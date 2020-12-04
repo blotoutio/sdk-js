@@ -889,6 +889,11 @@ export const setInitialConfiguration = (preferences) => {
     return
   }
 
+  if (!preferences.token || preferences.token.length !== 15) {
+    console.error('SDK token is not valid')
+    throw Error('SDK token is not valid')
+  }
+
   staticClientToken = preferences.token
   customDomain = preferences.customDomain
   storageRootKey = preferences.storageRootKey
