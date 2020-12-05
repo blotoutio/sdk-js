@@ -5,7 +5,10 @@ import {
   isSysEvtStore,
   isDevEvtStore,
   isHighFreqEventOff,
-  highFreqEvents
+  highFreqEvents,
+  isSysEvtCollect,
+  isApprox,
+  systemEventCode
 } from '../config'
 import * as log from './logUtil'
 import {
@@ -14,7 +17,8 @@ import {
   setSessionData,
   getEventsStore,
   getEventsSDKDataForDate,
-  setEventsSDKDataForDate
+  setEventsSDKDataForDate,
+  getValueFromSPTempUseStore
 } from './storageUtil'
 import {
   getDate,
@@ -35,9 +39,13 @@ import {
   sendNavigation,
   getNotSyncedEvents,
   eventsChunkArr,
-  getPayload
+  getPayload,
+  getReferrerUrlOfDateSession,
+  getMid,
+  getSystemMergeCounter
 } from '../utils'
 import { getManifestUrl } from './endPointUrlUtil'
+import { getNearestTimestamp } from './timeUtil'
 
 const sumFunction = (total, num) => {
   return total + num
@@ -292,7 +300,8 @@ export const syncPreviousSessionEvents = () => {
   sendPIIPHIEvent(piiEvents, date, 'pii')
   sendPIIPHIEvent(phiEvents, date, 'phi')
 
-  const eventsArrayChunk = eventsChunkArr(events, devEvents)
+  let eventsArrayChunk = eventsChunkArr(events, devEvents)
+  eventsArrayChunk = addSessionInfoEvent(events, eventsArrayChunk, date, sessionId)
   sendNavigation(date, sessionId)
   eventsArrayChunk.forEach((array) => {
     const eventsArray = getEventPayloadArr(array, date, sessionId)
@@ -300,7 +309,7 @@ export const syncPreviousSessionEvents = () => {
       return
     }
 
-    const payload = getPayload(sdkDataForDate.sessions[sessionId], events)
+    const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
     const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
     postRequest(url, JSON.stringify(payload))
       .then(() => {
@@ -361,4 +370,55 @@ export const setSessionPHIEvent = function (eventName, objectName, meta) {
 
   setEventsSDKDataForDate(date, sdkDataForDate)
   updateStore()
+}
+
+export const addSessionInfoEvent = function (events, eventsArrayChunk, date, sessionId) {
+  if (!isSysEvtCollect) {
+    return eventsArrayChunk
+  }
+
+  const sysMergeCounterValue = getSystemMergeCounter(events)
+
+  const sessionInfoObj = getSessionInfoPayload(date, sessionId)
+  const chunkIndex = eventsArrayChunk.findIndex((arr) => arr.length < sysMergeCounterValue)
+  if (chunkIndex === -1) {
+    const sessionEvtArr = [sessionInfoObj]
+    eventsArrayChunk.push(sessionEvtArr)
+  } else {
+    eventsArrayChunk[chunkIndex].push(sessionInfoObj)
+  }
+  return eventsArrayChunk
+}
+
+export const getSessionInfoPayload = (date, sessionId) => {
+  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const viewportLen = sdkDataForDate.sessions[sessionId].viewPort.length
+  const viewPortObj = sdkDataForDate.sessions[sessionId].viewPort[viewportLen - 1]
+  const eventTime = isApprox ? getNearestTimestamp(Date.now()) : Date.now()
+  const startTime = sdkDataForDate.sessions[sessionId].startTime
+  const endTime = sdkDataForDate.sessions[sessionId].endTime
+  const durationInSecs = Math.floor((endTime - startTime) / 1000)
+  const propObj = {
+    referrer: getReferrerUrlOfDateSession(date, sessionId),
+    screen: viewPortObj,
+    session_id: sessionId,
+    start: startTime,
+    end: endTime,
+    duration: durationInSecs
+  }
+
+  const obj = {
+    mid: getMid(),
+    userid: getValueFromSPTempUseStore(constants.UID),
+    evn: constants.SESSION_INFO,
+    evcs: systemEventCode.sessionInfo,
+    evdc: 1,
+    scrn: window.location.href,
+    evt: eventTime,
+    properties: propObj,
+    nmo: 1,
+    evc: constants.EVENT_CATEGORY
+  }
+
+  return obj
 }

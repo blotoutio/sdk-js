@@ -65,7 +65,8 @@ export const constants = {
   MODE_DEPLOYMENT: 'Mode_Deployment',
   PRIVACY_MODE: '0',
   FIRSTPARTY_MODE: '1',
-  SESSION_START_TIME: 'session_start_time'
+  SESSION_START_TIME: 'session_start_time',
+  SESSION_INFO: 'Session Info'
 }
 export const manifestConst = {
   Geo_Ip_Path: 'v1/geo/city',
@@ -110,7 +111,8 @@ export const systemEventCode = {
   session: 11507,
   hover: 11508,
   hoverc: 11509,
-  scroll: 11129
+  scroll: 11129,
+  sessionInfo: 11024
 }
 export const isDevMode = process.env.NODE_ENV === 'development'
 export const isManualManifest = true

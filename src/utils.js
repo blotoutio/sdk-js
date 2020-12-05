@@ -23,7 +23,8 @@ import {
   getNotSyncedSession,
   updatePreviousDayEndTime,
   checkAndGetSessionId,
-  setReferrerEvent
+  setReferrerEvent,
+  addSessionInfoEvent
 } from './common/sessionUtil'
 import * as storage from './common/storageUtil'
 import { v4 as uuidv4 } from 'uuid'
@@ -271,15 +272,16 @@ const syncPreviousDateEvents = () => {
   sendPIIPHIEvent(piiEvents, notSyncDate, 'pii')
   sendPIIPHIEvent(phiEvents, notSyncDate, 'phi')
 
-  const eventsArrChunk = eventsChunkArr(events, devEvents)
+  let eventsArrChunk = eventsChunkArr(events, devEvents)
+  eventsArrChunk = addSessionInfoEvent(events, eventsArrChunk, notSyncDate, sessionId)
   sendNavigation(notSyncDate, sessionId)
   eventsArrChunk.forEach((arr) => {
-    const events = getEventPayloadArr(arr, notSyncDate, sessionId)
-    if (events.length === 0) {
+    const eventsArray = getEventPayloadArr(arr, notSyncDate, sessionId)
+    if (eventsArray.length === 0) {
       return
     }
 
-    const payload = getPayload(sdkDataForDate.sessions[sessionId], events)
+    const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
     const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
     postRequest(url, JSON.stringify(payload))
       .then(() => {
@@ -1070,6 +1072,10 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
 
   const result = []
   arr.forEach((val) => {
+    if (val.evn) {
+      result.push(val)
+      return
+    }
     const propObj = {
       referrer: getReferrerUrlOfDateSession(date, sessionId),
       screen: viewPortObj,
@@ -1259,13 +1265,13 @@ export const initialize = (isDecryptionError) => {
   if (storage.getLocalData(getRootKey())) {
     if (localData[hostname] && !localData[hostname].events[date]) {
       const storeCheck = checkStoreEventsInterval()
+      if (checkManifest()) {
+        syncPreviousDateEvents()
+      }
       if (storeCheck) {
         const eventKeys = Object.keys(localData[hostname].events)
         const firstKey = eventKeys[0]
         delete localData[hostname].events[firstKey]
-      }
-      if (checkManifest()) {
-        syncPreviousDateEvents()
       }
       const session = createSessionObject(constants.INIT, constants.INIT)
       const sdkObj = createDaySchema(session)
@@ -1473,17 +1479,7 @@ export const eventsChunkArr = (events, devEvents) => {
     codifiedMergeCounter = constants.DEFAULT_EVENT_CODIFIED_MERGECOUNTER
   }
 
-  let sysMergeCounter = getManifestVariable(constants.EVENT_SYSTEM_MERGECOUNTER)
-  if (sysMergeCounter == null) {
-    sysMergeCounter = constants.DEFAULT_EVENT_SYSTEM_MERGECOUNTER
-  }
-
-  let sysMergeCounterValue = 0
-  if (sysMergeCounter === '-1') {
-    sysMergeCounterValue = events.length
-  } else if (sysMergeCounter > 0) {
-    sysMergeCounterValue = sysMergeCounter
-  }
+  const sysMergeCounterValue = getSystemMergeCounter(events)
   const sysEvents = sysMergeCounterValue ? chunk(events, sysMergeCounterValue) : []
   const codifiedEvents = chunk(devEvents, codifiedMergeCounter)
 
@@ -1783,9 +1779,24 @@ export const getPayload = (session, events) => {
     payload.geo = geo
   }
 
-  if (events.length > 0) {
+  if (events && events.length > 0) {
     payload.events = events
   }
 
   return payload
+}
+
+export const getSystemMergeCounter = (events) => {
+  let sysMergeCounter = getManifestVariable(constants.EVENT_SYSTEM_MERGECOUNTER)
+  if (sysMergeCounter == null) {
+    sysMergeCounter = constants.DEFAULT_EVENT_SYSTEM_MERGECOUNTER
+  }
+
+  let sysMergeCounterValue = 0
+  if (sysMergeCounter === '-1') {
+    sysMergeCounterValue = events.length
+  } else if (sysMergeCounter > 0) {
+    sysMergeCounterValue = sysMergeCounter
+  }
+  return sysMergeCounterValue
 }
