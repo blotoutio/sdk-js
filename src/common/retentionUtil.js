@@ -26,7 +26,6 @@ const getRetentionSDK = () => {
     createdDate: date,
     modifiedDate: date,
     domain: getDomain(),
-    tag: '',
     retentionData: getRetentionData()
   }
 }

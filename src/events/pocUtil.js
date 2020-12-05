@@ -15,14 +15,13 @@ import {
   getMid,
   getObjectTitle,
   getDate,
-  getMetaPayload,
-  getGeoPayload,
   getAllEventsOfDate,
   getSelector,
   setNewDateObject,
   getEventPayloadArr,
   getReferrerUrlOfDateSession,
-  createEventInfoObj
+  createEventInfoObj,
+  getPayload
 } from '../utils'
 import * as log from '../common/logUtil'
 import { postRequest } from '../common/networkUtil'
@@ -58,12 +57,7 @@ const send = (eventsArray) => {
   const sessionId = getSessionData(constants.SESSION_ID)
   const sdkDataForDate = getEventsSDKDataForDate(getDate())
 
-  const payload = {
-    meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-    geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-    events: eventsArray
-  }
-
+  const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
   const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
 
   postRequest(url, JSON.stringify(payload))
@@ -91,18 +85,14 @@ const getScrollPayloadArray = (arr, date, sessionId, startTime, endTime, viewPor
     const eventTime = isApprox ? getNearestTimestamp(val.tstmp) : val.tstmp
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     result.push({
-      appb: null,
       mid: val.mid,
-      id: null,
       userid: UID,
       evn: val.name,
-      count: null,
       evcs: val.evcs,
       evdc: eventCount.length,
       scrn: val.urlPath,
       evt: eventTime,
       properties: propObj,
-      tst: null,
       nmo: val.nmo,
       evc: val.evc
     })

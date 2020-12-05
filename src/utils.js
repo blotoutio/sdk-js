@@ -48,7 +48,6 @@ const createDaySchema = (session) => {
   return {
     date: getDate(),
     domain: getDomain(),
-    tag: '',
     sessions,
     retentionData: ''
   }
@@ -79,21 +78,21 @@ const createMetaObject = () => {
   const details = getBrowser(userAgent)
   const plf = mobileCheck() ? constants.MOBILE_PLATFORM_CODE : constants.WEB_PLATFORM_CODE
 
-  return {
+  const data = {
     plf: plf,
     domain: getDomain(),
-    dcomp: false,
-    acomp: false,
     osv: osDtl.version,
-    dmft: 'NA',
-    dm: 'NA',
     hostOS: findOS(),
     browser: details.name,
-    version: details.version,
     dplatform: getDeviceType(),
-    ua: navigator.userAgent,
-    extraInfo: {}
+    ua: navigator.userAgent
   }
+
+  if (details.version) {
+    data.version = details.version
+  }
+
+  return data
 }
 
 const getPositionObject = (event) => {
@@ -275,21 +274,18 @@ const syncPreviousDateEvents = () => {
   const eventsArrChunk = eventsChunkArr(events, devEvents)
   sendNavigation(notSyncDate, sessionId)
   eventsArrChunk.forEach((arr) => {
-    const eventsArr = getEventPayloadArr(arr, notSyncDate, sessionId)
-    if (eventsArr.length > 0) {
-      const payload = {
-        meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-        geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-        events: eventsArr
-      }
-
-      const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
-      postRequest(url, JSON.stringify(payload))
-        .then(() => {
-          setEventsSentToServer(arr, notSyncDate, sessionId)
-        })
-        .catch(log.error)
+    const events = getEventPayloadArr(arr, notSyncDate, sessionId)
+    if (events.length === 0) {
+      return
     }
+
+    const payload = getPayload(sdkDataForDate.sessions[sessionId], events)
+    const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+    postRequest(url, JSON.stringify(payload))
+      .then(() => {
+        setEventsSentToServer(arr, notSyncDate, sessionId)
+      })
+      .catch(log.error)
   })
 }
 
@@ -342,12 +338,7 @@ const setSyncEventsInterval = () => {
           return
         }
 
-        const payload = {
-          meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-          geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-          events: eventsArr
-        }
-
+        const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
         const url = getManifestUrl(
           constants.EVENT_PATH,
           manifestConst.Event_Path
@@ -502,19 +493,11 @@ const syncRetentionData = () => {
     const sessionId = storage.getSessionData(constants.SESSION_ID)
     const sdkDataForDate = storage.getEventsSDKDataForDate(date)
     const valueFromSPTempUseStore = storage.getValueFromSPCustomUseStore(constants.PREVIOUS_RETENTION_META)
+    const payload = getPayload(sdkDataForDate.sessions[sessionId], arr)
 
-    const payload = {
-      meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-      geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-      events: arr
-    }
-
-    let meta = null
     if (valueFromSPTempUseStore) {
-      meta = getPmeta(payload.meta, valueFromSPTempUseStore)
+      payload.pmeta = getPmeta(payload.meta, valueFromSPTempUseStore)
     }
-
-    payload.pmeta = meta
 
     const url = getManifestUrl(constants.EVENT_RETENTION_PATH, manifestConst.Event_Retention_Path)
     const tempUseData = storage.getValueFromSPTempUseStore(constants.FAILED_RETENTION)
@@ -708,22 +691,20 @@ const getRetentionPayloadArr = (arr, name) => {
   const UID = storage.getValueFromSPTempUseStore(constants.UID)
   arr.forEach((val) => {
     const eventTime = isApprox ? getNearestTimestamp(val.tstmp) : val.tstmp
-    result.push({
-      appb: null,
+    const data = {
       mid: val.mid,
-      id: null,
       userid: UID,
       evn: eventName,
-      count: null,
       evcs: val.evcs,
-      evdc: null,
-      scrn: null,
       evt: eventTime,
-      properties: null,
-      tst: val.avgtime ? val.avgtime : null,
       nmo: val.nmo,
       evc: val.evc
-    })
+    }
+
+    if (val.avgtime) {
+      data.tst = val.avgtime
+    }
+    result.push(data)
   })
 
   return result
@@ -762,18 +743,13 @@ const getNavigationPayloadArr = (navigations, navigationsTime) => {
   const UID = storage.getValueFromSPTempUseStore(constants.UID)
   const eventTime = isApprox ? getNearestTimestamp(Date.now()) : Date.now()
   return [{
-    appb: null,
     mid: getMid(),
-    id: null,
     userid: UID,
     evn: constants.NAVIGATION,
-    count: null,
     evcs: systemEventCode[constants.NAVIGATION],
     evdc: 1,
     scrn: window.location.href,
     evt: eventTime,
-    properties: {},
-    tst: null,
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
     nvg: navigations,
@@ -880,12 +856,7 @@ const sendEvents = (arr) => {
     return
   }
 
-  const payload = {
-    meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-    geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-    events: eventsArr
-  }
-
+  const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
   const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
   postRequest(url, JSON.stringify(payload))
     .then(() => { })
@@ -1097,10 +1068,13 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
     const propObj = {
       referrer: getReferrerUrlOfDateSession(date, sessionId),
       screen: viewPortObj,
-      objT: val.objectTitle ? val.objectTitle : null,
       obj: val.objectName,
       position: val.position,
       session_id: sessionId
+    }
+
+    if (val.objectTitle) {
+      propObj.objT = val.objectTitle
     }
 
     if (
@@ -1122,18 +1096,14 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
     const eventTime = isApprox ? getNearestTimestamp(val.tstmp) : val.tstmp
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     const obj = {
-      appb: null,
       mid: val.mid,
-      id: null,
       userid: storage.getValueFromSPTempUseStore(constants.UID),
       evn: val.name,
-      count: null,
       evcs: val.evcs,
       evdc: eventCount.length,
       scrn: val.urlPath,
       evt: eventTime,
       properties: propObj,
-      tst: null,
       nmo: val.nmo,
       evc: val.evc
     }
@@ -1404,6 +1374,10 @@ export const setRetentionData = () => {
 }
 
 export const getGeoPayload = (geo) => {
+  if (!geo) {
+    return null
+  }
+
   const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
   if (!mode || mode === constants.FIRSTPARTY_MODE) {
     return null
@@ -1439,6 +1413,10 @@ export const getGeoPayload = (geo) => {
 }
 
 export const getMetaPayload = (meta) => {
+  if (!meta) {
+    return {}
+  }
+
   let deviceGrain = getManifestVariable(constants.EVENT_DEVICEINFO_GRAIN)
   if (deviceGrain == null) {
     deviceGrain = constants.DEFAULT_EVENT_DEVICEINFO_GRAIN
@@ -1469,10 +1447,6 @@ export const getMetaPayload = (meta) => {
   if (deviceGrain >= 1 || isManualManifest) {
     obj.plf = meta.plf
     obj.appn = meta.domain
-    obj.jbrkn = 0
-    obj.vpn = 0
-    obj.dcomp = false
-    obj.acomp = false
     obj.osv = meta.osv
     obj.appv = meta.version
     obj.dmft = dmftStr
@@ -1480,9 +1454,11 @@ export const getMetaPayload = (meta) => {
     obj.bnme = meta.browser
     obj.dplatform = dplatform
   }
+
   if (deviceGrain >= 2 || isManualManifest) {
     obj.osn = meta.hostOS
   }
+
   return obj
 }
 
@@ -1554,11 +1530,7 @@ export const syncEvents = () => {
       return
     }
 
-    const payload = {
-      meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-      geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-      events: eventsArr
-    }
+    const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
     const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
     postRequest(url, JSON.stringify(payload))
       .then(() => {
@@ -1573,11 +1545,7 @@ export const sendBounceEvent = (date) => {
   const events = getBounceAndSessionEvents(sdkDataForDate)
   const sessionId = storage.getSessionData(constants.SESSION_ID)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
-  const payload = {
-    meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-    geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-    events: eventsArr
-  }
+  const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
 
   const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
   postRequest(url, JSON.stringify(payload))
@@ -1599,14 +1567,9 @@ export const sendNavigation = (date, sessionId) => {
     navigations.unshift(referrer)
     navigationsTime.unshift(0)
   }
+
   const navEventArr = getNavigationPayloadArr(navigations, navigationsTime)
-
-  const payload = {
-    meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-    geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-    events: navEventArr
-  }
-
+  const payload = getPayload(sdkDataForDate.sessions[sessionId], navEventArr)
   const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
   postRequest(url, JSON.stringify(payload))
     .then(() => { })
@@ -1743,10 +1706,7 @@ export const sendPIIPHIEvent = (events, date, type) => {
   const publicKey = getManifestVariable(key)
   const obj = encryptRSA(publicKey, JSON.stringify(eventsArr))
 
-  const payload = {
-    meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-    geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo)
-  }
+  const payload = getPayload(sdkDataForDate.sessions[sessionId])
 
   if (type === 'pii') {
     payload.pii = obj
@@ -1804,4 +1764,23 @@ export const getPreviousDateReferrer = () => {
   }
 
   return null
+}
+
+export const getPayload = (session, events) => {
+  const payload = {}
+  const meta = getMetaPayload(session.meta)
+  if (Object.keys(meta).length !== 0) {
+    payload.meta = meta
+  }
+
+  const geo = getGeoPayload(session.geo)
+  if (geo) {
+    payload.geo = geo
+  }
+
+  if (events.length > 0) {
+    payload.events = events
+  }
+
+  return payload
 }

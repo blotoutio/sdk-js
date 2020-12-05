@@ -33,10 +33,9 @@ import {
   createViewPortObject,
   setEventsSentToServer,
   sendNavigation,
-  getMetaPayload,
-  getGeoPayload,
   getNotSyncedEvents,
-  eventsChunkArr
+  eventsChunkArr,
+  getPayload
 } from '../utils'
 import { getManifestUrl } from './endPointUrlUtil'
 
@@ -301,12 +300,7 @@ export const syncPreviousSessionEvents = () => {
       return
     }
 
-    const payload = {
-      meta: getMetaPayload(sdkDataForDate.sessions[sessionId].meta),
-      geo: getGeoPayload(sdkDataForDate.sessions[sessionId].geo),
-      events: eventsArray
-    }
-
+    const payload = getPayload(sdkDataForDate.sessions[sessionId], events)
     const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
     postRequest(url, JSON.stringify(payload))
       .then(() => {
