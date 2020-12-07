@@ -23,7 +23,15 @@ jobs:
         registry-url: https://npm.pkg.github.com
         scope: blotoutio
 
+    - name: Cache node_modules
+      id: cache-modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
+
     - name: Install dependencies
+      if: steps.cache-modules.outputs.cache-hit != 'true'
       run: npm ci
       env:
         NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
