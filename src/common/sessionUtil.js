@@ -51,6 +51,16 @@ const sumFunction = (total, num) => {
   return total + num
 }
 
+export const eventSync = {
+  inProgress: false,
+  set progressStatus (status) {
+    this.inProgress = status
+  },
+  get progressStatus () {
+    return this.inProgress
+  }
+}
+
 export const checkAndGetSessionId = () => {
   let sessionId = getSessionData(constants.SESSION_ID)
 
@@ -73,7 +83,8 @@ export const setDevEvent = (eventName, objectName, meta) => {
   sdkDataForDate.sessions[sessionId].eventsData.devCodifiedEventsInfo.push(obj)
 
   const isEventPush = checkEventPushEventCounter(sdkDataForDate.sessions[sessionId].eventsData)
-  if (isEventPush) {
+  if (isEventPush && !eventSync.progressStatus) {
+    eventSync.progressStatus = true
     syncEvents()
   }
 
@@ -115,7 +126,8 @@ export const setEndDevEvent = (eventName) => {
   sdkDataForDate.sessions[sessionId].eventsData.devCodifiedEventsInfo.push(eventObject)
 
   const isEventPush = checkEventPushEventCounter(sdkDataForDate.sessions[sessionId].eventsData)
-  if (isEventPush) {
+  if (isEventPush && !eventSync.progressStatus) {
+    eventSync.progressStatus = true
     syncEvents()
   }
 
@@ -348,7 +360,8 @@ export const setSessionPIIEvent = function (eventName, objectName, meta) {
     createDevEventInfoObj(eventName, objectName, meta, true, false))
 
   const isEventPush = checkEventPushEventCounter(sdkDataForDate.sessions[sessionId].eventsData)
-  if (isEventPush) {
+  if (isEventPush && !eventSync.progressStatus) {
+    eventSync.progressStatus = true
     syncEvents()
   }
 
@@ -364,7 +377,8 @@ export const setSessionPHIEvent = function (eventName, objectName, meta) {
     createDevEventInfoObj(eventName, objectName, meta, false, true))
 
   const isEventPush = checkEventPushEventCounter(sdkDataForDate.sessions[sessionId].eventsData)
-  if (isEventPush) {
+  if (isEventPush && !eventSync.progressStatus) {
+    eventSync.progressStatus = true
     syncEvents()
   }
 

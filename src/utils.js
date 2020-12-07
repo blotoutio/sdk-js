@@ -24,7 +24,8 @@ import {
   updatePreviousDayEndTime,
   checkAndGetSessionId,
   setReferrerEvent,
-  addSessionInfoEvent
+  addSessionInfoEvent,
+  eventSync
 } from './common/sessionUtil'
 import * as storage from './common/storageUtil'
 import { v4 as uuidv4 } from 'uuid'
@@ -1149,6 +1150,7 @@ export const setEventsSentToServer = (arr, date, sessionId) => {
     storage.setEventsSDKDataForDate(date, sdkDataOfDate)
     storage.updateStore()
   })
+  eventSync.progressStatus = false
 }
 
 export const getAllEventsOfDate = (date) => {
@@ -1510,6 +1512,7 @@ export const checkEventPushEventCounter = (eventsDataObj) => {
 
 export const syncEvents = () => {
   if (!isSysEvtStore && !isDevEvtStore) {
+    eventSync.progressStatus = false
     return
   }
 
