@@ -2,7 +2,11 @@ import { getValueFromSPTempUseStore } from './storageUtil'
 import { constants } from '../config'
 
 export async function getRequest (url) {
-  const token = getValueFromSPTempUseStore(constants.SDK_TOKEN)
+  if (!url) {
+    return Promise.reject(new Error('URL is empty'))
+  }
+
+  const token = getValueFromSPTempUseStore(constants.SDK_TOKEN) || ''
   return await fetch(
     url,
     {
@@ -23,7 +27,11 @@ export async function getRequest (url) {
 }
 
 export async function postRequest (url, payload) {
-  const token = getValueFromSPTempUseStore(constants.SDK_TOKEN)
+  if (!url) {
+    return Promise.reject(new Error('URL is empty'))
+  }
+
+  const token = getValueFromSPTempUseStore(constants.SDK_TOKEN) || ''
   return await fetch(
     url,
     {
@@ -34,7 +42,7 @@ export async function postRequest (url, payload) {
         version: 'v1',
         token
       },
-      body: payload
+      body: payload || ''
     })
     .then(response => response.json().then(data => ({ status: response.status, body: data })))
     .then(data => {

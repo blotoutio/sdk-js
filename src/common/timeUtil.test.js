@@ -3,7 +3,9 @@ import {
   millisecondsToHours,
   getNearestTimestamp,
   millisecondsToDays,
-  getMonthNumber
+  getMonthNumber,
+  getCurrentWeekNumber,
+  getCurrentMonthNumber
 } from './timeUtil'
 
 describe('millisecondsToHours', () => {
@@ -48,5 +50,43 @@ describe('getNearestTimestamp', () => {
   it('data', () => {
     const result = getNearestTimestamp(1601648651)
     expect(result).toBe(1601649000)
+  })
+})
+
+describe('getCurrentWeekNumber', () => {
+  beforeAll(() => {
+    jest.useFakeTimers('modern')
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+
+  it('Jan 1st is Wed', () => {
+    jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
+    const result = getCurrentWeekNumber()
+    expect(result).toBe(6)
+  })
+
+  it('Jan 1st is Sat', () => {
+    jest.setSystemTime(new Date('04 Feb 2011 00:12:00 GMT').getTime())
+    const result = getCurrentWeekNumber()
+    expect(result).toBe(5)
+  })
+
+  it('Last week of 2020', () => {
+    jest.setSystemTime(new Date('30 Dec 2020 00:12:00 GMT').getTime())
+    const result = getCurrentWeekNumber()
+    expect(result).toBe(53)
+  })
+})
+
+describe('getCurrentMonthNumber', () => {
+  it('run', () => {
+    jest.useFakeTimers('modern')
+    jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
+    const result = getCurrentMonthNumber()
+    expect(result).toBe(1)
+    jest.useRealTimers()
   })
 })

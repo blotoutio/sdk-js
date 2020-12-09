@@ -1,7 +1,6 @@
 import { postRequest } from './networkUtil'
 import {
   constants,
-  manifestConst,
   isSysEvtStore,
   isDevEvtStore,
   isHighFreqEventOff,
@@ -322,7 +321,7 @@ export const syncPreviousSessionEvents = () => {
     }
 
     const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
-    const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+    const url = getManifestUrl()
     postRequest(url, JSON.stringify(payload))
       .then(() => {
         setEventsSentToServer(array, date, sessionId)

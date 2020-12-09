@@ -1,7 +1,6 @@
 export const getWeekNumber = (date) => {
   const newYear = new Date(date.getFullYear(), 0, 1)
-  let day = newYear.getDay()
-  day = day >= 0 ? day : day + 7
+  const day = newYear.getDay()
   const dayNumber =
     Math.floor(
       (date.getTime() -
@@ -14,8 +13,7 @@ export const getWeekNumber = (date) => {
     weekNumber = Math.floor((dayNumber + day - 1) / 7) + 1
     if (weekNumber > 52) {
       const nYear = new Date(date.getFullYear() + 1, 0, 1)
-      let nDay = nYear.getDay()
-      nDay = nDay >= 0 ? nDay : nDay + 7
+      const nDay = nYear.getDay()
       weekNumber = nDay < 4 ? 1 : 53
     }
   } else {

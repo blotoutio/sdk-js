@@ -1,19 +1,10 @@
-import { MD5Encode, SHA256Encode, decryptAES, encryptAES } from './securityUtil'
+import { SHA256Encode, decryptAES, encryptAES, encryptRSA, SHA1Encode } from './securityUtil'
 import { setLocalData } from './storageUtil'
 import { getRootIndexKey } from '../utils'
+import AES from 'crypto-js/aes'
 
-setLocalData(getRootIndexKey(), 'test_index')
-
-describe('MD5Encode', () => {
-  it('empty', () => {
-    const result = MD5Encode('')
-    expect(result).toBe('')
-  })
-
-  it('data', () => {
-    const result = MD5Encode('test string')
-    expect(result).toBe('6f8db599de986fab7a21625b7916589c')
-  })
+beforeEach(() => {
+  setLocalData(getRootIndexKey(), 'test_index')
 })
 
 describe('SHA256Encode', () => {
@@ -28,7 +19,23 @@ describe('SHA256Encode', () => {
   })
 })
 
+describe('SHA1Encode', () => {
+  it('empty', () => {
+    const result = SHA1Encode('')
+    expect(result).toBe('')
+  })
+
+  it('data', () => {
+    const result = SHA1Encode('test string')
+    expect(result).toBe('661295c9cbf9d6b2f6428414504a8deed3020641')
+  })
+})
+
 describe('encryptAES', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('empty pass code', () => {
     const result = encryptAES('test string', '')
     expect(result).toStrictEqual({
@@ -57,6 +64,29 @@ describe('encryptAES', () => {
       key: 'aed04f8c19d0ebc675a8bf92be5b77c384aa8e64d756a4bb29ff82cf38b427a3'
     })
   })
+
+  it('root index is empty', () => {
+    setLocalData(getRootIndexKey(), '')
+    const result = encryptAES('test string')
+    expect(result).toStrictEqual({
+      encryptedString: '',
+      iv: '',
+      key: ''
+    })
+  })
+
+  it('encrypt failed', () => {
+    const spy = jest
+      .spyOn(AES, 'encrypt')
+      .mockImplementation(() => null)
+    const result = encryptAES('test string')
+    expect(result).toStrictEqual({
+      encryptedString: '',
+      iv: '',
+      key: ''
+    })
+    spy.mockRestore()
+  })
 })
 
 describe('decryptAES', () => {
@@ -75,5 +105,40 @@ describe('decryptAES', () => {
       'b0METN8v1HtFgepaF/4QpA==',
       'verystrongthingthoksdfoksdfoksdhfverystrongthingthoksdfoksdfoksdhf')
     expect(result).toBe('test string')
+  })
+
+  it('root index is empty', () => {
+    setLocalData(getRootIndexKey(), '')
+    const result = decryptAES('b0METN8v1HtFgepaF/4QpA==')
+    expect(result).toBe('')
+  })
+
+  it('decryption failed', () => {
+    const spy = jest
+      .spyOn(AES, 'decrypt')
+      .mockImplementation(() => {
+        return 1 / 0
+      })
+    const result = decryptAES('b0METN8v1HtFgepaF/4QpA==')
+    expect(result).toBe('')
+    spy.mockRestore()
+  })
+})
+
+describe('encryptRSA', () => {
+  it('key is missing', () => {
+    const result = encryptRSA()
+    expect(result).toStrictEqual({
+      data: '',
+      iv: '',
+      key: ''
+    })
+  })
+
+  it('success', () => {
+    const result = encryptRSA('MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZ8GeBqADb2gj/rAAh5NlY7UM6hXF3vuyxI4bhlHMrjXGnSiwR1K4LozDgYlPKLJe/m/TP7ghzTe59hMnZWxbOKo5rZP+ndreI0vm5JuQ85ebpzvQ6xLSbNd98eZl/nTQLYQR9vr9FplMTM/D6UqFg7cnBZMCUNQyeKSDvRGNaPwIDAQAB', 'some data')
+    expect(result.iv.length).toBe(32)
+    expect(result.key.length).toBe(172)
+    expect(result.data.length).toBe(24)
   })
 })

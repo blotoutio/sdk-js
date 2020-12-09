@@ -283,7 +283,7 @@ const syncPreviousDateEvents = () => {
     }
 
     const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
-    const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+    const url = getManifestUrl()
     postRequest(url, JSON.stringify(payload))
       .then(() => {
         setEventsSentToServer(arr, notSyncDate, sessionId)
@@ -342,10 +342,7 @@ const setSyncEventsInterval = () => {
         }
 
         const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
-        const url = getManifestUrl(
-          constants.EVENT_PATH,
-          manifestConst.Event_Path
-        )
+        const url = getManifestUrl()
         postRequest(url, JSON.stringify(payload))
           .then(() => {
             setEventsSentToServer(arr, date, sessionId)
@@ -502,7 +499,7 @@ const syncRetentionData = () => {
       payload.pmeta = getPmeta(payload.meta, valueFromSPTempUseStore)
     }
 
-    const url = getManifestUrl(constants.EVENT_RETENTION_PATH, manifestConst.Event_Retention_Path)
+    const url = getManifestUrl('retention')
     const tempUseData = storage.getValueFromSPTempUseStore(constants.FAILED_RETENTION)
     let isTodayDate = false
     if (tempUseData) {
@@ -860,7 +857,7 @@ const sendEvents = (arr) => {
   }
 
   const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
-  const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+  const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))
     .then(() => { })
     .catch(log.error)
@@ -1210,6 +1207,7 @@ export const getManifestVariable = (name) => {
     return null
   }
 
+  // TODO(nejc): we should only run this once when we save manifest
   const manifestData = removeEmptyValue(manifestStore.manifestData.variables)
   const intervalIndex = manifestData.findIndex((obj) => obj.variableName === name)
   if (intervalIndex === -1) {
@@ -1535,7 +1533,7 @@ export const syncEvents = () => {
     }
 
     const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
-    const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+    const url = getManifestUrl()
     postRequest(url, JSON.stringify(payload))
       .then(() => {
         setEventsSentToServer(arr, date, sessionId)
@@ -1551,7 +1549,7 @@ export const sendBounceEvent = (date) => {
   const eventsArr = getEventPayloadArr(events, date, sessionId)
   const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
 
-  const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+  const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))
     .then(() => {
       setEventsSentToServer(events, date, sessionId)
@@ -1574,7 +1572,7 @@ export const sendNavigation = (date, sessionId) => {
 
   const navEventArr = getNavigationPayloadArr(navigations, navigationsTime)
   const payload = getPayload(sdkDataForDate.sessions[sessionId], navEventArr)
-  const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+  const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))
     .then(() => { })
     .catch(log.error)
@@ -1718,7 +1716,7 @@ export const sendPIIPHIEvent = (events, date, type) => {
     payload.phi = obj
   }
 
-  const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+  const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))
     .then(() => {
       setEventsSentToServer(events, date, sessionId)

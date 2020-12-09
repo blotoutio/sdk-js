@@ -1,6 +1,5 @@
 import {
   constants,
-  manifestConst,
   systemEventCode,
   isApprox,
   isSysEvtCollect
@@ -58,7 +57,7 @@ const send = (eventsArray) => {
   const sdkDataForDate = getEventsSDKDataForDate(getDate())
 
   const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
-  const url = getManifestUrl(constants.EVENT_PATH, manifestConst.Event_Path)
+  const url = getManifestUrl()
 
   postRequest(url, JSON.stringify(payload))
     .then(() => {})

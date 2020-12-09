@@ -66,7 +66,9 @@ export const constants = {
   PRIVACY_MODE: '0',
   FIRSTPARTY_MODE: '1',
   SESSION_START_TIME: 'session_start_time',
-  SESSION_INFO: 'Session Info'
+  SESSION_INFO: 'Session Info',
+  CUSTOM_EVENT_STORAGE: 'EventsSubCode',
+  DEVELOPER_EVENT_CUSTOM: 21100
 }
 export const manifestConst = {
   Geo_Ip_Path: 'v1/geo/city',
