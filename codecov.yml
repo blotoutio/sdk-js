@@ -1,0 +1,17 @@
+codecov:
+  require_ci_to_pass: yes
+  max_report_age: off
+
+ignore:
+  - "src/demo"
+
+parsers:
+  javascript:
+    enable_partials: yes
+
+comment:
+  layout: "diff,flags,files"
+  behavior: once
+
+github_checks:
+    annotations: true
