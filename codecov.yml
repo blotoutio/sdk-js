@@ -1,6 +1,8 @@
 codecov:
   require_ci_to_pass: yes
   max_report_age: off
+  notify:
+    wait_for_ci: true
 
 ignore:
   - "src/demo"
@@ -12,6 +14,7 @@ parsers:
 comment:
   layout: "diff,flags,files"
   behavior: once
+  require_changes: true
 
 github_checks:
     annotations: true
