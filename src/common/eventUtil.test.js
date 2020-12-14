@@ -7,38 +7,38 @@ describe('codeForCustomCodifiedEvent', () => {
   })
 
   it('name has spaces', () => {
-    expect(codeForCustomCodifiedEvent('some awesome event')).toBe(21316)
+    expect(codeForCustomCodifiedEvent('some awesome event')).toBe(24016)
   })
 
   it('name with underscore', () => {
-    expect(codeForCustomCodifiedEvent('awesome_event')).toBe(21308)
+    expect(codeForCustomCodifiedEvent('awesome_event')).toBe(24008)
   })
 
   it('non ascii name', () => {
-    expect(codeForCustomCodifiedEvent('目_awesome_event')).toBe(21349)
+    expect(codeForCustomCodifiedEvent('目_awesome_event')).toBe(24049)
   })
 
   it('long name', () => {
-    expect(codeForCustomCodifiedEvent('event event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_event')).toBe(21262)
+    expect(codeForCustomCodifiedEvent('event event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_event')).toBe(23962)
   })
 
   it('event already exists with the same name for different events', () => {
     jest
       .spyOn(storage, 'getValueFromSPNormalUseStore')
       .mockImplementation(() => ({
-        event1: 21308,
+        event1: 24008,
         event2: 21545
       }))
-    expect(codeForCustomCodifiedEvent('awesome_event')).toBe(21309)
+    expect(codeForCustomCodifiedEvent('awesome_event')).toBe(24009)
   })
 
   it('event already exists with the same name same event', () => {
     jest
       .spyOn(storage, 'getValueFromSPNormalUseStore')
       .mockImplementation(() => ({
-        awesome_event: 21308,
+        awesome_event: 24008,
         event2: 21545
       }))
-    expect(codeForCustomCodifiedEvent('awesome_event')).toBe(21308)
+    expect(codeForCustomCodifiedEvent('awesome_event')).toBe(24008)
   })
 })

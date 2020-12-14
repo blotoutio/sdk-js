@@ -26,7 +26,7 @@ const checkIfCodeExists = (eventName) => {
 }
 
 const generateSubCode = (eventSum) => {
-  return constants.DEVELOPER_EVENT_CUSTOM + (eventSum % 900)
+  return constants.DEVELOPER_EVENT_CUSTOM + (eventSum % 8899)
 }
 
 export const codeForCustomCodifiedEvent = (eventName) => {
