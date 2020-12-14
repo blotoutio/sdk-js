@@ -1,3 +1,7 @@
+const isValidDate = (d) => {
+  return d instanceof Date && !isNaN(d)
+}
+
 export const getWeekNumber = (date) => {
   const newYear = new Date(date.getFullYear(), 0, 1)
   const day = newYear.getDay()
@@ -49,4 +53,18 @@ export const getCurrentMonthNumber = () => {
 export const getNearestTimestamp = function (timestamp) {
   const prev = timestamp - (timestamp % 1800)
   return prev + 1800
+}
+
+export const getFormattedDate = (date) => {
+  if (!date || !isValidDate(date)) {
+    return null
+  }
+
+  return new Intl.DateTimeFormat(
+    'en',
+    {
+      month: '2-digit',
+      day: '2-digit',
+      year: '2-digit'
+    }).format(date)
 }

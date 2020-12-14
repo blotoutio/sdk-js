@@ -1369,19 +1369,9 @@ export const setRetentionData = () => {
   if (!mode || mode === constants.FIRSTPARTY_MODE) {
     return
   }
-  retention.setDAU()
-  retention.setWAU()
-  retention.setMAU()
-  retention.setDAST()
-  retention.setWAST()
-  retention.setMAST()
-
-  const isPayingUser = storage.getLocalData(constants.IS_PAYING_USER)
-  if (isPayingUser) {
-    retention.setDPU()
-    retention.setWPU()
-    retention.setMPU()
-  }
+  retention.setDailyActiveUsage()
+  retention.setWeeklyActiveUsage()
+  retention.setMonthlyActiveUsage()
 }
 
 export const getGeoPayload = (geo) => {

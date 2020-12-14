@@ -1,6 +1,11 @@
 import { constants } from '../config'
 import { getMid, getDate, getDomain } from '../utils'
-import { getEventsStore } from '../common/storageUtil'
+import {
+  getEventsStore,
+  updateStore,
+  getRetentionSDKData,
+  setRetentionSDKData
+} from '../common/storageUtil'
 
 const getRetentionData = () => {
   return {
@@ -108,6 +113,7 @@ export const getSessionTotalDuration = (sessions) => {
   if (!sessions) {
     return 0
   }
+
   return Object.keys(sessions).reduce((accumulator, key) => {
     if (!sessions[key]) {
       return accumulator
@@ -130,7 +136,8 @@ export const getSessionAvgObject = (code, date, averageTime) => {
     object.evcs = code
   }
 
-  if (date) {
+  date = parseInt(date)
+  if (!isNaN(date)) {
     object.tstmp = date
   }
 
@@ -139,4 +146,28 @@ export const getSessionAvgObject = (code, date, averageTime) => {
   }
 
   return object
+}
+
+export const retentionWrapper = (key, func) => {
+  if (!key || !func) {
+    return
+  }
+
+  const retentionSDKData = getRetentionSDKData()
+  if (!retentionSDKData || !retentionSDKData.retentionData) {
+    return
+  }
+
+  let retentions = retentionSDKData.retentionData[key]
+  if (!retentions) {
+    retentions = []
+  }
+
+  retentions = func(retentions)
+  if (!retentions) {
+    return
+  }
+
+  setRetentionSDKData(retentionSDKData)
+  updateStore()
 }

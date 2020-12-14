@@ -5,7 +5,8 @@ import {
   getHighestTimestamp,
   getLastNextDayEvent,
   getSessionTotalDuration,
-  getSessionAvgObject
+  getSessionAvgObject,
+  retentionWrapper
 } from './utils'
 import * as commonUtils from '../utils'
 import * as storageUtil from '../common/storageUtil'
@@ -26,6 +27,14 @@ afterEach(() => {
 })
 
 describe('getTimestampFromKey', () => {
+  beforeAll(() => {
+    jest.useFakeTimers('modern')
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+
   it('empty', () => {
     const result = getTimestampFromKey()
     expect(result).toBe(null)
@@ -43,17 +52,17 @@ describe('getTimestampFromKey', () => {
 
   it('with key', () => {
     const result = getTimestampFromKey('15-10-2020')
-    expect(result).toBe(1602712800000)
+    expect(result).toBe(1602720000000)
   })
 
   it('no leading 0', () => {
     const result = getTimestampFromKey('1-4-2020')
-    expect(result).toBe(1585692000000)
+    expect(result).toBe(1585699200000)
   })
 
   it('from function', () => {
     const result = getTimestampFromKey(commonUtils.getDate())
-    expect(result).toBe(1607900400000)
+    expect(result).toBe(1607904000000)
   })
 })
 
@@ -193,7 +202,7 @@ describe('getLastNextDayEvent', () => {
         '13-12-2020': {}
       }))
 
-    const result = getLastNextDayEvent(1607814000000)
+    const result = getLastNextDayEvent(1607821200000)
     expect(result).toStrictEqual({
       eventKey: '',
       eventStamp: 0
@@ -210,10 +219,10 @@ describe('getLastNextDayEvent', () => {
         '13-12-2020': {}
       }))
 
-    const result = getLastNextDayEvent(1607641200000)
+    const result = getLastNextDayEvent(1607648400000)
     expect(result).toStrictEqual({
       eventKey: '12-12-2020',
-      eventStamp: 1607727600000
+      eventStamp: 1607731200000
     })
     spy.mockRestore()
   })
@@ -226,10 +235,10 @@ describe('getLastNextDayEvent', () => {
         '13-12-2020': {}
       }))
 
-    const result = getLastNextDayEvent(1607727600000)
+    const result = getLastNextDayEvent(1607734800000)
     expect(result).toStrictEqual({
       eventKey: '13-12-2020',
-      eventStamp: 1607814000000
+      eventStamp: 1607817600000
     })
     spy.mockRestore()
   })
@@ -300,5 +309,96 @@ describe('getSessionAvgObject', () => {
       tstmp: 1607727600000,
       avgtime: 10
     })
+  })
+})
+
+describe('retentionWrapper', () => {
+  it('null values', () => {
+    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+      .mockImplementation()
+    retentionWrapper()
+    expect(spySet).toHaveBeenCalledTimes(0)
+    spySet.mockRestore()
+  })
+
+  it('empty storage', () => {
+    const spyGet = jest
+      .spyOn(storageUtil, 'getRetentionSDKData')
+      .mockImplementation(() => null)
+
+    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+      .mockImplementation()
+    retentionWrapper('dau', () => {})
+    expect(spySet).toHaveBeenCalledTimes(0)
+    spySet.mockRestore()
+    spyGet.mockRestore()
+  })
+
+  it('empty retentionData', () => {
+    const spyGet = jest
+      .spyOn(storageUtil, 'getRetentionSDKData')
+      .mockImplementation(() => ({ }))
+
+    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+      .mockImplementation()
+    retentionWrapper('dau', () => {})
+    expect(spySet).toHaveBeenCalledTimes(0)
+    spySet.mockRestore()
+    spyGet.mockRestore()
+  })
+
+  it('key not defined in storage', () => {
+    const spyGet = jest
+      .spyOn(storageUtil, 'getRetentionSDKData')
+      .mockImplementation(() => ({
+        retentionData: {}
+      }))
+
+    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+      .mockImplementation()
+    retentionWrapper('dau', () => {})
+    expect(spySet).toHaveBeenCalledTimes(0)
+    spySet.mockRestore()
+    spyGet.mockRestore()
+  })
+
+  it('ok', () => {
+    const spyGet = jest
+      .spyOn(storageUtil, 'getRetentionSDKData')
+      .mockImplementation(() => ({
+        retentionData: {
+          dau: []
+        }
+      }))
+
+    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+      .mockImplementation()
+    retentionWrapper('dau', (retentions) => {
+      retentions.push({
+        evc: 40001,
+        evcs: 41001,
+        mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
+        nmo: 1,
+        sentToServer: false,
+        tstmp: 1637904720000
+      })
+      return retentions
+    })
+    expect(spySet).toHaveBeenCalledWith({
+      retentionData: {
+        dau: [
+          {
+            evc: 40001,
+            evcs: 41001,
+            mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
+            nmo: 1,
+            sentToServer: false,
+            tstmp: 1637904720000
+          }
+        ]
+      }
+    })
+    spySet.mockRestore()
+    spyGet.mockRestore()
   })
 })

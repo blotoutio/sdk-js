@@ -5,7 +5,8 @@ import {
   millisecondsToDays,
   getMonthNumber,
   getCurrentWeekNumber,
-  getCurrentMonthNumber
+  getCurrentMonthNumber,
+  getFormattedDate
 } from './timeUtil'
 
 describe('millisecondsToHours', () => {
@@ -88,5 +89,22 @@ describe('getCurrentMonthNumber', () => {
     const result = getCurrentMonthNumber()
     expect(result).toBe(1)
     jest.useRealTimers()
+  })
+})
+
+describe('getFormattedDate', () => {
+  it('null', () => {
+    const result = getFormattedDate(null)
+    expect(result).toBe(null)
+  })
+
+  it('random input', () => {
+    const result = getFormattedDate('asfasdfdsf')
+    expect(result).toBe(null)
+  })
+
+  it('ok', () => {
+    const result = getFormattedDate(new Date('2020-03-25'))
+    expect(result).toBe('03/25/20')
   })
 })
