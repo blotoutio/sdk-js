@@ -25,82 +25,118 @@ const getRetentionData = () => {
   }
 }
 
+// TODO(nejc): this conversion from string to timestamp are dangerous
+// as we don't have timezone, which means that if someone is traveling
+// data will not be correct
+export const getTimestampFromKey = (key) => {
+  if (!key) {
+    return null
+  }
+
+  const eventDate = key.split('-')
+  if (eventDate.length !== 3) {
+    return null
+  }
+
+  return new Date(
+    parseInt(eventDate[2]),
+    parseInt(eventDate[1]) - 1,
+    parseInt(eventDate[0]))
+    .valueOf()
+}
+
 export const getUserObject = (code) => {
-  return {
+  const object = {
     sentToServer: false,
     tstmp: Date.now(),
     mid: getMid(),
     nmo: 1,
-    evc: constants.RETENTION_CATEGORY,
-    evcs: code
+    evc: constants.RETENTION_CATEGORY
   }
+
+  if (code) {
+    object.evcs = code
+  }
+
+  return object
 }
 
 export const getRetentionSDK = () => {
   const date = getDate()
   return {
     createdDate: date,
-    modifiedDate: date,
+    modifiedDate: date, // TODO(nejc): do we need this? I don't see being used
     domain: getDomain(),
     retentionData: getRetentionData()
   }
 }
 
-export const getHighestTimestamp = (array) => {
+export const getHighestTimestamp = (retentions) => {
   return Math.max.apply(
     Math,
-    array.map(function (o) {
-      return o.tstmp
-    })
-  )
+    retentions.map((item) => item.tstmp || 0))
 }
 
-export const getTobeLogDate = (timestamp) => {
-  let eventKey = ''
-  let eventStamp = 0
+export const getLastNextDayEvent = (timestamp) => {
   const eventStore = getEventsStore()
-  Object.keys(eventStore).forEach((key) => {
-    const eventDate = key.split('-')
-    if (eventDate.length < 3) {
-      return
+  if (!eventStore || !timestamp) {
+    return {
+      eventKey: '',
+      eventStamp: 0
     }
+  }
 
-    const eventDateTimeStamp = new Date(
-      parseInt(eventDate[2]),
-      parseInt(eventDate[1]),
-      parseInt(eventDate[0]))
-      .valueOf()
-
-    const currentDate = new Date().getDate()
-    if (eventDateTimeStamp > timestamp && currentDate !== parseInt(eventDate[0])) {
-      eventKey = key
-      eventStamp = eventDateTimeStamp
+  const currentDate = new Date().getDate()
+  for (const key in eventStore) {
+    const keyTimestamp = getTimestampFromKey(key)
+    const eventDate = new Date(keyTimestamp).getDate()
+    if (keyTimestamp > timestamp && currentDate !== eventDate) {
+      return {
+        eventKey: key,
+        eventStamp: keyTimestamp
+      }
     }
-  })
+  }
+
   return {
-    eventKey,
-    eventStamp
+    eventKey: '',
+    eventStamp: 0
   }
 }
 
-export const getSessionTotalDuration = (session) => {
-  let totalTime = 0
-  Object.keys(session).forEach((key) => {
-    const sessionDuration = session[key].endTime - session[key].startTime
-    totalTime += sessionDuration
-  })
-  return totalTime
+export const getSessionTotalDuration = (sessions) => {
+  if (!sessions) {
+    return 0
+  }
+  return Object.keys(sessions).reduce((accumulator, key) => {
+    if (!sessions[key]) {
+      return accumulator
+    }
+
+    return accumulator + (sessions[key].endTime - sessions[key].startTime)
+  }, 0)
 }
 
 export const getSessionAvgObject = (code, date, averageTime) => {
-  return {
+  const object = {
     sentToServer: false,
-    tstmp: date,
     logtstmp: Date.now(),
     mid: getMid(),
-    avgtime: averageTime,
     nmo: 1,
-    evc: constants.RETENTION_CATEGORY,
-    evcs: code
+    evc: constants.RETENTION_CATEGORY
   }
+
+  if (code) {
+    object.evcs = code
+  }
+
+  if (date) {
+    object.tstmp = date
+  }
+
+  if (averageTime) {
+    object.avgtime = averageTime
+  }
+
+  return object
 }

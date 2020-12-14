@@ -11,9 +11,10 @@ import {
   getUserObject,
   getRetentionSDK,
   getHighestTimestamp,
-  getTobeLogDate,
+  getLastNextDayEvent,
   getSessionTotalDuration,
-  getSessionAvgObject
+  getSessionAvgObject,
+  getTimestampFromKey
 } from './utils'
 
 export const create = () => {
@@ -174,12 +175,13 @@ export const setMPU = () => {
   }
 }
 
+// TODO(nejc): DAST is reported with a delay as we only log next time for a previous day
 export const setDAST = () => {
   const retentionSDKData = getRetentionSDKData()
   const retention = retentionSDKData.retentionData.dast
 
-  const highestDailyTimestamp = getHighestTimestamp(retention)
-  const { eventKey, eventStamp } = getTobeLogDate(highestDailyTimestamp)
+  const highestDailyTimestamp = getHighestTimestamp(retention) // 2dec
+  const { eventKey, eventStamp } = getLastNextDayEvent(highestDailyTimestamp)
 
   if (!eventKey) {
     return
@@ -214,17 +216,7 @@ export const setWAST = () => {
 
   const eventStore = getEventsStore()
   Object.keys(eventStore).forEach((key) => {
-    const eventDate = key.split('-')
-    if (eventDate.length < 3) {
-      return
-    }
-
-    const eventDateTimeStamp = new Date(
-      parseInt(eventDate[2]),
-      parseInt(eventDate[1]),
-      parseInt(eventDate[0])
-    )
-
+    const eventDateTimeStamp = getTimestampFromKey(key)
     const eventDateWeekNumber = getWeekNumber(eventDateTimeStamp)
     const highestCheck = !highestWeekNumber || eventDateWeekNumber > highestWeekNumber
     if (highestCheck && eventDateWeekNumber < currentWeekNumber) {
@@ -259,16 +251,7 @@ export const setMAST = () => {
   }
 
   Object.keys(eventStore).forEach((key) => {
-    const eventDate = key.split('-')
-    if (eventDate.length < 3) {
-      return
-    }
-
-    const eventDateTimeStamp = new Date(
-      parseInt(eventDate[2]),
-      parseInt(eventDate[1]),
-      parseInt(eventDate[0])
-    )
+    const eventDateTimeStamp = getTimestampFromKey(key)
     const eventDateMonthNumber = getMonthNumber(eventDateTimeStamp)
     const highestCheck = !highestMonthNumber || eventDateMonthNumber > highestMonthNumber
     if (highestCheck && eventDateMonthNumber < currentMonthNumber) {
