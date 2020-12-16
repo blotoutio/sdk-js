@@ -3,7 +3,7 @@ import { encryptAES, decryptAES } from '../common/securityUtil'
 import * as log from '../common/logUtil'
 import { getManifestVariable, getRootKey, initialize } from '../utils'
 import { millisecondsToDays } from '../common/timeUtil'
-import { getManifestStore } from './manifest'
+import { getModifiedDate } from './manifest'
 import { getLocal, setLocal } from '.'
 
 let rootStore
@@ -56,7 +56,7 @@ export const updateStore = () => {
     licenseExp = constants.DEFAULT_LICENSE_EXPIRE_DAY_ALIVE
   }
 
-  const modifiedDate = getManifestStore().modifiedDate
+  const modifiedDate = getModifiedDate()
   const diffTime = millisecondsToDays(Date.now() - modifiedDate)
   if (diffTime > licenseExp) {
     return

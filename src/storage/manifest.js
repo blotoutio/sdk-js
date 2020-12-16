@@ -1,6 +1,6 @@
 import { getStoreByDomain } from '.'
 
-export const getManifestStore = () => {
+export const getStore = () => {
   const store = getStoreByDomain()
   if (!store) {
     return null
@@ -8,38 +8,47 @@ export const getManifestStore = () => {
   return store.manifest
 }
 
-export const getManifestModifiedDate = () => {
-  const store = getManifestStore()
+export const setData = (manifest) => {
+  if (!manifest) {
+    return
+  }
+
+  const store = getStore()
+  if (!store) {
+    return
+  }
+  store.manifestData = manifest
+}
+
+export const getData = () => {
+  const store = getStore()
+  if (!store) {
+    return null
+  }
+  return store.manifestData
+}
+
+export const getModifiedDate = () => {
+  const store = getStore()
   if (!store) {
     return null
   }
   return store.modifiedDate
 }
 
-export const setManifestCreatedDate = (value) => {
-  const store = getManifestStore()
-  if (!store) {
-    return
-  }
-  store.createdDate = value
-}
-
-export const setManifestModifiedDate = (value) => {
-  const store = getManifestStore()
+export const setModifiedDate = (value) => {
+  const store = getStore()
   if (!store) {
     return
   }
   store.modifiedDate = value
 }
 
-export const setManifestDataStore = (manifest) => {
-  if (!manifest) {
-    return
-  }
-
-  const store = getManifestStore()
+// TODO(nejc): we only have set, but not get. Is this in use?
+export const setCreatedDate = (value) => {
+  const store = getStore()
   if (!store) {
     return
   }
-  store.manifestData = manifest
+  store.createdDate = value
 }

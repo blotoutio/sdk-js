@@ -38,11 +38,11 @@ import { getRetentionSDK } from './retention/utils'
 import { getLocal, getSession, setLocal } from './storage'
 import { getEventsByDate, getStore as getEventsStore, setEventsByDate, setStore as setEventsStore } from './storage/event'
 import {
-  getManifestModifiedDate,
-  getManifestStore,
-  setManifestCreatedDate,
-  setManifestDataStore,
-  setManifestModifiedDate
+  setCreatedDate,
+  getData as getManifestDataStore,
+  setData as setManifestData,
+  getModifiedDate,
+  setModifiedDate
 } from './storage/manifest'
 import { getRootStore, setRootStore, updateStore } from './storage/store'
 import {
@@ -404,10 +404,10 @@ const createDateObject = (event, objectName) => {
   return obj
 }
 
-const setManifestData = (data) => {
-  setManifestCreatedDate(Date.now())
-  setManifestModifiedDate(Date.now())
-  setManifestDataStore(data)
+const setManifest = (data) => {
+  setCreatedDate(Date.now())
+  setModifiedDate(Date.now())
+  setManifestData(data)
   setRetentionObject()
   updateStore()
 }
@@ -428,7 +428,7 @@ const setManifestRefreshInterval = () => {
   globalRetentionInterval = setInterval(() => {
     postRequest(url, payload)
       .then((data) => {
-        setManifestData(data)
+        setManifest(data)
         setManifestRefreshInterval()
         setSyncEventsInterval()
       })
@@ -1214,7 +1214,7 @@ export const pullManifest = () => {
     })
     postRequest(url, payload)
       .then((data) => {
-        setManifestData(data)
+        setManifest(data)
         setManifestRefreshInterval()
         setSyncEventsInterval()
         syncRetentionData()
@@ -1226,26 +1226,26 @@ export const pullManifest = () => {
 }
 
 export const getManifestVariable = (name) => {
-  const manifestStore = getManifestStore()
-  if (!manifestStore || manifestStore.manifestData == null) {
+  const manifestData = getManifestDataStore()
+  if (!manifestData) {
     return null
   }
 
   // TODO(nejc): we should only run this once when we save manifest
-  const manifestData = removeEmptyValue(manifestStore.manifestData.variables)
-  const intervalIndex = manifestData.findIndex((obj) => obj.variableName === name)
+  const variables = removeEmptyValue(manifestData.variables)
+  const intervalIndex = variables.findIndex((obj) => obj.variableName === name)
   if (intervalIndex === -1) {
     return null
   }
 
-  return manifestData[intervalIndex].value
+  return variables[intervalIndex].value
 }
 
 export const updateManifest = () => {
   pullManifest()
     .then((data) => {
-      setManifestModifiedDate(Date.now())
-      setManifestDataStore(data)
+      setModifiedDate(Date.now())
+      setManifestData(data)
       updateStore()
       setManifestRefreshInterval()
       setSyncEventsInterval()
@@ -1257,7 +1257,7 @@ export const updateManifest = () => {
 }
 
 export const checkUpdateForManifest = () => {
-  const modifiedDate = getManifestModifiedDate()
+  const modifiedDate = getModifiedDate()
   const diffTime = millisecondsToHours(Date.now() - modifiedDate)
   let manifestRefData = getManifestVariable(constants.MANIFEST_REFRESH_INTERVAL)
   manifestRefData = manifestRefData || callInterval
@@ -1269,8 +1269,8 @@ export const checkUpdateForManifest = () => {
   setTimeout(() => {
     pullManifest()
       .then((data) => {
-        setManifestModifiedDate(Date.now())
-        setManifestDataStore(data)
+        setModifiedDate(Date.now())
+        setManifestData(data)
         updateStore()
       })
       .catch((error) => {
