@@ -8,7 +8,7 @@ import {
   retentionWrapper
 } from './utils'
 import { getFormattedDate } from '../common/timeUtil'
-import { getEventsSDKDataForDate } from '../storage/event'
+import { getEventsByDate } from '../storage/event'
 
 export const setCount = (key, code) => {
   const func = (retentions) => {
@@ -37,7 +37,7 @@ export const setSession = () => {
       return
     }
 
-    const sdkDataForDate = getEventsSDKDataForDate(eventKey)
+    const sdkDataForDate = getEventsByDate(eventKey)
     if (!sdkDataForDate) {
       return
     }

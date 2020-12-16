@@ -13,7 +13,7 @@ import {
   isSysEvtStore
 } from '../config'
 import { getSessionData } from '../storage'
-import { getEventsSDKDataForDate } from '../storage/event'
+import { getEventsByDate } from '../storage/event'
 
 export const resize = (window) => {
   const eventName = 'resize'
@@ -59,7 +59,7 @@ export const load = (window) => {
         setEvent(eventName, e)
 
         const sessionId = getSessionData(constants.SESSION_ID)
-        const sdkDataForDate = getEventsSDKDataForDate(getDate())
+        const sdkDataForDate = getEventsByDate(getDate())
         const sessionIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
           .findIndex((obj) => obj.name === constants.SESSION)
         if (sessionIndex === -1) {
@@ -112,7 +112,7 @@ export const beforeUnload = (window) => {
     }
 
     const date = getDate()
-    const sdkDataForDate = getEventsSDKDataForDate(date)
+    const sdkDataForDate = getEventsByDate(date)
     const sessionId = getSessionData(constants.SESSION_ID)
     const bncIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
       .findIndex((obj) => obj.name === constants.BOUNCE)

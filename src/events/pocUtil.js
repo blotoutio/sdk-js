@@ -22,7 +22,7 @@ import { getNearestTimestamp } from '../common/timeUtil'
 import { updatePreviousDayEndTime } from '../common/sessionUtil'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { getSessionData } from '../storage'
-import { getEventsSDKDataForDate, getEventsStore } from '../storage/event'
+import { getEventsByDate, getStore as getEventsStore } from '../storage/event'
 import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
 
 const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mousePos = {}) => {
@@ -51,7 +51,7 @@ const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mou
 
 const send = (eventsArray) => {
   const sessionId = getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = getEventsSDKDataForDate(getDate())
+  const sdkDataForDate = getEventsByDate(getDate())
 
   const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
   const url = getManifestUrl()
@@ -144,7 +144,7 @@ export const sendScrollEvents = (arr, startTime, endTime) => {
   }
 
   const sessionId = getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const viewportLen = sdkDataForDate.sessions[sessionId].viewPort.length
   const viewPortObj = sdkDataForDate.sessions[sessionId].viewPort[viewportLen - 1]
   const eventsArray = getScrollPayloadArray(

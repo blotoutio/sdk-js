@@ -1,6 +1,6 @@
 import { constants } from '../config'
 import { getMid, getDate, getDomain } from '../utils'
-import { getEventsStore } from '../storage/event'
+import { getStore as getEventsStore } from '../storage/event'
 import { getRetentionSDKData, setRetentionSDKData } from '../storage/retention'
 import { updateStore } from '../storage/store'
 

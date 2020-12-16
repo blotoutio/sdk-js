@@ -11,7 +11,7 @@ import {
   getTimestampFromKey,
   retentionWrapper
 } from './utils'
-import { getEventsStore } from '../storage/event'
+import { getStore as getEventsStore } from '../storage/event'
 
 export const setCount = (key, code) => {
   const func = (retentions) => {

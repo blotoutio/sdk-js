@@ -36,7 +36,7 @@ import { getUrl, getManifestUrl } from './common/endPointUrlUtil'
 import { encryptRSA, SHA256Encode } from './common/securityUtil'
 import { getRetentionSDK } from './retention/utils'
 import { getLocalData, getSessionData, setLocalData } from './storage'
-import { getEventsSDKDataForDate, getEventsStore, setEventsSDKDataForDate, setEventsStore } from './storage/event'
+import { getEventsByDate, getStore as getEventsStore, setEventsByDate, setStore as setEventsStore } from './storage/event'
 import {
   getManifestModifiedDate,
   getManifestStore,
@@ -285,7 +285,7 @@ const syncPreviousDateEvents = () => {
   }
 
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsSDKDataForDate(notSyncDate)
+  const sdkDataForDate = getEventsByDate(notSyncDate)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
   const { events, devEvents, piiEvents, phiEvents } =
     getNotSyncedEvents(sdkDataForDate.sessions[sessionId].eventsData)
@@ -346,7 +346,7 @@ const setSyncEventsInterval = () => {
       setNewDateObject(date, eventStore)
     } else {
       const sessionId = getSessionData(constants.SESSION_ID)
-      const sdkDataForDate = getEventsSDKDataForDate(date)
+      const sdkDataForDate = getEventsByDate(date)
       const { events, devEvents, piiEvents, phiEvents } = getNotSyncedEvents(
         sdkDataForDate.sessions[sessionId].eventsData
       )
@@ -471,7 +471,7 @@ export const getDeviceType = () => {
 const setGeoData = () => {
   const date = getDate()
   const sessionId = getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const sessionGeo = getValueFromSPTempUseStore(constants.GEO)
   if (!sessionGeo.geo) {
     return
@@ -484,7 +484,7 @@ const setGeoData = () => {
     city: sessionGeo.geo.city
   }
 
-  setEventsSDKDataForDate(date, sdkDataForDate)
+  setEventsByDate(date, sdkDataForDate)
   updateStore()
 }
 
@@ -511,7 +511,7 @@ const syncRetentionData = () => {
 
     const date = getDate()
     const sessionId = getSessionData(constants.SESSION_ID)
-    const sdkDataForDate = getEventsSDKDataForDate(date)
+    const sdkDataForDate = getEventsByDate(date)
     const valueFromSPTempUseStore = getValueFromSPCustomUseStore(constants.PREVIOUS_RETENTION_META)
     const payload = getPayload(sdkDataForDate.sessions[sessionId], arr)
 
@@ -870,7 +870,7 @@ const getEventData = (eventName, event, type) => {
 const sendEvents = (arr) => {
   const date = getDate()
   const sessionId = getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const eventsArr = getEventPayloadArr(arr, date, sessionId)
   if (eventsArr.length === 0) {
     return
@@ -886,12 +886,12 @@ const sendEvents = (arr) => {
 const setUIDInInitEvent = () => {
   const date = getDate()
   const sessionId = getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const eventArr = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
   const index = findObjIndex(eventArr, 'init')
   setTimeout(() => {
     sdkDataForDate.sessions[sessionId].eventsData.eventsInfo[index].mid = getMid()
-    setEventsSDKDataForDate(date, sdkDataForDate)
+    setEventsByDate(date, sdkDataForDate)
   })
 }
 
@@ -1088,7 +1088,7 @@ export const getNotSyncedEventsCount = (obj) => {
 
 export const getEventPayloadArr = (arr, date, sessionId) => {
   const dateEvents = getAllEventsOfDate(date)
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const viewportLen = sdkDataForDate.sessions[sessionId].viewPort.length
   const viewPortObj = sdkDataForDate.sessions[sessionId].viewPort[viewportLen - 1]
 
@@ -1149,7 +1149,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
 export const setEventsSentToServer = (arr, date, sessionId) => {
   const currentSessionId = getSessionData(constants.SESSION_ID)
   arr.forEach((val) => {
-    const sdkDataOfDate = getEventsSDKDataForDate(date)
+    const sdkDataOfDate = getEventsByDate(date)
     if (!sdkDataOfDate) {
       return
     }
@@ -1168,14 +1168,14 @@ export const setEventsSentToServer = (arr, date, sessionId) => {
     if (currentSessionId !== sessionId) {
       sdkDataOfDate.sessions[sessionId].eventsData.sentToServer = true
     }
-    setEventsSDKDataForDate(date, sdkDataOfDate)
+    setEventsByDate(date, sdkDataOfDate)
     updateStore()
   })
   eventSync.progressStatus = false
 }
 
 export const getAllEventsOfDate = (date) => {
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const sessions = sdkDataForDate.sessions
   let arrEvent = []
   for (const x in sessions) {
@@ -1531,7 +1531,7 @@ export const syncEvents = () => {
   setSyncEventsInterval()
   const date = getDate()
   const sessionId = getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const { events, devEvents, piiEvents, phiEvents } =
     getNotSyncedEvents(sdkDataForDate.sessions[sessionId].eventsData)
 
@@ -1557,7 +1557,7 @@ export const syncEvents = () => {
 }
 
 export const sendBounceEvent = (date) => {
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const events = getBounceAndSessionEvents(sdkDataForDate)
   const sessionId = getSessionData(constants.SESSION_ID)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
@@ -1572,7 +1572,7 @@ export const sendBounceEvent = (date) => {
 }
 
 export const sendNavigation = (date, sessionId) => {
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const referrer = getReferrerUrlOfDateSession(date, sessionId)
   const navigations = sdkDataForDate.sessions[sessionId].eventsData.navigationPath.slice()
   const navigationsTime = sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav.slice()
@@ -1604,7 +1604,7 @@ export const detectQueryString = () => {
 }
 
 export const getReferrerUrlOfDateSession = (date, sessionId) => {
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
     .findIndex((obj) => obj.name === 'referrer')
 
@@ -1717,7 +1717,7 @@ export const sendPIIPHIEvent = (events, date, type) => {
 
   const key = type === 'pii' ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
   const sessionId = getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsByDate(date)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
   const publicKey = getManifestVariable(key)
   const obj = encryptRSA(publicKey, JSON.stringify(eventsArr))
@@ -1754,14 +1754,14 @@ export const setReferrer = (ref) => {
 
 export const getPreviousDateSessionEventData = () => {
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsSDKDataForDate(notSyncDate)
+  const sdkDataForDate = getEventsByDate(notSyncDate)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
   return sdkDataForDate.sessions[sessionId].eventsData
 }
 
 export const resetPreviousDateSessionNavigation = () => {
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsSDKDataForDate(notSyncDate)
+  const sdkDataForDate = getEventsByDate(notSyncDate)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
   sdkDataForDate.sessions[sessionId].eventsData.navigationPath = []
   sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav = []
@@ -1769,7 +1769,7 @@ export const resetPreviousDateSessionNavigation = () => {
 
 export const getPreviousDateReferrer = () => {
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsSDKDataForDate(notSyncDate)
+  const sdkDataForDate = getEventsByDate(notSyncDate)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
 
   const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo.findIndex((obj) => obj.name === 'referrer')

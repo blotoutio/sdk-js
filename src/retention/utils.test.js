@@ -170,7 +170,7 @@ describe('getHighestTimestamp', () => {
 describe('getLastNextDayEvent', () => {
   it('null store', () => {
     const spy = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => null)
 
     const result = getLastNextDayEvent()
@@ -183,7 +183,7 @@ describe('getLastNextDayEvent', () => {
 
   it('null timestamp', () => {
     const spy = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({
         '10-05-2020': {}
       }))
@@ -198,7 +198,7 @@ describe('getLastNextDayEvent', () => {
 
   it('dec 13st last log, current dec 14th', () => {
     const spy = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({
         '13-12-2020': {}
       }))
@@ -213,7 +213,7 @@ describe('getLastNextDayEvent', () => {
 
   it('dec 11st last log, current dec 14th', () => {
     const spy = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({
         '11-12-2020': {},
         '12-12-2020': {},
@@ -230,7 +230,7 @@ describe('getLastNextDayEvent', () => {
 
   it('dec 12st last log, current dec 14th', () => {
     const spy = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({
         '12-12-2020': {},
         '13-12-2020': {}

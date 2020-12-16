@@ -1,21 +1,37 @@
 import { getDomainStore } from '.'
 import { error } from '../common/logUtil'
 
-const getEventsStoreForDate = (dateString) => {
+export const getStore = () => {
+  const store = getDomainStore()
+  if (!store) {
+    return null
+  }
+  return store.events
+}
+
+export const setStore = (value) => {
+  const store = getDomainStore()
+  if (!store) {
+    return
+  }
+  store.events = value
+}
+
+const getStoreByDate = (dateString) => {
   if (!dateString) {
     error('Proper date as string needs to be passed')
     return null
   }
 
-  const store = getEventsStore()
+  const store = getStore()
   if (!store) {
     return
   }
   return store[dateString]
 }
 
-export const getEventsSDKDataForDate = (dateString) => {
-  const store = getEventsStoreForDate(dateString)
+export const getEventsByDate = (dateString) => {
+  const store = getStoreByDate(dateString)
   if (!store) {
     return null
   }
@@ -24,25 +40,10 @@ export const getEventsSDKDataForDate = (dateString) => {
     : JSON.parse(store.sdkData)
 }
 
-export const setEventsSDKDataForDate = (dateString, data) => {
-  const store = getEventsStoreForDate(dateString)
+export const setEventsByDate = (dateString, data) => {
+  const store = getStoreByDate(dateString)
   if (!store) {
     return
   }
   store.sdkData = data
-}
-export const getEventsStore = () => {
-  const store = getDomainStore()
-  if (!store) {
-    return null
-  }
-  return store.events
-}
-
-export const setEventsStore = (value) => {
-  const store = getDomainStore()
-  if (!store) {
-    return
-  }
-  store.events = value
 }

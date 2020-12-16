@@ -137,7 +137,7 @@ describe('setSession', () => {
       }))
 
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => null)
 
     const spySet = jest.spyOn(retentionStorage, 'setRetentionSDKData')
@@ -159,7 +159,7 @@ describe('setSession', () => {
       }))
 
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({
         '9-12-2020': {}
       }))
@@ -225,7 +225,7 @@ describe('setSession', () => {
       }))
 
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({
         '9-11-2020': {
           sdkData: {
@@ -281,7 +281,7 @@ describe('setSession', () => {
       }))
 
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsStore')
+      .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({
         '9-11-2020': {
           sdkData: {
