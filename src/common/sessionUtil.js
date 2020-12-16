@@ -39,7 +39,7 @@ import { getNearestTimestamp } from './timeUtil'
 import { getSession, setSession } from '../storage'
 import { getEventsByDate, getStore as getEventsStore, setEventsByDate } from '../storage/event'
 import { updateStore } from '../storage/store'
-import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
+import { getTempUseValue } from '../storage/sharedPreferences'
 
 const sumFunction = (total, num) => {
   return total + num
@@ -417,7 +417,7 @@ export const getSessionInfoPayload = (date, sessionId) => {
 
   const obj = {
     mid: getMid(),
-    userid: getValueFromSPTempUseStore(constants.UID),
+    userid: getTempUseValue(constants.UID),
     evn: constants.SESSION_INFO,
     evcs: systemEventCode.sessionInfo,
     evdc: 1,

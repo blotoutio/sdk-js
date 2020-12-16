@@ -24,7 +24,7 @@ describe('codeForCustomCodifiedEvent', () => {
 
   it('event already exists with the same name for different events', () => {
     jest
-      .spyOn(storage, 'getValueFromSPNormalUseStore')
+      .spyOn(storage, 'getNormalUseValue')
       .mockImplementation(() => ({
         event1: 24008,
         event2: 21545
@@ -34,7 +34,7 @@ describe('codeForCustomCodifiedEvent', () => {
 
   it('event already exists with the same name same event', () => {
     jest
-      .spyOn(storage, 'getValueFromSPNormalUseStore')
+      .spyOn(storage, 'getNormalUseValue')
       .mockImplementation(() => ({
         awesome_event: 24008,
         event2: 21545

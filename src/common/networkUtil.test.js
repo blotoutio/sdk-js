@@ -12,7 +12,7 @@ describe('getRequest', () => {
 
   it('200', async () => {
     jest
-      .spyOn(storage, 'getValueFromSPTempUseStore')
+      .spyOn(storage, 'getTempUseValue')
       .mockImplementation(() => 'aosdfkaosfkoaskfo23e23')
 
     const result = { success: true }
@@ -86,7 +86,7 @@ describe('postRequest', () => {
 
   it('200', async () => {
     jest
-      .spyOn(storage, 'getValueFromSPTempUseStore')
+      .spyOn(storage, 'getTempUseValue')
       .mockImplementation(() => 'aosdfkaosfkoaskfo23e23')
 
     const result = { success: true }

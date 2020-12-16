@@ -46,9 +46,10 @@ import {
 } from './storage/manifest'
 import { getRootStore, setRootStore, updateStore } from './storage/store'
 import {
-  getValueFromSPCustomUseStore,
-  getValueFromSPTempUseStore,
-  setValueInSPCustomUseStore, setValueInSPTempUseStore
+  getCustomUseValue,
+  getTempUseValue,
+  setCustomUseValue,
+  setTempUseValue
 } from './storage/sharedPreferences'
 import { getSDK, setSDK } from './storage/retention'
 
@@ -472,7 +473,7 @@ const setGeoData = () => {
   const date = getDate()
   const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
-  const sessionGeo = getValueFromSPTempUseStore(constants.GEO)
+  const sessionGeo = getTempUseValue(constants.GEO)
   if (!sessionGeo.geo) {
     return
   }
@@ -512,7 +513,7 @@ const syncRetentionData = () => {
     const date = getDate()
     const sessionId = getSession(constants.SESSION_ID)
     const sdkDataForDate = getEventsByDate(date)
-    const valueFromSPTempUseStore = getValueFromSPCustomUseStore(constants.PREVIOUS_RETENTION_META)
+    const valueFromSPTempUseStore = getCustomUseValue(constants.PREVIOUS_RETENTION_META)
     const payload = getPayload(sdkDataForDate.sessions[sessionId], arr)
 
     if (valueFromSPTempUseStore) {
@@ -520,7 +521,7 @@ const syncRetentionData = () => {
     }
 
     const url = getManifestUrl('retention')
-    const tempUseData = getValueFromSPTempUseStore(constants.FAILED_RETENTION)
+    const tempUseData = getTempUseValue(constants.FAILED_RETENTION)
     let isTodayDate = false
     if (tempUseData) {
       Object.keys(tempUseData).forEach((val) => {
@@ -549,19 +550,19 @@ const sendRetentionReq = (url, retentionStore, payload, date) => {
   postRequest(url, JSON.stringify(payload))
     .then(() => {
       setSendtoServer(retentionStore, payload.events)
-      setValueInSPCustomUseStore(constants.PREVIOUS_RETENTION_META, payload.meta)
+      setCustomUseValue(constants.PREVIOUS_RETENTION_META, payload.meta)
 
-      const tempUseData = getValueFromSPTempUseStore(constants.FAILED_RETENTION)
+      const tempUseData = getTempUseValue(constants.FAILED_RETENTION)
       if (date && tempUseData[date]) {
         delete tempUseData[date]
       }
-      setValueInSPTempUseStore(constants.FAILED_RETENTION, tempUseData)
+      setTempUseValue(constants.FAILED_RETENTION, tempUseData)
 
       updateStore()
     })
     .catch(() => {
       const date = getDate()
-      let tempUseData = getValueFromSPTempUseStore(constants.FAILED_RETENTION)
+      let tempUseData = getTempUseValue(constants.FAILED_RETENTION)
       if (!tempUseData) {
         tempUseData = {}
       }
@@ -569,7 +570,7 @@ const sendRetentionReq = (url, retentionStore, payload, date) => {
       if (!tempUseData[date]) {
         tempUseData[date] = payload
       }
-      setValueInSPTempUseStore(constants.FAILED_RETENTION, tempUseData)
+      setTempUseValue(constants.FAILED_RETENTION, tempUseData)
       updateStore()
     })
 }
@@ -708,7 +709,7 @@ const getPmeta = (obj1, obj2) => {
 const getRetentionPayloadArr = (arr, name) => {
   const eventName = name === constants.IS_NEW_USER ? constants.DNU : name
   const result = []
-  const UID = getValueFromSPTempUseStore(constants.UID)
+  const UID = getTempUseValue(constants.UID)
   arr.forEach((val) => {
     const eventTime = isApprox ? getNearestTimestamp(val.tstmp) : val.tstmp
     const data = {
@@ -760,7 +761,7 @@ const getDomainOfReferrer = (ref) => {
 }
 
 const getNavigationPayloadArr = (navigations, navigationsTime) => {
-  const UID = getValueFromSPTempUseStore(constants.UID)
+  const UID = getTempUseValue(constants.UID)
   const eventTime = isApprox ? getNearestTimestamp(Date.now()) : Date.now()
   return [{
     mid: getMid(),
@@ -782,7 +783,7 @@ const userIDUUID = () => {
     return staticUserID
   }
 
-  const userUUID = getValueFromSPTempUseStore(constants.UID)
+  const userUUID = getTempUseValue(constants.UID)
   if (userUUID) {
     staticUserID = userUUID
     return staticUserID
@@ -817,11 +818,11 @@ const convertTo64CharUUID = (stringToConvert) => {
 }
 
 const setUID = () => {
-  const tempUseData = getValueFromSPTempUseStore(constants.UID)
+  const tempUseData = getTempUseValue(constants.UID)
   if (!tempUseData) {
     const userID = userIDUUID()
     updateIndexScore(userID, true)
-    setValueInSPTempUseStore(constants.UID, userID)
+    setTempUseValue(constants.UID, userID)
     updateStore()
     return
   }
@@ -1010,7 +1011,7 @@ export const createRefEventInfoObj = (eventName, ref, meta = {}) => {
 
 export const getMid = () => {
   const domainName = getDomain()
-  const userID = getValueFromSPTempUseStore(constants.UID)
+  const userID = getTempUseValue(constants.UID)
   return `${domainName}-${userID}-${Date.now()}`
 }
 
@@ -1041,7 +1042,7 @@ export const findObjIndex = (eventArr, eventName) => {
 }
 
 export const setGeoDetails = () => {
-  const sessionGeo = getValueFromSPTempUseStore(constants.GEO)
+  const sessionGeo = getTempUseValue(constants.GEO)
   const relativeGeoPath = getManifestVariable(constants.GEO_IP_PATH)
     ? getManifestVariable(constants.GEO_IP_PATH)
     : manifestConst.Geo_Ip_Path
@@ -1049,7 +1050,7 @@ export const setGeoDetails = () => {
     const url = `${getUrl()}/${relativeGeoPath}`
     getRequest(url)
       .then((data) => {
-        setValueInSPTempUseStore(constants.GEO, data)
+        setTempUseValue(constants.GEO, data)
         setGeoData()
       })
       .catch(log.error)
@@ -1130,7 +1131,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     const obj = {
       mid: val.mid,
-      userid: getValueFromSPTempUseStore(constants.UID),
+      userid: getTempUseValue(constants.UID),
       evn: val.name,
       evcs: val.evcs,
       evdc: eventCount.length,

@@ -1,12 +1,12 @@
 import { constants } from '../config'
-import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
+import { getTempUseValue } from '../storage/sharedPreferences'
 
 export async function getRequest (url) {
   if (!url) {
     return Promise.reject(new Error('URL is empty'))
   }
 
-  const token = getValueFromSPTempUseStore(constants.SDK_TOKEN) || ''
+  const token = getTempUseValue(constants.SDK_TOKEN) || ''
   return await fetch(
     url,
     {
@@ -31,7 +31,7 @@ export async function postRequest (url, payload) {
     return Promise.reject(new Error('URL is empty'))
   }
 
-  const token = getValueFromSPTempUseStore(constants.SDK_TOKEN) || ''
+  const token = getTempUseValue(constants.SDK_TOKEN) || ''
   return await fetch(
     url,
     {

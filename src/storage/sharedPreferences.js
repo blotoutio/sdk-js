@@ -1,6 +1,6 @@
 import { getStoreByDomain } from '.'
 
-const getSharedPreferenceStore = () => {
+const getStore = () => {
   const store = getStoreByDomain()
   if (!store) {
     return null
@@ -8,86 +8,64 @@ const getSharedPreferenceStore = () => {
   return store.sharedPreference
 }
 
-const getSPTempUseStore = () => {
-  const store = getSharedPreferenceStore()
+const getTempUse = () => {
+  const store = getStore()
   if (!store) {
     return null
   }
   return store.tempUse
 }
 
-const getSPNormalUseStore = () => {
-  const store = getSharedPreferenceStore()
+const getNormalUse = () => {
+  const store = getStore()
   if (!store) {
     return null
   }
   return store.normalUse
 }
 
-const getSPCustomUseStore = () => {
-  const store = getSharedPreferenceStore()
+const getCustomUse = () => {
+  const store = getStore()
   if (!store) {
     return null
   }
   return store.customUse
 }
 
-export const setValueInSPTempUseStore = (key, value) => {
-  if (!key) {
-    return
-  }
-
-  const store = getSPTempUseStore()
-  if (!store) {
-    return
-  }
-  store[key] = value
-}
-
-export const getValueFromSPTempUseStore = (key) => {
-  const store = getSPTempUseStore()
+const getValue = (store, key) => {
   if (!store) {
     return null
   }
   return store[key]
 }
 
-export const setValueInSPNormalUseStore = (key, value) => {
-  if (!key) {
-    return
-  }
-
-  const store = getSPNormalUseStore()
-  if (!store) {
+const setValue = (store, key, value) => {
+  if (!key || !store) {
     return
   }
   store[key] = value
 }
 
-export const getValueFromSPNormalUseStore = (key) => {
-  const store = getSPNormalUseStore()
-  if (!store) {
-    return null
-  }
-  return store[key]
+export const setTempUseValue = (key, value) => {
+  setValue(getTempUse(), key, value)
 }
 
-export const setValueInSPCustomUseStore = (key, value) => {
-  if (!key) {
-    return
-  }
-
-  const store = getSPCustomUseStore()
-  if (!store) {
-    return
-  }
-  store[key] = value
+export const getTempUseValue = (key) => {
+  return getValue(getTempUse(), key)
 }
 
-export const getValueFromSPCustomUseStore = function (key) {
-  const store = getSPCustomUseStore()
-  if (!store) {
-    return null
-  }
-  return store[key]
+export const setNormalUseValue = (key, value) => {
+  setValue(getNormalUse(), key, value)
+}
+
+export const getNormalUseValue = (key) => {
+  return getValue(getNormalUse(), key)
+}
+
+export const setCustomUseValue = (key, value) => {
+  setValue(getCustomUse(), key, value)
+}
+
+export const getCustomUseValue = function (key) {
+  return getValue(getCustomUse(), key)
 }

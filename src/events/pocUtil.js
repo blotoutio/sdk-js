@@ -23,7 +23,7 @@ import { updatePreviousDayEndTime } from '../common/sessionUtil'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { getSession } from '../storage'
 import { getEventsByDate, getStore as getEventsStore } from '../storage/event'
-import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
+import { getTempUseValue } from '../storage/sharedPreferences'
 
 const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mousePos = {}) => {
   const position = {
@@ -70,7 +70,7 @@ const getScrollPayloadArray = (arr, date, sessionId, startTime, endTime, viewPor
     screen: viewPortObj,
     session_id: sessionId
   }
-  const UID = getValueFromSPTempUseStore(constants.UID)
+  const UID = getTempUseValue(constants.UID)
   const result = []
   arr.forEach((val) => {
     if (!val) {

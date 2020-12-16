@@ -27,7 +27,7 @@ import {
   isDevEvtStore
 } from './config'
 import { getSession, setLocal } from './storage'
-import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/sharedPreferences'
+import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
 
 (function (window) {
   const SDK = function () {}
@@ -86,7 +86,7 @@ import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/
       initialize(false)
       setRetentionData()
 
-      setValueInSPTempUseStore(constants.SDK_TOKEN, preferences.token)
+      setTempUseValue(constants.SDK_TOKEN, preferences.token)
       if (!checkManifest()) {
         pullManifest()
           .then(() => {})
@@ -123,7 +123,7 @@ import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/
   }
 
   SDK.prototype.getUserId = function () {
-    return getValueFromSPTempUseStore(constants.UID)
+    return getTempUseValue(constants.UID)
   }
 
   SDK.prototype.logPIIEvent = function (eventName, meta = {}, objectName = '') {

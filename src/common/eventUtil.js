@@ -1,7 +1,7 @@
 import { SHA1Encode } from './securityUtil'
 import { constants } from '../config'
 import { updateStore } from '../storage/store'
-import { getValueFromSPNormalUseStore, setValueInSPNormalUseStore } from '../storage/sharedPreferences'
+import { getNormalUseValue, setNormalUseValue } from '../storage/sharedPreferences'
 
 const hashIntSum = (eventName) => {
   const eventNameL = eventName.toString().toLowerCase()
@@ -15,7 +15,7 @@ const hashIntSum = (eventName) => {
 }
 
 const checkIfCodeExists = (eventName) => {
-  const customEventStore = getValueFromSPNormalUseStore(constants.CUSTOM_EVENT_STORAGE)
+  const customEventStore = getNormalUseValue(constants.CUSTOM_EVENT_STORAGE)
   if (customEventStore) {
     const valueFoundIsEventCode = customEventStore[eventName]
     if (valueFoundIsEventCode) {
@@ -43,7 +43,7 @@ export const codeForCustomCodifiedEvent = (eventName) => {
   let eventNameIntSum = hashIntSum(eventName)
   eventSubCode = generateSubCode(eventNameIntSum)
 
-  const customEventStore = getValueFromSPNormalUseStore(constants.CUSTOM_EVENT_STORAGE) || {}
+  const customEventStore = getNormalUseValue(constants.CUSTOM_EVENT_STORAGE) || {}
   const keys = Object.keys(customEventStore)
   for (let i = 0; i < keys.length; i++) {
     const valAsEventName = keys[i]
@@ -55,7 +55,7 @@ export const codeForCustomCodifiedEvent = (eventName) => {
   }
 
   customEventStore[eventName] = eventSubCode
-  setValueInSPNormalUseStore(constants.CUSTOM_EVENT_STORAGE, customEventStore)
+  setNormalUseValue(constants.CUSTOM_EVENT_STORAGE, customEventStore)
 
   updateStore()
   return eventSubCode
