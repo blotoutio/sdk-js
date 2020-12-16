@@ -2,8 +2,7 @@ const headers = [
   navigator.platform,
   navigator.userAgent,
   navigator.appVersion,
-  navigator.vendor,
-  window.opera
+  navigator.vendor
 ]
 
 const systems = [
@@ -21,16 +20,14 @@ const systems = [
 ]
 
 const matchItem = function (string) {
-  for (let i = 0; i < systems.length; i += 1) {
-    const regex = new RegExp(systems[i].value, 'i')
+  for (const system of systems) {
+    const regex = new RegExp(system.value, 'i')
     if (regex.test(string)) {
-      const regexVersion = new RegExp(systems[i].version + '[- /:;]([\\d._]+)', 'i')
+      const regexVersion = new RegExp(system.version + '[- /:;]([\\d._]+)', 'i')
       let matches = string.match(regexVersion)
       let version = ''
-      if (matches) {
-        if (matches[1]) {
-          matches = matches[1]
-        }
+      if (matches && matches.length > 1) {
+        matches = matches[1]
       }
 
       if (matches) {
@@ -46,12 +43,12 @@ const matchItem = function (string) {
         version = '0'
       }
       return {
-        name: systems[i].name,
+        name: system.name,
         version: version
       }
     }
   }
-  return { name: 'unknown', version: 0 }
+  return { name: 'unknown', version: '0' }
 }
 
 export const getOS = () => {

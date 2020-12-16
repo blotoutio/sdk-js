@@ -16,7 +16,7 @@ import {
 import { getNearestTimestamp, millisecondsToHours } from './common/timeUtil'
 import { codeForCustomCodifiedEvent } from './common/eventUtil'
 import * as log from './common/logUtil'
-import { getOS } from './common/systemUtil'
+import { getOS } from './common/operatingSystemUtil'
 import * as retention from './retention'
 import {
   syncPreviousSessionEvents,

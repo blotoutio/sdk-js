@@ -29,8 +29,6 @@ export const setCount = (key, code) => {
   retentionWrapper(key, func)
 }
 
-// TODO(nejc): DAST is reported with a delay as we only log next time for a
-//  previous day
 export const setSession = () => {
   const func = (retentions) => {
     const highestDailyTimestamp = getHighestTimestamp(retentions)
