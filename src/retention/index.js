@@ -1,17 +1,9 @@
 import { constants } from '../config'
 import { getLocalData } from '../common/storageUtil'
-import { getRetentionSDK } from './utils'
 
 import * as dailyActive from './dailyActive'
 import * as weeklyActive from './weeklyActive'
 import * as monthlyActive from './monthlyActive'
-
-export const create = () => {
-  return {
-    isSynced: false,
-    retentionSDK: getRetentionSDK()
-  }
-}
 
 export const setDailyActiveUsage = () => {
   dailyActive.setCount('dau', constants.DAUCode)

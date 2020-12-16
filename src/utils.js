@@ -17,7 +17,11 @@ import { getNearestTimestamp, millisecondsToHours } from './common/timeUtil'
 import { codeForCustomCodifiedEvent } from './common/eventUtil'
 import * as log from './common/logUtil'
 import { getOS } from './common/operatingSystemUtil'
-import * as retention from './retention'
+import {
+  setDailyActiveUsage,
+  setMonthlyActiveUsage,
+  setWeeklyActiveUsage
+} from './retention'
 import {
   syncPreviousSessionEvents,
   getNotSyncedSession,
@@ -31,6 +35,7 @@ import * as storage from './common/storageUtil'
 import { v4 as uuidv4 } from 'uuid'
 import { getUrl, getManifestUrl } from './common/endPointUrlUtil'
 import { encryptRSA, SHA256Encode } from './common/securityUtil'
+import { getRetentionSDK } from './retention/utils'
 
 let globalRetentionInterval = null
 let globalEventInterval = null
@@ -880,7 +885,11 @@ const setRetentionObject = () => {
   if (!mode || mode === constants.FIRSTPARTY_MODE) {
     return
   }
-  storage.setRetentionSDKData(retention.create())
+  if (storage.getRetentionSDKData() != null) {
+    return
+  }
+  const retentionSdkData = getRetentionSDK()
+  storage.setRetentionSDKData(retentionSdkData)
   storage.updateStore()
 }
 
@@ -1369,9 +1378,9 @@ export const setRetentionData = () => {
   if (!mode || mode === constants.FIRSTPARTY_MODE) {
     return
   }
-  retention.setDailyActiveUsage()
-  retention.setWeeklyActiveUsage()
-  retention.setMonthlyActiveUsage()
+  setDailyActiveUsage()
+  setWeeklyActiveUsage()
+  setMonthlyActiveUsage()
 }
 
 export const getGeoPayload = (geo) => {
