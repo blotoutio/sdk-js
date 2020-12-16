@@ -1,6 +1,7 @@
-import { updateStore, setValueInSPNormalUseStore, getValueFromSPNormalUseStore } from './storageUtil'
 import { SHA1Encode } from './securityUtil'
 import { constants } from '../config'
+import { updateStore } from '../storage/store'
+import { getValueFromSPNormalUseStore, setValueInSPNormalUseStore } from '../storage/sharedPreferences'
 
 const hashIntSum = (eventName) => {
   const eventNameL = eventName.toString().toLowerCase()

@@ -9,7 +9,8 @@ import {
   retentionWrapper
 } from './utils'
 import * as commonUtils from '../utils'
-import * as storageUtil from '../common/storageUtil'
+import * as retentionStorage from '../storage/retention'
+import * as eventStorage from '../storage/event'
 
 let spyGetUserObject
 beforeEach(() => {
@@ -169,7 +170,7 @@ describe('getHighestTimestamp', () => {
 describe('getLastNextDayEvent', () => {
   it('null store', () => {
     const spy = jest
-      .spyOn(storageUtil, 'getEventsStore')
+      .spyOn(eventStorage, 'getEventsStore')
       .mockImplementation(() => null)
 
     const result = getLastNextDayEvent()
@@ -182,7 +183,7 @@ describe('getLastNextDayEvent', () => {
 
   it('null timestamp', () => {
     const spy = jest
-      .spyOn(storageUtil, 'getEventsStore')
+      .spyOn(eventStorage, 'getEventsStore')
       .mockImplementation(() => ({
         '10-05-2020': {}
       }))
@@ -197,7 +198,7 @@ describe('getLastNextDayEvent', () => {
 
   it('dec 13st last log, current dec 14th', () => {
     const spy = jest
-      .spyOn(storageUtil, 'getEventsStore')
+      .spyOn(eventStorage, 'getEventsStore')
       .mockImplementation(() => ({
         '13-12-2020': {}
       }))
@@ -212,7 +213,7 @@ describe('getLastNextDayEvent', () => {
 
   it('dec 11st last log, current dec 14th', () => {
     const spy = jest
-      .spyOn(storageUtil, 'getEventsStore')
+      .spyOn(eventStorage, 'getEventsStore')
       .mockImplementation(() => ({
         '11-12-2020': {},
         '12-12-2020': {},
@@ -229,7 +230,7 @@ describe('getLastNextDayEvent', () => {
 
   it('dec 12st last log, current dec 14th', () => {
     const spy = jest
-      .spyOn(storageUtil, 'getEventsStore')
+      .spyOn(eventStorage, 'getEventsStore')
       .mockImplementation(() => ({
         '12-12-2020': {},
         '13-12-2020': {}
@@ -314,7 +315,7 @@ describe('getSessionAvgObject', () => {
 
 describe('retentionWrapper', () => {
   it('null values', () => {
-    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+    const spySet = jest.spyOn(retentionStorage, 'setRetentionSDKData')
       .mockImplementation()
     retentionWrapper()
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -323,10 +324,10 @@ describe('retentionWrapper', () => {
 
   it('empty storage', () => {
     const spyGet = jest
-      .spyOn(storageUtil, 'getRetentionSDKData')
+      .spyOn(retentionStorage, 'getRetentionSDKData')
       .mockImplementation(() => null)
 
-    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+    const spySet = jest.spyOn(retentionStorage, 'setRetentionSDKData')
       .mockImplementation()
     retentionWrapper('dau', () => {})
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -336,10 +337,10 @@ describe('retentionWrapper', () => {
 
   it('empty retentionData', () => {
     const spyGet = jest
-      .spyOn(storageUtil, 'getRetentionSDKData')
+      .spyOn(retentionStorage, 'getRetentionSDKData')
       .mockImplementation(() => ({ }))
 
-    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+    const spySet = jest.spyOn(retentionStorage, 'setRetentionSDKData')
       .mockImplementation()
     retentionWrapper('dau', () => {})
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -349,12 +350,12 @@ describe('retentionWrapper', () => {
 
   it('key not defined in storage', () => {
     const spyGet = jest
-      .spyOn(storageUtil, 'getRetentionSDKData')
+      .spyOn(retentionStorage, 'getRetentionSDKData')
       .mockImplementation(() => ({
         retentionData: {}
       }))
 
-    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+    const spySet = jest.spyOn(retentionStorage, 'setRetentionSDKData')
       .mockImplementation()
     retentionWrapper('dau', () => {})
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -364,14 +365,14 @@ describe('retentionWrapper', () => {
 
   it('ok', () => {
     const spyGet = jest
-      .spyOn(storageUtil, 'getRetentionSDKData')
+      .spyOn(retentionStorage, 'getRetentionSDKData')
       .mockImplementation(() => ({
         retentionData: {
           dau: []
         }
       }))
 
-    const spySet = jest.spyOn(storageUtil, 'setRetentionSDKData')
+    const spySet = jest.spyOn(retentionStorage, 'setRetentionSDKData')
       .mockImplementation()
     retentionWrapper('dau', (retentions) => {
       retentions.push({

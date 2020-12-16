@@ -1,9 +1,4 @@
-import {
-  setLocalData,
-  getLocalData,
-  setSessionData,
-  getSessionData
-} from './storageUtil'
+import { getLocalData, getSessionData, setLocalData, setSessionData } from '.'
 
 describe('LocalData', () => {
   it('set', () => {

@@ -3,7 +3,6 @@ import {
   getMonthNumber,
   getCurrentMonthNumber
 } from '../common/timeUtil'
-import { getEventsStore } from '../common/storageUtil'
 import {
   getUserObject,
   getHighestTimestamp,
@@ -12,6 +11,7 @@ import {
   getTimestampFromKey,
   retentionWrapper
 } from './utils'
+import { getEventsStore } from '../storage/event'
 
 export const setCount = (key, code) => {
   const func = (retentions) => {

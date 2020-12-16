@@ -1,5 +1,4 @@
 import { constants } from '../config'
-import { getEventsSDKDataForDate } from '../common/storageUtil'
 import {
   getUserObject,
   getHighestTimestamp,
@@ -9,6 +8,7 @@ import {
   retentionWrapper
 } from './utils'
 import { getFormattedDate } from '../common/timeUtil'
+import { getEventsSDKDataForDate } from '../storage/event'
 
 export const setCount = (key, code) => {
   const func = (retentions) => {

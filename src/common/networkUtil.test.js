@@ -1,5 +1,5 @@
 import { getRequest, postRequest } from './networkUtil'
-import * as storage from './storageUtil'
+import * as storage from '../storage/sharedPreferences'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))

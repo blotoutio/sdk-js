@@ -1,5 +1,5 @@
 import { setEvent } from '../common/sessionUtil'
-import { getSessionData } from '../common/storageUtil'
+import { getSessionData } from '../storage'
 import {
   constants,
   isSysEvtCollect,

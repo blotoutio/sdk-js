@@ -1,5 +1,5 @@
 import { codeForCustomCodifiedEvent } from './eventUtil'
-import * as storage from './storageUtil'
+import * as storage from '../storage/sharedPreferences'
 
 describe('codeForCustomCodifiedEvent', () => {
   it('null', () => {

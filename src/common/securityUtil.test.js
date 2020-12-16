@@ -1,7 +1,7 @@
 import { SHA256Encode, decryptAES, encryptAES, encryptRSA, SHA1Encode } from './securityUtil'
-import { setLocalData } from './storageUtil'
 import { getRootIndexKey } from '../utils'
 import AES from 'crypto-js/aes'
+import { setLocalData } from '../storage'
 
 beforeEach(() => {
   setLocalData(getRootIndexKey(), 'test_index')

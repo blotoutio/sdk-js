@@ -31,11 +31,26 @@ import {
   addSessionInfoEvent,
   eventSync
 } from './common/sessionUtil'
-import * as storage from './common/storageUtil'
 import { v4 as uuidv4 } from 'uuid'
 import { getUrl, getManifestUrl } from './common/endPointUrlUtil'
 import { encryptRSA, SHA256Encode } from './common/securityUtil'
 import { getRetentionSDK } from './retention/utils'
+import { getLocalData, getSessionData, setLocalData } from './storage'
+import { getEventsSDKDataForDate, getEventsStore, setEventsSDKDataForDate, setEventsStore } from './storage/event'
+import {
+  getManifestModifiedDate,
+  getManifestStore,
+  setManifestCreatedDate,
+  setManifestDataStore,
+  setManifestModifiedDate
+} from './storage/manifest'
+import { getRootStore, setRootStore, updateStore } from './storage/store'
+import {
+  getValueFromSPCustomUseStore,
+  getValueFromSPTempUseStore,
+  setValueInSPCustomUseStore, setValueInSPTempUseStore
+} from './storage/sharedPreferences'
+import { getRetentionSDKData, setRetentionSDKData } from './storage/retention'
 
 let globalRetentionInterval = null
 let globalEventInterval = null
@@ -47,7 +62,7 @@ let storageRootKey = null
 
 const createDaySchema = (session) => {
   const sessions = {}
-  const id = storage.getSessionData('sessionId')
+  const id = getSessionData('sessionId')
   if (id) {
     sessions[id] = session
   }
@@ -270,7 +285,7 @@ const syncPreviousDateEvents = () => {
   }
 
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = storage.getEventsSDKDataForDate(notSyncDate)
+  const sdkDataForDate = getEventsSDKDataForDate(notSyncDate)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
   const { events, devEvents, piiEvents, phiEvents } =
     getNotSyncedEvents(sdkDataForDate.sessions[sessionId].eventsData)
@@ -298,7 +313,7 @@ const syncPreviousDateEvents = () => {
 }
 
 const getNotSyncedDate = () => {
-  const obj = storage.getEventsStore()
+  const obj = getEventsStore()
   let notSyncDate
   for (const x in obj) {
     notSyncDate = x
@@ -325,13 +340,13 @@ const setSyncEventsInterval = () => {
   }
   globalEventInterval = setInterval(() => {
     const date = getDate()
-    const eventStore = storage.getEventsStore()
+    const eventStore = getEventsStore()
     if (!eventStore[date]) {
       updatePreviousDayEndTime()
       setNewDateObject(date, eventStore)
     } else {
-      const sessionId = storage.getSessionData(constants.SESSION_ID)
-      const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+      const sessionId = getSessionData(constants.SESSION_ID)
+      const sdkDataForDate = getEventsSDKDataForDate(date)
       const { events, devEvents, piiEvents, phiEvents } = getNotSyncedEvents(
         sdkDataForDate.sessions[sessionId].eventsData
       )
@@ -390,11 +405,11 @@ const createDateObject = (event, objectName) => {
 }
 
 const setManifestData = (data) => {
-  storage.setManifestCreatedDate(Date.now())
-  storage.setManifestModifiedDate(Date.now())
-  storage.setManifestDataStore(data)
+  setManifestCreatedDate(Date.now())
+  setManifestModifiedDate(Date.now())
+  setManifestDataStore(data)
   setRetentionObject()
-  storage.updateStore()
+  updateStore()
 }
 
 const setManifestRefreshInterval = () => {
@@ -455,9 +470,9 @@ export const getDeviceType = () => {
 
 const setGeoData = () => {
   const date = getDate()
-  const sessionId = storage.getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
-  const sessionGeo = storage.getValueFromSPTempUseStore(constants.GEO)
+  const sessionId = getSessionData(constants.SESSION_ID)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
+  const sessionGeo = getValueFromSPTempUseStore(constants.GEO)
   if (!sessionGeo.geo) {
     return
   }
@@ -469,8 +484,8 @@ const setGeoData = () => {
     city: sessionGeo.geo.city
   }
 
-  storage.setEventsSDKDataForDate(date, sdkDataForDate)
-  storage.updateStore()
+  setEventsSDKDataForDate(date, sdkDataForDate)
+  updateStore()
 }
 
 const syncRetentionData = () => {
@@ -480,7 +495,7 @@ const syncRetentionData = () => {
       return
     }
 
-    const retentionStore = storage.getRetentionSDKData()
+    const retentionStore = getRetentionSDKData()
     let arr = []
     Object.keys(retentionStore.retentionData).forEach((key) => {
       const res = getNotSyncObj(retentionStore.retentionData[key])
@@ -495,9 +510,9 @@ const syncRetentionData = () => {
     }
 
     const date = getDate()
-    const sessionId = storage.getSessionData(constants.SESSION_ID)
-    const sdkDataForDate = storage.getEventsSDKDataForDate(date)
-    const valueFromSPTempUseStore = storage.getValueFromSPCustomUseStore(constants.PREVIOUS_RETENTION_META)
+    const sessionId = getSessionData(constants.SESSION_ID)
+    const sdkDataForDate = getEventsSDKDataForDate(date)
+    const valueFromSPTempUseStore = getValueFromSPCustomUseStore(constants.PREVIOUS_RETENTION_META)
     const payload = getPayload(sdkDataForDate.sessions[sessionId], arr)
 
     if (valueFromSPTempUseStore) {
@@ -505,7 +520,7 @@ const syncRetentionData = () => {
     }
 
     const url = getManifestUrl('retention')
-    const tempUseData = storage.getValueFromSPTempUseStore(constants.FAILED_RETENTION)
+    const tempUseData = getValueFromSPTempUseStore(constants.FAILED_RETENTION)
     let isTodayDate = false
     if (tempUseData) {
       Object.keys(tempUseData).forEach((val) => {
@@ -534,19 +549,19 @@ const sendRetentionReq = (url, retentionStore, payload, date) => {
   postRequest(url, JSON.stringify(payload))
     .then(() => {
       setSendtoServer(retentionStore, payload.events)
-      storage.setValueInSPCustomUseStore(constants.PREVIOUS_RETENTION_META, payload.meta)
+      setValueInSPCustomUseStore(constants.PREVIOUS_RETENTION_META, payload.meta)
 
-      const tempUseData = storage.getValueFromSPTempUseStore(constants.FAILED_RETENTION)
+      const tempUseData = getValueFromSPTempUseStore(constants.FAILED_RETENTION)
       if (date && tempUseData[date]) {
         delete tempUseData[date]
       }
-      storage.setValueInSPTempUseStore(constants.FAILED_RETENTION, tempUseData)
+      setValueInSPTempUseStore(constants.FAILED_RETENTION, tempUseData)
 
-      storage.updateStore()
+      updateStore()
     })
     .catch(() => {
       const date = getDate()
-      let tempUseData = storage.getValueFromSPTempUseStore(constants.FAILED_RETENTION)
+      let tempUseData = getValueFromSPTempUseStore(constants.FAILED_RETENTION)
       if (!tempUseData) {
         tempUseData = {}
       }
@@ -554,8 +569,8 @@ const sendRetentionReq = (url, retentionStore, payload, date) => {
       if (!tempUseData[date]) {
         tempUseData[date] = payload
       }
-      storage.setValueInSPTempUseStore(constants.FAILED_RETENTION, tempUseData)
-      storage.updateStore()
+      setValueInSPTempUseStore(constants.FAILED_RETENTION, tempUseData)
+      updateStore()
     })
 }
 
@@ -573,7 +588,7 @@ const setSendtoServer = (retentionStore, events) => {
     const objIdx = retentionStore.retentionData[key].findIndex((obj) => obj.mid === mid)
     retentionStore.retentionData[key][objIdx].sentToServer = true
   })
-  storage.setRetentionSDKData(retentionStore)
+  setRetentionSDKData(retentionStore)
 }
 
 const getNotSyncObj = (array) => {
@@ -693,7 +708,7 @@ const getPmeta = (obj1, obj2) => {
 const getRetentionPayloadArr = (arr, name) => {
   const eventName = name === constants.IS_NEW_USER ? constants.DNU : name
   const result = []
-  const UID = storage.getValueFromSPTempUseStore(constants.UID)
+  const UID = getValueFromSPTempUseStore(constants.UID)
   arr.forEach((val) => {
     const eventTime = isApprox ? getNearestTimestamp(val.tstmp) : val.tstmp
     const data = {
@@ -726,7 +741,7 @@ const checkStoreEventsInterval = () => {
   if (storeEventsInterval == null) {
     storeEventsInterval = constants.DEFAULT_STORE_EVENTS_INTERVAL
   }
-  const eventStore = storage.getEventsStore()
+  const eventStore = getEventsStore()
   const dateCount = Object.keys(eventStore).length
   return dateCount === parseInt(storeEventsInterval)
 }
@@ -745,7 +760,7 @@ const getDomainOfReferrer = (ref) => {
 }
 
 const getNavigationPayloadArr = (navigations, navigationsTime) => {
-  const UID = storage.getValueFromSPTempUseStore(constants.UID)
+  const UID = getValueFromSPTempUseStore(constants.UID)
   const eventTime = isApprox ? getNearestTimestamp(Date.now()) : Date.now()
   return [{
     mid: getMid(),
@@ -767,7 +782,7 @@ const userIDUUID = () => {
     return staticUserID
   }
 
-  const userUUID = storage.getValueFromSPTempUseStore(constants.UID)
+  const userUUID = getValueFromSPTempUseStore(constants.UID)
   if (userUUID) {
     staticUserID = userUUID
     return staticUserID
@@ -802,12 +817,12 @@ const convertTo64CharUUID = (stringToConvert) => {
 }
 
 const setUID = () => {
-  const tempUseData = storage.getValueFromSPTempUseStore(constants.UID)
+  const tempUseData = getValueFromSPTempUseStore(constants.UID)
   if (!tempUseData) {
     const userID = userIDUUID()
     updateIndexScore(userID, true)
-    storage.setValueInSPTempUseStore(constants.UID, userID)
-    storage.updateStore()
+    setValueInSPTempUseStore(constants.UID, userID)
+    updateStore()
     return
   }
 
@@ -817,7 +832,7 @@ const setUID = () => {
 }
 
 const updateIndexScore = (indexValueToSet, isFirstIndex) => {
-  let sdkIndexData = storage.getLocalData(getRootIndexKey())
+  let sdkIndexData = getLocalData(getRootIndexKey())
   if (sdkIndexData) {
     // why 1056: 68+36+68+68+68+68+68+68+68+68+68+68+68+68+68+68 = 1056
     if (sdkIndexData.length >= 1056) {
@@ -840,7 +855,7 @@ const updateIndexScore = (indexValueToSet, isFirstIndex) => {
   const preUUID = prePostUUID.substr(0, idLengthHalf)
   const postUUID = prePostUUID.substr(idLengthHalf)
   const indexStoreStr = preUUID + sdkIndexData + postUUID
-  storage.setLocalData(getRootIndexKey(), indexStoreStr)
+  setLocalData(getRootIndexKey(), indexStoreStr)
 }
 
 const getEventData = (eventName, event, type) => {
@@ -854,8 +869,8 @@ const getEventData = (eventName, event, type) => {
 
 const sendEvents = (arr) => {
   const date = getDate()
-  const sessionId = storage.getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sessionId = getSessionData(constants.SESSION_ID)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const eventsArr = getEventPayloadArr(arr, date, sessionId)
   if (eventsArr.length === 0) {
     return
@@ -870,13 +885,13 @@ const sendEvents = (arr) => {
 
 const setUIDInInitEvent = () => {
   const date = getDate()
-  const sessionId = storage.getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sessionId = getSessionData(constants.SESSION_ID)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const eventArr = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
   const index = findObjIndex(eventArr, 'init')
   setTimeout(() => {
     sdkDataForDate.sessions[sessionId].eventsData.eventsInfo[index].mid = getMid()
-    storage.setEventsSDKDataForDate(date, sdkDataForDate)
+    setEventsSDKDataForDate(date, sdkDataForDate)
   })
 }
 
@@ -885,12 +900,12 @@ const setRetentionObject = () => {
   if (!mode || mode === constants.FIRSTPARTY_MODE) {
     return
   }
-  if (storage.getRetentionSDKData() != null) {
+  if (getRetentionSDKData() != null) {
     return
   }
   const retentionSdkData = getRetentionSDK()
-  storage.setRetentionSDKData(retentionSdkData)
-  storage.updateStore()
+  setRetentionSDKData(retentionSdkData)
+  updateStore()
 }
 
 export const setInitialConfiguration = (preferences) => {
@@ -943,7 +958,7 @@ export const createEventInfoObj = (eventName, objectName, meta = {}, event = {})
     name: eventName,
     urlPath: window.location.href,
     tstmp: Date.now(),
-    mid: storage.getRootStore() ? getMid() : '',
+    mid: getRootStore() ? getMid() : '',
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
     evcs: systemEventCode[eventName],
@@ -995,7 +1010,7 @@ export const createRefEventInfoObj = (eventName, ref, meta = {}) => {
 
 export const getMid = () => {
   const domainName = getDomain()
-  const userID = storage.getValueFromSPTempUseStore(constants.UID)
+  const userID = getValueFromSPTempUseStore(constants.UID)
   return `${domainName}-${userID}-${Date.now()}`
 }
 
@@ -1026,7 +1041,7 @@ export const findObjIndex = (eventArr, eventName) => {
 }
 
 export const setGeoDetails = () => {
-  const sessionGeo = storage.getValueFromSPTempUseStore(constants.GEO)
+  const sessionGeo = getValueFromSPTempUseStore(constants.GEO)
   const relativeGeoPath = getManifestVariable(constants.GEO_IP_PATH)
     ? getManifestVariable(constants.GEO_IP_PATH)
     : manifestConst.Geo_Ip_Path
@@ -1034,7 +1049,7 @@ export const setGeoDetails = () => {
     const url = `${getUrl()}/${relativeGeoPath}`
     getRequest(url)
       .then((data) => {
-        storage.setValueInSPTempUseStore(constants.GEO, data)
+        setValueInSPTempUseStore(constants.GEO, data)
         setGeoData()
       })
       .catch(log.error)
@@ -1073,7 +1088,7 @@ export const getNotSyncedEventsCount = (obj) => {
 
 export const getEventPayloadArr = (arr, date, sessionId) => {
   const dateEvents = getAllEventsOfDate(date)
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const viewportLen = sdkDataForDate.sessions[sessionId].viewPort.length
   const viewPortObj = sdkDataForDate.sessions[sessionId].viewPort[viewportLen - 1]
 
@@ -1115,7 +1130,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     const obj = {
       mid: val.mid,
-      userid: storage.getValueFromSPTempUseStore(constants.UID),
+      userid: getValueFromSPTempUseStore(constants.UID),
       evn: val.name,
       evcs: val.evcs,
       evdc: eventCount.length,
@@ -1132,9 +1147,9 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
 }
 
 export const setEventsSentToServer = (arr, date, sessionId) => {
-  const currentSessionId = storage.getSessionData(constants.SESSION_ID)
+  const currentSessionId = getSessionData(constants.SESSION_ID)
   arr.forEach((val) => {
-    const sdkDataOfDate = storage.getEventsSDKDataForDate(date)
+    const sdkDataOfDate = getEventsSDKDataForDate(date)
     if (!sdkDataOfDate) {
       return
     }
@@ -1153,14 +1168,14 @@ export const setEventsSentToServer = (arr, date, sessionId) => {
     if (currentSessionId !== sessionId) {
       sdkDataOfDate.sessions[sessionId].eventsData.sentToServer = true
     }
-    storage.setEventsSDKDataForDate(date, sdkDataOfDate)
-    storage.updateStore()
+    setEventsSDKDataForDate(date, sdkDataOfDate)
+    updateStore()
   })
   eventSync.progressStatus = false
 }
 
 export const getAllEventsOfDate = (date) => {
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const sessions = sdkDataForDate.sessions
   let arrEvent = []
   for (const x in sessions) {
@@ -1181,7 +1196,7 @@ export const debounce = (func, delay) => {
 }
 
 export const checkManifest = () => {
-  const localData = storage.getRootStore()
+  const localData = getRootStore()
   if (!localData) {
     return false
   }
@@ -1211,7 +1226,7 @@ export const pullManifest = () => {
 }
 
 export const getManifestVariable = (name) => {
-  const manifestStore = storage.getManifestStore()
+  const manifestStore = getManifestStore()
   if (!manifestStore || manifestStore.manifestData == null) {
     return null
   }
@@ -1229,9 +1244,9 @@ export const getManifestVariable = (name) => {
 export const updateManifest = () => {
   pullManifest()
     .then((data) => {
-      storage.setManifestModifiedDate(Date.now())
-      storage.setManifestDataStore(data)
-      storage.updateStore()
+      setManifestModifiedDate(Date.now())
+      setManifestDataStore(data)
+      updateStore()
       setManifestRefreshInterval()
       setSyncEventsInterval()
       syncRetentionData()
@@ -1242,7 +1257,7 @@ export const updateManifest = () => {
 }
 
 export const checkUpdateForManifest = () => {
-  const modifiedDate = storage.getManifestModifiedDate()
+  const modifiedDate = getManifestModifiedDate()
   const diffTime = millisecondsToHours(Date.now() - modifiedDate)
   let manifestRefData = getManifestVariable(constants.MANIFEST_REFRESH_INTERVAL)
   manifestRefData = manifestRefData || callInterval
@@ -1254,9 +1269,9 @@ export const checkUpdateForManifest = () => {
   setTimeout(() => {
     pullManifest()
       .then((data) => {
-        storage.setManifestModifiedDate(Date.now())
-        storage.setManifestDataStore(data)
-        storage.updateStore()
+        setManifestModifiedDate(Date.now())
+        setManifestDataStore(data)
+        updateStore()
       })
       .catch((error) => {
         log.error(error)
@@ -1266,12 +1281,12 @@ export const checkUpdateForManifest = () => {
 }
 
 export const initialize = (isDecryptionError) => {
-  const localData = isDecryptionError ? null : storage.getRootStore()
+  const localData = isDecryptionError ? null : getRootStore()
   const hostname = getDomain()
   const date = getDate()
   const sessionId = checkAndGetSessionId()
 
-  if (storage.getLocalData(getRootKey())) {
+  if (getLocalData(getRootKey())) {
     if (localData[hostname] && !localData[hostname].events[date]) {
       const storeCheck = checkStoreEventsInterval()
       if (checkManifest()) {
@@ -1302,9 +1317,9 @@ export const initialize = (isDecryptionError) => {
         localData[hostname] = createDomain(constants.INIT)
       }
     }
-    storage.setRootStore(localData)
+    setRootStore(localData)
     setUID()
-    storage.updateStore()
+    updateStore()
     return
   }
 
@@ -1313,16 +1328,16 @@ export const initialize = (isDecryptionError) => {
     domains: [hostname],
     [hostname]: domainSchema
   }
-  storage.setRootStore(obj)
+  setRootStore(obj)
   setUIDInInitEvent()
   setUID()
-  storage.updateStore()
+  updateStore()
 }
 
 export const checkGeo = () => {
-  const eventStore = storage.getEventsStore()
+  const eventStore = getEventsStore()
   const date = getDate()
-  const sessionId = storage.getSessionData(constants.SESSION_ID)
+  const sessionId = getSessionData(constants.SESSION_ID)
   const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
 
   return !!(sessionId &&
@@ -1369,8 +1384,8 @@ export const setNewDateObject = (date, eventStore) => {
 
   setRetentionData()
   setSyncEventsInterval()
-  storage.setEventsStore(eventStore)
-  storage.updateStore()
+  setEventsStore(eventStore)
+  updateStore()
 }
 
 export const setRetentionData = () => {
@@ -1515,8 +1530,8 @@ export const syncEvents = () => {
 
   setSyncEventsInterval()
   const date = getDate()
-  const sessionId = storage.getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sessionId = getSessionData(constants.SESSION_ID)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const { events, devEvents, piiEvents, phiEvents } =
     getNotSyncedEvents(sdkDataForDate.sessions[sessionId].eventsData)
 
@@ -1542,9 +1557,9 @@ export const syncEvents = () => {
 }
 
 export const sendBounceEvent = (date) => {
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const events = getBounceAndSessionEvents(sdkDataForDate)
-  const sessionId = storage.getSessionData(constants.SESSION_ID)
+  const sessionId = getSessionData(constants.SESSION_ID)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
   const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
 
@@ -1557,7 +1572,7 @@ export const sendBounceEvent = (date) => {
 }
 
 export const sendNavigation = (date, sessionId) => {
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const referrer = getReferrerUrlOfDateSession(date, sessionId)
   const navigations = sdkDataForDate.sessions[sessionId].eventsData.navigationPath.slice()
   const navigationsTime = sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav.slice()
@@ -1578,7 +1593,7 @@ export const sendNavigation = (date, sessionId) => {
 }
 
 export const getBounceAndSessionEvents = (obj) => {
-  const sessionId = storage.getSessionData(constants.SESSION_ID)
+  const sessionId = getSessionData(constants.SESSION_ID)
   return obj.sessions[sessionId].eventsData.eventsInfo
     .filter((evt) => evt.name === constants.BOUNCE || constants.SESSION)
 }
@@ -1589,7 +1604,7 @@ export const detectQueryString = () => {
 }
 
 export const getReferrerUrlOfDateSession = (date, sessionId) => {
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
     .findIndex((obj) => obj.name === 'referrer')
 
@@ -1701,8 +1716,8 @@ export const sendPIIPHIEvent = (events, date, type) => {
   }
 
   const key = type === 'pii' ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
-  const sessionId = storage.getSessionData(constants.SESSION_ID)
-  const sdkDataForDate = storage.getEventsSDKDataForDate(date)
+  const sessionId = getSessionData(constants.SESSION_ID)
+  const sdkDataForDate = getEventsSDKDataForDate(date)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
   const publicKey = getManifestVariable(key)
   const obj = encryptRSA(publicKey, JSON.stringify(eventsArr))
@@ -1739,14 +1754,14 @@ export const setReferrer = (ref) => {
 
 export const getPreviousDateSessionEventData = () => {
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = storage.getEventsSDKDataForDate(notSyncDate)
+  const sdkDataForDate = getEventsSDKDataForDate(notSyncDate)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
   return sdkDataForDate.sessions[sessionId].eventsData
 }
 
 export const resetPreviousDateSessionNavigation = () => {
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = storage.getEventsSDKDataForDate(notSyncDate)
+  const sdkDataForDate = getEventsSDKDataForDate(notSyncDate)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
   sdkDataForDate.sessions[sessionId].eventsData.navigationPath = []
   sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav = []
@@ -1754,7 +1769,7 @@ export const resetPreviousDateSessionNavigation = () => {
 
 export const getPreviousDateReferrer = () => {
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = storage.getEventsSDKDataForDate(notSyncDate)
+  const sdkDataForDate = getEventsSDKDataForDate(notSyncDate)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
 
   const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo.findIndex((obj) => obj.name === 'referrer')

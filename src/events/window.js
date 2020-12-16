@@ -6,13 +6,14 @@ import {
   updateNavTime,
   setViewPort
 } from '../common/sessionUtil'
-import { getSessionData, getEventsSDKDataForDate } from '../common/storageUtil'
 import { debounce, collectEvent, sendBounceEvent, getDate, detectQueryString } from '../utils'
 import {
   constants,
   isSysEvtCollect,
   isSysEvtStore
 } from '../config'
+import { getSessionData } from '../storage'
+import { getEventsSDKDataForDate } from '../storage/event'
 
 export const resize = (window) => {
   const eventName = 'resize'

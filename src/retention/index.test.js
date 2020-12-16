@@ -3,7 +3,7 @@ import {
   setWeeklyActiveUsage,
   setMonthlyActiveUsage
 } from '.'
-import * as storageUtil from '../common/storageUtil'
+import * as storage from '../storage'
 import * as daily from './dailyActive'
 import * as weekly from './weeklyActive'
 import * as monthly from './monthlyActive'
@@ -27,8 +27,14 @@ describe('setDailyActiveUsage', () => {
     const spySession = jest
       .spyOn(daily, 'setSession')
     const spyLocale = jest
-      .spyOn(storageUtil, 'getLocalData')
-      .mockImplementation(() => true)
+      .spyOn(storage, 'getLocalData')
+      .mockImplementation((name) => {
+        if (name === 'isPayingUser') {
+          return true
+        }
+
+        return null
+      })
     setDailyActiveUsage()
     expect(spyCount).toHaveBeenCalledWith('dau', 41001)
     expect(spyCount).toHaveBeenCalledWith('dpu', 41004)
@@ -58,8 +64,14 @@ describe('setWeeklyActiveUsage', () => {
     const spySession = jest
       .spyOn(weekly, 'setSession')
     const spyLocale = jest
-      .spyOn(storageUtil, 'getLocalData')
-      .mockImplementation(() => true)
+      .spyOn(storage, 'getLocalData')
+      .mockImplementation((name) => {
+        if (name === 'isPayingUser') {
+          return true
+        }
+
+        return null
+      })
     setWeeklyActiveUsage()
     expect(spyCount).toHaveBeenCalledWith('wau', 41002)
     expect(spyCount).toHaveBeenCalledWith('wpu', 41005)
@@ -89,8 +101,14 @@ describe('setMonthlyActiveUsage', () => {
     const spySession = jest
       .spyOn(monthly, 'setSession')
     const spyLocale = jest
-      .spyOn(storageUtil, 'getLocalData')
-      .mockImplementation(() => true)
+      .spyOn(storage, 'getLocalData')
+      .mockImplementation((name) => {
+        if (name === 'isPayingUser') {
+          return true
+        }
+
+        return null
+      })
     setMonthlyActiveUsage()
     expect(spyCount).toHaveBeenCalledWith('mau', 41003)
     expect(spyCount).toHaveBeenCalledWith('mpu', 41006)

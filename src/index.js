@@ -7,12 +7,6 @@ import {
   setSessionPHIEvent
 } from './common/sessionUtil'
 import {
-  setLocalData,
-  getSessionData,
-  setValueInSPTempUseStore,
-  getValueFromSPTempUseStore
-} from './common/storageUtil'
-import {
   collectEvent,
   setReferrer,
   setInitialConfiguration,
@@ -32,6 +26,8 @@ import {
   isDevEvtCollect,
   isDevEvtStore
 } from './config'
+import { getSessionData, setLocalData } from './storage'
+import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/sharedPreferences'
 
 (function (window) {
   const SDK = function () {}

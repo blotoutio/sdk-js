@@ -1,11 +1,11 @@
 import { setEvent } from '../common/sessionUtil'
-import { getSessionData } from '../common/storageUtil'
 import {
   constants,
   isSysEvtCollect,
   isSysEvtStore
 } from '../config'
 import { collectEvent } from '../utils'
+import { getSessionData } from '../storage'
 
 export const cut = (window) => {
   const eventName = 'cut'

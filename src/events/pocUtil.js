@@ -5,12 +5,6 @@ import {
   isSysEvtCollect
 } from '../config'
 import {
-  getSessionData,
-  getEventsStore,
-  getEventsSDKDataForDate,
-  getValueFromSPTempUseStore
-} from '../common/storageUtil'
-import {
   getMid,
   getObjectTitle,
   getDate,
@@ -27,6 +21,9 @@ import { postRequest } from '../common/networkUtil'
 import { getNearestTimestamp } from '../common/timeUtil'
 import { updatePreviousDayEndTime } from '../common/sessionUtil'
 import { getManifestUrl } from '../common/endPointUrlUtil'
+import { getSessionData } from '../storage'
+import { getEventsSDKDataForDate, getEventsStore } from '../storage/event'
+import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
 
 const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mousePos = {}) => {
   const position = {

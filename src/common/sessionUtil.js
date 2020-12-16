@@ -11,15 +11,6 @@ import {
 } from '../config'
 import * as log from './logUtil'
 import {
-  updateStore,
-  getSessionData,
-  setSessionData,
-  getEventsStore,
-  getEventsSDKDataForDate,
-  setEventsSDKDataForDate,
-  getValueFromSPTempUseStore
-} from './storageUtil'
-import {
   getDate,
   createDevEventInfoObj,
   checkEventPushEventCounter,
@@ -45,6 +36,10 @@ import {
 } from '../utils'
 import { getManifestUrl } from './endPointUrlUtil'
 import { getNearestTimestamp } from './timeUtil'
+import { getSessionData, setSessionData } from '../storage'
+import { getEventsSDKDataForDate, getEventsStore, setEventsSDKDataForDate } from '../storage/event'
+import { updateStore } from '../storage/store'
+import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
 
 const sumFunction = (total, num) => {
   return total + num

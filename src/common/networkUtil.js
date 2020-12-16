@@ -1,5 +1,5 @@
-import { getValueFromSPTempUseStore } from './storageUtil'
 import { constants } from '../config'
+import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
 
 export async function getRequest (url) {
   if (!url) {

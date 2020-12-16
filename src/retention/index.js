@@ -1,9 +1,9 @@
 import { constants } from '../config'
-import { getLocalData } from '../common/storageUtil'
 
 import * as dailyActive from './dailyActive'
 import * as weeklyActive from './weeklyActive'
 import * as monthlyActive from './monthlyActive'
+import { getLocalData } from '../storage'
 
 export const setDailyActiveUsage = () => {
   dailyActive.setCount('dau', constants.DAUCode)
