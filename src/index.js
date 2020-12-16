@@ -26,7 +26,7 @@ import {
   isDevEvtCollect,
   isDevEvtStore
 } from './config'
-import { getSessionData, setLocalData } from './storage'
+import { getSession, setLocal } from './storage'
 import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/sharedPreferences'
 
 (function (window) {
@@ -35,7 +35,7 @@ import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/
   SDK.prototype.logEvent = function (eventName, meta = {}, objectName = '') {
     try {
       if (isDevEvtStore) {
-        if (getSessionData(constants.SESSION_ID)) {
+        if (getSession(constants.SESSION_ID)) {
           setDevEvent(eventName, objectName, meta)
         }
         return
@@ -51,7 +51,7 @@ import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/
 
   SDK.prototype.startTimedEvent = function (eventName, meta = {}, objectName = '') {
     try {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setStartDevEvent(eventName, objectName, meta)
       }
     } catch (e) {
@@ -62,7 +62,7 @@ import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/
   SDK.prototype.endTimedEvent = function (eventName) {
     try {
       if (isDevEvtStore) {
-        if (getSessionData(constants.SESSION_ID)) {
+        if (getSession(constants.SESSION_ID)) {
           setEndDevEvent(eventName)
         }
         return
@@ -116,7 +116,7 @@ import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/
 
   SDK.prototype.setPayingUser = function () {
     try {
-      setLocalData(constants.IS_PAYING_USER, true)
+      setLocal(constants.IS_PAYING_USER, true)
     } catch (e) {
       log.error(e)
     }
@@ -129,7 +129,7 @@ import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/
   SDK.prototype.logPIIEvent = function (eventName, meta = {}, objectName = '') {
     try {
       if (isDevEvtStore) {
-        if (getSessionData(constants.SESSION_ID)) {
+        if (getSession(constants.SESSION_ID)) {
           setSessionPIIEvent(eventName, objectName, meta)
         }
         return
@@ -146,7 +146,7 @@ import { getValueFromSPTempUseStore, setValueInSPTempUseStore } from './storage/
   SDK.prototype.logPHIEvent = function (eventName, meta = {}, objectName = '') {
     try {
       if (isDevEvtStore) {
-        if (getSessionData(constants.SESSION_ID)) {
+        if (getSession(constants.SESSION_ID)) {
           setSessionPHIEvent(eventName, objectName, meta)
         }
         return

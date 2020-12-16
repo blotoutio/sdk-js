@@ -35,7 +35,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getUrl, getManifestUrl } from './common/endPointUrlUtil'
 import { encryptRSA, SHA256Encode } from './common/securityUtil'
 import { getRetentionSDK } from './retention/utils'
-import { getLocalData, getSessionData, setLocalData } from './storage'
+import { getLocal, getSession, setLocal } from './storage'
 import { getEventsByDate, getStore as getEventsStore, setEventsByDate, setStore as setEventsStore } from './storage/event'
 import {
   getManifestModifiedDate,
@@ -62,7 +62,7 @@ let storageRootKey = null
 
 const createDaySchema = (session) => {
   const sessions = {}
-  const id = getSessionData('sessionId')
+  const id = getSession('sessionId')
   if (id) {
     sessions[id] = session
   }
@@ -345,7 +345,7 @@ const setSyncEventsInterval = () => {
       updatePreviousDayEndTime()
       setNewDateObject(date, eventStore)
     } else {
-      const sessionId = getSessionData(constants.SESSION_ID)
+      const sessionId = getSession(constants.SESSION_ID)
       const sdkDataForDate = getEventsByDate(date)
       const { events, devEvents, piiEvents, phiEvents } = getNotSyncedEvents(
         sdkDataForDate.sessions[sessionId].eventsData
@@ -470,7 +470,7 @@ export const getDeviceType = () => {
 
 const setGeoData = () => {
   const date = getDate()
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const sessionGeo = getValueFromSPTempUseStore(constants.GEO)
   if (!sessionGeo.geo) {
@@ -510,7 +510,7 @@ const syncRetentionData = () => {
     }
 
     const date = getDate()
-    const sessionId = getSessionData(constants.SESSION_ID)
+    const sessionId = getSession(constants.SESSION_ID)
     const sdkDataForDate = getEventsByDate(date)
     const valueFromSPTempUseStore = getValueFromSPCustomUseStore(constants.PREVIOUS_RETENTION_META)
     const payload = getPayload(sdkDataForDate.sessions[sessionId], arr)
@@ -832,7 +832,7 @@ const setUID = () => {
 }
 
 const updateIndexScore = (indexValueToSet, isFirstIndex) => {
-  let sdkIndexData = getLocalData(getRootIndexKey())
+  let sdkIndexData = getLocal(getRootIndexKey())
   if (sdkIndexData) {
     // why 1056: 68+36+68+68+68+68+68+68+68+68+68+68+68+68+68+68 = 1056
     if (sdkIndexData.length >= 1056) {
@@ -855,7 +855,7 @@ const updateIndexScore = (indexValueToSet, isFirstIndex) => {
   const preUUID = prePostUUID.substr(0, idLengthHalf)
   const postUUID = prePostUUID.substr(idLengthHalf)
   const indexStoreStr = preUUID + sdkIndexData + postUUID
-  setLocalData(getRootIndexKey(), indexStoreStr)
+  setLocal(getRootIndexKey(), indexStoreStr)
 }
 
 const getEventData = (eventName, event, type) => {
@@ -869,7 +869,7 @@ const getEventData = (eventName, event, type) => {
 
 const sendEvents = (arr) => {
   const date = getDate()
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const eventsArr = getEventPayloadArr(arr, date, sessionId)
   if (eventsArr.length === 0) {
@@ -885,7 +885,7 @@ const sendEvents = (arr) => {
 
 const setUIDInInitEvent = () => {
   const date = getDate()
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const eventArr = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
   const index = findObjIndex(eventArr, 'init')
@@ -1147,7 +1147,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
 }
 
 export const setEventsSentToServer = (arr, date, sessionId) => {
-  const currentSessionId = getSessionData(constants.SESSION_ID)
+  const currentSessionId = getSession(constants.SESSION_ID)
   arr.forEach((val) => {
     const sdkDataOfDate = getEventsByDate(date)
     if (!sdkDataOfDate) {
@@ -1286,7 +1286,7 @@ export const initialize = (isDecryptionError) => {
   const date = getDate()
   const sessionId = checkAndGetSessionId()
 
-  if (getLocalData(getRootKey())) {
+  if (getLocal(getRootKey())) {
     if (localData[hostname] && !localData[hostname].events[date]) {
       const storeCheck = checkStoreEventsInterval()
       if (checkManifest()) {
@@ -1337,7 +1337,7 @@ export const initialize = (isDecryptionError) => {
 export const checkGeo = () => {
   const eventStore = getEventsStore()
   const date = getDate()
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
 
   return !!(sessionId &&
@@ -1530,7 +1530,7 @@ export const syncEvents = () => {
 
   setSyncEventsInterval()
   const date = getDate()
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const { events, devEvents, piiEvents, phiEvents } =
     getNotSyncedEvents(sdkDataForDate.sessions[sessionId].eventsData)
@@ -1559,7 +1559,7 @@ export const syncEvents = () => {
 export const sendBounceEvent = (date) => {
   const sdkDataForDate = getEventsByDate(date)
   const events = getBounceAndSessionEvents(sdkDataForDate)
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
   const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
 
@@ -1593,7 +1593,7 @@ export const sendNavigation = (date, sessionId) => {
 }
 
 export const getBounceAndSessionEvents = (obj) => {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   return obj.sessions[sessionId].eventsData.eventsInfo
     .filter((evt) => evt.name === constants.BOUNCE || constants.SESSION)
 }
@@ -1716,7 +1716,7 @@ export const sendPIIPHIEvent = (events, date, type) => {
   }
 
   const key = type === 'pii' ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
   const publicKey = getManifestVariable(key)

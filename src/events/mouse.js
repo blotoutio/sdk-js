@@ -1,5 +1,5 @@
 import { setEvent } from '../common/sessionUtil'
-import { getSessionData } from '../storage'
+import { getSession } from '../storage'
 import {
   constants,
   isSysEvtCollect,
@@ -13,7 +13,7 @@ export const click = (window) => {
   const eventName = 'click'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return
@@ -29,7 +29,7 @@ export const doubleClick = (window) => {
   const eventName = 'dblclick'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return
@@ -45,7 +45,7 @@ export const contextMenu = (window) => {
   const eventName = 'contextmenu'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return
@@ -72,7 +72,7 @@ export const mouse = (window) => {
     mousePosX = event.pageX
     mousePosY = event.pageY
     if (isSysEvtStore) {
-      if (!getSessionData(constants.SESSION_ID)) {
+      if (!getSession(constants.SESSION_ID)) {
         return
       }
 
@@ -100,7 +100,7 @@ export const mouse = (window) => {
 
   window.addEventListener('scroll', function (event) {
     if (isSysEvtStore) {
-      if (!getSessionData(constants.SESSION_ID)) {
+      if (!getSession(constants.SESSION_ID)) {
         return
       }
 

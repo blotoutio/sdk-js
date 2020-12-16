@@ -5,13 +5,13 @@ import {
   isSysEvtStore
 } from '../config'
 import { collectEvent } from '../utils'
-import { getSessionData } from '../storage'
+import { getSession } from '../storage'
 
 export const cut = (window) => {
   const eventName = 'cut'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return
@@ -27,7 +27,7 @@ export const copy = (window) => {
   const eventName = 'copy'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return
@@ -43,7 +43,7 @@ export const paste = (window) => {
   const eventName = 'paste'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return

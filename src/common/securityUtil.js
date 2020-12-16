@@ -7,11 +7,11 @@ import utf8 from 'crypto-js/enc-utf8'
 import { v4 as uuidv4 } from 'uuid'
 import { getRootIndexKey } from '../utils'
 import { error } from './logUtil'
-import { getLocalData } from '../storage'
+import { getLocal } from '../storage'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
 
 const getUserIndex = () => {
-  const sdkIndexData = getLocalData(getRootIndexKey())
+  const sdkIndexData = getLocal(getRootIndexKey())
   if (!sdkIndexData) {
     return ''
   }

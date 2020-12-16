@@ -1,29 +1,29 @@
 import { getDomain } from '../utils'
 import { getRootStore } from './store'
 
-export const setLocalData = (name, data) => {
+export const setLocal = (name, data) => {
   if (!name) {
     return
   }
   window.localStorage.setItem(name, data)
 }
 
-export const getLocalData = (name) => {
+export const getLocal = (name) => {
   return window.localStorage.getItem(name)
 }
 
-export const setSessionData = (name, data) => {
+export const setSession = (name, data) => {
   if (!name) {
     return
   }
   window.sessionStorage.setItem(name, data)
 }
 
-export const getSessionData = (name) => {
+export const getSession = (name) => {
   return window.sessionStorage.getItem(name)
 }
 
-export const getDomainStore = (domainName) => {
+export const getStoreByDomain = (domainName) => {
   if (!domainName) {
     domainName = getDomain()
   }

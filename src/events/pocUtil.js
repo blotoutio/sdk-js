@@ -21,7 +21,7 @@ import { postRequest } from '../common/networkUtil'
 import { getNearestTimestamp } from '../common/timeUtil'
 import { updatePreviousDayEndTime } from '../common/sessionUtil'
 import { getManifestUrl } from '../common/endPointUrlUtil'
-import { getSessionData } from '../storage'
+import { getSession } from '../storage'
 import { getEventsByDate, getStore as getEventsStore } from '../storage/event'
 import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
 
@@ -50,7 +50,7 @@ const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mou
 }
 
 const send = (eventsArray) => {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(getDate())
 
   const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
@@ -122,7 +122,7 @@ export const sendEvents = (array) => {
     setNewDateObject(date, store)
   }
 
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const eventsArray = getEventPayloadArr(array, date, sessionId)
   if (eventsArray.length === 0) {
     return
@@ -143,7 +143,7 @@ export const sendScrollEvents = (arr, startTime, endTime) => {
     setNewDateObject(date, store)
   }
 
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const viewportLen = sdkDataForDate.sessions[sessionId].viewPort.length
   const viewPortObj = sdkDataForDate.sessions[sessionId].viewPort[viewportLen - 1]

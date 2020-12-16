@@ -1,5 +1,5 @@
 import { setEvent } from '../common/sessionUtil'
-import { getSessionData } from '../storage'
+import { getSession } from '../storage'
 import {
   constants,
   isSysEvtCollect,
@@ -11,7 +11,7 @@ export const keyPressed = (window) => {
   const eventName = 'keypress'
   window.addEventListener(eventName, function (e) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, e)
       }
       return
@@ -28,7 +28,7 @@ export const keyDown = (window) => {
   window.addEventListener('keydown', function (e) {
     if (e.keyCode === 112 /* KeyboardEvent.DOM_VK_F1 */) {
       if (isSysEvtStore) {
-        if (getSessionData(constants.SESSION_ID)) {
+        if (getSession(constants.SESSION_ID)) {
           setEvent(eventName, e)
         }
         return

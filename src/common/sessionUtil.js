@@ -36,7 +36,7 @@ import {
 } from '../utils'
 import { getManifestUrl } from './endPointUrlUtil'
 import { getNearestTimestamp } from './timeUtil'
-import { getSessionData, setSessionData } from '../storage'
+import { getSession, setSession } from '../storage'
 import { getEventsByDate, getStore as getEventsStore, setEventsByDate } from '../storage/event'
 import { updateStore } from '../storage/store'
 import { getValueFromSPTempUseStore } from '../storage/sharedPreferences'
@@ -56,20 +56,20 @@ export const eventSync = {
 }
 
 export const checkAndGetSessionId = () => {
-  let sessionId = getSessionData(constants.SESSION_ID)
+  let sessionId = getSession(constants.SESSION_ID)
 
   if (!sessionId) {
     sessionId = Date.now()
-    setSessionData(constants.SESSION_ID, sessionId)
+    setSession(constants.SESSION_ID, sessionId)
     // To calculate navigation time
-    setSessionData(constants.SESSION_START_TIME, sessionId)
+    setSession(constants.SESSION_START_TIME, sessionId)
   }
 
   return sessionId
 }
 
 export const setDevEvent = (eventName, objectName, meta) => {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
   const obj = createDevEventInfoObj(eventName, objectName, meta, false, false)
 
@@ -87,7 +87,7 @@ export const setDevEvent = (eventName, objectName, meta) => {
 }
 
 export const setStartDevEvent = (eventName, objectName, meta) => {
-  let eventArray = JSON.parse(getSessionData('startEvents')) || []
+  let eventArray = JSON.parse(getSession('startEvents')) || []
   const isExist = isEventExist(eventArray, eventName)
   if (!isExist) {
     eventArray.push(
@@ -98,13 +98,13 @@ export const setStartDevEvent = (eventName, objectName, meta) => {
     eventArray[index].startTime = Date.now()
     eventArray = JSON.stringify(eventArray)
   }
-  setSessionData('startEvents', eventArray)
+  setSession('startEvents', eventArray)
 }
 
 export const setEndDevEvent = (eventName) => {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
-  let eventArray = JSON.parse(getSessionData('startEvents')) || []
+  let eventArray = JSON.parse(getSession('startEvents')) || []
   const isExist = isEventExist(eventArray, eventName)
   if (!isExist) {
     log.error('Event did not start yet')
@@ -134,7 +134,7 @@ export const setEndDevEvent = (eventName) => {
 
   eventArray.splice(index, 1)
   eventArray = JSON.stringify(eventArray)
-  setSessionData('startEvents', eventArray)
+  setSession('startEvents', eventArray)
 }
 
 export const setEvent = function (eventName, event, meta = {}) {
@@ -144,7 +144,7 @@ export const setEvent = function (eventName, event, meta = {}) {
 
   try {
     const objectName = getSelector(event.target)
-    const sessionId = getSessionData(constants.SESSION_ID)
+    const sessionId = getSession(constants.SESSION_ID)
     const date = getDate()
     const eventStore = getEventsStore()
 
@@ -166,7 +166,7 @@ export const setEvent = function (eventName, event, meta = {}) {
 }
 
 export const updatePreviousDayEndTime = () => {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getPreviousDate()
 
   const sdkDataForDate = getEventsByDate(date)
@@ -177,7 +177,7 @@ export const updatePreviousDayEndTime = () => {
 
 export const setReferrerEvent = (eventName, ref, meta) => {
   try {
-    const sessionId = getSessionData(constants.SESSION_ID)
+    const sessionId = getSession(constants.SESSION_ID)
     const date = getDate()
     const sdkDataForDate = getEventsByDate(date)
     const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo.findIndex((obj) => obj.name === eventName)
@@ -196,7 +196,7 @@ export const setReferrerEvent = (eventName, ref, meta) => {
 export const setDNTEvent = function (eventName, event, meta) {
   try {
     const objectName = getSelector(event.target)
-    const sessionId = getSessionData(constants.SESSION_ID)
+    const sessionId = getSession(constants.SESSION_ID)
     const date = getDate()
     const sdkDataForDate = getEventsByDate(date)
     const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo.findIndex((obj) => obj.name === eventName)
@@ -215,7 +215,7 @@ export const setDNTEvent = function (eventName, event, meta) {
 }
 
 export const updateSessionEndTime = () => {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
   const sdkDataForDate = getEventsByDate(date)
 
@@ -225,7 +225,7 @@ export const updateSessionEndTime = () => {
 }
 
 export const updateNavPath = () => {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
   const sdkDataForDate = getEventsByDate(date)
   const navPaths = sdkDataForDate.sessions[sessionId].eventsData.navigationPath
@@ -243,10 +243,10 @@ export const updateNavPath = () => {
 }
 
 export const updateNavTime = () => {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
   const sdkDataForDate = getEventsByDate(date)
-  const startTime = parseInt(getSessionData(constants.SESSION_START_TIME))
+  const startTime = parseInt(getSession(constants.SESSION_START_TIME))
   const timeArray = sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav
   const currentTime = Date.now()
   const navPaths = sdkDataForDate.sessions[sessionId].eventsData.navigationPath
@@ -296,7 +296,7 @@ export const syncPreviousSessionEvents = () => {
   const date = getDate()
   const sdkDataForDate = getEventsByDate(date)
   const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
-  const currentSessionId = getSessionData(constants.SESSION_ID)
+  const currentSessionId = getSession(constants.SESSION_ID)
   if (currentSessionId === sessionId) {
     return
   }
@@ -337,7 +337,7 @@ export const getNotSyncedSession = (object) => {
 }
 
 export const setViewPort = function () {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
   const obj = createViewPortObject()
   const sdkDataForDate = getEventsByDate(date)
@@ -347,7 +347,7 @@ export const setViewPort = function () {
 }
 
 export const setSessionPIIEvent = function (eventName, objectName, meta) {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
   const sdkDataForDate = getEventsByDate(date)
   sdkDataForDate.sessions[sessionId].eventsData.devCodifiedEventsInfo.push(
@@ -364,7 +364,7 @@ export const setSessionPIIEvent = function (eventName, objectName, meta) {
 }
 
 export const setSessionPHIEvent = function (eventName, objectName, meta) {
-  const sessionId = getSessionData(constants.SESSION_ID)
+  const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
   const sdkDataForDate = getEventsByDate(date)
   sdkDataForDate.sessions[sessionId].eventsData.devCodifiedEventsInfo.push(

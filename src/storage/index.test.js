@@ -1,13 +1,13 @@
-import { getLocalData, getSessionData, setLocalData, setSessionData } from '.'
+import { getLocal, getSession, setLocal, setSession } from '.'
 
 describe('LocalData', () => {
   it('set', () => {
-    const localDataStr = setLocalData('names', JSON.stringify({ fname: 'ashish', lname: 'nigam' }))
+    const localDataStr = setLocal('names', JSON.stringify({ fname: 'ashish', lname: 'nigam' }))
     expect(localDataStr).toBe(undefined)
   })
 
   it('get', () => {
-    const localDataStr = getLocalData('names')
+    const localDataStr = getLocal('names')
     const localData = JSON.parse(localDataStr)
     const firstName = localData.fname
     expect(firstName).toBe('ashish')
@@ -15,16 +15,16 @@ describe('LocalData', () => {
 })
 
 describe('SessionData', () => {
-  it('setSessionData value in window session storage & and match', () => {
-    const sessionDataStr = setSessionData('sessionKey', JSON.stringify({
+  it('setSession value in window session storage & and match', () => {
+    const sessionDataStr = setSession('sessionKey', JSON.stringify({
       name1: 'session',
       name2: 'storage'
     }))
     expect(sessionDataStr).toBe(undefined)
   })
 
-  it('getSessionData value from window session storage & and match', () => {
-    const sessionDataStr = getSessionData('sessionKey')
+  it('getSession value from window session storage & and match', () => {
+    const sessionDataStr = getSession('sessionKey')
     const sessionData = JSON.parse(sessionDataStr)
     const storageName = sessionData.name1
     expect(storageName).toBe('session')

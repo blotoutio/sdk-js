@@ -27,7 +27,7 @@ describe('setDailyActiveUsage', () => {
     const spySession = jest
       .spyOn(daily, 'setSession')
     const spyLocale = jest
-      .spyOn(storage, 'getLocalData')
+      .spyOn(storage, 'getLocal')
       .mockImplementation((name) => {
         if (name === 'isPayingUser') {
           return true
@@ -64,7 +64,7 @@ describe('setWeeklyActiveUsage', () => {
     const spySession = jest
       .spyOn(weekly, 'setSession')
     const spyLocale = jest
-      .spyOn(storage, 'getLocalData')
+      .spyOn(storage, 'getLocal')
       .mockImplementation((name) => {
         if (name === 'isPayingUser') {
           return true
@@ -101,7 +101,7 @@ describe('setMonthlyActiveUsage', () => {
     const spySession = jest
       .spyOn(monthly, 'setSession')
     const spyLocale = jest
-      .spyOn(storage, 'getLocalData')
+      .spyOn(storage, 'getLocal')
       .mockImplementation((name) => {
         if (name === 'isPayingUser') {
           return true

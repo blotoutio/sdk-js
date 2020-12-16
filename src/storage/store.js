@@ -4,7 +4,7 @@ import * as log from '../common/logUtil'
 import { getManifestVariable, getRootKey, initialize } from '../utils'
 import { millisecondsToDays } from '../common/timeUtil'
 import { getManifestStore } from './manifest'
-import { getLocalData, setLocalData } from '.'
+import { getLocal, setLocal } from '.'
 
 let rootStore
 
@@ -18,7 +18,7 @@ export const getRootStore = () => {
     return rootStore
   }
 
-  let sdkRootObjStr = getLocalData(getRootKey())
+  let sdkRootObjStr = getLocal(getRootKey())
   if (!sdkRootObjStr) {
     return null
   }
@@ -68,5 +68,5 @@ export const updateStore = () => {
     data = encryptedString
   }
 
-  setLocalData(getRootKey(), data)
+  setLocal(getRootKey(), data)
 }

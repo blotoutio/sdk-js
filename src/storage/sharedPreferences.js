@@ -1,7 +1,7 @@
-import { getDomainStore } from '.'
+import { getStoreByDomain } from '.'
 
 const getSharedPreferenceStore = () => {
-  const store = getDomainStore()
+  const store = getStoreByDomain()
   if (!store) {
     return null
   }

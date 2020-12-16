@@ -1,8 +1,8 @@
-import { getDomainStore } from '.'
+import { getStoreByDomain } from '.'
 import { error } from '../common/logUtil'
 
 export const getStore = () => {
-  const store = getDomainStore()
+  const store = getStoreByDomain()
   if (!store) {
     return null
   }
@@ -10,7 +10,7 @@ export const getStore = () => {
 }
 
 export const setStore = (value) => {
-  const store = getDomainStore()
+  const store = getStoreByDomain()
   if (!store) {
     return
   }

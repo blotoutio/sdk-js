@@ -12,14 +12,14 @@ import {
   isSysEvtCollect,
   isSysEvtStore
 } from '../config'
-import { getSessionData } from '../storage'
+import { getSession } from '../storage'
 import { getEventsByDate } from '../storage/event'
 
 export const resize = (window) => {
   const eventName = 'resize'
   window.addEventListener(eventName, debounce((e) => {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, e, {})
         setViewPort()
       }
@@ -39,7 +39,7 @@ export const unload = (window) => {
       updateNavTime()
       updateNavPath()
 
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, e)
       }
       return
@@ -55,10 +55,10 @@ export const load = (window) => {
   const eventName = 'load'
   window.addEventListener(eventName, function (e) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, e)
 
-        const sessionId = getSessionData(constants.SESSION_ID)
+        const sessionId = getSession(constants.SESSION_ID)
         const sdkDataForDate = getEventsByDate(getDate())
         const sessionIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
           .findIndex((obj) => obj.name === constants.SESSION)
@@ -107,13 +107,13 @@ export const beforeUnload = (window) => {
     }
 
     updateSessionEndTime()
-    if (!getSessionData(constants.SESSION_ID)) {
+    if (!getSession(constants.SESSION_ID)) {
       return
     }
 
     const date = getDate()
     const sdkDataForDate = getEventsByDate(date)
-    const sessionId = getSessionData(constants.SESSION_ID)
+    const sessionId = getSession(constants.SESSION_ID)
     const bncIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
       .findIndex((obj) => obj.name === constants.BOUNCE)
     const startTime = sdkDataForDate.sessions[sessionId].startTime
@@ -134,7 +134,7 @@ export const domSubTreeModified = (window) => {
   const eventName = 'DOMSubtreeModified'
   window.addEventListener(eventName, debounce((event) => {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return
@@ -150,7 +150,7 @@ export const domActive = (window) => {
   const eventName = 'DOMActivate'
   window.addEventListener(eventName, function (e) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, e)
       }
       return

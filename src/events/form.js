@@ -1,5 +1,5 @@
 import { setEvent } from '../common/sessionUtil'
-import { getSessionData } from '../storage'
+import { getSession } from '../storage'
 import {
   constants,
   isSysEvtCollect,
@@ -11,7 +11,7 @@ export const reset = (window) => {
   const eventName = 'reset'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return
@@ -27,7 +27,7 @@ export const submit = (window) => {
   const eventName = 'submit'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSessionData(constants.SESSION_ID)) {
+      if (getSession(constants.SESSION_ID)) {
         setEvent(eventName, event)
       }
       return
