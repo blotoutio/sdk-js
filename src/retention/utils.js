@@ -1,7 +1,7 @@
 import { constants } from '../config'
 import { getMid, getDate, getDomain } from '../utils'
 import { getStore as getEventsStore } from '../storage/event'
-import { getRetentionSDKData, setRetentionSDKData } from '../storage/retention'
+import { getSDK, setSDK } from '../storage/retention'
 import { updateStore } from '../storage/store'
 
 const getRetentionData = () => {
@@ -150,7 +150,7 @@ export const retentionWrapper = (key, func) => {
     return
   }
 
-  const retentionSDKData = getRetentionSDKData()
+  const retentionSDKData = getSDK()
   if (!retentionSDKData || !retentionSDKData.retentionData) {
     return
   }
@@ -165,6 +165,6 @@ export const retentionWrapper = (key, func) => {
     return
   }
 
-  setRetentionSDKData(retentionSDKData)
+  setSDK(retentionSDKData)
   updateStore()
 }

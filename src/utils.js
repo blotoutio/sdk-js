@@ -50,7 +50,7 @@ import {
   getValueFromSPTempUseStore,
   setValueInSPCustomUseStore, setValueInSPTempUseStore
 } from './storage/sharedPreferences'
-import { getRetentionSDKData, setRetentionSDKData } from './storage/retention'
+import { getSDK, setSDK } from './storage/retention'
 
 let globalRetentionInterval = null
 let globalEventInterval = null
@@ -495,7 +495,7 @@ const syncRetentionData = () => {
       return
     }
 
-    const retentionStore = getRetentionSDKData()
+    const retentionStore = getSDK()
     let arr = []
     Object.keys(retentionStore.retentionData).forEach((key) => {
       const res = getNotSyncObj(retentionStore.retentionData[key])
@@ -588,7 +588,7 @@ const setSendtoServer = (retentionStore, events) => {
     const objIdx = retentionStore.retentionData[key].findIndex((obj) => obj.mid === mid)
     retentionStore.retentionData[key][objIdx].sentToServer = true
   })
-  setRetentionSDKData(retentionStore)
+  setSDK(retentionStore)
 }
 
 const getNotSyncObj = (array) => {
@@ -900,11 +900,11 @@ const setRetentionObject = () => {
   if (!mode || mode === constants.FIRSTPARTY_MODE) {
     return
   }
-  if (getRetentionSDKData() != null) {
+  if (getSDK() != null) {
     return
   }
   const retentionSdkData = getRetentionSDK()
-  setRetentionSDKData(retentionSdkData)
+  setSDK(retentionSdkData)
   updateStore()
 }
 

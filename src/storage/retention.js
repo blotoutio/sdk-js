@@ -1,6 +1,6 @@
 import { getStoreByDomain } from '.'
 
-const getRetentionStore = () => {
+const getStore = () => {
   const store = getStoreByDomain()
   if (!store) {
     return null
@@ -8,8 +8,8 @@ const getRetentionStore = () => {
   return store.retention
 }
 
-export const getRetentionSDKData = () => {
-  const retentionStore = getRetentionStore()
+export const getSDK = () => {
+  const retentionStore = getStore()
   if (!retentionStore) {
     return null
   }
@@ -19,8 +19,8 @@ export const getRetentionSDKData = () => {
     : JSON.parse(retentionStore.retentionSDK)
 }
 
-export const setRetentionSDKData = (retention) => {
-  const store = getRetentionStore()
+export const setSDK = (retention) => {
+  const store = getStore()
   if (!store) {
     return
   }
