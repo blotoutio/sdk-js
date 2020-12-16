@@ -1,13 +1,13 @@
 {
-  "name": "@blotoutio/js-sdk",
+  "name": "@blotoutio/sdk-js",
   "version": "0.2.0",
   "description": "Blotout JS SDK",
   "author": "Blotout",
   "license": "MPL-2.0",
-  "homepage": "https://github.com/blotoutio/js-sdk",
+  "homepage": "https://github.com/blotoutio/sdk-js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/blotoutio/js-sdk.git"
+    "url": "git://github.com/blotoutio/sdk-js.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
