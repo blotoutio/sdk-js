@@ -1,5 +1,5 @@
-import { constants, dataEncryptionEnabled } from '../config'
-import { encryptAES, decryptAES } from '../common/securityUtil'
+import { constants } from '../config'
+import { encryptAES, decryptAES, shouldEncrypt } from '../common/securityUtil'
 import * as log from '../common/logUtil'
 import { getManifestVariable, getRootKey, initialize } from '../utils'
 import { millisecondsToDays } from '../common/timeUtil'
@@ -16,15 +16,15 @@ export const getRoot = () => {
     return rootStore
   }
 
-  let sdkRootObjStr = getLocal(getRootKey())
-  if (!sdkRootObjStr) {
+  let localRoot = getLocal(getRootKey())
+  if (!localRoot) {
     return null
   }
 
-  const domainStrFound = sdkRootObjStr.includes(constants.DOMAINS)
+  const domainStrFound = localRoot.includes(constants.DOMAINS)
   if (!domainStrFound) {
-    sdkRootObjStr = decryptAES(sdkRootObjStr)
-    const decryptSuccess = sdkRootObjStr.includes(constants.DOMAINS)
+    localRoot = decryptAES(localRoot)
+    const decryptSuccess = localRoot && localRoot.includes(constants.DOMAINS)
     if (!decryptSuccess) {
       // In case data decryption error, we are resetting it but need API to log
       window.localStorage.removeItem(getRootKey())
@@ -35,7 +35,7 @@ export const getRoot = () => {
   }
 
   try {
-    setRoot(JSON.parse(sdkRootObjStr))
+    setRoot(JSON.parse(localRoot))
   } catch (e) {
     log.info(e)
   }
@@ -44,7 +44,7 @@ export const getRoot = () => {
 }
 
 export const updateRoot = (store) => {
-  if (store) {
+  if (store !== undefined) {
     setRoot(store)
   }
 
@@ -53,19 +53,18 @@ export const updateRoot = (store) => {
   }
 
   let licenseExp = getManifestVariable(constants.LICENSE_EXPIRE_DAY_ALIVE)
-
-  if (!licenseExp) {
+  if (licenseExp == null) {
     licenseExp = constants.DEFAULT_LICENSE_EXPIRE_DAY_ALIVE
   }
 
   const modifiedDate = getModifiedDate()
-  const diffTime = millisecondsToDays(Date.now() - modifiedDate)
-  if (diffTime > licenseExp) {
+  const diffDays = millisecondsToDays(Date.now() - modifiedDate)
+  if (diffDays > licenseExp) {
     return
   }
 
   let data = JSON.stringify(rootStore)
-  if (dataEncryptionEnabled) {
+  if (shouldEncrypt()) {
     const { encryptedString } = encryptAES(data)
     data = encryptedString
   }

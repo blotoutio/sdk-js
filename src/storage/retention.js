@@ -14,9 +14,7 @@ export const getSDK = () => {
     return null
   }
 
-  return typeof retentionStore.retentionSDK === 'object'
-    ? retentionStore.retentionSDK
-    : JSON.parse(retentionStore.retentionSDK)
+  return retentionStore.retentionSDK
 }
 
 export const setSDK = (retention) => {

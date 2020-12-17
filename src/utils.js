@@ -1287,7 +1287,7 @@ export const initialize = (isDecryptionError) => {
   const date = getDate()
   const sessionId = checkAndGetSessionId()
 
-  if (getLocal(getRootKey())) {
+  if (getLocal(getRootKey()) && localData) {
     if (localData[hostname] && !localData[hostname].events[date]) {
       const storeCheck = checkStoreEventsInterval()
       if (checkManifest()) {

@@ -46,26 +46,26 @@ const setValue = (store, key, value) => {
   store[key] = value
 }
 
-export const setTempUseValue = (key, value) => {
-  setValue(getTempUse(), key, value)
-}
-
 export const getTempUseValue = (key) => {
   return getValue(getTempUse(), key)
 }
 
-export const setNormalUseValue = (key, value) => {
-  setValue(getNormalUse(), key, value)
+export const setTempUseValue = (key, value) => {
+  setValue(getTempUse(), key, value)
 }
 
 export const getNormalUseValue = (key) => {
   return getValue(getNormalUse(), key)
 }
 
-export const setCustomUseValue = (key, value) => {
-  setValue(getCustomUse(), key, value)
+export const setNormalUseValue = (key, value) => {
+  setValue(getNormalUse(), key, value)
 }
 
-export const getCustomUseValue = function (key) {
+export const getCustomUseValue = (key) => {
   return getValue(getCustomUse(), key)
+}
+
+export const setCustomUseValue = (key, value) => {
+  setValue(getCustomUse(), key, value)
 }

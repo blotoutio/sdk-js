@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getRootIndexKey } from '../utils'
 import { error } from './logUtil'
 import { getLocal } from '../storage'
+import { dataEncryptionEnabled } from '../config'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
 
 const getUserIndex = () => {
@@ -126,4 +127,8 @@ export const encryptRSA = (publicKey, data) => {
     key: encrypt2.encrypt(key),
     iv
   }
+}
+
+export const shouldEncrypt = () => {
+  return dataEncryptionEnabled
 }

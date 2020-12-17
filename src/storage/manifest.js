@@ -44,11 +44,15 @@ export const setModifiedDate = (value) => {
   store.modifiedDate = value
 }
 
-// TODO(nejc): we only have set, but not get. Is this in use?
 export const setCreatedDate = (value) => {
   const store = getStore()
   if (!store) {
     return
   }
+
+  if (store.createdDate) {
+    return
+  }
+
   store.createdDate = value
 }

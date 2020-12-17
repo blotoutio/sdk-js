@@ -1,4 +1,11 @@
-import { SHA256Encode, decryptAES, encryptAES, encryptRSA, SHA1Encode } from './securityUtil'
+import {
+  SHA256Encode,
+  decryptAES,
+  encryptAES,
+  encryptRSA,
+  SHA1Encode,
+  shouldEncrypt
+} from './securityUtil'
 import { getRootIndexKey } from '../utils'
 import AES from 'crypto-js/aes'
 import { setLocal } from '../storage'
@@ -140,5 +147,12 @@ describe('encryptRSA', () => {
     expect(result.iv.length).toBe(32)
     expect(result.key.length).toBe(172)
     expect(result.data.length).toBe(24)
+  })
+})
+
+describe('shouldEncrypt', () => {
+  it('ok', () => {
+    const result = shouldEncrypt()
+    expect(result).toBe(true)
   })
 })

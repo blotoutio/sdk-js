@@ -25,7 +25,7 @@ const getStoreByDate = (dateString) => {
 
   const store = getStore()
   if (!store) {
-    return
+    return null
   }
   return store[dateString]
 }
@@ -35,9 +35,8 @@ export const getEventsByDate = (dateString) => {
   if (!store) {
     return null
   }
-  return typeof store.sdkData === 'object'
-    ? store.sdkData
-    : JSON.parse(store.sdkData)
+
+  return store.sdkData
 }
 
 export const setEventsByDate = (dateString, data) => {
