@@ -2,7 +2,7 @@ import { constants } from '../config'
 import { getMid, getDate, getDomain } from '../utils'
 import { getStore as getEventsStore } from '../storage/event'
 import { getSDK, setSDK } from '../storage/retention'
-import { updateStore } from '../storage/store'
+import { updateRoot } from '../storage/store'
 
 const getRetentionData = () => {
   return {
@@ -166,5 +166,5 @@ export const retentionWrapper = (key, func) => {
   }
 
   setSDK(retentionSDKData)
-  updateStore()
+  updateRoot()
 }

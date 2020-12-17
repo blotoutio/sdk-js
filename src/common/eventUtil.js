@@ -1,6 +1,6 @@
 import { SHA1Encode } from './securityUtil'
 import { constants } from '../config'
-import { updateStore } from '../storage/store'
+import { updateRoot } from '../storage/store'
 import { getNormalUseValue, setNormalUseValue } from '../storage/sharedPreferences'
 
 const hashIntSum = (eventName) => {
@@ -57,6 +57,6 @@ export const codeForCustomCodifiedEvent = (eventName) => {
   customEventStore[eventName] = eventSubCode
   setNormalUseValue(constants.CUSTOM_EVENT_STORAGE, customEventStore)
 
-  updateStore()
+  updateRoot()
   return eventSubCode
 }

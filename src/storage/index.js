@@ -1,5 +1,5 @@
 import { getDomain } from '../utils'
-import { getRootStore } from './store'
+import { getRoot } from './store'
 
 export const setLocal = (name, data) => {
   if (!name) {
@@ -28,7 +28,7 @@ export const getStoreByDomain = (domainName) => {
     domainName = getDomain()
   }
 
-  const store = getRootStore()
+  const store = getRoot()
   if (!store) {
     return null
   }

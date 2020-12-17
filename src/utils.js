@@ -44,7 +44,7 @@ import {
   getModifiedDate,
   setModifiedDate
 } from './storage/manifest'
-import { getRootStore, setRootStore, updateStore } from './storage/store'
+import { getRoot, updateRoot } from './storage/store'
 import {
   getCustomUseValue,
   getTempUseValue,
@@ -410,7 +410,7 @@ const setManifest = (data) => {
   setModifiedDate(Date.now())
   setManifestData(data)
   setRetentionObject()
-  updateStore()
+  updateRoot()
 }
 
 const setManifestRefreshInterval = () => {
@@ -486,7 +486,7 @@ const setGeoData = () => {
   }
 
   setEventsByDate(date, sdkDataForDate)
-  updateStore()
+  updateRoot()
 }
 
 const syncRetentionData = () => {
@@ -558,7 +558,7 @@ const sendRetentionReq = (url, retentionStore, payload, date) => {
       }
       setTempUseValue(constants.FAILED_RETENTION, tempUseData)
 
-      updateStore()
+      updateRoot()
     })
     .catch(() => {
       const date = getDate()
@@ -571,7 +571,7 @@ const sendRetentionReq = (url, retentionStore, payload, date) => {
         tempUseData[date] = payload
       }
       setTempUseValue(constants.FAILED_RETENTION, tempUseData)
-      updateStore()
+      updateRoot()
     })
 }
 
@@ -823,7 +823,7 @@ const setUID = () => {
     const userID = userIDUUID()
     updateIndexScore(userID, true)
     setTempUseValue(constants.UID, userID)
-    updateStore()
+    updateRoot()
     return
   }
 
@@ -906,7 +906,7 @@ const setRetentionObject = () => {
   }
   const retentionSdkData = getRetentionSDK()
   setSDK(retentionSdkData)
-  updateStore()
+  updateRoot()
 }
 
 export const setInitialConfiguration = (preferences) => {
@@ -959,7 +959,7 @@ export const createEventInfoObj = (eventName, objectName, meta = {}, event = {})
     name: eventName,
     urlPath: window.location.href,
     tstmp: Date.now(),
-    mid: getRootStore() ? getMid() : '',
+    mid: getRoot() ? getMid() : '',
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
     evcs: systemEventCode[eventName],
@@ -1170,7 +1170,7 @@ export const setEventsSentToServer = (arr, date, sessionId) => {
       sdkDataOfDate.sessions[sessionId].eventsData.sentToServer = true
     }
     setEventsByDate(date, sdkDataOfDate)
-    updateStore()
+    updateRoot()
   })
   eventSync.progressStatus = false
 }
@@ -1197,7 +1197,7 @@ export const debounce = (func, delay) => {
 }
 
 export const checkManifest = () => {
-  const localData = getRootStore()
+  const localData = getRoot()
   if (!localData) {
     return false
   }
@@ -1247,7 +1247,7 @@ export const updateManifest = () => {
     .then((data) => {
       setModifiedDate(Date.now())
       setManifestData(data)
-      updateStore()
+      updateRoot()
       setManifestRefreshInterval()
       setSyncEventsInterval()
       syncRetentionData()
@@ -1272,7 +1272,7 @@ export const checkUpdateForManifest = () => {
       .then((data) => {
         setModifiedDate(Date.now())
         setManifestData(data)
-        updateStore()
+        updateRoot()
       })
       .catch((error) => {
         log.error(error)
@@ -1282,7 +1282,7 @@ export const checkUpdateForManifest = () => {
 }
 
 export const initialize = (isDecryptionError) => {
-  const localData = isDecryptionError ? null : getRootStore()
+  const localData = isDecryptionError ? null : getRoot()
   const hostname = getDomain()
   const date = getDate()
   const sessionId = checkAndGetSessionId()
@@ -1318,9 +1318,8 @@ export const initialize = (isDecryptionError) => {
         localData[hostname] = createDomain(constants.INIT)
       }
     }
-    setRootStore(localData)
+    updateRoot(localData)
     setUID()
-    updateStore()
     return
   }
 
@@ -1329,10 +1328,9 @@ export const initialize = (isDecryptionError) => {
     domains: [hostname],
     [hostname]: domainSchema
   }
-  setRootStore(obj)
+  updateRoot(obj)
   setUIDInInitEvent()
   setUID()
-  updateStore()
 }
 
 export const checkGeo = () => {
@@ -1386,7 +1384,7 @@ export const setNewDateObject = (date, eventStore) => {
   setRetentionData()
   setSyncEventsInterval()
   setEventsStore(eventStore)
-  updateStore()
+  updateRoot()
 }
 
 export const setRetentionData = () => {

@@ -7,13 +7,11 @@ import { getModifiedDate } from './manifest'
 import { getLocal, setLocal } from '.'
 
 let rootStore
-
-// TODO(nejc): why are not updateStore and setRootStore the same?
-export const setRootStore = (value) => {
+const setRoot = (value) => {
   rootStore = value
 }
 
-export const getRootStore = () => {
+export const getRoot = () => {
   if (rootStore) {
     return rootStore
   }
@@ -31,13 +29,13 @@ export const getRootStore = () => {
       // In case data decryption error, we are resetting it but need API to log
       window.localStorage.removeItem(getRootKey())
       initialize(true)
-      setRootStore(null)
+      setRoot(null)
       return null
     }
   }
 
   try {
-    setRootStore(JSON.parse(sdkRootObjStr))
+    setRoot(JSON.parse(sdkRootObjStr))
   } catch (e) {
     log.info(e)
   }
@@ -45,7 +43,11 @@ export const getRootStore = () => {
   return rootStore
 }
 
-export const updateStore = () => {
+export const updateRoot = (store) => {
+  if (store) {
+    setRoot(store)
+  }
+
   if (!rootStore) {
     return
   }
