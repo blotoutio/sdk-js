@@ -21,7 +21,7 @@ import {
 } from './config'
 import { getSession, setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
-import { setDevEvent, setEndDevEvent, setStartDevEvent } from './session/events'
+import { setDevEvent, setEndDevEvent, setStartDevEvent } from './session/event'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 
 (function (window) {

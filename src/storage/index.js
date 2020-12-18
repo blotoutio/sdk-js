@@ -41,3 +41,7 @@ export const getStoreByDomain = (domainName) => {
 
   return store[domainName]
 }
+
+export const removeSession = (key) => {
+  window.sessionStorage.removeItem(key)
+}

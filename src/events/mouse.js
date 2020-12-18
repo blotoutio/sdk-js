@@ -1,12 +1,11 @@
-import { setEvent } from '../session/events'
+import { setEvent } from '../session/event'
 import { getSession } from '../storage'
 import {
   constants,
-  isSysEvtCollect,
   isSysEvtStore,
   isHighFreqEventOff
 } from '../config'
-import { collectEvent } from '../utils'
+import { collectEvent, shouldCollectSystemEvents } from '../utils'
 import { getHoverEventData, getsScrollEventData, sendEvents, sendScrollEvents } from './pocUtil'
 
 export const click = (window) => {
@@ -19,7 +18,7 @@ export const click = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, event, constants.SYSTEM_EVENT)
     }
   })
@@ -35,7 +34,7 @@ export const doubleClick = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, event, constants.SYSTEM_EVENT)
     }
   })
@@ -51,7 +50,7 @@ export const contextMenu = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, event, constants.SYSTEM_EVENT)
     }
   })

@@ -1,15 +1,14 @@
-import { debounce, collectEvent, sendBounceEvent, getDate, detectQueryString } from '../utils'
+import { debounce, collectEvent, sendBounceEvent, getDate, detectQueryString, shouldCollectSystemEvents } from '../utils'
 import {
   constants,
-  isSysEvtCollect,
   isSysEvtStore
 } from '../config'
 import { getSession } from '../storage'
 import { getEventsByDate } from '../storage/event'
-import { setEvent } from '../session/events'
+import { setEvent } from '../session/event'
 import { setDNTEvent, setViewPort } from '../session/system'
 import { updateNavPath, updateNavTime } from '../session/navigation'
-import { updateSessionEndTime } from '../session'
+import { updateEndTime } from '../session'
 
 export const resize = (window) => {
   const eventName = 'resize'
@@ -22,7 +21,7 @@ export const resize = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, e, constants.SYSTEM_EVENT)
     }
   }, 3000))
@@ -41,7 +40,7 @@ export const unload = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, e, constants.SYSTEM_EVENT)
     }
   })
@@ -84,13 +83,13 @@ export const load = (window) => {
         (window.external.msTrackingProtectionEnabled && window.external.msTrackingProtectionEnabled())
         ) {
         // Do Not Track is enabled!
-          setDNTEvent('dnt', e, {})
+          setDNTEvent(e)
         }
       }
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, e, constants.SYSTEM_EVENT)
     }
   })
@@ -102,7 +101,7 @@ export const beforeUnload = (window) => {
       return
     }
 
-    updateSessionEndTime()
+    updateEndTime()
     if (!getSession(constants.SESSION_ID)) {
       return
     }
@@ -136,7 +135,7 @@ export const domSubTreeModified = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, event, constants.SYSTEM_EVENT)
     }
   }, constants.DOM_SUB_TREE_MODIFIED_INTERVAL))
@@ -152,7 +151,7 @@ export const domActive = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, e, constants.SYSTEM_EVENT)
     }
   })

@@ -43,8 +43,8 @@ import {
   setTempUseValue
 } from './storage/sharedPreferences'
 import { getSDK, setSDK } from './storage/retention'
-import { checkAndGetSessionId, eventSync, getNotSyncedSession } from './session/utils'
-import { addSessionInfoEvent, syncPreviousSessionEvents, updatePreviousDayEndTime } from './session'
+import { checkAndGetSessionId, eventSync, getNotSynced } from './session/utils'
+import { syncPreviousDateEvents, syncPreviousEvents, updatePreviousDayEndTime } from './session'
 import { setReferrerEvent } from './session/navigation'
 
 let globalRetentionInterval = null
@@ -274,53 +274,8 @@ const browserVersion = (userAgent, regex) => {
   return userAgent.match(regex) ? userAgent.match(regex)[2] : null
 }
 
-const syncPreviousDateEvents = () => {
-  if (!isSysEvtStore && !isDevEvtStore) {
-    return
-  }
-
-  const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsByDate(notSyncDate)
-  const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
-  const { events, devEvents, piiEvents, phiEvents } =
-    getNotSyncedEvents(sdkDataForDate.sessions[sessionId].eventsData)
-
-  sendPIIPHIEvent(piiEvents, notSyncDate, 'pii')
-  sendPIIPHIEvent(phiEvents, notSyncDate, 'phi')
-
-  let eventsArrChunk = eventsChunkArr(events, devEvents)
-  eventsArrChunk = addSessionInfoEvent(events, eventsArrChunk, notSyncDate, sessionId)
-  sendNavigation(notSyncDate, sessionId)
-  eventsArrChunk.forEach((arr) => {
-    const eventsArray = getEventPayloadArr(arr, notSyncDate, sessionId)
-    if (eventsArray.length === 0) {
-      return
-    }
-
-    const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
-    const url = getManifestUrl()
-    postRequest(url, JSON.stringify(payload))
-      .then(() => {
-        setEventsSentToServer(arr, notSyncDate, sessionId)
-      })
-      .catch(log.error)
-  })
-}
-
-const getNotSyncedDate = () => {
-  const obj = getEventsStore()
-  let notSyncDate
-  for (const x in obj) {
-    notSyncDate = x
-    if (!obj[x].isSynced) {
-      break
-    }
-  }
-  return notSyncDate
-}
-
 const setSyncEventsInterval = () => {
-  if (!isSysEvtStore && !isDevEvtStore) {
+  if (!shouldSyncStoredData()) {
     return
   }
 
@@ -336,7 +291,7 @@ const setSyncEventsInterval = () => {
   globalEventInterval = setInterval(() => {
     const date = getDate()
     const eventStore = getEventsStore()
-    if (!eventStore[date]) {
+    if (eventStore && !eventStore[date]) {
       updatePreviousDayEndTime()
       setNewDateObject(date, eventStore)
     } else {
@@ -480,7 +435,6 @@ const setGeoData = () => {
   }
 
   setEventsByDate(date, sdkDataForDate)
-  updateRoot()
 }
 
 const syncRetentionData = () => {
@@ -705,7 +659,7 @@ const getRetentionPayloadArr = (arr, name) => {
   const result = []
   const UID = getTempUseValue(constants.UID)
   arr.forEach((val) => {
-    const eventTime = isApprox ? getNearestTimestamp(val.tstmp) : val.tstmp
+    const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(val.tstmp) : val.tstmp
     const data = {
       mid: val.mid,
       userid: UID,
@@ -756,7 +710,7 @@ const getDomainOfReferrer = (ref) => {
 
 const getNavigationPayloadArr = (navigations, navigationsTime) => {
   const UID = getTempUseValue(constants.UID)
-  const eventTime = isApprox ? getNearestTimestamp(Date.now()) : Date.now()
+  const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(Date.now()) : Date.now()
   return [{
     mid: getMid(),
     userid: UID,
@@ -1027,10 +981,6 @@ export const getPreviousDate = () => {
   return `${date}-${month}-${year}`
 }
 
-export const isEventExist = (eventArr, eventName) => {
-  return !!eventArr.find((obj) => obj.name === eventName)
-}
-
 export const findObjIndex = (eventArr, eventName) => {
   return eventArr.findIndex((obj) => obj.name === eventName)
 }
@@ -1059,33 +1009,30 @@ export const getNotSyncedEvents = (obj) => {
   let devEvents = []
   let piiEvents = []
   let phiEvents = []
-  if (isSysEvtCollect) {
+  if (shouldCollectSystemEvents() && obj.eventsInfo) {
     events = obj.eventsInfo.filter((evt) => !evt.sentToServer && !evt.isPii && !evt.isPhi)
   }
-  if (isDevEvtCollect) {
+  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
     piiEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer && evt.isPii)
   }
-  if (isDevEvtCollect) {
+  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
     phiEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer && evt.isPhi)
   }
-  if (isDevEvtCollect) {
+  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
     devEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer)
   }
   return { events, devEvents, piiEvents, phiEvents }
 }
 
-export const getNotSyncedEventsCount = (obj) => {
-  let events = obj.eventsInfo.filter((evt) => !evt.sentToServer)
-  const devEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer)
-  events = events.concat(devEvents)
-  return events.length
-}
-
 export const getEventPayloadArr = (arr, date, sessionId) => {
   const dateEvents = getAllEventsOfDate(date)
-  const sdkDataForDate = getEventsByDate(date)
-  const viewportLen = sdkDataForDate.sessions[sessionId].viewPort.length
-  const viewPortObj = sdkDataForDate.sessions[sessionId].viewPort[viewportLen - 1]
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+    return null
+  }
+  const session = sdkData.sessions[sessionId]
+  const viewportLength = (session.viewPort || []).length
+  const viewPortObj = viewportLength > 0 ? session.viewPort[viewportLength - 1] : {}
 
   const result = []
   arr.forEach((val) => {
@@ -1121,7 +1068,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       propObj.codifiedInfo = val.metaInfo
     }
 
-    const eventTime = isApprox ? getNearestTimestamp(val.tstmp) : val.tstmp
+    const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(val.tstmp) : val.tstmp
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     const obj = {
       mid: val.mid,
@@ -1164,7 +1111,6 @@ export const setEventsSentToServer = (arr, date, sessionId) => {
       sdkDataOfDate.sessions[sessionId].eventsData.sentToServer = true
     }
     setEventsByDate(date, sdkDataOfDate)
-    updateRoot()
   })
   eventSync.progressStatus = false
 }
@@ -1301,7 +1247,7 @@ export const initialize = (isDecryptionError) => {
     } else {
       if (localData[hostname]) {
         if (checkManifest()) {
-          syncPreviousSessionEvents()
+          syncPreviousEvents()
         }
 
         if (!localData[hostname].events[date].sdkData.sessions[sessionId]) {
@@ -1487,7 +1433,7 @@ export const eventsChunkArr = (events, devEvents) => {
   }
 
   const sysMergeCounterValue = getSystemMergeCounter(events)
-  const sysEvents = sysMergeCounterValue ? chunk(events, sysMergeCounterValue) : []
+  const sysEvents = sysMergeCounterValue != null ? chunk(events, sysMergeCounterValue) : []
   const codifiedEvents = chunk(devEvents, codifiedMergeCounter)
 
   const length = sysEvents.length > codifiedEvents.length ? sysEvents.length : codifiedEvents.length
@@ -1505,18 +1451,8 @@ export const eventsChunkArr = (events, devEvents) => {
   return mergeArr
 }
 
-export const checkEventPushEventCounter = (eventsDataObj) => {
-  const eventsCount = getNotSyncedEventsCount(eventsDataObj)
-  let eventsPushEventsCounter = getManifestVariable(constants.EVENT_PUSH_EVENTSCOUNTER)
-  if (eventsPushEventsCounter == null) {
-    eventsPushEventsCounter = constants.DEFAULT_EVENT_PUSH_EVENTSCOUNTER
-  }
-
-  return eventsCount >= parseInt(eventsPushEventsCounter)
-}
-
 export const syncEvents = () => {
-  if (!isSysEvtStore && !isDevEvtStore) {
+  if (!shouldSyncStoredData()) {
     eventSync.progressStatus = false
     return
   }
@@ -1597,15 +1533,24 @@ export const detectQueryString = () => {
 }
 
 export const getReferrerUrlOfDateSession = (date, sessionId) => {
-  const sdkDataForDate = getEventsByDate(date)
-  const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+    return null
+  }
+
+  const eventsData = sdkData.sessions[sessionId].eventsData
+  if (!eventsData || !eventsData.eventsInfo) {
+    return null
+  }
+
+  const refIndex = eventsData.eventsInfo
     .findIndex((obj) => obj.name === 'referrer')
 
   if (refIndex === -1) {
     return null
   }
 
-  return sdkDataForDate.sessions[sessionId].eventsData.eventsInfo[refIndex].value
+  return eventsData.eventsInfo[refIndex].value
 }
 
 export const getObjectTitle = (event, eventName) => {
@@ -1675,6 +1620,10 @@ export const getObjectTitle = (event, eventName) => {
 }
 
 export const getSelector = (ele) => {
+  if (!ele) {
+    return 'Unknown'
+  }
+
   if (ele.localName) {
     return (ele.localName + (ele.id ? '#' + ele.id : '') + (ele.className ? '.' + ele.className : ''))
   }
@@ -1704,7 +1653,7 @@ export const collectEvent = (eventName, event, type) => {
 }
 
 export const sendPIIPHIEvent = (events, date, type) => {
-  if (events && events.length < 1) {
+  if (events && events.length === 0) {
     return
   }
 
@@ -1748,14 +1697,14 @@ export const setReferrer = (ref) => {
 export const getPreviousDateSessionEventData = () => {
   const notSyncDate = getNotSyncedDate()
   const sdkDataForDate = getEventsByDate(notSyncDate)
-  const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
+  const sessionId = getNotSynced(sdkDataForDate.sessions)
   return sdkDataForDate.sessions[sessionId].eventsData
 }
 
 export const resetPreviousDateSessionNavigation = () => {
   const notSyncDate = getNotSyncedDate()
   const sdkDataForDate = getEventsByDate(notSyncDate)
-  const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
+  const sessionId = getNotSynced(sdkDataForDate.sessions)
   sdkDataForDate.sessions[sessionId].eventsData.navigationPath = []
   sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav = []
 }
@@ -1763,7 +1712,7 @@ export const resetPreviousDateSessionNavigation = () => {
 export const getPreviousDateReferrer = () => {
   const notSyncDate = getNotSyncedDate()
   const sdkDataForDate = getEventsByDate(notSyncDate)
-  const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
+  const sessionId = getNotSynced(sdkDataForDate.sessions)
 
   const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo.findIndex((obj) => obj.name === 'referrer')
   if (refIndex !== -1) {
@@ -1806,5 +1755,29 @@ export const getSystemMergeCounter = (events) => {
   } else if (sysMergeCounter > 0) {
     sysMergeCounterValue = sysMergeCounter
   }
-  return sysMergeCounterValue
+  return parseInt(sysMergeCounterValue)
+}
+
+export const shouldSyncStoredData = () => {
+  return isSysEvtStore || isDevEvtStore
+}
+
+export const getNotSyncedDate = () => {
+  const obj = getEventsStore()
+  let notSyncDate
+  for (const x in obj) {
+    notSyncDate = x
+    if (!obj[x].isSynced) {
+      break
+    }
+  }
+  return notSyncDate
+}
+
+export const shouldApproximateTimestamp = () => {
+  return isApprox
+}
+
+export const shouldCollectSystemEvents = () => {
+  return isSysEvtCollect
 }

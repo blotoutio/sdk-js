@@ -1,11 +1,10 @@
-import { setEvent } from '../session/events'
+import { setEvent } from '../session/event'
 import { getSession } from '../storage'
 import {
   constants,
-  isSysEvtCollect,
   isSysEvtStore
 } from '../config'
-import { collectEvent } from '../utils'
+import { collectEvent, shouldCollectSystemEvents } from '../utils'
 
 export const keyPressed = (window) => {
   const eventName = 'keypress'
@@ -17,7 +16,7 @@ export const keyPressed = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, e, constants.SYSTEM_EVENT)
     }
   })
@@ -34,7 +33,7 @@ export const keyDown = (window) => {
         return
       }
 
-      if (isSysEvtCollect) {
+      if (shouldCollectSystemEvents()) {
         collectEvent(eventName, e, constants.SYSTEM_EVENT)
       }
     }

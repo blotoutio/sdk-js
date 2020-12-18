@@ -20,7 +20,7 @@
     "demo": "webpack --config webpack.demo.js",
     "start": "webpack serve --config webpack.dev.js",
     "lint": "standard",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "engines": {
     "node": ">=12.0.0"

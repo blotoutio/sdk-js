@@ -1,10 +1,9 @@
-import { setEvent } from '../session/events'
+import { setEvent } from '../session/event'
 import {
   constants,
-  isSysEvtCollect,
   isSysEvtStore
 } from '../config'
-import { collectEvent } from '../utils'
+import { collectEvent, shouldCollectSystemEvents } from '../utils'
 import { getSession } from '../storage'
 
 export const dragStart = (window) => {
@@ -17,7 +16,7 @@ export const dragStart = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, event, constants.SYSTEM_EVENT)
     }
   })
@@ -33,7 +32,7 @@ export const dragEnd = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, event, constants.SYSTEM_EVENT)
     }
   })

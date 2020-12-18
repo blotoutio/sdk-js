@@ -2,37 +2,44 @@ import { createEventInfoObj, createViewPortObject, getDate, getSelector } from '
 import { getSession } from '../storage'
 import { constants } from '../config'
 import { getEventsByDate, setEventsByDate } from '../storage/event'
-import { updateRoot } from '../storage/store'
-import { info } from '../common/logUtil'
 
-export const setDNTEvent = function (eventName, event, meta) {
-  try {
-    const objectName = getSelector(event.target)
-    const sessionId = getSession(constants.SESSION_ID)
-    const date = getDate()
-    const sdkDataForDate = getEventsByDate(date)
-    const refIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
-      .findIndex((obj) => obj.name === eventName)
-    if (refIndex !== -1) {
-      return
-    }
-
-    sdkDataForDate.sessions[sessionId].eventsData.eventsInfo.push(
-      createEventInfoObj(eventName, objectName, meta, event)
-    )
-    setEventsByDate(date, sdkDataForDate)
-    updateRoot()
-  } catch (error) {
-    info(error)
+export const setDNTEvent = function (event) {
+  const eventName = 'dnt'
+  if (!event) {
+    return
   }
+  const objectName = getSelector(event.target)
+  const sessionId = getSession(constants.SESSION_ID)
+  const date = getDate()
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+    return
+  }
+  const eventsInfo = sdkData.sessions[sessionId].eventsData.eventsInfo
+  if (!eventsInfo) {
+    return
+  }
+  const refIndex = eventsInfo.findIndex((obj) => obj.name === eventName)
+  if (refIndex !== -1) {
+    return
+  }
+
+  eventsInfo.push(createEventInfoObj(eventName, objectName, {}, event))
+  setEventsByDate(date, sdkData)
 }
 
-export const setViewPort = function () {
+export const setViewPort = () => {
   const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
   const obj = createViewPortObject()
-  const sdkDataForDate = getEventsByDate(date)
-  sdkDataForDate.sessions[sessionId].viewPort.push(obj)
-  setEventsByDate(date, sdkDataForDate)
-  updateRoot()
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+    return
+  }
+  const session = sdkData.sessions[sessionId]
+  if (!session.viewPort) {
+    session.viewPort = []
+  }
+  session.viewPort.push(obj)
+  setEventsByDate(date, sdkData)
 }

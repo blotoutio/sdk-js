@@ -1,40 +1,35 @@
 import { getSession } from '../storage'
 import { constants } from '../config'
-import { checkEventPushEventCounter, createDevEventInfoObj, getDate, syncEvents } from '../utils'
+import { createDevEventInfoObj, getDate } from '../utils'
 import { getEventsByDate, setEventsByDate } from '../storage/event'
-import { eventSync } from './utils'
-import { updateRoot } from '../storage/store'
+import { maybeSync } from './utils'
 
-export const setSessionPIIEvent = function (eventName, objectName, meta) {
-  const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
-  const sdkDataForDate = getEventsByDate(date)
-  sdkDataForDate.sessions[sessionId].eventsData.devCodifiedEventsInfo.push(
-    createDevEventInfoObj(eventName, objectName, meta, true, false))
-
-  const isEventPush = checkEventPushEventCounter(sdkDataForDate.sessions[sessionId].eventsData)
-  if (isEventPush && !eventSync.progressStatus) {
-    eventSync.progressStatus = true
-    syncEvents()
+const setPersonalEvent = (eventName, objectName, meta, isPII) => {
+  if (!eventName) {
+    return
   }
 
-  setEventsByDate(date, sdkDataForDate)
-  updateRoot()
+  const sessionId = getSession(constants.SESSION_ID)
+  const date = getDate()
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+    return
+  }
+
+  const eventsData = sdkData.sessions[sessionId].eventsData
+  if (!eventsData.devCodifiedEventsInfo) {
+    eventsData.devCodifiedEventsInfo = []
+  }
+  eventsData.devCodifiedEventsInfo.push(createDevEventInfoObj(eventName, objectName, meta, isPII, !isPII))
+
+  maybeSync(eventsData)
+  setEventsByDate(date, sdkData)
 }
 
-export const setSessionPHIEvent = function (eventName, objectName, meta) {
-  const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
-  const sdkDataForDate = getEventsByDate(date)
-  sdkDataForDate.sessions[sessionId].eventsData.devCodifiedEventsInfo.push(
-    createDevEventInfoObj(eventName, objectName, meta, false, true))
+export const setSessionPIIEvent = (eventName, objectName, meta) => {
+  setPersonalEvent(eventName, objectName, meta, true)
+}
 
-  const isEventPush = checkEventPushEventCounter(sdkDataForDate.sessions[sessionId].eventsData)
-  if (isEventPush && !eventSync.progressStatus) {
-    eventSync.progressStatus = true
-    syncEvents()
-  }
-
-  setEventsByDate(date, sdkDataForDate)
-  updateRoot()
+export const setSessionPHIEvent = (eventName, objectName, meta) => {
+  setPersonalEvent(eventName, objectName, meta, false)
 }

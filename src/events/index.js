@@ -1,5 +1,4 @@
 import {
-  isSysEvtCollect,
   isSysEvtStore
 } from '../config'
 
@@ -15,9 +14,10 @@ import { touchEnd } from './touch'
 import { hashChange } from './hash'
 import { resize, unload, load, beforeUnload, domActive, domSubTreeModified } from './window'
 import { error } from './resource'
+import { shouldCollectSystemEvents } from '../utils'
 
 export const startEvents = (window) => {
-  if (!isSysEvtStore && !isSysEvtCollect) {
+  if (!isSysEvtStore && !shouldCollectSystemEvents()) {
     return
   }
 

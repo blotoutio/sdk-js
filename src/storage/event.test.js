@@ -1,7 +1,7 @@
 import { getEventsByDate, getStore, setEventsByDate, setStore } from './event'
 import * as storage from '.'
 import * as utils from '../utils'
-import { updateRoot } from './store'
+import * as store from './store'
 
 describe('getStore', () => {
   it('null', () => {
@@ -52,7 +52,7 @@ describe('setStore', () => {
         test: {}
       }
     }
-    updateRoot(obj)
+    store.updateRoot(obj)
 
     setStore({
       data: false
@@ -89,7 +89,7 @@ describe('getEventsByDate', () => {
         }
       }
     }
-    updateRoot(obj)
+    store.updateRoot(obj)
     const result = getEventsByDate('15-20-2020')
     expect(result).toBe(undefined)
     spyDomain.mockRestore()
@@ -112,7 +112,7 @@ describe('getEventsByDate', () => {
         }
       }
     }
-    updateRoot(obj)
+    store.updateRoot(obj)
     const result = getEventsByDate('15-20-2020')
     expect(result).toStrictEqual({
       data: false
@@ -143,11 +143,16 @@ describe('setEventsByDate', () => {
         }
       }
     }
-    updateRoot(obj)
+    store.updateRoot(obj)
+
+    const spyUpdate = jest
+      .spyOn(store, 'updateRoot')
+      .mockImplementation()
 
     setEventsByDate('15-20-2020', {
       data: false
     })
+    expect(spyUpdate).toBeCalledTimes(1)
     const result = getEventsByDate('15-20-2020')
     expect(result).toStrictEqual({
       data: false

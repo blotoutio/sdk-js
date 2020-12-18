@@ -4,7 +4,7 @@ import * as log from '../common/logUtil'
 import { getManifestVariable, getRootKey, initialize } from '../utils'
 import { millisecondsToDays } from '../common/timeUtil'
 import { getModifiedDate } from './manifest'
-import { getLocal, setLocal } from '.'
+import { getLocal, removeSession, setLocal } from '.'
 
 let rootStore
 const setRoot = (value) => {
@@ -27,7 +27,7 @@ export const getRoot = () => {
     const decryptSuccess = localRoot && localRoot.includes(constants.DOMAINS)
     if (!decryptSuccess) {
       // In case data decryption error, we are resetting it but need API to log
-      window.localStorage.removeItem(getRootKey())
+      removeSession(getRootKey())
       initialize(true)
       setRoot(null)
       return null

@@ -1,5 +1,26 @@
 import { getSession, setSession } from '../storage'
 import { constants } from '../config'
+import { getManifestVariable, syncEvents } from '../utils'
+
+const getNotSyncedEventsCount = (obj) => {
+  if (!obj || !obj.eventsInfo || !obj.devCodifiedEventsInfo) {
+    return 0
+  }
+  let events = obj.eventsInfo.filter((evt) => !evt.sentToServer)
+  const devEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer)
+  events = events.concat(devEvents)
+  return events.length
+}
+
+const checkEventPushEventCounter = (eventsData) => {
+  const eventsCount = getNotSyncedEventsCount(eventsData)
+  let manifestCounter = getManifestVariable(constants.EVENT_PUSH_EVENTSCOUNTER)
+  if (manifestCounter == null) {
+    manifestCounter = constants.DEFAULT_EVENT_PUSH_EVENTSCOUNTER
+  }
+
+  return eventsCount >= parseInt(manifestCounter)
+}
 
 export const eventSync = {
   inProgress: false,
@@ -24,13 +45,27 @@ export const checkAndGetSessionId = () => {
   return sessionId
 }
 
-export const getNotSyncedSession = (object) => {
-  let lastSyncSession
-  for (const x in object) {
-    lastSyncSession = x
-    if (!object[x].eventsData.sentToServer) {
+export const getNotSynced = (sessions) => {
+  let sessionId = null
+  for (const id in sessions) {
+    if (!sessions[id].eventsData) {
+      continue
+    }
+    sessionId = id
+    if (!sessions[id].eventsData.sentToServer) {
       break
     }
   }
-  return lastSyncSession
+  return sessionId
+}
+
+export const maybeSync = (eventsData) => {
+  if (!eventsData) {
+    return
+  }
+  const isEventPush = checkEventPushEventCounter(eventsData)
+  if (isEventPush && !eventSync.progressStatus) {
+    eventSync.progressStatus = true
+    syncEvents()
+  }
 }

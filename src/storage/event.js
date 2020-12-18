@@ -1,5 +1,6 @@
 import { getStoreByDomain } from '.'
 import { error } from '../common/logUtil'
+import { updateRoot } from './store'
 
 export const getStore = () => {
   const store = getStoreByDomain()
@@ -45,4 +46,5 @@ export const setEventsByDate = (dateString, data) => {
     return
   }
   store.sdkData = data
+  updateRoot()
 }

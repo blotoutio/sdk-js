@@ -1,11 +1,10 @@
-import { setEvent } from '../session/events'
+import { setEvent } from '../session/event'
 import { getSession } from '../storage'
 import {
   constants,
-  isSysEvtCollect,
   isSysEvtStore
 } from '../config'
-import { collectEvent } from '../utils'
+import { collectEvent, shouldCollectSystemEvents } from '../utils'
 
 export const print = (window) => {
   const eventName = 'afterprint'
@@ -17,7 +16,7 @@ export const print = (window) => {
       return
     }
 
-    if (isSysEvtCollect) {
+    if (shouldCollectSystemEvents()) {
       collectEvent(eventName, event, constants.SYSTEM_EVENT)
     }
   })

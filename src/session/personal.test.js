@@ -1,0 +1,226 @@
+import * as eventStorage from '../storage/event'
+import * as storage from '../storage'
+import * as utils from '../utils'
+import { setSessionPHIEvent, setSessionPIIEvent } from './personal'
+
+let spySet
+let spyDate
+let spySession
+beforeEach(() => {
+  spyDate = jest
+    .spyOn(utils, 'getDate')
+    .mockImplementation(() => '20-3-2020')
+
+  spySession = jest
+    .spyOn(storage, 'getSession')
+    .mockImplementation(() => 124123423)
+
+  spySet = jest
+    .spyOn(eventStorage, 'setEventsByDate')
+    .mockImplementation()
+
+  jest.useFakeTimers('modern')
+  jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
+})
+
+afterEach(() => {
+  spyDate.mockRestore()
+  spySet.mockRestore()
+  spySession.mockRestore()
+  jest.useRealTimers()
+})
+
+describe('setPersonalEvent', () => {
+  it('null', () => {
+    setSessionPIIEvent()
+    expect(spySet).toBeCalledTimes(0)
+  })
+
+  it('no sessions', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => null)
+    setSessionPIIEvent()
+    expect(spySet).toBeCalledTimes(0)
+    spyEvents.mockRestore()
+  })
+
+  it('no session', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {}
+      }))
+    setSessionPIIEvent('personal', 'obName', {
+      meta: true
+    })
+    expect(spySet).toBeCalledTimes(0)
+    spyEvents.mockRestore()
+  })
+
+  it('no eventsData', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {}
+        }
+      }))
+    setSessionPIIEvent('personal', 'obName', {
+      meta: true
+    })
+    expect(spySet).toBeCalledTimes(0)
+    spyEvents.mockRestore()
+  })
+
+  it('no devCodifiedEventsInfo', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            eventsData: {}
+          }
+        }
+      }))
+    setSessionPIIEvent('personal', 'obName', {
+      meta: true
+    })
+    expect(spySet).toBeCalledWith('20-3-2020', {
+      sessions: {
+        124123423: {
+          eventsData: {
+            devCodifiedEventsInfo: [
+              {
+                duration: null,
+                evc: 20001,
+                evcs: 23950,
+                isPhi: false,
+                isPii: true,
+                metaInfo: {
+                  meta: true
+                },
+                mid: 'localhost-null-1580775120000',
+                name: 'personal',
+                nmo: 1,
+                objectName: 'obName',
+                sentToServer: false,
+                tstmp: 1580775120000,
+                urlPath: 'http://localhost/'
+              }
+            ]
+          }
+        }
+      }
+    })
+    spyEvents.mockRestore()
+  })
+
+  it('devCodifiedEventsInfo, sync in progress', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            eventsData: {
+              devCodifiedEventsInfo: [
+                {
+                  data: true
+                }
+              ]
+            }
+          }
+        }
+      }))
+
+    setSessionPIIEvent('personal', 'obName', {
+      meta: true
+    })
+    expect(spySet).toBeCalledWith('20-3-2020', {
+      sessions: {
+        124123423: {
+          eventsData: {
+            devCodifiedEventsInfo: [
+              {
+                data: true
+              },
+              {
+                duration: null,
+                evc: 20001,
+                evcs: 23950,
+                isPhi: false,
+                isPii: true,
+                metaInfo: {
+                  meta: true
+                },
+                mid: 'localhost-null-1580775120000',
+                name: 'personal',
+                nmo: 1,
+                objectName: 'obName',
+                sentToServer: false,
+                tstmp: 1580775120000,
+                urlPath: 'http://localhost/'
+              }
+            ]
+          }
+        }
+      }
+    })
+    spyEvents.mockRestore()
+  })
+})
+
+describe('setSessionPHIEvent', () => {
+  it('ok', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            eventsData: {
+              devCodifiedEventsInfo: [
+                {
+                  data: true
+                }
+              ]
+            }
+          }
+        }
+      }))
+
+    setSessionPHIEvent('personal', 'obName', {
+      meta: true
+    })
+    expect(spySet).toBeCalledWith('20-3-2020', {
+      sessions: {
+        124123423: {
+          eventsData: {
+            devCodifiedEventsInfo: [
+              {
+                data: true
+              },
+              {
+                duration: null,
+                evc: 20001,
+                evcs: 23950,
+                isPhi: true,
+                isPii: false,
+                metaInfo: {
+                  meta: true
+                },
+                mid: 'localhost-null-1580775120000',
+                name: 'personal',
+                nmo: 1,
+                objectName: 'obName',
+                sentToServer: false,
+                tstmp: 1580775120000,
+                urlPath: 'http://localhost/'
+              }
+            ]
+          }
+        }
+      }
+    })
+    spyEvents.mockRestore()
+  })
+})

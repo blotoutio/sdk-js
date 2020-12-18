@@ -1,8 +1,6 @@
 import {
   constants,
-  systemEventCode,
-  isApprox,
-  isSysEvtCollect
+  systemEventCode
 } from '../config'
 import {
   getMid,
@@ -14,7 +12,7 @@ import {
   getEventPayloadArr,
   getReferrerUrlOfDateSession,
   createEventInfoObj,
-  getPayload
+  getPayload, shouldApproximateTimestamp, shouldCollectSystemEvents
 } from '../utils'
 import * as log from '../common/logUtil'
 import { postRequest } from '../common/networkUtil'
@@ -78,7 +76,7 @@ const getScrollPayloadArray = (arr, date, sessionId, startTime, endTime, viewPor
     }
 
     propObj.mPosition = val.position
-    const eventTime = isApprox ? getNearestTimestamp(val.tstmp) : val.tstmp
+    const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(val.tstmp) : val.tstmp
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     result.push({
       mid: val.mid,
@@ -111,7 +109,7 @@ export const getsScrollEventData = (eventName, e, meta, mousePos) => {
 }
 
 export const sendEvents = (array) => {
-  if (!isSysEvtCollect) {
+  if (!shouldCollectSystemEvents()) {
     return
   }
 
@@ -132,7 +130,7 @@ export const sendEvents = (array) => {
 }
 
 export const sendScrollEvents = (arr, startTime, endTime) => {
-  if (!isSysEvtCollect) {
+  if (!shouldCollectSystemEvents()) {
     return
   }
 

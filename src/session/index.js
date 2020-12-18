@@ -1,57 +1,64 @@
 import { getSession } from '../storage'
-import { constants, isApprox, isDevEvtStore, isSysEvtCollect, isSysEvtStore, systemEventCode } from '../config'
+import { constants, systemEventCode } from '../config'
 import {
   eventsChunkArr,
   getDate,
-  getEventPayloadArr, getMid,
-  getNotSyncedEvents, getPayload,
-  getPreviousDate, getReferrerUrlOfDateSession, getSystemMergeCounter,
+  getEventPayloadArr,
+  getMid,
+  getNotSyncedEvents,
+  getPayload,
+  getPreviousDate,
+  getReferrerUrlOfDateSession,
+  getSystemMergeCounter,
   sendNavigation,
-  sendPIIPHIEvent, setEventsSentToServer
+  sendPIIPHIEvent,
+  setEventsSentToServer,
+  shouldSyncStoredData,
+  getNotSyncedDate,
+  shouldApproximateTimestamp,
+  shouldCollectSystemEvents
 } from '../utils'
 import { getEventsByDate, setEventsByDate } from '../storage/event'
-import { updateRoot } from '../storage/store'
-import { getNotSyncedSession } from './utils'
+import { getNotSynced } from './utils'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
 import { getNearestTimestamp } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 
-export const updatePreviousDayEndTime = () => {
-  const sessionId = getSession(constants.SESSION_ID)
-  const date = getPreviousDate()
+const getInfoPayload = (date, sessionId) => {
+  const sdkData = getEventsByDate(date)
+  const session = sdkData.sessions[sessionId]
+  const viewportLen = (session.viewPort || []).length
+  const viewPortObj = viewportLen > 0 ? session.viewPort[viewportLen - 1] : {}
+  const startTime = session.startTime
+  const endTime = session.endTime
+  const durationInSecs = Math.floor((endTime - startTime) / 1000)
 
-  const sdkDataForDate = getEventsByDate(date)
-  sdkDataForDate.sessions[sessionId].endTime = Date.now()
-  setEventsByDate(date, sdkDataForDate)
-  updateRoot()
+  return {
+    mid: getMid(),
+    userid: getTempUseValue(constants.UID),
+    evn: constants.SESSION_INFO,
+    evcs: systemEventCode.sessionInfo,
+    evdc: 1,
+    scrn: window.location.href,
+    evt: shouldApproximateTimestamp() ? getNearestTimestamp(Date.now()) : Date.now(),
+    properties: {
+      referrer: getReferrerUrlOfDateSession(date, sessionId),
+      screen: viewPortObj,
+      session_id: sessionId,
+      start: startTime,
+      end: endTime,
+      duration: durationInSecs
+    },
+    nmo: 1,
+    evc: constants.EVENT_CATEGORY
+  }
 }
 
-export const updateSessionEndTime = () => {
-  const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
-  const sdkDataForDate = getEventsByDate(date)
-
-  sdkDataForDate.sessions[sessionId].endTime = Date.now()
-  setEventsByDate(date, sdkDataForDate)
-  updateRoot()
-}
-
-export const syncPreviousSessionEvents = () => {
-  if (!isSysEvtStore && !isDevEvtStore) {
-    return
-  }
-
-  const date = getDate()
-  const sdkDataForDate = getEventsByDate(date)
-  const sessionId = getNotSyncedSession(sdkDataForDate.sessions)
-  const currentSessionId = getSession(constants.SESSION_ID)
-  if (currentSessionId === sessionId) {
-    return
-  }
+const syncEvents = (sdkData, sessionId, date) => {
   const { events, devEvents, piiEvents, phiEvents } =
-    getNotSyncedEvents(sdkDataForDate.sessions[sessionId].eventsData)
+    getNotSyncedEvents(sdkData.sessions[sessionId].eventsData)
 
   sendPIIPHIEvent(piiEvents, date, 'pii')
   sendPIIPHIEvent(phiEvents, date, 'phi')
@@ -65,7 +72,7 @@ export const syncPreviousSessionEvents = () => {
       return
     }
 
-    const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
+    const payload = getPayload(sdkData.sessions[sessionId], eventsArray)
     const url = getManifestUrl()
     postRequest(url, JSON.stringify(payload))
       .then(() => {
@@ -75,14 +82,14 @@ export const syncPreviousSessionEvents = () => {
   })
 }
 
-export const addSessionInfoEvent = function (events, eventsArrayChunk, date, sessionId) {
-  if (!isSysEvtCollect) {
+const addSessionInfoEvent = function (events, eventsArrayChunk, date, sessionId) {
+  if (!shouldCollectSystemEvents()) {
     return eventsArrayChunk
   }
 
   const sysMergeCounterValue = getSystemMergeCounter(events)
 
-  const sessionInfoObj = getSessionInfoPayload(date, sessionId)
+  const sessionInfoObj = getInfoPayload(date, sessionId)
   const chunkIndex = eventsArrayChunk.findIndex((arr) => arr.length < sysMergeCounterValue)
   if (chunkIndex === -1) {
     const sessionEvtArr = [sessionInfoObj]
@@ -93,35 +100,63 @@ export const addSessionInfoEvent = function (events, eventsArrayChunk, date, ses
   return eventsArrayChunk
 }
 
-export const getSessionInfoPayload = (date, sessionId) => {
-  const sdkDataForDate = getEventsByDate(date)
-  const viewportLen = sdkDataForDate.sessions[sessionId].viewPort.length
-  const viewPortObj = sdkDataForDate.sessions[sessionId].viewPort[viewportLen - 1]
-  const eventTime = isApprox ? getNearestTimestamp(Date.now()) : Date.now()
-  const startTime = sdkDataForDate.sessions[sessionId].startTime
-  const endTime = sdkDataForDate.sessions[sessionId].endTime
-  const durationInSecs = Math.floor((endTime - startTime) / 1000)
-  const propObj = {
-    referrer: getReferrerUrlOfDateSession(date, sessionId),
-    screen: viewPortObj,
-    session_id: sessionId,
-    start: startTime,
-    end: endTime,
-    duration: durationInSecs
+export const updatePreviousDayEndTime = () => {
+  const sessionId = getSession(constants.SESSION_ID)
+  const date = getPreviousDate()
+
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+    return
   }
 
-  const obj = {
-    mid: getMid(),
-    userid: getTempUseValue(constants.UID),
-    evn: constants.SESSION_INFO,
-    evcs: systemEventCode.sessionInfo,
-    evdc: 1,
-    scrn: window.location.href,
-    evt: eventTime,
-    properties: propObj,
-    nmo: 1,
-    evc: constants.EVENT_CATEGORY
+  sdkData.sessions[sessionId].endTime = Date.now()
+  setEventsByDate(date, sdkData)
+}
+
+export const updateEndTime = () => {
+  const sessionId = getSession(constants.SESSION_ID)
+  const date = getDate()
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+    return
   }
 
-  return obj
+  sdkData.sessions[sessionId].endTime = Date.now()
+  setEventsByDate(date, sdkData)
+}
+
+export const syncPreviousEvents = () => {
+  if (!shouldSyncStoredData()) {
+    return
+  }
+
+  const date = getDate()
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions) {
+    return
+  }
+
+  const sessionId = getNotSynced(sdkData.sessions)
+  const currentSessionId = getSession(constants.SESSION_ID).toString()
+  if (currentSessionId === sessionId) {
+    return
+  }
+
+  syncEvents(sdkData, sessionId, date)
+}
+
+export const syncPreviousDateEvents = () => {
+  if (!shouldSyncStoredData()) {
+    return
+  }
+
+  const date = getNotSyncedDate()
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions) {
+    return
+  }
+
+  const sessionId = getNotSynced(sdkData.sessions)
+
+  syncEvents(sdkData, sessionId, date)
 }
