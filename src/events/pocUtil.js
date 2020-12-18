@@ -19,11 +19,11 @@ import {
 import * as log from '../common/logUtil'
 import { postRequest } from '../common/networkUtil'
 import { getNearestTimestamp } from '../common/timeUtil'
-import { updatePreviousDayEndTime } from '../common/sessionUtil'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { getSession } from '../storage'
 import { getEventsByDate, getStore as getEventsStore } from '../storage/event'
 import { getTempUseValue } from '../storage/sharedPreferences'
+import { updatePreviousDayEndTime } from '../session'
 
 const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mousePos = {}) => {
   const position = {

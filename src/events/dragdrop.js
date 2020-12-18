@@ -1,4 +1,4 @@
-import { setEvent } from '../common/sessionUtil'
+import { setEvent } from '../session/events'
 import {
   constants,
   isSysEvtCollect,

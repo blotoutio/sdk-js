@@ -1,12 +1,5 @@
 import { startEvents } from './events'
 import {
-  setDevEvent,
-  setStartDevEvent,
-  setEndDevEvent,
-  setSessionPIIEvent,
-  setSessionPHIEvent
-} from './common/sessionUtil'
-import {
   collectEvent,
   setReferrer,
   setInitialConfiguration,
@@ -28,6 +21,8 @@ import {
 } from './config'
 import { getSession, setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
+import { setDevEvent, setEndDevEvent, setStartDevEvent } from './session/events'
+import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 
 (function (window) {
   const SDK = function () {}

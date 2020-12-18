@@ -1,4 +1,4 @@
-import { setEvent } from '../common/sessionUtil'
+import { setEvent } from '../session/events'
 import { getSession } from '../storage'
 import { collectEvent } from '../utils'
 import {

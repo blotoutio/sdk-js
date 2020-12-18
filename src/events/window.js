@@ -1,11 +1,3 @@
-import {
-  setEvent,
-  setDNTEvent,
-  updateSessionEndTime,
-  updateNavPath,
-  updateNavTime,
-  setViewPort
-} from '../common/sessionUtil'
 import { debounce, collectEvent, sendBounceEvent, getDate, detectQueryString } from '../utils'
 import {
   constants,
@@ -14,6 +6,10 @@ import {
 } from '../config'
 import { getSession } from '../storage'
 import { getEventsByDate } from '../storage/event'
+import { setEvent } from '../session/events'
+import { setDNTEvent, setViewPort } from '../session/system'
+import { updateNavPath, updateNavTime } from '../session/navigation'
+import { updateSessionEndTime } from '../session'
 
 export const resize = (window) => {
   const eventName = 'resize'

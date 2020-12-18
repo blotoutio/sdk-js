@@ -22,15 +22,6 @@ import {
   setMonthlyActiveUsage,
   setWeeklyActiveUsage
 } from './retention'
-import {
-  syncPreviousSessionEvents,
-  getNotSyncedSession,
-  updatePreviousDayEndTime,
-  checkAndGetSessionId,
-  setReferrerEvent,
-  addSessionInfoEvent,
-  eventSync
-} from './common/sessionUtil'
 import { v4 as uuidv4 } from 'uuid'
 import { getUrl, getManifestUrl } from './common/endPointUrlUtil'
 import { encryptRSA, SHA256Encode } from './common/securityUtil'
@@ -52,6 +43,9 @@ import {
   setTempUseValue
 } from './storage/sharedPreferences'
 import { getSDK, setSDK } from './storage/retention'
+import { checkAndGetSessionId, eventSync, getNotSyncedSession } from './session/utils'
+import { addSessionInfoEvent, syncPreviousSessionEvents, updatePreviousDayEndTime } from './session'
+import { setReferrerEvent } from './session/navigation'
 
 let globalRetentionInterval = null
 let globalEventInterval = null
