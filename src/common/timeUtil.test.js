@@ -34,9 +34,39 @@ describe('millisecondsToDays', () => {
 })
 
 describe('getWeekNumber', () => {
-  it('data', () => {
-    const result = getWeekNumber(new Date(160164865100))
-    expect(result).toBe(5)
+  it('Oct 02 2020', () => {
+    const result = getWeekNumber(new Date(1601648651000))
+    expect(result).toBe(40)
+  })
+
+  it('Dec 30 2019', () => {
+    const result = getWeekNumber(new Date(1577664000000))
+    expect(result).toBe(1)
+  })
+
+  it('Jan 1 2020', () => {
+    const result = getWeekNumber(new Date(1577880000000))
+    expect(result).toBe(1)
+  })
+
+  it('Dec 29 2008', () => {
+    const result = getWeekNumber(new Date(1230508800000))
+    expect(result).toBe(1)
+  })
+
+  it('Jan 3 2010', () => {
+    const result = getWeekNumber(new Date(1262476800000))
+    expect(result).toBe(53)
+  })
+
+  it('Jan 1 2006', () => {
+    const result = getWeekNumber(new Date(1136073600000))
+    expect(result).toBe(52)
+  })
+
+  it('Jan 3 2010', () => {
+    const result = getWeekNumber(new Date(1262476800000))
+    expect(result).toBe(53)
   })
 })
 

@@ -2,28 +2,19 @@ const isValidDate = (d) => {
   return d instanceof Date && !isNaN(d)
 }
 
+// Based on https://en.wikipedia.org/wiki/ISO_week_date
 export const getWeekNumber = (date) => {
-  const newYear = new Date(date.getFullYear(), 0, 1)
-  const day = newYear.getDay()
-  const dayNumber =
-    Math.floor(
-      (date.getTime() -
-        newYear.getTime() -
-        (date.getTimezoneOffset() - newYear.getTimezoneOffset()) * 60000) /
-        86400000
-    ) + 1
-  let weekNumber
-  if (day < 4) {
-    weekNumber = Math.floor((dayNumber + day - 1) / 7) + 1
-    if (weekNumber > 52) {
-      const nYear = new Date(date.getFullYear() + 1, 0, 1)
-      const nDay = nYear.getDay()
-      weekNumber = nDay < 4 ? 1 : 53
-    }
-  } else {
-    weekNumber = Math.floor((dayNumber + day - 1) / 7)
+  const target = new Date(date.valueOf())
+  const dayNumber = (date.getUTCDay() + 6) % 7
+  target.setUTCDate(target.getUTCDate() - dayNumber + 3)
+  const firstThursday = target.valueOf()
+  target.setUTCMonth(0, 1)
+
+  if (target.getUTCDay() !== 4) {
+    target.setUTCMonth(0, 1 + ((4 - target.getUTCDay()) + 7) % 7)
   }
-  return weekNumber
+
+  return Math.ceil((firstThursday - target) / (7 * 24 * 3600 * 1000)) + 1
 }
 
 // Q: what should this function do?
