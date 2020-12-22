@@ -71,7 +71,7 @@ export const setStartDevEvent = (eventName, objectName, meta) => {
 
   let eventArray = []
   try {
-    eventArray = JSON.parse(getSession('startEvents'))
+    eventArray = JSON.parse(getSession('startEvents')) || []
   } catch (e) {
     error(e)
   }
@@ -92,7 +92,7 @@ export const setEndDevEvent = (eventName) => {
 
   let eventArray = []
   try {
-    eventArray = JSON.parse(getSession('startEvents'))
+    eventArray = JSON.parse(getSession('startEvents')) || []
   } catch (e) {
     removeSession('startEvents')
     return

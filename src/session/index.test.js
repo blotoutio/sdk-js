@@ -253,6 +253,8 @@ describe('syncPreviousEvents', () => {
                 timeStamp: 1608506665536
               }
             ],
+            startTime: 1231312321,
+            endTime: 0,
             eventsData: {
               sentToServer: false,
               eventsInfo: [
@@ -284,7 +286,7 @@ describe('syncPreviousEvents', () => {
     expect(spySendPIH).toBeCalledTimes(2)
     expect(spyNavigation).toBeCalledTimes(1)
     expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"userid":null,"evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}}]}')
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213","duration":null},"nmo":1,"evc":10001}]}')
+    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213","start":1231312321,"end":0,"duration":0},"nmo":1,"evc":10001}]}')
     expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}}]}')
     spyEvents.mockRestore()
     spyCount.mockRestore()

@@ -33,7 +33,10 @@ const getInfoPayload = (date, sessionId) => {
   const viewPortObj = viewportLen > 0 ? session.viewPort[viewportLen - 1] : {}
   const startTime = session.startTime
   const endTime = session.endTime
-  const durationInSecs = Math.floor((endTime - startTime) / 1000)
+  let durationInSecs = Math.floor((endTime - startTime) / 1000)
+  if (durationInSecs < 0) {
+    durationInSecs = 0
+  }
 
   return {
     mid: getMid(),

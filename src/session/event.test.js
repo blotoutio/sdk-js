@@ -303,6 +303,14 @@ describe('setStartDevEvent', () => {
     expect(spySetSession).toBeCalledTimes(1)
   })
 
+  it('no session', () => {
+    spySession = jest
+      .spyOn(storage, 'getSession')
+      .mockImplementation(() => null)
+    setStartDevEvent('some_event')
+    expect(spySetSession).toBeCalledTimes(1)
+  })
+
   it('new event', () => {
     spySession = jest
       .spyOn(storage, 'getSession')
@@ -355,6 +363,15 @@ describe('setEndDevEvent', () => {
     expect(spySetSession).toBeCalledTimes(0)
     expect(spySet).toBeCalledTimes(0)
     spyRemove.mockRestore()
+  })
+
+  it('no session', () => {
+    spySession = jest
+      .spyOn(storage, 'getSession')
+      .mockImplementation(() => null)
+    setEndDevEvent('some_event')
+    expect(spySetSession).toBeCalledTimes(0)
+    expect(spySet).toBeCalledTimes(0)
   })
 
   it('event did not start yet', () => {

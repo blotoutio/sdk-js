@@ -73,8 +73,8 @@ const createDaySchema = (session) => {
 const createSessionObject = (eventName, objectName) => {
   return {
     startTime: Date.now(),
-    endTime: '',
-    lastServerSyncTime: '',
+    endTime: 0,
+    lastServerSyncTime: 0,
     sdkVersion: process.env.PACKAGE_VERSION,
     geo: {},
     meta: createMetaObject(),
