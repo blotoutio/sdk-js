@@ -26,7 +26,7 @@
     "node": ">=12.0.0"
   },
   "dependencies": {
-    "@blotoutio/jsencrypt-no-random-padding": "^2.3.3",
+    "@blotoutio/jsencrypt-no-random-padding": "^2.3.4",
     "crypto-js": "^3.1.9-1",
     "uuid": "^8.3.0"
   },
