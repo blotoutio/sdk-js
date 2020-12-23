@@ -4,11 +4,11 @@ import base64 from 'crypto-js/enc-base64'
 import AES from 'crypto-js/aes'
 import PBKDF2 from 'crypto-js/pbkdf2'
 import utf8 from 'crypto-js/enc-utf8'
-import { v4 as uuidv4 } from 'uuid'
 import { getRootIndexKey } from '../utils'
 import { error } from './logUtil'
 import { getLocal } from '../storage'
 import { dataEncryptionEnabled } from '../config'
+import { getUUID } from './uuid'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
 
 const getUserIndex = () => {
@@ -116,7 +116,7 @@ export const encryptRSA = (publicKey, data) => {
     }
   }
 
-  const uuidKey = uuidv4() + uuidv4()
+  const uuidKey = getUUID() + getUUID()
   const encrypt2 = new encrypt.JSEncrypt()
   encrypt2.setPublicKey(publicKey)
 

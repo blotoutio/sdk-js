@@ -10,9 +10,9 @@ import {
   getSelector,
   setNewDateObject,
   getEventPayloadArr,
-  getReferrerUrlOfDateSession,
-  createEventInfoObj,
-  getPayload, shouldApproximateTimestamp, shouldCollectSystemEvents
+  getPayload,
+  shouldApproximateTimestamp,
+  shouldCollectSystemEvents
 } from '../utils'
 import * as log from '../common/logUtil'
 import { postRequest } from '../common/networkUtil'
@@ -22,6 +22,8 @@ import { getSession } from '../storage'
 import { getEventsByDate, getStore as getEventsStore } from '../storage/event'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { updatePreviousDayEndTime } from '../session'
+import { createEventInfoObj } from '../session/event'
+import { getReferrerUrlOfDateSession } from '../common/referrer'
 
 const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mousePos = {}) => {
   const position = {

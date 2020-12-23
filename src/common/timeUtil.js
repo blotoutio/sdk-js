@@ -18,12 +18,12 @@ export const getWeekNumber = (date) => {
 }
 
 export const millisecondsToHours = (milliseconds) => {
-  const hours = parseInt((milliseconds / (1000 * 60 * 60)) % 24)
+  const hours = parseInt(((milliseconds / (1000 * 60 * 60)) % 24).toString())
   return hours < 10 ? '0' + hours : hours.toString()
 }
 
 export const millisecondsToDays = (milliseconds) => {
-  return parseInt(milliseconds / (60 * 60 * 24 * 1000))
+  return parseInt((milliseconds / (60 * 60 * 24 * 1000)).toString())
 }
 
 export const getCurrentWeekNumber = () => {

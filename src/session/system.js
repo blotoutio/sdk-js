@@ -1,7 +1,9 @@
-import { createEventInfoObj, createViewPortObject, getDate, getSelector } from '../utils'
+import { getDate, getSelector } from '../utils'
 import { getSession } from '../storage'
 import { constants } from '../config'
 import { getEventsByDate, setEventsByDate } from '../storage/event'
+import { createViewPortObject } from './utils'
+import { createEventInfoObj } from './event'
 
 export const setDNTEvent = function (event) {
   const eventName = 'dnt'

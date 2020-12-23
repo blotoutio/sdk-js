@@ -1,12 +1,9 @@
 import { startEvents } from './events'
 import {
   collectEvent,
-  setReferrer,
   setInitialConfiguration,
   setRetentionData,
-  initialize,
-  checkGeo,
-  setGeoDetails
+  initialize
 } from './utils'
 import { setUrl } from './common/endPointUrlUtil'
 import * as log from './common/logUtil'
@@ -21,6 +18,8 @@ import { setDevEvent, setEndDevEvent, setStartDevEvent } from './session/event'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 import { pullManifest, updateManifest, checkManifest } from './manifest'
 import { checkUpdateForManifest } from './retention'
+import { setReferrer } from './common/referrer'
+import { setGeoDetails, checkGeo } from './common/geo'
 
 (function (window) {
   const SDK = function () {}

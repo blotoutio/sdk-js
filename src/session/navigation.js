@@ -1,7 +1,8 @@
 import { getSession } from '../storage'
 import { constants } from '../config'
-import { createRefEventInfoObj, getDate } from '../utils'
+import { getDate } from '../utils'
 import { getEventsByDate, setEventsByDate } from '../storage/event'
+import { createReferrerEventInfo } from '../common/referrer'
 
 export const updateNavTime = () => {
   const date = getDate()
@@ -95,6 +96,6 @@ export const setReferrerEvent = (eventName, ref, meta) => {
     return
   }
 
-  eventsData.eventsInfo.push(createRefEventInfoObj(eventName, ref, meta))
+  eventsData.eventsInfo.push(createReferrerEventInfo(eventName, ref, meta))
   setEventsByDate(date, sdkData)
 }

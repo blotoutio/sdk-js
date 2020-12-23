@@ -1,9 +1,8 @@
-import { constants, highFreqEvents, isHighFreqEventOff } from '../config'
+import { constants, highFreqEvents, isHighFreqEventOff, systemEventCode } from '../config'
 import {
   createDevEventInfoObj,
-  createEventInfoObj,
   findObjIndex,
-  getDate,
+  getDate, getMid, getObjectTitle,
   getSelector,
   setNewDateObject
 } from '../utils'
@@ -12,6 +11,33 @@ import { getEventsByDate, getStore as getEventsStore, setEventsByDate } from '..
 import { updatePreviousDayEndTime } from '.'
 import { error } from '../common/logUtil'
 import { maybeSync } from './utils'
+import { getRoot } from '../storage/store'
+
+const getPositionObject = (event) => {
+  let height = -1
+  let width = -1
+  if (event && event.target) {
+    if (event.target.offsetHeight) {
+      height = event.target.offsetHeight
+    }
+
+    if (event.target.offsetWidth) {
+      width = event.target.offsetWidth
+    }
+  }
+
+  let x = -1
+  let y = -1
+  if (event.screenX != null && event.offsetX != null) {
+    x = event.screenX - event.offsetX
+  }
+
+  if (event.screenY != null && event.offsetY != null) {
+    y = event.screenY - event.offsetY
+  }
+
+  return { x, y, width, height }
+}
 
 export const setEvent = function (eventName, event, meta = {}) {
   if (!eventName || (isHighFreqEventOff && highFreqEvents.includes(eventName))) {
@@ -126,4 +152,25 @@ export const setEndDevEvent = (eventName) => {
   eventArray.splice(index, 1)
   eventArray = JSON.stringify(eventArray)
   setSession('startEvents', eventArray)
+}
+
+export const createEventInfoObj = (eventName, objectName, meta = {}, event = {}) => {
+  return {
+    sentToServer: false,
+    objectName,
+    name: eventName,
+    urlPath: window.location.href,
+    tstmp: Date.now(),
+    mid: getRoot() ? getMid() : '',
+    nmo: 1,
+    evc: constants.EVENT_CATEGORY,
+    evcs: systemEventCode[eventName],
+    position: getPositionObject(event),
+    metaInfo: meta,
+    objectTitle: getObjectTitle(event, eventName),
+    extraInfo: {
+      mousePosX: event.clientX,
+      mousePosY: event.clientY
+    }
+  }
 }
