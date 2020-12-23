@@ -1,7 +1,7 @@
 import { constants } from '../config'
 import { getMid, getDate, getDomain } from '../utils'
 import { getStore as getEventsStore } from '../storage/event'
-import { getSDK, setSDK } from '../storage/retention'
+import { getSDK, setSDK } from './storage'
 import { updateRoot } from '../storage/store'
 
 const getRetentionData = () => {

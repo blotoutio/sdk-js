@@ -9,7 +9,7 @@ import {
   retentionWrapper
 } from './utils'
 import * as commonUtils from '../utils'
-import * as retentionStorage from '../storage/retention'
+import * as retentionStorage from './storage'
 import * as eventStorage from '../storage/event'
 
 let spyGetUserObject

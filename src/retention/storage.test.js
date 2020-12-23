@@ -1,7 +1,7 @@
-import * as storage from '.'
+import * as storage from '../storage'
 import * as utils from '../utils'
-import { getSDK, setSDK } from './retention'
-import { updateRoot } from './store'
+import { getSDK, setSDK } from './storage'
+import { updateRoot } from '../storage/store'
 
 describe('getSDK', () => {
   it('null', () => {

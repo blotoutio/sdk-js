@@ -1,4 +1,4 @@
-import { getStoreByDomain } from '.'
+import { getStoreByDomain } from '../storage'
 
 const getStore = () => {
   const store = getStoreByDomain()

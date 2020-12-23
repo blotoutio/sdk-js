@@ -1,4 +1,4 @@
-import * as retentionStorage from '../storage/retention'
+import * as retentionStorage from './storage'
 import * as eventStorage from '../storage/event'
 import * as commonUtils from '../utils'
 import { setCount, setSession } from './weeklyActive'
