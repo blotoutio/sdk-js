@@ -1,25 +1,17 @@
 import { startEvents } from './event/system'
-import {
-  collectEvent,
-  setInitialConfiguration,
-  setRetentionData,
-  initialize
-} from './utils'
+import { setInitialConfiguration, initialize } from './utils'
 import { setUrl } from './common/endPointUrlUtil'
 import * as log from './common/logUtil'
-import {
-  constants,
-  isDevEvtCollect,
-  isDevEvtStore
-} from './config'
+import { constants, isDevEvtCollect, isDevEvtStore } from './config'
 import { getSession, setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 import { pullManifest, updateManifest, checkManifest } from './manifest'
-import { checkUpdateForManifest } from './retention'
+import { checkUpdateForManifest, setRetentionData } from './retention'
 import { setReferrer } from './common/referrer'
 import { setGeoDetails, checkGeo } from './common/geo'
+import { collectEvent } from './event'
 
 (function (window) {
   const SDK = function () {}

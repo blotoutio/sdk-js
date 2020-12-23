@@ -1,7 +1,8 @@
-import { checkAndGetSessionId, eventSync, getNotSynced, maybeSync } from './utils'
+import { checkAndGetSessionId, getNotSynced, maybeSync } from './utils'
 import * as storage from '../storage'
-import * as utils from '../utils'
+import * as event from '../event'
 import * as manifest from '../manifest'
+import { eventSync } from '../event/utils'
 
 describe('eventSync', () => {
   beforeEach(() => {
@@ -105,7 +106,7 @@ describe('maybeSync', () => {
 
   beforeEach(() => {
     spySync = jest
-      .spyOn(utils, 'syncEvents')
+      .spyOn(event, 'syncEvents')
       .mockImplementation()
     eventSync.progressStatus = false
   })

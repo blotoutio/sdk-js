@@ -1,39 +1,25 @@
-import { postRequest } from './common/networkUtil'
 import {
-  callInterval,
   constants,
   isManualManifest,
   isApprox,
-  isSysEvtCollect,
   isSysEvtStore,
-  isDevEvtCollect,
-  isDevEvtStore,
-  isHighFreqEventOff,
-  highFreqEvents
+  isDevEvtStore
 } from './config'
-import { getNearestTimestamp } from './common/timeUtil'
-import { codeForCustomCodifiedEvent } from './common/eventUtil'
-import * as log from './common/logUtil'
-import {
-  setDailyActiveUsage,
-  setMonthlyActiveUsage,
-  setWeeklyActiveUsage
-} from './retention'
-import { getManifestUrl } from './common/endPointUrlUtil'
-import { encryptRSA } from './common/securityUtil'
+import { setRetentionData } from './retention'
 import { getLocal, getSession } from './storage'
-import { getEventsByDate, getStore as getEventsStore, setEventsByDate, setStore as setEventsStore } from './event/storage'
+import { getEventsByDate, getStore, setEventsByDate, setStore } from './event/storage'
 import { getRoot, updateRoot } from './storage/store'
 import { getTempUseValue } from './storage/sharedPreferences'
-import { checkAndGetSessionId, createSessionObject, eventSync, getNotSynced } from './session/utils'
-import { syncPreviousDateEvents, syncPreviousEvents, updatePreviousDayEndTime } from './session'
+import { checkAndGetSessionId, createSessionObject, getNotSynced } from './session/utils'
+import {
+  syncPreviousDateEvents,
+  syncPreviousEvents,
+  setSyncEventsInterval
+} from './event'
 import { checkManifest, getManifestVariable } from './manifest'
-import { createEventInfoObj } from './event/session'
 import { setClientToken, setUID } from './common/uuid'
-import { getPreviousDateReferrer, getReferrerUrlOfDateSession } from './common/referrer'
+import { getPreviousDateReferrer } from './common/referrer'
 
-let globalEventInterval = null
-let collectEventsArr = []
 let customDomain = null
 let storageRootKey = null
 
@@ -50,55 +36,6 @@ const createDaySchema = (session) => {
     sessions,
     retentionData: ''
   }
-}
-
-export const setSyncEventsInterval = () => {
-  if (!shouldSyncStoredData()) {
-    return
-  }
-
-  let eventPushInterval = getManifestVariable(constants.EVENT_PUSH_INTERVAL)
-  if (eventPushInterval == null) {
-    eventPushInterval = constants.DEFAULT_EVENT_PUSH_INTERVAL
-  }
-  eventPushInterval = eventPushInterval || callInterval
-  const eventPushIntervalInSec = eventPushInterval * 60 * 60 * 1000
-  if (globalEventInterval) {
-    clearInterval(globalEventInterval)
-  }
-  globalEventInterval = setInterval(() => {
-    const date = getDate()
-    const eventStore = getEventsStore()
-    if (eventStore && !eventStore[date]) {
-      updatePreviousDayEndTime()
-      setNewDateObject(date, eventStore)
-    } else {
-      const sessionId = getSession(constants.SESSION_ID)
-      const sdkDataForDate = getEventsByDate(date)
-      const { events, devEvents, piiEvents, phiEvents } = getNotSyncedEvents(
-        sdkDataForDate.sessions[sessionId].eventsData
-      )
-
-      sendPIIPHIEvent(piiEvents, date, 'pii')
-      sendPIIPHIEvent(phiEvents, date, 'phi')
-
-      const eventsArrChunk = eventsChunkArr(events, devEvents)
-      eventsArrChunk.forEach((arr) => {
-        const eventsArr = getEventPayloadArr(arr, date, sessionId)
-        if (eventsArr.length === 0) {
-          return
-        }
-
-        const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
-        const url = getManifestUrl()
-        postRequest(url, JSON.stringify(payload))
-          .then(() => {
-            setEventsSentToServer(arr, date, sessionId)
-          })
-          .catch(log.error)
-      })
-    }
-  }, eventPushIntervalInSec)
 }
 
 const createDomain = (objectName) => {
@@ -132,45 +69,14 @@ const createDateObject = (event, objectName) => {
   return obj
 }
 
-const chunk = (arr, size) => {
-  return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-    arr.slice(i * size, i * size + size)
-  )
-}
-
 const checkStoreEventsInterval = () => {
   let storeEventsInterval = getManifestVariable(constants.STORE_EVENTS_INTERVAL)
   if (storeEventsInterval == null) {
     storeEventsInterval = constants.DEFAULT_STORE_EVENTS_INTERVAL
   }
-  const eventStore = getEventsStore()
+  const eventStore = getStore()
   const dateCount = Object.keys(eventStore).length
   return dateCount === parseInt(storeEventsInterval)
-}
-
-const getEventData = (eventName, event, type) => {
-  const objectName = getSelector(event.target)
-  if (type === 'system') {
-    return createEventInfoObj(eventName, objectName, {}, event)
-  }
-
-  return createDevEventInfoObj(eventName, objectName, {}, false, false)
-}
-
-const sendEvents = (arr) => {
-  const date = getDate()
-  const sessionId = getSession(constants.SESSION_ID)
-  const sdkDataForDate = getEventsByDate(date)
-  const eventsArr = getEventPayloadArr(arr, date, sessionId)
-  if (eventsArr.length === 0) {
-    return
-  }
-
-  const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
-  const url = getManifestUrl()
-  postRequest(url, JSON.stringify(payload))
-    .then(() => { })
-    .catch(log.error)
 }
 
 const setUIDInInitEvent = () => {
@@ -218,24 +124,6 @@ export const getRootIndexKey = () => {
   return `sdk${key}Index`
 }
 
-export const createDevEventInfoObj = (eventName, objectName, meta, isPii, isPhi, duration = null) => {
-  return {
-    sentToServer: false,
-    objectName,
-    name: eventName,
-    urlPath: window.location.href,
-    tstmp: Date.now(),
-    mid: getMid(),
-    nmo: 1,
-    evc: constants.EVENT_DEV_CATEGORY,
-    evcs: codeForCustomCodifiedEvent(eventName),
-    duration,
-    metaInfo: meta,
-    isPii,
-    isPhi
-  }
-}
-
 export const getMid = () => {
   const domainName = getDomain()
   const userID = getTempUseValue(constants.UID)
@@ -262,128 +150,6 @@ export const getPreviousDate = () => {
 
 export const findObjIndex = (eventArr, eventName) => {
   return eventArr.findIndex((obj) => obj.name === eventName)
-}
-
-export const getNotSyncedEvents = (obj) => {
-  let events = []
-  let devEvents = []
-  let piiEvents = []
-  let phiEvents = []
-  if (shouldCollectSystemEvents() && obj.eventsInfo) {
-    events = obj.eventsInfo.filter((evt) => !evt.sentToServer && !evt.isPii && !evt.isPhi)
-  }
-  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
-    piiEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer && evt.isPii)
-  }
-  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
-    phiEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer && evt.isPhi)
-  }
-  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
-    devEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer)
-  }
-  return { events, devEvents, piiEvents, phiEvents }
-}
-
-export const getEventPayloadArr = (arr, date, sessionId) => {
-  const dateEvents = getAllEventsOfDate(date)
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
-    return null
-  }
-  const session = sdkData.sessions[sessionId]
-  const viewportLength = (session.viewPort || []).length
-  const viewPortObj = viewportLength > 0 ? session.viewPort[viewportLength - 1] : {}
-
-  const result = []
-  arr.forEach((val) => {
-    if (val.evn) {
-      result.push(val)
-      return
-    }
-    const propObj = {
-      referrer: getReferrerUrlOfDateSession(date, sessionId),
-      screen: viewPortObj,
-      obj: val.objectName,
-      position: val.position,
-      session_id: sessionId
-    }
-
-    if (val.objectTitle) {
-      propObj.objT = val.objectTitle
-    }
-
-    if (
-      val.name === 'click' ||
-      val.name === 'mouseover' ||
-      val.name === 'hoverc' ||
-      val.name === 'hover' ||
-      val.name === 'dblclick'
-    ) {
-      if (val.extraInfo) {
-        propObj.mouse = { x: val.extraInfo.mousePosX, y: val.extraInfo.mousePosY }
-      }
-    }
-
-    if (val.evc === constants.EVENT_DEV_CATEGORY) {
-      propObj.codifiedInfo = val.metaInfo
-    }
-
-    const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(val.tstmp) : val.tstmp
-    const eventCount = dateEvents.filter((evt) => evt.name === val.name)
-    const obj = {
-      mid: val.mid,
-      userid: getTempUseValue(constants.UID),
-      evn: val.name,
-      evcs: val.evcs,
-      evdc: eventCount.length,
-      scrn: val.urlPath,
-      evt: eventTime,
-      properties: propObj,
-      nmo: val.nmo,
-      evc: val.evc
-    }
-
-    result.push(obj)
-  })
-  return result
-}
-
-export const setEventsSentToServer = (arr, date, sessionId) => {
-  const currentSessionId = getSession(constants.SESSION_ID)
-  arr.forEach((val) => {
-    const sdkDataOfDate = getEventsByDate(date)
-    if (!sdkDataOfDate) {
-      return
-    }
-    const mID = val.mid
-    const evtIndex = sdkDataOfDate.sessions[sessionId].eventsData.eventsInfo
-      .findIndex((obj) => obj.mid === mID)
-    const devEventIndex = sdkDataOfDate.sessions[sessionId].eventsData.devCodifiedEventsInfo
-      .findIndex((obj) => obj.mid === mID)
-
-    if (evtIndex !== -1) {
-      sdkDataOfDate.sessions[sessionId].eventsData.eventsInfo[evtIndex].sentToServer = true
-    }
-    if (devEventIndex !== -1) {
-      sdkDataOfDate.sessions[sessionId].eventsData.devCodifiedEventsInfo[devEventIndex].sentToServer = true
-    }
-    if (currentSessionId !== sessionId) {
-      sdkDataOfDate.sessions[sessionId].eventsData.sentToServer = true
-    }
-    setEventsByDate(date, sdkDataOfDate)
-  })
-  eventSync.progressStatus = false
-}
-
-export const getAllEventsOfDate = (date) => {
-  const sdkDataForDate = getEventsByDate(date)
-  const sessions = sdkDataForDate.sessions
-  let arrEvent = []
-  for (const x in sessions) {
-    arrEvent = arrEvent.concat(sdkDataForDate.sessions[x].eventsData.eventsInfo)
-    arrEvent = arrEvent.concat(sdkDataForDate.sessions[x].eventsData.devCodifiedEventsInfo)
-  }
-  return arrEvent
 }
 
 export const debounce = (func, delay) => {
@@ -485,18 +251,8 @@ export const setNewDateObject = (date, eventStore) => {
 
   setRetentionData()
   setSyncEventsInterval()
-  setEventsStore(eventStore)
+  setStore(eventStore)
   updateRoot()
-}
-
-export const setRetentionData = () => {
-  const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
-  if (!mode || mode === constants.FIRSTPARTY_MODE) {
-    return
-  }
-  setDailyActiveUsage()
-  setWeeklyActiveUsage()
-  setMonthlyActiveUsage()
 }
 
 export const getGeoPayload = (geo) => {
@@ -586,86 +342,6 @@ export const getMetaPayload = (meta) => {
   }
 
   return obj
-}
-
-export const eventsChunkArr = (events, devEvents) => {
-  let codifiedMergeCounter = getManifestVariable(constants.EVENT_CODIFIED_MERGECOUNTER)
-  if (codifiedMergeCounter == null) {
-    codifiedMergeCounter = constants.DEFAULT_EVENT_CODIFIED_MERGECOUNTER
-  }
-
-  const sysMergeCounterValue = getSystemMergeCounter(events)
-  const sysEvents = sysMergeCounterValue != null ? chunk(events, sysMergeCounterValue) : []
-  const codifiedEvents = chunk(devEvents, codifiedMergeCounter)
-
-  const length = sysEvents.length > codifiedEvents.length ? sysEvents.length : codifiedEvents.length
-  const mergeArr = []
-  for (let i = 0; i < length; i++) {
-    let inArr = []
-    if (sysEvents[i]) {
-      inArr = inArr.concat(sysEvents[i])
-    }
-    if (codifiedEvents[i]) {
-      inArr = inArr.concat(codifiedEvents[i])
-    }
-    mergeArr.push(inArr)
-  }
-  return mergeArr
-}
-
-export const syncEvents = () => {
-  if (!shouldSyncStoredData()) {
-    eventSync.progressStatus = false
-    return
-  }
-
-  setSyncEventsInterval()
-  const date = getDate()
-  const sessionId = getSession(constants.SESSION_ID)
-  const sdkDataForDate = getEventsByDate(date)
-  const { events, devEvents, piiEvents, phiEvents } =
-    getNotSyncedEvents(sdkDataForDate.sessions[sessionId].eventsData)
-
-  sendPIIPHIEvent(piiEvents, date, 'pii')
-  sendPIIPHIEvent(phiEvents, date, 'phi')
-
-  const eventsArrChunk = eventsChunkArr(events, devEvents)
-
-  eventsArrChunk.forEach((arr) => {
-    const eventsArr = getEventPayloadArr(arr, date, sessionId)
-    if (eventsArr.length === 0) {
-      return
-    }
-
-    const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
-    const url = getManifestUrl()
-    postRequest(url, JSON.stringify(payload))
-      .then(() => {
-        setEventsSentToServer(arr, date, sessionId)
-      })
-      .catch(log.error)
-  })
-}
-
-export const sendBounceEvent = (date) => {
-  const sdkDataForDate = getEventsByDate(date)
-  const events = getBounceAndSessionEvents(sdkDataForDate)
-  const sessionId = getSession(constants.SESSION_ID)
-  const eventsArr = getEventPayloadArr(events, date, sessionId)
-  const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArr)
-
-  const url = getManifestUrl()
-  postRequest(url, JSON.stringify(payload))
-    .then(() => {
-      setEventsSentToServer(events, date, sessionId)
-    })
-    .catch(log.error)
-}
-
-export const getBounceAndSessionEvents = (obj) => {
-  const sessionId = getSession(constants.SESSION_ID)
-  return obj.sessions[sessionId].eventsData.eventsInfo
-    .filter((evt) => evt.name === constants.BOUNCE || constants.SESSION)
 }
 
 export const detectQueryString = () => {
@@ -759,47 +435,6 @@ export const getSelector = (ele) => {
   return 'Unknown'
 }
 
-export const collectEvent = (eventName, event, type) => {
-  if (isHighFreqEventOff && highFreqEvents.includes(eventName)) {
-    return
-  }
-
-  collectEventsArr.push(getEventData(eventName, event, type))
-  setTimeout(() => {
-    const eventsArray = collectEventsArr
-    collectEventsArr = []
-    sendEvents(eventsArray)
-  }, constants.COLLECT_TIMEOUT)
-}
-
-export const sendPIIPHIEvent = (events, date, type) => {
-  if (events && events.length === 0) {
-    return
-  }
-
-  const key = type === 'pii' ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
-  const sessionId = getSession(constants.SESSION_ID)
-  const sdkDataForDate = getEventsByDate(date)
-  const eventsArr = getEventPayloadArr(events, date, sessionId)
-  const publicKey = getManifestVariable(key)
-  const obj = encryptRSA(publicKey, JSON.stringify(eventsArr))
-
-  const payload = getPayload(sdkDataForDate.sessions[sessionId])
-
-  if (type === 'pii') {
-    payload.pii = obj
-  } else {
-    payload.phi = obj
-  }
-
-  const url = getManifestUrl()
-  postRequest(url, JSON.stringify(payload))
-    .then(() => {
-      setEventsSentToServer(events, date, sessionId)
-    })
-    .catch(log.error)
-}
-
 export const getPreviousDateSessionEventData = () => {
   const notSyncDate = getNotSyncedDate()
   const sdkDataForDate = getEventsByDate(notSyncDate)
@@ -854,7 +489,7 @@ export const shouldSyncStoredData = () => {
 }
 
 export const getNotSyncedDate = () => {
-  const obj = getEventsStore()
+  const obj = getStore()
   let notSyncDate
   for (const x in obj) {
     notSyncDate = x
@@ -867,8 +502,4 @@ export const getNotSyncedDate = () => {
 
 export const shouldApproximateTimestamp = () => {
   return isApprox
-}
-
-export const shouldCollectSystemEvents = () => {
-  return isSysEvtCollect
 }

@@ -3,24 +3,23 @@ import {
   getMid,
   getObjectTitle,
   getDate,
-  getAllEventsOfDate,
   getSelector,
   setNewDateObject,
-  getEventPayloadArr,
   getPayload,
-  shouldApproximateTimestamp,
-  shouldCollectSystemEvents
+  shouldApproximateTimestamp
 } from '../../utils'
 import * as log from '../../common/logUtil'
 import { postRequest } from '../../common/networkUtil'
 import { getNearestTimestamp } from '../../common/timeUtil'
 import { getManifestUrl } from '../../common/endPointUrlUtil'
 import { getSession } from '../../storage'
-import { getEventsByDate, getStore as getEventsStore } from '../storage'
+import { getEventsByDate, getStore } from '../storage'
 import { getTempUseValue } from '../../storage/sharedPreferences'
 import { updatePreviousDayEndTime } from '../../session'
 import { createEventInfoObj } from '../session'
 import { getReferrerUrlOfDateSession } from '../../common/referrer'
+import { getEventPayloadArr, shouldCollectSystemEvents } from '../utils'
+import { getAllEventsOfDate } from '../.'
 
 const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mousePos = {}) => {
   const position = {
@@ -113,7 +112,7 @@ export const sendEvents = (array) => {
   }
 
   const date = getDate()
-  const store = getEventsStore()
+  const store = getStore()
   if (store && !store[date]) {
     updatePreviousDayEndTime()
     setNewDateObject(date, store)
@@ -134,7 +133,7 @@ export const sendScrollEvents = (arr, startTime, endTime) => {
   }
 
   const date = getDate()
-  const store = getEventsStore()
+  const store = getStore()
   if (store && !store[date]) {
     updatePreviousDayEndTime()
     setNewDateObject(date, store)

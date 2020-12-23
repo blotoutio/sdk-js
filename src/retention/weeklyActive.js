@@ -1,8 +1,5 @@
 import { constants } from '../config'
-import {
-  getCurrentWeekNumber,
-  getWeekNumber
-} from '../common/timeUtil'
+import { getCurrentWeekNumber, getWeekNumber } from '../common/timeUtil'
 import {
   getUserObject,
   getHighestTimestamp,
@@ -11,7 +8,7 @@ import {
   getTimestampFromKey,
   retentionWrapper
 } from './utils'
-import { getStore as getEventsStore } from '../event/storage'
+import { getStore } from '../event/storage'
 
 export const setCount = (key, code) => {
   const func = (retentions) => {
@@ -44,7 +41,7 @@ export const setSession = () => {
       }
     }
 
-    const eventStore = getEventsStore()
+    const eventStore = getStore()
     if (!eventStore) {
       return
     }

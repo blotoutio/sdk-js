@@ -1,9 +1,11 @@
 import { getSession, setSession } from '../storage'
 import { constants } from '../config'
-import { getDomain, syncEvents } from '../utils'
+import { getDomain } from '../utils'
 import { getManifestVariable } from '../manifest'
 import { createEventInfoObj } from '../event/session'
 import { getOS } from '../common/operatingSystemUtil'
+import { eventSync } from '../event/utils'
+import { syncEvents } from '../event'
 
 const findOS = () => {
   let curOS = ''
@@ -212,16 +214,6 @@ const checkEventPushEventCounter = (eventsData) => {
   }
 
   return eventsCount >= parseInt(manifestCounter)
-}
-
-export const eventSync = {
-  inProgress: false,
-  set progressStatus (status) {
-    this.inProgress = status
-  },
-  get progressStatus () {
-    return this.inProgress
-  }
 }
 
 export const checkAndGetSessionId = () => {

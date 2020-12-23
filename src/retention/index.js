@@ -1,5 +1,4 @@
 import { callInterval, constants } from '../config'
-
 import * as dailyActive from './dailyActive'
 import * as weeklyActive from './weeklyActive'
 import * as monthlyActive from './monthlyActive'
@@ -321,4 +320,14 @@ export const checkUpdateForManifest = () => {
       .catch(error)
   }, callTime)
   return false
+}
+
+export const setRetentionData = () => {
+  const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
+  if (!mode || mode === constants.FIRSTPARTY_MODE) {
+    return
+  }
+  setDailyActiveUsage()
+  setWeeklyActiveUsage()
+  setMonthlyActiveUsage()
 }

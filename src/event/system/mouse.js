@@ -1,7 +1,8 @@
 import { setEvent } from '../session'
 import { getSession } from '../../storage'
 import { constants, isSysEvtStore, isHighFreqEventOff } from '../../config'
-import { collectEvent, shouldCollectSystemEvents } from '../../utils'
+import { shouldCollectSystemEvents } from '../utils'
+import { collectEvent } from '../.'
 import { getHoverEventData, getsScrollEventData, sendEvents, sendScrollEvents } from './pocUtil'
 
 export const click = (window) => {

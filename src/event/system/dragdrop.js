@@ -1,6 +1,7 @@
 import { setEvent } from '../session'
 import { constants, isSysEvtStore } from '../../config'
-import { collectEvent, shouldCollectSystemEvents } from '../../utils'
+import { shouldCollectSystemEvents } from '../utils'
+import { collectEvent } from '../.'
 import { getSession } from '../../storage'
 
 export const dragStart = (window) => {

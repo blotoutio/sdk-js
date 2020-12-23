@@ -1,7 +1,8 @@
 import { setEvent } from '../session'
 import { getSession } from '../../storage'
 import { constants, isSysEvtStore } from '../../config'
-import { collectEvent, shouldCollectSystemEvents } from '../../utils'
+import { shouldCollectSystemEvents } from '../utils'
+import { collectEvent } from '../.'
 
 export const print = (window) => {
   const eventName = 'afterprint'

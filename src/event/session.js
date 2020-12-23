@@ -1,17 +1,19 @@
 import { constants, highFreqEvents, isHighFreqEventOff, systemEventCode } from '../config'
 import {
-  createDevEventInfoObj,
   findObjIndex,
-  getDate, getMid, getObjectTitle,
+  getDate,
+  getMid,
+  getObjectTitle,
   getSelector,
   setNewDateObject
 } from '../utils'
 import { getSession, removeSession, setSession } from '../storage'
-import { getEventsByDate, getStore as getEventsStore, setEventsByDate } from './storage'
+import { getEventsByDate, getStore, setEventsByDate } from './storage'
 import { updatePreviousDayEndTime } from '../session'
 import { error } from '../common/logUtil'
 import { maybeSync } from '../session/utils'
 import { getRoot } from '../storage/store'
+import { createDevEventInfoObj } from './utils'
 
 const getPositionObject = (event) => {
   let height = -1
@@ -47,7 +49,7 @@ export const setEvent = function (eventName, event, meta = {}) {
   const objectName = event && getSelector(event.target)
   const sessionId = getSession(constants.SESSION_ID)
   const date = getDate()
-  const eventStore = getEventsStore()
+  const eventStore = getStore()
 
   if (eventStore && !eventStore[date]) {
     updatePreviousDayEndTime()

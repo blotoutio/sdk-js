@@ -1,4 +1,4 @@
-import { debounce, collectEvent, sendBounceEvent, getDate, detectQueryString, shouldCollectSystemEvents } from '../../utils'
+import { debounce, getDate, detectQueryString } from '../../utils'
 import { constants, isSysEvtStore } from '../../config'
 import { getSession } from '../../storage'
 import { getEventsByDate } from '../storage'
@@ -6,6 +6,8 @@ import { setEvent } from '../session'
 import { setDNTEvent, setViewPort } from '../../session/system'
 import { updateNavPath, updateNavTime } from '../../session/navigation'
 import { updateEndTime } from '../../session'
+import { shouldCollectSystemEvents } from '../utils'
+import { collectEvent, sendBounceEvent } from '../.'
 
 export const resize = (window) => {
   const eventName = 'resize'

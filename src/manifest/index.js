@@ -3,11 +3,12 @@ import { setRetentionObject, syncData } from '../retention'
 import { getRoot, updateRoot } from '../storage/store'
 import { getUrl } from '../common/endPointUrlUtil'
 import { manifestConst, constants, callInterval } from '../config'
-import { getDomain, setSyncEventsInterval } from '../utils'
+import { getDomain } from '../utils'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
+import { setSyncEventsInterval } from '../event'
 
-let globalRetentionInterval
+let globalRetentionInterval = null
 
 const removeEmptyValue = (array) => {
   return array.filter((el) => el != null && el !== '')

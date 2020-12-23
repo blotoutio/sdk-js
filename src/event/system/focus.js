@@ -1,6 +1,7 @@
 import { setEvent } from '../session'
 import { getSession } from '../../storage'
-import { collectEvent, shouldCollectSystemEvents } from '../../utils'
+import { shouldCollectSystemEvents } from '../utils'
+import { collectEvent } from '../.'
 import { constants, isSysEvtStore } from '../../config'
 
 export const blur = (window) => {
