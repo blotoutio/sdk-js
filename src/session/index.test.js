@@ -1,7 +1,9 @@
 import * as eventStorage from '../event/storage'
+import * as eventUtils from '../event/utils'
 import * as storage from '../storage'
+import * as utils from '../utils'
 import * as timeUtil from '../common/timeUtil'
-import { updatePreviousDayEndTime, updateEndTime } from './index'
+import { updatePreviousDayEndTime, updateEndTime, addSessionInfoEvent } from './index'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -121,6 +123,205 @@ describe('updateEndTime', () => {
         }
       }
     })
+    spyEvents.mockRestore()
+  })
+})
+
+describe('addSessionInfoEvent', () => {
+  it('collection is off', () => {
+    const spySystem = jest
+      .spyOn(eventUtils, 'shouldCollectSystemEvents')
+      .mockImplementation(() => false)
+    const result = addSessionInfoEvent()
+    expect(result).toBe(undefined)
+    spySystem.mockRestore()
+  })
+
+  it('null', () => {
+    const result = addSessionInfoEvent()
+    expect(result).toBe(undefined)
+  })
+
+  it('sessions is missing', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({}))
+    const result = addSessionInfoEvent()
+    expect(result).toBe(undefined)
+    spyEvents.mockRestore()
+  })
+
+  it('session is missing', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {}
+      }))
+    const result = addSessionInfoEvent()
+    expect(result).toBe(undefined)
+    spyEvents.mockRestore()
+  })
+
+  it('viewport is missing and end time is 0', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            startTime: 2312313123,
+            endTime: 0
+          }
+        }
+      }))
+    const result = addSessionInfoEvent([], [], '20-3-2020', 124123423)
+    expect(result).toStrictEqual([
+      [
+        {
+          evc: 10001,
+          evcs: 11024,
+          evdc: 1,
+          evn: 'Session Info',
+          evt: 1580775120000,
+          mid: 'localhost-null-1580775120000',
+          nmo: 1,
+          properties: {
+            duration: 0,
+            end: 0,
+            referrer: null,
+            screen: {},
+            session_id: 124123423,
+            start: 2312313123
+          },
+          scrn: 'http://localhost/',
+          userid: null
+        }
+      ]
+    ])
+    spyEvents.mockRestore()
+  })
+
+  it('session event goes in the same chunk', () => {
+    const spyCount = jest
+      .spyOn(utils, 'getSystemMergeCounter')
+      .mockImplementation(() => 2)
+    const spyApproximate = jest
+      .spyOn(utils, 'shouldApproximateTimestamp')
+      .mockImplementation(() => true)
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            startTime: 2312313123,
+            endTime: 2313316123,
+            viewPort: [
+              {
+                timeStamp: 314412412241242,
+                width: 10,
+                height: 20
+              },
+              {
+                timeStamp: 314412412341242,
+                width: 10,
+                height: 20
+              }
+            ]
+          }
+        }
+      }))
+    const result = addSessionInfoEvent(
+      [],
+      [[
+        {
+          evn: 'Custom event'
+        }
+      ]],
+      '20-3-2020',
+      124123423)
+    expect(result).toStrictEqual([
+      [
+        {
+          evn: 'Custom event'
+        },
+        {
+          evc: 10001,
+          evcs: 11024,
+          evdc: 1,
+          evn: 'Session Info',
+          evt: 1580775121800,
+          mid: 'localhost-null-1580775120000',
+          nmo: 1,
+          properties: {
+            duration: 1003,
+            end: 2313316123,
+            referrer: null,
+            screen: {
+              timeStamp: 314412412341242,
+              width: 10,
+              height: 20
+            },
+            session_id: 124123423,
+            start: 2312313123
+          },
+          scrn: 'http://localhost/',
+          userid: null
+        }
+      ]
+    ])
+    spyEvents.mockRestore()
+    spyApproximate.mockRestore()
+    spyCount.mockRestore()
+  })
+
+  it('session event goes in the same chunk', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            startTime: 2312313123,
+            endTime: 2313316123,
+            viewPort: []
+          }
+        }
+      }))
+    const result = addSessionInfoEvent(
+      [],
+      [[
+        {
+          evn: 'Custom event'
+        }
+      ]],
+      '20-3-2020',
+      124123423)
+    expect(result).toStrictEqual([
+      [
+        {
+          evn: 'Custom event'
+        }
+      ],
+      [
+        {
+          evc: 10001,
+          evcs: 11024,
+          evdc: 1,
+          evn: 'Session Info',
+          evt: 1580775120000,
+          mid: 'localhost-null-1580775120000',
+          nmo: 1,
+          properties: {
+            duration: 1003,
+            end: 2313316123,
+            referrer: null,
+            screen: {},
+            session_id: 124123423,
+            start: 2312313123
+          },
+          scrn: 'http://localhost/',
+          userid: null
+        }
+      ]
+    ])
     spyEvents.mockRestore()
   })
 })

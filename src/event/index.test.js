@@ -80,7 +80,7 @@ describe('syncPreviousEvents', () => {
     spyEvents.mockRestore()
   })
 
-  it('nothing to sync, only session will be sent', () => {
+  it('nothing to sync', () => {
     const spyApproximate = jest
       .spyOn(utils, 'shouldApproximateTimestamp')
       .mockImplementation(() => true)
@@ -97,7 +97,7 @@ describe('syncPreviousEvents', () => {
         }
       }))
     syncPreviousEvents()
-    expect(spyPost).toBeCalledWith('', '{"events":[{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775121800,"properties":{"referrer":null,"screen":{},"session_id":"12341234213","duration":null},"nmo":1,"evc":10001}]}')
+    expect(spyPost).toBeCalledTimes(0)
     spyEvents.mockRestore()
     spyApproximate.mockRestore()
   })
@@ -249,7 +249,7 @@ describe('syncPreviousDateEvents', () => {
     spyEvents.mockRestore()
   })
 
-  it('nothing to sync, only session will be sent', () => {
+  it('nothing to sync', () => {
     const spyApproximate = jest
       .spyOn(utils, 'shouldApproximateTimestamp')
       .mockImplementation(() => true)
@@ -266,7 +266,7 @@ describe('syncPreviousDateEvents', () => {
         }
       }))
     syncPreviousDateEvents()
-    expect(spyPost).toBeCalledWith('', '{"events":[{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775121800,"properties":{"referrer":null,"screen":{},"session_id":"12341234213","duration":null},"nmo":1,"evc":10001}]}')
+    expect(spyPost).toBeCalledTimes(0)
     spyEvents.mockRestore()
     spyApproximate.mockRestore()
   })

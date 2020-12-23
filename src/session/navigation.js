@@ -104,8 +104,15 @@ export const setReferrerEvent = (eventName, ref, meta) => {
 
 export const resetPreviousDate = () => {
   const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsByDate(notSyncDate)
-  const sessionId = getNotSynced(sdkDataForDate.sessions)
-  sdkDataForDate.sessions[sessionId].eventsData.navigationPath = []
-  sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav = []
+  const sdkData = getEventsByDate(notSyncDate)
+  if (!sdkData || !sdkData.sessions) {
+    return
+  }
+  const sessionId = getNotSynced(sdkData.sessions)
+  if (!sessionId) {
+    return
+  }
+
+  sdkData.sessions[sessionId].eventsData.navigationPath = []
+  sdkData.sessions[sessionId].eventsData.stayTimeBeforeNav = []
 }

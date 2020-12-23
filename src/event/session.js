@@ -157,6 +157,10 @@ export const setEndDevEvent = (eventName) => {
 }
 
 export const createEventInfoObj = (eventName, objectName, meta = {}, event = {}) => {
+  if (!eventName) {
+    return null
+  }
+
   return {
     sentToServer: false,
     objectName,

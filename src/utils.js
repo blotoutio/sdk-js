@@ -265,7 +265,7 @@ export const getSystemMergeCounter = (events) => {
   }
 
   if (sysMergeCounter === '-1') {
-    return events.length
+    return (events && events.length) || 0
   } else if (sysMergeCounter > 0) {
     return parseInt(sysMergeCounter)
   }

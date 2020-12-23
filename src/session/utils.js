@@ -154,7 +154,7 @@ const mobileCheck = () => {
               a.substr(0, 4)
             )
     ) { check = true }
-  })(navigator.userAgent || navigator.vendor || window.opera)
+  })(navigator.userAgent || navigator.vendor)
   return check
 }
 
@@ -230,17 +230,16 @@ export const checkAndGetSessionId = () => {
 }
 
 export const getNotSynced = (sessions) => {
-  let sessionId = null
   for (const id in sessions) {
-    if (!sessions[id].eventsData) {
+    if (!sessions[id] || !sessions[id].eventsData) {
       continue
     }
-    sessionId = id
     if (!sessions[id].eventsData.sentToServer) {
-      break
+      return id
     }
   }
-  return sessionId
+
+  return null
 }
 
 export const maybeSync = (eventsData) => {
@@ -255,7 +254,7 @@ export const maybeSync = (eventsData) => {
 }
 
 export const createSessionObject = (eventName, objectName) => {
-  return {
+  const data = {
     startTime: Date.now(),
     endTime: 0,
     lastServerSyncTime: 0,
@@ -264,13 +263,20 @@ export const createSessionObject = (eventName, objectName) => {
     meta: createMetaObject(),
     viewPort: [createViewPortObject()],
     eventsData: {
-      eventsInfo: [createEventInfoObj(eventName, objectName)],
+      eventsInfo: [],
       navigationPath: [window.location.href],
       stayTimeBeforeNav: [],
       devCodifiedEventsInfo: [],
       sentToServer: false
     }
   }
+
+  const eventsInfo = createEventInfoObj(eventName, objectName)
+  if (eventsInfo) {
+    data.eventsData.eventsInfo = eventsInfo
+  }
+
+  return data
 }
 
 export const createViewPortObject = () => {

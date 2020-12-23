@@ -13,7 +13,13 @@ import { shouldCollectSystemEvents } from '../event/utils'
 
 const getInfoPayload = (date, sessionId) => {
   const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions) {
+    return null
+  }
   const session = sdkData.sessions[sessionId]
+  if (!session) {
+    return null
+  }
   const viewportLen = (session.viewPort || []).length
   const viewPortObj = viewportLen > 0 ? session.viewPort[viewportLen - 1] : {}
   const startTime = session.startTime
@@ -44,20 +50,22 @@ const getInfoPayload = (date, sessionId) => {
   }
 }
 
-export const addSessionInfoEvent = function (events, eventsArrayChunk, date, sessionId) {
+export const addSessionInfoEvent = (events, eventsArrayChunk, date, sessionId) => {
   if (!shouldCollectSystemEvents()) {
     return eventsArrayChunk
   }
 
   const sysMergeCounterValue = getSystemMergeCounter(events)
-
-  const sessionInfoObj = getInfoPayload(date, sessionId)
+  const info = getInfoPayload(date, sessionId)
+  if (!info) {
+    return eventsArrayChunk
+  }
   const chunkIndex = eventsArrayChunk.findIndex((arr) => arr.length < sysMergeCounterValue)
   if (chunkIndex === -1) {
-    const sessionEvtArr = [sessionInfoObj]
+    const sessionEvtArr = [info]
     eventsArrayChunk.push(sessionEvtArr)
   } else {
-    eventsArrayChunk[chunkIndex].push(sessionInfoObj)
+    eventsArrayChunk[chunkIndex].push(info)
   }
   return eventsArrayChunk
 }

@@ -1,8 +1,17 @@
-import { checkAndGetSessionId, getNotSynced, maybeSync } from './utils'
+import { checkAndGetSessionId, createSessionObject, getNotSynced, maybeSync } from './utils'
 import * as storage from '../storage'
 import * as event from '../event'
 import * as manifest from '../manifest'
 import { eventSync } from '../event/utils'
+
+beforeEach(() => {
+  jest.useFakeTimers('modern')
+  jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
+})
+
+afterEach(() => {
+  jest.useRealTimers()
+})
 
 describe('eventSync', () => {
   beforeEach(() => {
@@ -150,5 +159,241 @@ describe('maybeSync', () => {
     expect(spySync).toBeCalledTimes(1)
     expect(eventSync.progressStatus).toBe(true)
     spyManifest.mockRestore()
+  })
+})
+
+describe('createSessionObject', () => {
+  beforeEach(() => {
+    navigator.__defineGetter__('userAgent', () => '')
+    navigator.__defineGetter__('appVersion', () => '')
+  })
+
+  it('null', () => {
+    navigator.__defineGetter__('userAgent', () => null)
+    const result = createSessionObject()
+    expect(result).toStrictEqual({
+      endTime: 0,
+      eventsData: {
+        devCodifiedEventsInfo: [],
+        eventsInfo: [],
+        navigationPath: [
+          'http://localhost/'
+        ],
+        sentToServer: false,
+        stayTimeBeforeNav: []
+      },
+      geo: {},
+      lastServerSyncTime: 0,
+      meta: {
+        browser: 'unknown',
+        domain: 'localhost',
+        dplatform: 'desktop',
+        hostOS: '',
+        osv: '0',
+        plf: 70,
+        ua: null,
+        version: '0.0.0.0'
+      },
+      sdkVersion: undefined,
+      startTime: 1580775120000,
+      viewPort: [
+        {
+          docHeight: 0,
+          docWidth: 0,
+          height: 0,
+          timeStamp: 1580775120000,
+          width: 0
+        }
+      ]
+    })
+  })
+
+  it('with event', () => {
+    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (Linux; U; Android 2.2; en-us; SCH-I800 Build/FROYO) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1')
+
+    const result = createSessionObject('some_event', {
+      data: false
+    })
+    expect(result).toStrictEqual({
+      endTime: 0,
+      eventsData: {
+        devCodifiedEventsInfo: [],
+        eventsInfo: {
+          evc: 10001,
+          evcs: undefined,
+          extraInfo: {
+            mousePosX: undefined,
+            mousePosY: undefined
+          },
+          metaInfo: {},
+          mid: '',
+          name: 'some_event',
+          nmo: 1,
+          objectName: {
+            data: false
+          },
+          objectTitle: '',
+          position: {
+            height: -1,
+            width: -1,
+            x: -1,
+            y: -1
+          },
+          sentToServer: false,
+          tstmp: 1580775120000,
+          urlPath: 'http://localhost/'
+        },
+        navigationPath: [
+          'http://localhost/'
+        ],
+        sentToServer: false,
+        stayTimeBeforeNav: []
+      },
+      geo: {},
+      lastServerSyncTime: 0,
+      meta: {
+        browser: 'Safari',
+        domain: 'localhost',
+        dplatform: 'mobile',
+        hostOS: '',
+        osv: '0',
+        plf: 16,
+        ua: 'Mozilla/5.0 (Linux; U; Android 2.2; en-us; SCH-I800 Build/FROYO) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1',
+        version: '533'
+      },
+      sdkVersion: undefined,
+      startTime: 1580775120000,
+      viewPort: [
+        {
+          docHeight: 0,
+          docWidth: 0,
+          height: 0,
+          timeStamp: 1580775120000,
+          width: 0
+        }
+      ]
+    })
+  })
+
+  it('device is tablet', () => {
+    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1')
+    const result = createSessionObject()
+    expect(result).toStrictEqual({
+      endTime: 0,
+      eventsData: {
+        devCodifiedEventsInfo: [],
+        eventsInfo: [],
+        navigationPath: [
+          'http://localhost/'
+        ],
+        sentToServer: false,
+        stayTimeBeforeNav: []
+      },
+      geo: {},
+      lastServerSyncTime: 0,
+      meta: {
+        browser: 'Safari',
+        domain: 'localhost',
+        dplatform: 'tablet',
+        hostOS: '',
+        osv: '0',
+        plf: 70,
+        ua: 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
+        version: '604'
+      },
+      sdkVersion: undefined,
+      startTime: 1580775120000,
+      viewPort: [
+        {
+          docHeight: 0,
+          docWidth: 0,
+          height: 0,
+          timeStamp: 1580775120000,
+          width: 0
+        }
+      ]
+    })
+  })
+
+  it('OS is Mac', () => {
+    navigator.__defineGetter__('appVersion', () => '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36')
+
+    const result = createSessionObject()
+    expect(result).toStrictEqual({
+      endTime: 0,
+      eventsData: {
+        devCodifiedEventsInfo: [],
+        eventsInfo: [],
+        navigationPath: [
+          'http://localhost/'
+        ],
+        sentToServer: false,
+        stayTimeBeforeNav: []
+      },
+      geo: {},
+      lastServerSyncTime: 0,
+      meta: {
+        browser: 'unknown',
+        domain: 'localhost',
+        dplatform: 'desktop',
+        hostOS: 'MacOS',
+        osv: '0',
+        plf: 70,
+        ua: '',
+        version: '0.0.0.0'
+      },
+      sdkVersion: undefined,
+      startTime: 1580775120000,
+      viewPort: [
+        {
+          docHeight: 0,
+          docWidth: 0,
+          height: 0,
+          timeStamp: 1580775120000,
+          width: 0
+        }
+      ]
+    })
+  })
+
+  it('OS is Windows', () => {
+    navigator.__defineGetter__('appVersion', () => '5.0 (Windows; en-US)')
+
+    const result = createSessionObject()
+    expect(result).toStrictEqual({
+      endTime: 0,
+      eventsData: {
+        devCodifiedEventsInfo: [],
+        eventsInfo: [],
+        navigationPath: [
+          'http://localhost/'
+        ],
+        sentToServer: false,
+        stayTimeBeforeNav: []
+      },
+      geo: {},
+      lastServerSyncTime: 0,
+      meta: {
+        browser: 'unknown',
+        domain: 'localhost',
+        dplatform: 'desktop',
+        hostOS: 'Windows',
+        osv: '0',
+        plf: 70,
+        ua: '',
+        version: '0.0.0.0'
+      },
+      sdkVersion: undefined,
+      startTime: 1580775120000,
+      viewPort: [
+        {
+          docHeight: 0,
+          docWidth: 0,
+          height: 0,
+          timeStamp: 1580775120000,
+          width: 0
+        }
+      ]
+    })
   })
 })

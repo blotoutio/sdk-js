@@ -1,7 +1,7 @@
 import * as eventStorage from '../event/storage'
 import * as storage from '../storage'
 import * as timeUtil from '../common/timeUtil'
-import { setReferrerEvent, updateNavPath, updateNavTime } from './navigation'
+import { resetPreviousDate, setReferrerEvent, updateNavPath, updateNavTime } from './navigation'
 
 let spyDate
 let spySet
@@ -459,6 +459,77 @@ describe('setReferrerEvent', () => {
                 value: undefined
               }
             ]
+          }
+        }
+      }
+    })
+    spyEvents.mockRestore()
+  })
+})
+
+describe('resetPreviousDate', () => {
+  it('sdk data missing', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => null)
+    resetPreviousDate()
+    spyEvents.mockRestore()
+  })
+
+  it('sessions missing', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => {})
+    resetPreviousDate()
+    spyEvents.mockRestore()
+  })
+
+  it('everything is already synced', () => {
+    const data = {
+      sessions: {
+        234234234242: {
+          eventsData: {
+            sentToServer: true
+          }
+        },
+        2342342342342: {}
+      }
+    }
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => data)
+    resetPreviousDate()
+    expect(data).toStrictEqual(data)
+    spyEvents.mockRestore()
+  })
+
+  it('session not synced', () => {
+    const data = {
+      sessions: {
+        234234234242: {
+          eventsData: {
+            navigationPath: [
+              'http://domain.com/'
+            ],
+            stayTimeBeforeNav: [
+              5
+            ],
+            sentToServer: false
+          }
+        }
+      }
+    }
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => data)
+    resetPreviousDate()
+    expect(data).toStrictEqual({
+      sessions: {
+        234234234242: {
+          eventsData: {
+            navigationPath: [],
+            sentToServer: false,
+            stayTimeBeforeNav: []
           }
         }
       }
