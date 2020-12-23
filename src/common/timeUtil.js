@@ -17,13 +17,11 @@ export const getWeekNumber = (date) => {
   return Math.ceil((firstThursday - target) / (7 * 24 * 3600 * 1000)) + 1
 }
 
-// Q: what should this function do?
 export const millisecondsToHours = (milliseconds) => {
   const hours = parseInt((milliseconds / (1000 * 60 * 60)) % 24)
   return hours < 10 ? '0' + hours : hours.toString()
 }
 
-// Q: what should this function do?
 export const millisecondsToDays = (milliseconds) => {
   return parseInt(milliseconds / (60 * 60 * 24 * 1000))
 }

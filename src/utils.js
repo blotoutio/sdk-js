@@ -13,7 +13,7 @@ import {
   isHighFreqEventOff,
   highFreqEvents
 } from './config'
-import { getNearestTimestamp, millisecondsToHours } from './common/timeUtil'
+import { getNearestTimestamp } from './common/timeUtil'
 import { codeForCustomCodifiedEvent } from './common/eventUtil'
 import * as log from './common/logUtil'
 import { getOS } from './common/operatingSystemUtil'
@@ -25,29 +25,19 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 import { getUrl, getManifestUrl } from './common/endPointUrlUtil'
 import { encryptRSA, SHA256Encode } from './common/securityUtil'
-import { getRetentionSDK } from './retention/utils'
 import { getLocal, getSession, setLocal } from './storage'
 import { getEventsByDate, getStore as getEventsStore, setEventsByDate, setStore as setEventsStore } from './storage/event'
-import {
-  setCreatedDate,
-  getData as getManifestDataStore,
-  setData as setManifestData,
-  getModifiedDate,
-  setModifiedDate
-} from './storage/manifest'
+
 import { getRoot, updateRoot } from './storage/store'
 import {
-  getCustomUseValue,
   getTempUseValue,
-  setCustomUseValue,
   setTempUseValue
 } from './storage/sharedPreferences'
-import { getSDK, setSDK } from './storage/retention'
 import { checkAndGetSessionId, eventSync, getNotSynced } from './session/utils'
 import { syncPreviousDateEvents, syncPreviousEvents, updatePreviousDayEndTime } from './session'
 import { setReferrerEvent } from './session/navigation'
+import { checkManifest, getManifestVariable } from './manifest'
 
-let globalRetentionInterval = null
 let globalEventInterval = null
 let collectEventsArr = []
 let staticUserID = null
@@ -274,7 +264,7 @@ const browserVersion = (userAgent, regex) => {
   return userAgent.match(regex) ? userAgent.match(regex)[2] : null
 }
 
-const setSyncEventsInterval = () => {
+export const setSyncEventsInterval = () => {
   if (!shouldSyncStoredData()) {
     return
   }
@@ -354,40 +344,6 @@ const createDateObject = (event, objectName) => {
   return obj
 }
 
-const setManifest = (data) => {
-  setCreatedDate(Date.now())
-  setModifiedDate(Date.now())
-  setManifestData(data)
-  setRetentionObject()
-  updateRoot()
-}
-
-const setManifestRefreshInterval = () => {
-  const url = `${getUrl()}/${manifestConst.MANIFEST_PATH}`
-  const payload = JSON.stringify({
-    lastUpdatedTime: 0,
-    bundleId: getDomain()
-  })
-  const manifestRefData = getManifestVariable(constants.MANIFEST_REFRESH_INTERVAL)
-  const manifestIntervalInMSec = manifestRefData
-    ? manifestRefData * 60 * 60 * 1000
-    : callInterval
-  if (globalRetentionInterval) {
-    clearInterval(globalRetentionInterval)
-  }
-  globalRetentionInterval = setInterval(() => {
-    postRequest(url, payload)
-      .then((data) => {
-        setManifest(data)
-        setManifestRefreshInterval()
-        setSyncEventsInterval()
-      })
-      .catch((error) => {
-        log.error(error)
-      })
-  }, manifestIntervalInMSec)
-}
-
 const mobileCheck = () => {
   let check = false;
   ((a) => {
@@ -437,248 +393,6 @@ const setGeoData = () => {
   setEventsByDate(date, sdkDataForDate)
 }
 
-const syncRetentionData = () => {
-  try {
-    const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
-    if (!mode || mode === constants.FIRSTPARTY_MODE) {
-      return
-    }
-
-    const retentionStore = getSDK()
-    let arr = []
-    Object.keys(retentionStore.retentionData).forEach((key) => {
-      const res = getNotSyncObj(retentionStore.retentionData[key])
-      if (res && res.length > 0) {
-        const payloadArr = getRetentionPayloadArr(res, key)
-        arr = arr.concat(payloadArr)
-      }
-    })
-
-    if (arr.length === 0) {
-      return
-    }
-
-    const date = getDate()
-    const sessionId = getSession(constants.SESSION_ID)
-    const sdkDataForDate = getEventsByDate(date)
-    const valueFromSPTempUseStore = getCustomUseValue(constants.PREVIOUS_RETENTION_META)
-    const payload = getPayload(sdkDataForDate.sessions[sessionId], arr)
-
-    if (valueFromSPTempUseStore) {
-      payload.pmeta = getPmeta(payload.meta, valueFromSPTempUseStore)
-    }
-
-    const url = getManifestUrl('retention')
-    const tempUseData = getTempUseValue(constants.FAILED_RETENTION)
-    let isTodayDate = false
-    if (tempUseData) {
-      Object.keys(tempUseData).forEach((val) => {
-        if (val === date) {
-          isTodayDate = true
-        }
-
-        sendRetentionReq(url, retentionStore, tempUseData[val], val)
-      })
-    }
-
-    if (!isTodayDate) {
-      sendRetentionReq(url, retentionStore, payload, '')
-    }
-  } catch (error) {
-    log.info(error)
-  }
-}
-
-const sendRetentionReq = (url, retentionStore, payload, date) => {
-  const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
-  if (!mode || mode === constants.FIRSTPARTY_MODE) {
-    return
-  }
-
-  postRequest(url, JSON.stringify(payload))
-    .then(() => {
-      setSendtoServer(retentionStore, payload.events)
-      setCustomUseValue(constants.PREVIOUS_RETENTION_META, payload.meta)
-
-      const tempUseData = getTempUseValue(constants.FAILED_RETENTION)
-      if (date && tempUseData[date]) {
-        delete tempUseData[date]
-      }
-      setTempUseValue(constants.FAILED_RETENTION, tempUseData)
-
-      updateRoot()
-    })
-    .catch(() => {
-      const date = getDate()
-      let tempUseData = getTempUseValue(constants.FAILED_RETENTION)
-      if (!tempUseData) {
-        tempUseData = {}
-      }
-
-      if (!tempUseData[date]) {
-        tempUseData[date] = payload
-      }
-      setTempUseValue(constants.FAILED_RETENTION, tempUseData)
-      updateRoot()
-    })
-}
-
-const setSendtoServer = (retentionStore, events) => {
-  events.forEach((val) => {
-    if (!val) {
-      return
-    }
-    const mid = val.mid
-    const key = val.evn === constants.DNU ? constants.IS_NEW_USER : val.evn
-    if (!Array.isArray(retentionStore.retentionData[key])) {
-      retentionStore.retentionData[key].sentToServer = true
-      return
-    }
-    const objIdx = retentionStore.retentionData[key].findIndex((obj) => obj.mid === mid)
-    retentionStore.retentionData[key][objIdx].sentToServer = true
-  })
-  setSDK(retentionStore)
-}
-
-const getNotSyncObj = (array) => {
-  if (Array.isArray(array)) {
-    return array.filter((evt) => !evt.sentToServer)
-  }
-
-  if (typeof array === 'object' && !array.sentToServer) {
-    return [array]
-  }
-}
-
-const getPmeta = (obj1, obj2) => {
-  if (!obj2 || Object.prototype.toString.call(obj2) !== '[object Object]') {
-    return obj1
-  }
-
-  const diffs = {}
-  let key
-
-  /**
-     * Check if two arrays are equal
-     * @param  {Array}   arr1 The first array
-     * @param  {Array}   arr2 The second array
-     * @return {Boolean}      If true, both arrays are equal
-     */
-  const arraysMatch = (arr1, arr2) => {
-    // Check if the arrays are the same length
-    if (arr1.length !== arr2.length) return false
-
-    // Check if all items exist and are in the same order
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] !== arr2[i]) return false
-    }
-
-    // Otherwise, return true
-    return true
-  }
-
-  /**
-     * Compare two items and push non-matches to object
-     * @param  {*}      item1 The first item
-     * @param  {*}      item2 The second item
-     * @param  {String} key   The key in our object
-     */
-  const compare = (item1, item2, key) => {
-    // Get the object type
-    const type1 = Object.prototype.toString.call(item1)
-    const type2 = Object.prototype.toString.call(item2)
-
-    // If type2 is undefined it has been removed
-    if (type2 === '[object Undefined]') {
-      diffs[key] = null
-      return
-    }
-
-    // If items are different types
-    if (type1 !== type2) {
-      diffs[key] = item2
-      return
-    }
-
-    // If an object, compare recursively
-    if (type1 === '[object Object]') {
-      const objDiff = diff(item1, item2)
-      if (Object.keys(objDiff).length > 1) {
-        diffs[key] = objDiff
-      }
-      return
-    }
-
-    // If an array, compare
-    if (type1 === '[object Array]') {
-      if (!arraysMatch(item1, item2)) {
-        diffs[key] = item2
-      }
-      return
-    }
-
-    // Else if it's a function, convert to a string and compare
-    // Otherwise, just compare
-    if (type1 === '[object Function]') {
-      if (item1.toString() !== item2.toString()) {
-        diffs[key] = item2
-      }
-    } else {
-      if (item1 !== item2) {
-        diffs[key] = item2
-      }
-    }
-  }
-
-  //
-  // Compare our objects
-  //
-
-  // Loop through the first object
-  for (key in obj1) {
-    if (obj1[key]) {
-      compare(obj1[key], obj2[key], key)
-    }
-  }
-
-  // Loop through the second object and find missing items
-  for (key in obj2) {
-    if (obj2[key]) {
-      if (!obj1[key] && obj1[key] !== obj2[key]) {
-        diffs[key] = obj2[key]
-      }
-    }
-  }
-
-  // Return the object of differences
-  return diffs
-}
-
-const getRetentionPayloadArr = (arr, name) => {
-  const eventName = name === constants.IS_NEW_USER ? constants.DNU : name
-  const result = []
-  const UID = getTempUseValue(constants.UID)
-  arr.forEach((val) => {
-    const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(val.tstmp) : val.tstmp
-    const data = {
-      mid: val.mid,
-      userid: UID,
-      evn: eventName,
-      evcs: val.evcs,
-      evt: eventTime,
-      nmo: val.nmo,
-      evc: val.evc
-    }
-
-    if (val.avgtime) {
-      data.tst = val.avgtime
-    }
-    result.push(data)
-  })
-
-  return result
-}
-
 const chunk = (arr, size) => {
   return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
     arr.slice(i * size, i * size + size)
@@ -693,10 +407,6 @@ const checkStoreEventsInterval = () => {
   const eventStore = getEventsStore()
   const dateCount = Object.keys(eventStore).length
   return dateCount === parseInt(storeEventsInterval)
-}
-
-const removeEmptyValue = (array) => {
-  return array.filter((el) => el != null && el !== '')
 }
 
 const getDomainOfReferrer = (ref) => {
@@ -842,19 +552,6 @@ const setUIDInInitEvent = () => {
     sdkDataForDate.sessions[sessionId].eventsData.eventsInfo[index].mid = getMid()
     setEventsByDate(date, sdkDataForDate)
   })
-}
-
-const setRetentionObject = () => {
-  const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
-  if (!mode || mode === constants.FIRSTPARTY_MODE) {
-    return
-  }
-  if (getSDK() != null) {
-    return
-  }
-  const retentionSdkData = getRetentionSDK()
-  setSDK(retentionSdkData)
-  updateRoot()
 }
 
 export const setInitialConfiguration = (preferences) => {
@@ -1134,91 +831,6 @@ export const debounce = (func, delay) => {
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(() => func.apply(context, args), delay)
   }
-}
-
-export const checkManifest = () => {
-  const localData = getRoot()
-  if (!localData) {
-    return false
-  }
-
-  const domainName = getDomain()
-  return localData[domainName] && localData[domainName].manifest.createdDate != null
-}
-
-export const pullManifest = () => {
-  return new Promise((resolve, reject) => {
-    const url = `${getUrl()}/${manifestConst.MANIFEST_PATH}`
-    const payload = JSON.stringify({
-      lastUpdatedTime: 0,
-      bundleId: getDomain()
-    })
-    postRequest(url, payload)
-      .then((data) => {
-        setManifest(data)
-        setManifestRefreshInterval()
-        setSyncEventsInterval()
-        syncRetentionData()
-      })
-      .catch((error) => {
-        reject(error)
-      })
-  })
-}
-
-export const getManifestVariable = (name) => {
-  const manifestData = getManifestDataStore()
-  if (!manifestData) {
-    return null
-  }
-
-  // TODO(nejc): we should only run this once when we save manifest
-  const variables = removeEmptyValue(manifestData.variables)
-  const intervalIndex = variables.findIndex((obj) => obj.variableName === name)
-  if (intervalIndex === -1) {
-    return null
-  }
-
-  return variables[intervalIndex].value
-}
-
-export const updateManifest = () => {
-  pullManifest()
-    .then((data) => {
-      setModifiedDate(Date.now())
-      setManifestData(data)
-      updateRoot()
-      setManifestRefreshInterval()
-      setSyncEventsInterval()
-      syncRetentionData()
-    })
-    .catch((error) => {
-      log.error(error)
-    })
-}
-
-export const checkUpdateForManifest = () => {
-  const modifiedDate = getModifiedDate()
-  const diffTime = millisecondsToHours(Date.now() - modifiedDate)
-  let manifestRefData = getManifestVariable(constants.MANIFEST_REFRESH_INTERVAL)
-  manifestRefData = manifestRefData || callInterval
-  if (diffTime >= manifestRefData) {
-    return true
-  }
-
-  const callTime = manifestRefData - diffTime
-  setTimeout(() => {
-    pullManifest()
-      .then((data) => {
-        setModifiedDate(Date.now())
-        setManifestData(data)
-        updateRoot()
-      })
-      .catch((error) => {
-        log.error(error)
-      })
-  }, callTime)
-  return false
 }
 
 export const initialize = (isDecryptionError) => {
@@ -1749,13 +1361,13 @@ export const getSystemMergeCounter = (events) => {
     sysMergeCounter = constants.DEFAULT_EVENT_SYSTEM_MERGECOUNTER
   }
 
-  let sysMergeCounterValue = 0
   if (sysMergeCounter === '-1') {
-    sysMergeCounterValue = events.length
+    return events.length
   } else if (sysMergeCounter > 0) {
-    sysMergeCounterValue = sysMergeCounter
+    return parseInt(sysMergeCounter)
   }
-  return parseInt(sysMergeCounterValue)
+
+  return 0
 }
 
 export const shouldSyncStoredData = () => {

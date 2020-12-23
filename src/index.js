@@ -5,10 +5,6 @@ import {
   setInitialConfiguration,
   setRetentionData,
   initialize,
-  checkManifest,
-  pullManifest,
-  checkUpdateForManifest,
-  updateManifest,
   checkGeo,
   setGeoDetails
 } from './utils'
@@ -23,6 +19,8 @@ import { getSession, setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent, setEndDevEvent, setStartDevEvent } from './session/event'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
+import { pullManifest, updateManifest, checkManifest } from './manifest'
+import { checkUpdateForManifest } from './retention'
 
 (function (window) {
   const SDK = function () {}

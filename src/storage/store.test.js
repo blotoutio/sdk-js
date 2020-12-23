@@ -1,7 +1,8 @@
 import { getRoot, updateRoot } from './store'
 import * as storage from '.'
 import * as utils from '../utils'
-import * as manifest from './manifest'
+import * as manifestStorage from '../manifest/storage'
+import * as manifest from '../manifest'
 import * as security from '../common/securityUtil'
 
 let spyRoot
@@ -115,11 +116,11 @@ describe('updateRoot', () => {
 
   it('manifest var provided, expired', () => {
     const spyManifest = jest
-      .spyOn(utils, 'getManifestVariable')
+      .spyOn(manifest, 'getManifestVariable')
       .mockImplementation(() => 1)
 
     const spyDate = jest
-      .spyOn(manifest, 'getModifiedDate')
+      .spyOn(manifestStorage, 'getModifiedDate')
       .mockImplementation(() => Date.now() - (2 * 24 * 60 * 60 * 1000)) // 2 days
     updateRoot({ data: true })
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -129,7 +130,7 @@ describe('updateRoot', () => {
 
   it('manifest var not provided, not expired', () => {
     const spyDate = jest
-      .spyOn(manifest, 'getModifiedDate')
+      .spyOn(manifestStorage, 'getModifiedDate')
       .mockImplementation(() => Date.now())
     const spySecurity = jest
       .spyOn(security, 'encryptAES')
@@ -146,7 +147,7 @@ describe('updateRoot', () => {
 
   it('encryption disabled', () => {
     const spyDate = jest
-      .spyOn(manifest, 'getModifiedDate')
+      .spyOn(manifestStorage, 'getModifiedDate')
       .mockImplementation(() => Date.now())
     const spySecurity = jest
       .spyOn(security, 'shouldEncrypt')

@@ -1,4 +1,4 @@
-import { getManifestVariable } from '../utils'
+import { getManifestVariable } from '../manifest'
 import { constants, manifestConst } from '../config'
 
 let endpointUrl = ''

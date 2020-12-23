@@ -1,10 +1,11 @@
 import { constants } from '../config'
 import { encryptAES, decryptAES, shouldEncrypt } from '../common/securityUtil'
 import * as log from '../common/logUtil'
-import { getManifestVariable, getRootKey, initialize } from '../utils'
+import { getRootKey, initialize } from '../utils'
 import { millisecondsToDays } from '../common/timeUtil'
-import { getModifiedDate } from './manifest'
+import { getModifiedDate } from '../manifest/storage'
 import { getLocal, removeSession, setLocal } from '.'
+import { getManifestVariable } from '../manifest'
 
 let rootStore
 const setRoot = (value) => {

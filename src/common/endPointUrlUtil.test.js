@@ -1,5 +1,6 @@
 import { setUrl, getUrl, getManifestUrl } from './endPointUrlUtil'
 import * as utils from '../utils'
+import * as manifest from '../manifest'
 
 describe('get/setUrl', () => {
   it('null', () => {
@@ -34,7 +35,7 @@ describe('getManifestUrl', () => {
 
   it('empty type, manifest', () => {
     jest
-      .spyOn(utils, 'getManifestVariable')
+      .spyOn(manifest, 'getManifestVariable')
       .mockImplementationOnce(() => 'http://manifest.io')
       .mockImplementationOnce(() => 'v1/path')
 
@@ -54,7 +55,7 @@ describe('getManifestUrl', () => {
 
   it('type event, manifest', () => {
     jest
-      .spyOn(utils, 'getManifestVariable')
+      .spyOn(manifest, 'getManifestVariable')
       .mockImplementationOnce(() => 'http://manifest.io')
       .mockImplementationOnce(() => 'v1/path')
 
@@ -69,7 +70,7 @@ describe('getManifestUrl', () => {
 
   it('retention event, manifest', () => {
     jest
-      .spyOn(utils, 'getManifestVariable')
+      .spyOn(manifest, 'getManifestVariable')
       .mockImplementationOnce(() => 'http://manifest.io')
       .mockImplementationOnce(() => 'v1/retention')
 

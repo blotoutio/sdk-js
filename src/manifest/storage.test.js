@@ -1,12 +1,12 @@
-import * as storage from '.'
+import * as storage from '../storage'
 import * as utils from '../utils'
 import {
   setData,
   getData,
   getStore,
   getModifiedDate, setCreatedDate, setModifiedDate
-} from './manifest'
-import { updateRoot } from './store'
+} from './storage'
+import { updateRoot } from '../storage/store'
 
 describe('getStore', () => {
   it('null', () => {

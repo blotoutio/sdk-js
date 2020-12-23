@@ -1,6 +1,7 @@
 import { getSession, setSession } from '../storage'
 import { constants } from '../config'
-import { getManifestVariable, syncEvents } from '../utils'
+import { syncEvents } from '../utils'
+import { getManifestVariable } from '../manifest'
 
 const getNotSyncedEventsCount = (obj) => {
   if (!obj || !obj.eventsInfo || !obj.devCodifiedEventsInfo) {
