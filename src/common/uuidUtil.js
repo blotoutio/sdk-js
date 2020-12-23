@@ -4,13 +4,13 @@ import { SHA256Encode } from './securityUtil'
 import { getTempUseValue, setTempUseValue } from '../storage/sharedPreferences'
 import { constants } from '../config'
 import { updateRoot } from '../storage/store'
-import { getRootIndexKey } from '../storage/key'
+import { getRootIndex } from '../storage/key'
 
 let staticUserID = null
 let clientToken = null
 
 const updateIndexScore = (indexValueToSet, isFirstIndex) => {
-  let sdkIndexData = getLocal(getRootIndexKey())
+  let sdkIndexData = getLocal(getRootIndex())
   if (sdkIndexData) {
     // why 1056: 68+36+68+68+68+68+68+68+68+68+68+68+68+68+68+68 = 1056
     if (sdkIndexData.length >= 1056) {
@@ -33,7 +33,7 @@ const updateIndexScore = (indexValueToSet, isFirstIndex) => {
   const preUUID = prePostUUID.substr(0, idLengthHalf)
   const postUUID = prePostUUID.substr(idLengthHalf)
   const indexStoreStr = preUUID + sdkIndexData + postUUID
-  setLocal(getRootIndexKey(), indexStoreStr)
+  setLocal(getRootIndex(), indexStoreStr)
 }
 
 const userIDUUID = () => {

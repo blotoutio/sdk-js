@@ -8,10 +8,10 @@ import {
 } from './securityUtil'
 import AES from 'crypto-js/aes'
 import { setLocal } from '../storage'
-import { getRootIndexKey } from '../storage/key'
+import { getRootIndex } from '../storage/key'
 
 beforeEach(() => {
-  setLocal(getRootIndexKey(), 'test_index')
+  setLocal(getRootIndex(), 'test_index')
 })
 
 describe('SHA256Encode', () => {
@@ -73,7 +73,7 @@ describe('encryptAES', () => {
   })
 
   it('root index is empty', () => {
-    setLocal(getRootIndexKey(), '')
+    setLocal(getRootIndex(), '')
     const result = encryptAES('test string')
     expect(result).toStrictEqual({
       encryptedString: '',
@@ -115,7 +115,7 @@ describe('decryptAES', () => {
   })
 
   it('root index is empty', () => {
-    setLocal(getRootIndexKey(), '')
+    setLocal(getRootIndex(), '')
     const result = decryptAES('b0METN8v1HtFgepaF/4QpA==')
     expect(result).toBe('')
   })

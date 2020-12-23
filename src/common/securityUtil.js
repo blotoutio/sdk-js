@@ -8,11 +8,11 @@ import { error } from './logUtil'
 import { getLocal } from '../storage'
 import { dataEncryptionEnabled } from '../config'
 import { getUUID } from './uuidUtil'
-import { getRootIndexKey } from '../storage/key'
+import { getRootIndex } from '../storage/key'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
 
 const getUserIndex = () => {
-  const sdkIndexData = getLocal(getRootIndexKey())
+  const sdkIndexData = getLocal(getRootIndex())
   if (!sdkIndexData) {
     return ''
   }

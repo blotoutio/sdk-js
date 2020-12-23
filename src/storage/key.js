@@ -1,6 +1,6 @@
 import { constants } from '../config'
 
-let rootKey
+let rootKey = null
 
 export const getRootKey = () => {
   let key = constants.ROOT_KEY
@@ -11,7 +11,7 @@ export const getRootKey = () => {
   return `sdk${key}`
 }
 
-export const getRootIndexKey = () => {
+export const getRootIndex = () => {
   let key = constants.ROOT_KEY
   if (rootKey) {
     key = rootKey
@@ -21,5 +21,8 @@ export const getRootIndexKey = () => {
 }
 
 export const setRootKey = (key) => {
+  if (!key) {
+    rootKey = null
+  }
   rootKey = key
 }
