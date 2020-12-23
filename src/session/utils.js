@@ -2,7 +2,7 @@ import { getSession, setSession } from '../storage'
 import { constants } from '../config'
 import { getDomain, syncEvents } from '../utils'
 import { getManifestVariable } from '../manifest'
-import { createEventInfoObj } from './event'
+import { createEventInfoObj } from '../event/session'
 import { getOS } from '../common/operatingSystemUtil'
 
 const findOS = () => {

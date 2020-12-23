@@ -1,7 +1,7 @@
-import { getEventsByDate, getStore, setEventsByDate, setStore } from './event'
-import * as storage from '.'
+import { getEventsByDate, getStore, setEventsByDate, setStore } from './storage'
+import * as storage from '../storage'
 import * as utils from '../utils'
-import * as store from './store'
+import * as store from '../storage/store'
 
 describe('getStore', () => {
   it('null', () => {

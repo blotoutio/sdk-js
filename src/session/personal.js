@@ -1,7 +1,7 @@
 import { getSession } from '../storage'
 import { constants } from '../config'
 import { createDevEventInfoObj, getDate } from '../utils'
-import { getEventsByDate, setEventsByDate } from '../storage/event'
+import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { maybeSync } from './utils'
 
 const setPersonalEvent = (eventName, objectName, meta, isPII) => {

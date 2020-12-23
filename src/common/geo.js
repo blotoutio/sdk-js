@@ -1,7 +1,7 @@
 import { getDate } from '../utils'
 import { getSession } from '../storage'
 import { constants, manifestConst } from '../config'
-import { getEventsByDate, setEventsByDate, getStore } from '../storage/event'
+import { getEventsByDate, setEventsByDate, getStore } from '../event/storage'
 import { getTempUseValue, setTempUseValue } from '../storage/sharedPreferences'
 import { getManifestVariable } from '../manifest'
 import { getUrl } from './endPointUrlUtil'

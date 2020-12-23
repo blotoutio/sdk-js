@@ -1,13 +1,10 @@
-import { setEvent } from '../session/event'
-import { getSession } from '../storage'
-import {
-  constants,
-  isSysEvtStore
-} from '../config'
-import { collectEvent, shouldCollectSystemEvents } from '../utils'
+import { setEvent } from '../session'
+import { constants, isSysEvtStore } from '../../config'
+import { collectEvent, shouldCollectSystemEvents } from '../../utils'
+import { getSession } from '../../storage'
 
-export const reset = (window) => {
-  const eventName = 'reset'
+export const dragStart = (window) => {
+  const eventName = 'dragstart'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
       if (getSession(constants.SESSION_ID)) {
@@ -22,8 +19,8 @@ export const reset = (window) => {
   })
 }
 
-export const submit = (window) => {
-  const eventName = 'submit'
+export const dragEnd = (window) => {
+  const eventName = 'dragend'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
       if (getSession(constants.SESSION_ID)) {

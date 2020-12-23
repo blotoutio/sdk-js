@@ -1,4 +1,4 @@
-import { startEvents } from './events'
+import { startEvents } from './event/system'
 import {
   collectEvent,
   setInitialConfiguration,
@@ -14,7 +14,7 @@ import {
 } from './config'
 import { getSession, setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
-import { setDevEvent, setEndDevEvent, setStartDevEvent } from './session/event'
+import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 import { pullManifest, updateManifest, checkManifest } from './manifest'
 import { checkUpdateForManifest } from './retention'

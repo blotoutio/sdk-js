@@ -1,13 +1,10 @@
-import { setEvent } from '../session/event'
-import {
-  constants,
-  isSysEvtStore
-} from '../config'
-import { collectEvent, shouldCollectSystemEvents } from '../utils'
-import { getSession } from '../storage'
+import { setEvent } from '../session'
+import { getSession } from '../../storage'
+import { constants, isSysEvtStore } from '../../config'
+import { collectEvent, shouldCollectSystemEvents } from '../../utils'
 
-export const dragStart = (window) => {
-  const eventName = 'dragstart'
+export const offline = (window) => {
+  const eventName = 'offline'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
       if (getSession(constants.SESSION_ID)) {
@@ -22,8 +19,8 @@ export const dragStart = (window) => {
   })
 }
 
-export const dragEnd = (window) => {
-  const eventName = 'dragend'
+export const online = (window) => {
+  const eventName = 'online'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
       if (getSession(constants.SESSION_ID)) {

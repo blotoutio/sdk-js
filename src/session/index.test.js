@@ -1,4 +1,4 @@
-import * as eventStorage from '../storage/event'
+import * as eventStorage from '../event/storage'
 import * as storage from '../storage'
 import * as utils from '../utils'
 import * as network from '../common/networkUtil'

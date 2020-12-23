@@ -7,10 +7,10 @@ import {
   setNewDateObject
 } from '../utils'
 import { getSession, removeSession, setSession } from '../storage'
-import { getEventsByDate, getStore as getEventsStore, setEventsByDate } from '../storage/event'
-import { updatePreviousDayEndTime } from '.'
+import { getEventsByDate, getStore as getEventsStore, setEventsByDate } from './storage'
+import { updatePreviousDayEndTime } from '../session'
 import { error } from '../common/logUtil'
-import { maybeSync } from './utils'
+import { maybeSync } from '../session/utils'
 import { getRoot } from '../storage/store'
 
 const getPositionObject = (event) => {

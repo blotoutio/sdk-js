@@ -8,7 +8,7 @@ import {
   retentionWrapper
 } from './utils'
 import { getFormattedDate } from '../common/timeUtil'
-import { getEventsByDate } from '../storage/event'
+import { getEventsByDate } from '../event/storage'
 
 export const setCount = (key, code) => {
   const func = (retentions) => {

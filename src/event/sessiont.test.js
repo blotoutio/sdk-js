@@ -1,7 +1,7 @@
-import * as eventStorage from '../storage/event'
+import * as eventStorage from '../event/storage'
 import * as storage from '../storage'
 import * as utils from '../utils'
-import { setDevEvent, setEndDevEvent, setEvent, setStartDevEvent } from './event'
+import { setDevEvent, setEndDevEvent, setEvent, setStartDevEvent } from './session'
 
 let spyDate
 let spySet

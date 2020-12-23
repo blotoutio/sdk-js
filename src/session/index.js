@@ -16,7 +16,7 @@ import {
   shouldApproximateTimestamp,
   shouldCollectSystemEvents
 } from '../utils'
-import { getEventsByDate, setEventsByDate } from '../storage/event'
+import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { getNotSynced } from './utils'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'

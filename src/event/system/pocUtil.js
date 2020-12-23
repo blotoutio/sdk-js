@@ -1,7 +1,4 @@
-import {
-  constants,
-  systemEventCode
-} from '../config'
+import { constants, systemEventCode } from '../../config'
 import {
   getMid,
   getObjectTitle,
@@ -13,17 +10,17 @@ import {
   getPayload,
   shouldApproximateTimestamp,
   shouldCollectSystemEvents
-} from '../utils'
-import * as log from '../common/logUtil'
-import { postRequest } from '../common/networkUtil'
-import { getNearestTimestamp } from '../common/timeUtil'
-import { getManifestUrl } from '../common/endPointUrlUtil'
-import { getSession } from '../storage'
-import { getEventsByDate, getStore as getEventsStore } from '../storage/event'
-import { getTempUseValue } from '../storage/sharedPreferences'
-import { updatePreviousDayEndTime } from '../session'
-import { createEventInfoObj } from '../session/event'
-import { getReferrerUrlOfDateSession } from '../common/referrer'
+} from '../../utils'
+import * as log from '../../common/logUtil'
+import { postRequest } from '../../common/networkUtil'
+import { getNearestTimestamp } from '../../common/timeUtil'
+import { getManifestUrl } from '../../common/endPointUrlUtil'
+import { getSession } from '../../storage'
+import { getEventsByDate, getStore as getEventsStore } from '../storage'
+import { getTempUseValue } from '../../storage/sharedPreferences'
+import { updatePreviousDayEndTime } from '../../session'
+import { createEventInfoObj } from '../session'
+import { getReferrerUrlOfDateSession } from '../../common/referrer'
 
 const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mousePos = {}) => {
   const position = {

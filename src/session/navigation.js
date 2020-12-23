@@ -1,7 +1,7 @@
 import { getSession } from '../storage'
 import { constants } from '../config'
 import { getDate } from '../utils'
-import { getEventsByDate, setEventsByDate } from '../storage/event'
+import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { createReferrerEventInfo } from '../common/referrer'
 
 export const updateNavTime = () => {

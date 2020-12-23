@@ -1,17 +1,14 @@
-import { setEvent } from '../session/event'
-import { getSession } from '../storage'
-import {
-  constants,
-  isSysEvtStore
-} from '../config'
-import { collectEvent, shouldCollectSystemEvents } from '../utils'
+import { setEvent } from '../session'
+import { getSession } from '../../storage'
+import { collectEvent, shouldCollectSystemEvents } from '../../utils'
+import { constants, isSysEvtStore } from '../../config'
 
-export const offline = (window) => {
-  const eventName = 'offline'
+export const blur = (window) => {
+  const eventName = 'blur'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
       if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event)
+        setEvent(eventName, event, {})
       }
       return
     }
@@ -22,8 +19,8 @@ export const offline = (window) => {
   })
 }
 
-export const online = (window) => {
-  const eventName = 'online'
+export const focus = (window) => {
+  const eventName = 'focus'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
       if (getSession(constants.SESSION_ID)) {

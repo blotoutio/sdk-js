@@ -1,6 +1,6 @@
 import { constants } from '../config'
 import { getMid, getDate, getDomain } from '../utils'
-import { getStore as getEventsStore } from '../storage/event'
+import { getStore as getEventsStore } from '../event/storage'
 import { getSDK, setSDK } from './storage'
 import { updateRoot } from '../storage/store'
 

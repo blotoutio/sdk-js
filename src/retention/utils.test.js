@@ -10,7 +10,7 @@ import {
 } from './utils'
 import * as commonUtils from '../utils'
 import * as retentionStorage from './storage'
-import * as eventStorage from '../storage/event'
+import * as eventStorage from '../event/storage'
 
 let spyGetUserObject
 beforeEach(() => {

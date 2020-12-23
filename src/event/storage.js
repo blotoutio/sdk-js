@@ -1,6 +1,6 @@
-import { getStoreByDomain } from '.'
+import { getStoreByDomain } from '../storage'
 import { error } from '../common/logUtil'
-import { updateRoot } from './store'
+import { updateRoot } from '../storage/store'
 
 export const getStore = () => {
   const store = getStoreByDomain()

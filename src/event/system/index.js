@@ -1,7 +1,4 @@
-import {
-  isSysEvtStore
-} from '../config'
-
+import { isSysEvtStore } from '../../config'
 import { dragStart, dragEnd } from './dragdrop'
 import { copy, cut, paste } from './clipboard'
 import { blur, focus } from './focus'
@@ -14,7 +11,7 @@ import { touchEnd } from './touch'
 import { hashChange } from './hash'
 import { resize, unload, load, beforeUnload, domActive, domSubTreeModified } from './window'
 import { error } from './resource'
-import { shouldCollectSystemEvents } from '../utils'
+import { shouldCollectSystemEvents } from '../../utils'
 
 export const startEvents = (window) => {
   if (!isSysEvtStore && !shouldCollectSystemEvents()) {

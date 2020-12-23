@@ -1,10 +1,7 @@
-import { setEvent } from '../session/event'
-import {
-  constants,
-  isSysEvtStore
-} from '../config'
-import { collectEvent, shouldCollectSystemEvents } from '../utils'
-import { getSession } from '../storage'
+import { setEvent } from '../session'
+import { constants, isSysEvtStore } from '../../config'
+import { collectEvent, shouldCollectSystemEvents } from '../../utils'
+import { getSession } from '../../storage'
 
 export const cut = (window) => {
   const eventName = 'cut'
