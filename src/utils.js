@@ -1,86 +1,31 @@
 import {
   constants,
-  isManualManifest,
   isApprox,
   isSysEvtStore,
   isDevEvtStore
 } from './config'
 import { setRetentionData } from './retention'
 import { getLocal, getSession } from './storage'
-import { getEventsByDate, getStore, setEventsByDate, setStore } from './event/storage'
+import { checkEventsInterval, getEventsByDate, getStore, setEventsByDate, setStore } from './event/storage'
 import { getRoot, updateRoot } from './storage/store'
 import { getTempUseValue } from './storage/sharedPreferences'
-import { checkAndGetSessionId, createSessionObject, getNotSynced } from './session/utils'
+import { checkAndGetSessionId, createSessionObject } from './session/utils'
 import {
   syncPreviousDateEvents,
   syncPreviousEvents,
   setSyncEventsInterval
 } from './event'
 import { checkManifest, getManifestVariable } from './manifest'
-import { setClientToken, setUID } from './common/uuid'
-import { getPreviousDateReferrer } from './common/referrer'
-
-let customDomain = null
-let storageRootKey = null
-
-const createDaySchema = (session) => {
-  const sessions = {}
-  const id = getSession('sessionId')
-  if (id) {
-    sessions[id] = session
-  }
-
-  return {
-    date: getDate(),
-    domain: getDomain(),
-    sessions,
-    retentionData: ''
-  }
-}
-
-const createDomain = (objectName) => {
-  return {
-    sharedPreference: {
-      tempUse: {},
-      normalUse: {},
-      customUse: {}
-    },
-    manifest: {
-      createdDate: null,
-      modifiedDate: null,
-      manifestData: null
-    },
-    retention: {
-      isSynced: false,
-      retentionSDK: null
-    },
-    events: createDateObject('init', objectName)
-  }
-}
-
-const createDateObject = (event, objectName) => {
-  const session = createSessionObject(event, objectName)
-  const dateString = getDate()
-  const obj = {}
-  obj[dateString] = {
-    isSynced: false,
-    sdkData: createDaySchema(session)
-  }
-  return obj
-}
-
-const checkStoreEventsInterval = () => {
-  let storeEventsInterval = getManifestVariable(constants.STORE_EVENTS_INTERVAL)
-  if (storeEventsInterval == null) {
-    storeEventsInterval = constants.DEFAULT_STORE_EVENTS_INTERVAL
-  }
-  const eventStore = getStore()
-  const dateCount = Object.keys(eventStore).length
-  return dateCount === parseInt(storeEventsInterval)
-}
+import { setClientToken, setUID } from './common/uuidUtil'
+import { getPreviousDateReferrer } from './common/referrerUtil'
+import { createDomain, getDomain, setCustomDomain } from './common/domainUtil'
+import { getStringDate } from './common/timeUtil'
+import { getRootKey, setRootKey } from './storage/key'
+import { getPreviousDateData } from './event/session'
+import { resetPreviousDate } from './session/navigation'
 
 const setUIDInInitEvent = () => {
-  const date = getDate()
+  const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const eventArr = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
@@ -89,6 +34,21 @@ const setUIDInInitEvent = () => {
     sdkDataForDate.sessions[sessionId].eventsData.eventsInfo[index].mid = getMid()
     setEventsByDate(date, sdkDataForDate)
   })
+}
+
+export const createDaySchema = (session) => {
+  const sessions = {}
+  const id = getSession('sessionId')
+  if (id) {
+    sessions[id] = session
+  }
+
+  return {
+    date: getStringDate(),
+    domain: getDomain(),
+    sessions,
+    retentionData: ''
+  }
 }
 
 export const setInitialConfiguration = (preferences) => {
@@ -102,50 +62,14 @@ export const setInitialConfiguration = (preferences) => {
   }
 
   setClientToken(preferences.token)
-  customDomain = preferences.customDomain
-  storageRootKey = preferences.storageRootKey
-}
-
-export const getRootKey = () => {
-  let key = constants.ROOT_KEY
-  if (storageRootKey) {
-    key = storageRootKey
-  }
-
-  return `sdk${key}`
-}
-
-export const getRootIndexKey = () => {
-  let key = constants.ROOT_KEY
-  if (storageRootKey) {
-    key = storageRootKey
-  }
-
-  return `sdk${key}Index`
+  setCustomDomain(preferences.customDomain)
+  setRootKey(preferences.storageRootKey)
 }
 
 export const getMid = () => {
   const domainName = getDomain()
   const userID = getTempUseValue(constants.UID)
   return `${domainName}-${userID}-${Date.now()}`
-}
-
-export const getDate = () => {
-  const d = new Date()
-  const date = d.getDate()
-  const month = d.getMonth() + 1
-  const year = d.getFullYear()
-  return `${date}-${month}-${year}`
-}
-
-export const getPreviousDate = () => {
-  const today = new Date()
-  const yesterday = new Date(today)
-  yesterday.setDate(yesterday.getDate() - 1)
-  const date = yesterday.getDate()
-  const month = yesterday.getMonth() + 1
-  const year = yesterday.getFullYear()
-  return `${date}-${month}-${year}`
 }
 
 export const findObjIndex = (eventArr, eventName) => {
@@ -165,12 +89,12 @@ export const debounce = (func, delay) => {
 export const initialize = (isDecryptionError) => {
   const localData = isDecryptionError ? null : getRoot()
   const hostname = getDomain()
-  const date = getDate()
+  const date = getStringDate()
   const sessionId = checkAndGetSessionId()
 
   if (getLocal(getRootKey()) && localData) {
     if (localData[hostname] && !localData[hostname].events[date]) {
-      const storeCheck = checkStoreEventsInterval()
+      const storeCheck = checkEventsInterval()
       if (checkManifest()) {
         syncPreviousDateEvents()
       }
@@ -214,23 +138,16 @@ export const initialize = (isDecryptionError) => {
   setUID()
 }
 
-export const getDomain = () => {
-  if (customDomain) {
-    return customDomain
-  }
-  return window.location.hostname
-}
-
 export const setNewDateObject = (date, eventStore) => {
-  const { navigationPath, stayTimeBeforeNav } = getPreviousDateSessionEventData()
+  const { navigationPath, stayTimeBeforeNav } = getPreviousDateData()
   const referrer = getPreviousDateReferrer()
-  resetPreviousDateSessionNavigation()
+  resetPreviousDate()
   if (checkManifest()) {
     // old date sync events
     syncPreviousDateEvents()
   }
 
-  const storeCheck = checkStoreEventsInterval()
+  const storeCheck = checkEventsInterval()
   if (storeCheck) {
     const eventKeys = Object.keys(eventStore)
     const firstKey = eventKeys[0]
@@ -253,100 +170,6 @@ export const setNewDateObject = (date, eventStore) => {
   setSyncEventsInterval()
   setStore(eventStore)
   updateRoot()
-}
-
-export const getGeoPayload = (geo) => {
-  if (!geo) {
-    return null
-  }
-
-  const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
-  if (!mode || mode === constants.FIRSTPARTY_MODE) {
-    return null
-  }
-
-  let geoGrain = getManifestVariable(constants.EVENT_GEOLOCATION_GRAIN)
-  if (!geoGrain) {
-    geoGrain = constants.DEFAULT_EVENT_GEOLOCATION_GRAIN
-  }
-
-  if (isManualManifest) {
-    return geo
-  }
-
-  const geoObject = {}
-  if (geoGrain >= 1) {
-    geoObject.conc = geo.conc
-  }
-
-  if (geoGrain >= 2) {
-    geoObject.couc = geo.couc
-  }
-
-  if (geoGrain >= 3) {
-    geoObject.reg = geo.reg
-  }
-
-  if (geoGrain >= 4) {
-    geoObject.city = geo.city
-  }
-
-  return geoObject
-}
-
-export const getMetaPayload = (meta) => {
-  if (!meta) {
-    return {}
-  }
-
-  let deviceGrain = getManifestVariable(constants.EVENT_DEVICEINFO_GRAIN)
-  if (deviceGrain == null) {
-    deviceGrain = constants.DEFAULT_EVENT_DEVICEINFO_GRAIN
-  }
-  let dmftStr = ''
-  if (meta.hostOS === 'MacOS') {
-    dmftStr = 'Apple'
-  } else if (meta.hostOS === 'Windows') {
-    dmftStr = 'Microsoft'
-  } else if (meta.hostOS === 'Linux') {
-    dmftStr = 'Ubuntu'
-  } else if (meta.hostOS === 'UNIX') {
-    dmftStr = 'UNIX'
-  }
-  const isIntelBased = meta.ua.includes('Intel') || meta.ua.indexOf('Intel') !== -1
-  let deviceModel = 'Intel Based'
-  const dplatform = meta.dplatform
-  if (dplatform === 'mobile' || dplatform === 'tablet') {
-    if (!isIntelBased) {
-      deviceModel = 'ARM Based'
-    }
-  } else if (dplatform === 'desktop') {
-    if (!isIntelBased) {
-      deviceModel = 'AMD Based'
-    }
-  }
-  const obj = {}
-  if (deviceGrain >= 1 || isManualManifest) {
-    obj.plf = meta.plf
-    obj.appn = meta.domain
-    obj.osv = meta.osv
-    obj.appv = meta.version
-    obj.dmft = dmftStr
-    obj.dm = deviceModel // Should be laptop model but for now this is ok.
-    obj.bnme = meta.browser
-    obj.dplatform = dplatform
-  }
-
-  if (deviceGrain >= 2 || isManualManifest) {
-    obj.osn = meta.hostOS
-  }
-
-  return obj
-}
-
-export const detectQueryString = () => {
-  const currentUrl = window.location.href
-  return (/\?.+=.*/g).test(currentUrl)
 }
 
 export const getObjectTitle = (event, eventName) => {
@@ -433,40 +256,6 @@ export const getSelector = (ele) => {
   }
 
   return 'Unknown'
-}
-
-export const getPreviousDateSessionEventData = () => {
-  const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsByDate(notSyncDate)
-  const sessionId = getNotSynced(sdkDataForDate.sessions)
-  return sdkDataForDate.sessions[sessionId].eventsData
-}
-
-export const resetPreviousDateSessionNavigation = () => {
-  const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsByDate(notSyncDate)
-  const sessionId = getNotSynced(sdkDataForDate.sessions)
-  sdkDataForDate.sessions[sessionId].eventsData.navigationPath = []
-  sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav = []
-}
-
-export const getPayload = (session, events) => {
-  const payload = {}
-  const meta = getMetaPayload(session.meta)
-  if (Object.keys(meta).length !== 0) {
-    payload.meta = meta
-  }
-
-  const geo = getGeoPayload(session.geo)
-  if (geo) {
-    payload.geo = geo
-  }
-
-  if (events && events.length > 0) {
-    payload.events = events
-  }
-
-  return payload
 }
 
 export const getSystemMergeCounter = (events) => {

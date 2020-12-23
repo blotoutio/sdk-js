@@ -3,10 +3,10 @@ import { setRetentionObject, syncData } from '../retention'
 import { getRoot, updateRoot } from '../storage/store'
 import { getUrl } from '../common/endPointUrlUtil'
 import { manifestConst, constants, callInterval } from '../config'
-import { getDomain } from '../utils'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
 import { setSyncEventsInterval } from '../event'
+import { getDomain } from '../common/domainUtil'
 
 let globalRetentionInterval = null
 

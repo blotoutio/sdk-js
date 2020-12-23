@@ -9,8 +9,8 @@ import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 import { pullManifest, updateManifest, checkManifest } from './manifest'
 import { checkUpdateForManifest, setRetentionData } from './retention'
-import { setReferrer } from './common/referrer'
-import { setGeoDetails, checkGeo } from './common/geo'
+import { setReferrer } from './common/referrerUtil'
+import { setGeoDetails, checkGeo } from './common/geoUtil'
 import { collectEvent } from './event'
 
 (function (window) {

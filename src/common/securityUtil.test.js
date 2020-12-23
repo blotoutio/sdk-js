@@ -6,9 +6,9 @@ import {
   SHA1Encode,
   shouldEncrypt
 } from './securityUtil'
-import { getRootIndexKey } from '../utils'
 import AES from 'crypto-js/aes'
 import { setLocal } from '../storage'
+import { getRootIndexKey } from '../storage/key'
 
 beforeEach(() => {
   setLocal(getRootIndexKey(), 'test_index')

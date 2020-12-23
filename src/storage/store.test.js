@@ -3,12 +3,13 @@ import * as storage from '.'
 import * as utils from '../utils'
 import * as manifestStorage from '../manifest/storage'
 import * as manifest from '../manifest'
+import * as key from './key'
 import * as security from '../common/securityUtil'
 
 let spyRoot
 beforeEach(() => {
   spyRoot = jest
-    .spyOn(utils, 'getRootKey')
+    .spyOn(key, 'getRootKey')
     .mockImplementation(() => 'localhost')
 })
 

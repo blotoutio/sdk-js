@@ -1,4 +1,4 @@
-import { debounce, getDate, detectQueryString } from '../../utils'
+import { debounce } from '../../utils'
 import { constants, isSysEvtStore } from '../../config'
 import { getSession } from '../../storage'
 import { getEventsByDate } from '../storage'
@@ -8,6 +8,12 @@ import { updateNavPath, updateNavTime } from '../../session/navigation'
 import { updateEndTime } from '../../session'
 import { shouldCollectSystemEvents } from '../utils'
 import { collectEvent, sendBounceEvent } from '../.'
+import { getStringDate } from '../../common/timeUtil'
+
+const detectQueryString = () => {
+  const currentUrl = window.location.href
+  return (/\?.+=.*/g).test(currentUrl)
+}
 
 export const resize = (window) => {
   const eventName = 'resize'
@@ -53,7 +59,7 @@ export const load = (window) => {
         setEvent(eventName, e)
 
         const sessionId = getSession(constants.SESSION_ID)
-        const sdkDataForDate = getEventsByDate(getDate())
+        const sdkDataForDate = getEventsByDate(getStringDate())
         const sessionIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
           .findIndex((obj) => obj.name === constants.SESSION)
         if (sessionIndex === -1) {
@@ -105,7 +111,7 @@ export const beforeUnload = (window) => {
       return
     }
 
-    const date = getDate()
+    const date = getStringDate()
     const sdkDataForDate = getEventsByDate(date)
     const sessionId = getSession(constants.SESSION_ID)
     const bncIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo

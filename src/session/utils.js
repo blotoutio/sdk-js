@@ -1,11 +1,11 @@
 import { getSession, setSession } from '../storage'
 import { constants } from '../config'
-import { getDomain } from '../utils'
 import { getManifestVariable } from '../manifest'
 import { createEventInfoObj } from '../event/session'
 import { getOS } from '../common/operatingSystemUtil'
 import { eventSync } from '../event/utils'
 import { syncEvents } from '../event'
+import { getDomain } from '../common/domainUtil'
 
 const findOS = () => {
   let curOS = ''

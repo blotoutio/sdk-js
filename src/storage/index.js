@@ -1,5 +1,5 @@
-import { getDomain } from '../utils'
 import { getRoot } from './store'
+import { getDomain } from '../common/domainUtil'
 
 export const setLocal = (name, data) => {
   if (!name) {

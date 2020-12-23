@@ -1,5 +1,5 @@
 import { getLocal, getSession, setLocal, setSession, getStoreByDomain } from '.'
-import * as utils from '../utils'
+import * as domain from '../common/domainUtil'
 import * as store from './store'
 
 describe('setLocal/getLocal', () => {
@@ -39,7 +39,7 @@ describe('getStoreByDomain', () => {
   })
   it('domain generated', () => {
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
+      .spyOn(domain, 'getDomain')
       .mockImplementation(() => 'test.com')
     const result = getStoreByDomain()
     expect(result).toBe(null)

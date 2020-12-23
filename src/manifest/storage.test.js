@@ -1,5 +1,5 @@
 import * as storage from '../storage'
-import * as utils from '../utils'
+import * as domain from '../common/domainUtil'
 import {
   setData,
   getData,
@@ -53,13 +53,13 @@ describe('setData', () => {
   })
 
   it('ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         manifest: {}
       }
     }
@@ -126,13 +126,13 @@ describe('setModifiedDate', () => {
   })
 
   it('ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         manifest: {}
       }
     }
@@ -150,13 +150,13 @@ describe('setCreatedDate', () => {
   })
 
   it('created date is already present', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         manifest: {
           createdDate: 12312312312312
         }
@@ -172,13 +172,13 @@ describe('setCreatedDate', () => {
   })
 
   it('created date is not present', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         manifest: {}
       }
     }

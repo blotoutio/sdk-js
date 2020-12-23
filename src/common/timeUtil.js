@@ -57,3 +57,21 @@ export const getFormattedDate = (date) => {
       year: '2-digit'
     }).format(date)
 }
+
+export const getStringDate = () => {
+  const d = new Date()
+  const date = d.getDate()
+  const month = d.getMonth() + 1
+  const year = d.getFullYear()
+  return `${date}-${month}-${year}`
+}
+
+export const getPreviousDateString = () => {
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(yesterday.getDate() - 1)
+  const date = yesterday.getDate()
+  const month = yesterday.getMonth() + 1
+  const year = yesterday.getFullYear()
+  return `${date}-${month}-${year}`
+}

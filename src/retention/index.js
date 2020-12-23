@@ -6,8 +6,8 @@ import { getLocal, getSession } from '../storage'
 import { getManifestVariable, pullManifest } from '../manifest'
 import { getSDK, setSDK } from './storage'
 import { getCustomUseValue, getTempUseValue, setCustomUseValue, setTempUseValue } from '../storage/sharedPreferences'
-import { getDate, getPayload, shouldApproximateTimestamp } from '../utils'
-import { getNearestTimestamp, millisecondsToHours } from '../common/timeUtil'
+import { shouldApproximateTimestamp } from '../utils'
+import { getNearestTimestamp, getStringDate, millisecondsToHours } from '../common/timeUtil'
 import { postRequest } from '../common/networkUtil'
 import { updateRoot } from '../storage/store'
 import { getEventsByDate } from '../event/storage'
@@ -15,6 +15,7 @@ import { getManifestUrl } from '../common/endPointUrlUtil'
 import { info, error } from '../common/logUtil'
 import { getRetentionSDK } from './utils'
 import { getModifiedDate, setModifiedDate, setData } from '../manifest/storage'
+import { getPayload } from '../common/payloadUtil'
 
 const getRetentionPayloadArr = (arr, name) => {
   const eventName = name === constants.IS_NEW_USER ? constants.DNU : name
@@ -194,7 +195,7 @@ const sendRetentionReq = (url, retentionStore, payload, date) => {
       updateRoot()
     })
     .catch(() => {
-      const date = getDate()
+      const date = getStringDate()
       let tempUseData = getTempUseValue(constants.FAILED_RETENTION)
       if (!tempUseData) {
         tempUseData = {}
@@ -256,7 +257,7 @@ export const syncData = () => {
       return
     }
 
-    const date = getDate()
+    const date = getStringDate()
     const sessionId = getSession(constants.SESSION_ID)
     const sdkDataForDate = getEventsByDate(date)
     const valueFromSPTempUseStore = getCustomUseValue(constants.PREVIOUS_RETENTION_META)

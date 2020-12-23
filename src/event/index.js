@@ -1,8 +1,6 @@
 import {
-  getDate,
   getMid,
   getNotSyncedDate,
-  getPayload,
   getSelector,
   setNewDateObject,
   shouldApproximateTimestamp,
@@ -33,9 +31,10 @@ import { getManifestVariable } from '../manifest'
 import { encryptRSA } from '../common/securityUtil'
 import { addSessionInfoEvent, updatePreviousDayEndTime } from '../session'
 import { getNotSynced } from '../session/utils'
-import { getReferrerUrlOfDateSession } from '../common/referrer'
-import { getNearestTimestamp } from '../common/timeUtil'
+import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
+import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
+import { getPayload } from '../common/payloadUtil'
 
 let collectEventsArr = []
 let globalEventInterval = null
@@ -94,7 +93,7 @@ const getEventData = (eventName, event, type) => {
 }
 
 const sendEvents = (arr) => {
-  const date = getDate()
+  const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const eventsArr = getEventPayloadArr(arr, date, sessionId)
@@ -185,7 +184,7 @@ export const setSyncEventsInterval = () => {
     clearInterval(globalEventInterval)
   }
   globalEventInterval = setInterval(() => {
-    const date = getDate()
+    const date = getStringDate()
     const eventStore = getStore()
     if (eventStore && !eventStore[date]) {
       updatePreviousDayEndTime()
@@ -243,7 +242,7 @@ export const syncEvents = (sessionId, date) => {
   setSyncEventsInterval()
   let session = true
   if (!date) {
-    date = getDate()
+    date = getStringDate()
   }
 
   if (!sessionId) {
@@ -280,7 +279,7 @@ export const syncEvents = (sessionId, date) => {
 }
 
 export const syncPreviousEvents = () => {
-  const date = getDate()
+  const date = getStringDate()
   const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions) {
     return

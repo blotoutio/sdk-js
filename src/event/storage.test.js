@@ -1,6 +1,6 @@
 import { getEventsByDate, getStore, setEventsByDate, setStore } from './storage'
 import * as storage from '../storage'
-import * as utils from '../utils'
+import * as domain from '../common/domainUtil'
 import * as store from '../storage/store'
 
 describe('getStore', () => {
@@ -42,13 +42,13 @@ describe('setStore', () => {
   })
 
   it('ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         test: {}
       }
     }
@@ -77,13 +77,13 @@ describe('getEventsByDate', () => {
   })
 
   it('sdkData missing', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         events: {
           '15-20-2020': {}
         }
@@ -96,13 +96,13 @@ describe('getEventsByDate', () => {
   })
 
   it('all ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         events: {
           '15-20-2020': {
             sdkData: {
@@ -131,13 +131,13 @@ describe('setEventsByDate', () => {
   })
 
   it('ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         events: {
           '15-20-2020': {}
         }

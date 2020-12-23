@@ -3,7 +3,7 @@ import { constants } from '../config'
 import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { maybeSync } from './utils'
 import { createDevEventInfoObj } from '../event/utils'
-import { getDate } from '../utils'
+import { getStringDate } from '../common/timeUtil'
 
 const setPersonalEvent = (eventName, objectName, meta, isPII) => {
   if (!eventName) {
@@ -11,7 +11,7 @@ const setPersonalEvent = (eventName, objectName, meta, isPII) => {
   }
 
   const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
+  const date = getStringDate()
   const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
     return

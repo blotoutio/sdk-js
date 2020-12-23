@@ -4,11 +4,11 @@ import base64 from 'crypto-js/enc-base64'
 import AES from 'crypto-js/aes'
 import PBKDF2 from 'crypto-js/pbkdf2'
 import utf8 from 'crypto-js/enc-utf8'
-import { getRootIndexKey } from '../utils'
 import { error } from './logUtil'
 import { getLocal } from '../storage'
 import { dataEncryptionEnabled } from '../config'
-import { getUUID } from './uuid'
+import { getUUID } from './uuidUtil'
+import { getRootIndexKey } from '../storage/key'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
 
 const getUserIndex = () => {

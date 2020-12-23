@@ -2,24 +2,23 @@ import { constants, systemEventCode } from '../../config'
 import {
   getMid,
   getObjectTitle,
-  getDate,
   getSelector,
   setNewDateObject,
-  getPayload,
   shouldApproximateTimestamp
 } from '../../utils'
 import * as log from '../../common/logUtil'
 import { postRequest } from '../../common/networkUtil'
-import { getNearestTimestamp } from '../../common/timeUtil'
+import { getNearestTimestamp, getStringDate } from '../../common/timeUtil'
 import { getManifestUrl } from '../../common/endPointUrlUtil'
 import { getSession } from '../../storage'
 import { getEventsByDate, getStore } from '../storage'
 import { getTempUseValue } from '../../storage/sharedPreferences'
 import { updatePreviousDayEndTime } from '../../session'
 import { createEventInfoObj } from '../session'
-import { getReferrerUrlOfDateSession } from '../../common/referrer'
+import { getReferrerUrlOfDateSession } from '../../common/referrerUtil'
 import { getEventPayloadArr, shouldCollectSystemEvents } from '../utils'
 import { getAllEventsOfDate } from '../.'
+import { getPayload } from '../../common/payloadUtil'
 
 const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mousePos = {}) => {
   const position = {
@@ -47,7 +46,7 @@ const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mou
 
 const send = (eventsArray) => {
   const sessionId = getSession(constants.SESSION_ID)
-  const sdkDataForDate = getEventsByDate(getDate())
+  const sdkDataForDate = getEventsByDate(getStringDate())
 
   const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
   const url = getManifestUrl()
@@ -111,7 +110,7 @@ export const sendEvents = (array) => {
     return
   }
 
-  const date = getDate()
+  const date = getStringDate()
   const store = getStore()
   if (store && !store[date]) {
     updatePreviousDayEndTime()
@@ -132,7 +131,7 @@ export const sendScrollEvents = (arr, startTime, endTime) => {
     return
   }
 
-  const date = getDate()
+  const date = getStringDate()
   const store = getStore()
   if (store && !store[date]) {
     updatePreviousDayEndTime()

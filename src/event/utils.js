@@ -6,7 +6,7 @@ import { getNormalUseValue, getTempUseValue, setNormalUseValue } from '../storag
 import { updateRoot } from '../storage/store'
 import { getAllEventsOfDate } from './index'
 import { getEventsByDate } from './storage'
-import { getReferrerUrlOfDateSession } from '../common/referrer'
+import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getNearestTimestamp } from '../common/timeUtil'
 
 const chunk = (arr, size) => {

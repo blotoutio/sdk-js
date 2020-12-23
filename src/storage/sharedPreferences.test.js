@@ -1,5 +1,5 @@
 import * as storage from '.'
-import * as utils from '../utils'
+import * as domain from '../common/domainUtil'
 import {
   getCustomUseValue,
   getNormalUseValue,
@@ -55,13 +55,13 @@ describe('setTempUseValue', () => {
   })
 
   it('tempUse not present', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         sharedPreference: {}
       }
     }
@@ -74,13 +74,13 @@ describe('setTempUseValue', () => {
   })
 
   it('ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         sharedPreference: {
           tempUse: {}
         }
@@ -140,13 +140,13 @@ describe('setNormalUseValue', () => {
   })
 
   it('normalUse not present', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         sharedPreference: {}
       }
     }
@@ -159,13 +159,13 @@ describe('setNormalUseValue', () => {
   })
 
   it('ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         sharedPreference: {
           normalUse: {}
         }
@@ -225,13 +225,13 @@ describe('setCustomUseValue', () => {
   })
 
   it('customUse not present', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         sharedPreference: {}
       }
     }
@@ -244,13 +244,13 @@ describe('setCustomUseValue', () => {
   })
 
   it('ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         sharedPreference: {
           customUse: {}
         }

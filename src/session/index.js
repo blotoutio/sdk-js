@@ -1,16 +1,14 @@
 import { getSession } from '../storage'
 import { constants, systemEventCode } from '../config'
 import {
-  getDate,
   getMid,
-  getPreviousDate,
   getSystemMergeCounter,
   shouldApproximateTimestamp
 } from '../utils'
 import { getEventsByDate, setEventsByDate } from '../event/storage'
-import { getNearestTimestamp } from '../common/timeUtil'
+import { getNearestTimestamp, getPreviousDateString, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
-import { getReferrerUrlOfDateSession } from '../common/referrer'
+import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { shouldCollectSystemEvents } from '../event/utils'
 
 const getInfoPayload = (date, sessionId) => {
@@ -66,7 +64,7 @@ export const addSessionInfoEvent = function (events, eventsArrayChunk, date, ses
 
 export const updatePreviousDayEndTime = () => {
   const sessionId = getSession(constants.SESSION_ID)
-  const date = getPreviousDate()
+  const date = getPreviousDateString()
 
   const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
@@ -79,7 +77,7 @@ export const updatePreviousDayEndTime = () => {
 
 export const updateEndTime = () => {
   const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
+  const date = getStringDate()
   const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
     return

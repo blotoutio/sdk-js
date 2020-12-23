@@ -1,6 +1,6 @@
 import * as eventStorage from '../event/storage'
 import * as storage from '../storage'
-import * as utils from '../utils'
+import * as timeUtil from '../common/timeUtil'
 import { updatePreviousDayEndTime, updateEndTime } from './index'
 
 window.fetch = require('node-fetch')
@@ -11,7 +11,7 @@ let spySet
 let spySession
 beforeEach(() => {
   spyDate = jest
-    .spyOn(utils, 'getDate')
+    .spyOn(timeUtil, 'getStringDate')
     .mockImplementation(() => '20-3-2020')
 
   spySession = jest

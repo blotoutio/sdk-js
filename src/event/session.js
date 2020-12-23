@@ -1,8 +1,7 @@
 import { constants, highFreqEvents, isHighFreqEventOff, systemEventCode } from '../config'
 import {
   findObjIndex,
-  getDate,
-  getMid,
+  getMid, getNotSyncedDate,
   getObjectTitle,
   getSelector,
   setNewDateObject
@@ -11,9 +10,10 @@ import { getSession, removeSession, setSession } from '../storage'
 import { getEventsByDate, getStore, setEventsByDate } from './storage'
 import { updatePreviousDayEndTime } from '../session'
 import { error } from '../common/logUtil'
-import { maybeSync } from '../session/utils'
+import { getNotSynced, maybeSync } from '../session/utils'
 import { getRoot } from '../storage/store'
 import { createDevEventInfoObj } from './utils'
+import { getStringDate } from '../common/timeUtil'
 
 const getPositionObject = (event) => {
   let height = -1
@@ -48,7 +48,7 @@ export const setEvent = function (eventName, event, meta = {}) {
 
   const objectName = event && getSelector(event.target)
   const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
+  const date = getStringDate()
   const eventStore = getStore()
 
   if (eventStore && !eventStore[date]) {
@@ -75,7 +75,7 @@ export const setDevEvent = (eventName, objectName, meta) => {
     return
   }
   const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
+  const date = getStringDate()
   const obj = createDevEventInfoObj(eventName, objectName, meta, false, false)
 
   const sdkData = getEventsByDate(date)
@@ -136,7 +136,7 @@ export const setEndDevEvent = (eventName) => {
   const diffTime = Date.now() - eventObject.tstmp
   eventObject.duration = Math.floor(diffTime / 1000)
 
-  const date = getDate()
+  const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
   const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
@@ -175,4 +175,11 @@ export const createEventInfoObj = (eventName, objectName, meta = {}, event = {})
       mousePosY: event.clientY
     }
   }
+}
+
+export const getPreviousDateData = () => {
+  const notSyncDate = getNotSyncedDate()
+  const sdkDataForDate = getEventsByDate(notSyncDate)
+  const sessionId = getNotSynced(sdkDataForDate.sessions)
+  return sdkDataForDate.sessions[sessionId].eventsData
 }

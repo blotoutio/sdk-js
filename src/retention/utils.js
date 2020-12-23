@@ -1,8 +1,10 @@
 import { constants } from '../config'
-import { getMid, getDate, getDomain } from '../utils'
+import { getMid } from '../utils'
 import { getStore } from '../event/storage'
 import { getSDK, setSDK } from './storage'
 import { updateRoot } from '../storage/store'
+import { getStringDate } from '../common/timeUtil'
+import { getDomain } from '../common/domainUtil'
 
 const getRetentionData = () => {
   return {
@@ -64,7 +66,7 @@ export const getUserObject = (code) => {
 }
 
 export const getRetentionSDK = () => {
-  const date = getDate()
+  const date = getStringDate()
   return {
     createdDate: date,
     modifiedDate: date, // TODO(nejc): do we need this? I don't see being used

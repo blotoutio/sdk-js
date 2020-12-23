@@ -1,6 +1,8 @@
 import { getStoreByDomain } from '../storage'
 import { error } from '../common/logUtil'
 import { updateRoot } from '../storage/store'
+import { getManifestVariable } from '../manifest'
+import { constants } from '../config'
 
 export const getStore = () => {
   const store = getStoreByDomain()
@@ -47,4 +49,14 @@ export const setEventsByDate = (dateString, data) => {
   }
   store.sdkData = data
   updateRoot()
+}
+
+export const checkEventsInterval = () => {
+  let storeEventsInterval = getManifestVariable(constants.STORE_EVENTS_INTERVAL)
+  if (storeEventsInterval == null) {
+    storeEventsInterval = constants.DEFAULT_STORE_EVENTS_INTERVAL
+  }
+  const eventStore = getStore()
+  const dateCount = Object.keys(eventStore).length
+  return dateCount === parseInt(storeEventsInterval)
 }

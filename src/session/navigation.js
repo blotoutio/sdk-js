@@ -1,11 +1,13 @@
 import { getSession } from '../storage'
 import { constants } from '../config'
-import { getDate } from '../utils'
 import { getEventsByDate, setEventsByDate } from '../event/storage'
-import { createReferrerEventInfo } from '../common/referrer'
+import { createReferrerEventInfo } from '../common/referrerUtil'
+import { getStringDate } from '../common/timeUtil'
+import { getNotSyncedDate } from '../utils'
+import { getNotSynced } from './utils'
 
 export const updateNavTime = () => {
-  const date = getDate()
+  const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
   const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
@@ -54,7 +56,7 @@ export const updateNavTime = () => {
 
 export const updateNavPath = () => {
   const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
+  const date = getStringDate()
   const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
     return
@@ -80,7 +82,7 @@ export const setReferrerEvent = (eventName, ref, meta) => {
   }
 
   const sessionId = getSession(constants.SESSION_ID)
-  const date = getDate()
+  const date = getStringDate()
   const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
     return
@@ -98,4 +100,12 @@ export const setReferrerEvent = (eventName, ref, meta) => {
 
   eventsData.eventsInfo.push(createReferrerEventInfo(eventName, ref, meta))
   setEventsByDate(date, sdkData)
+}
+
+export const resetPreviousDate = () => {
+  const notSyncDate = getNotSyncedDate()
+  const sdkDataForDate = getEventsByDate(notSyncDate)
+  const sessionId = getNotSynced(sdkDataForDate.sessions)
+  sdkDataForDate.sessions[sessionId].eventsData.navigationPath = []
+  sdkDataForDate.sessions[sessionId].eventsData.stayTimeBeforeNav = []
 }

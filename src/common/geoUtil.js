@@ -1,4 +1,3 @@
-import { getDate } from '../utils'
 import { getSession } from '../storage'
 import { constants, manifestConst } from '../config'
 import { getEventsByDate, setEventsByDate, getStore } from '../event/storage'
@@ -7,9 +6,10 @@ import { getManifestVariable } from '../manifest'
 import { getUrl } from './endPointUrlUtil'
 import { getRequest } from './networkUtil'
 import { error } from './logUtil'
+import { getStringDate } from './timeUtil'
 
 const setGeoData = () => {
-  const date = getDate()
+  const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
   const sdkDataForDate = getEventsByDate(date)
   const sessionGeo = getTempUseValue(constants.GEO)
@@ -48,7 +48,7 @@ export const setGeoDetails = () => {
 
 export const checkGeo = () => {
   const eventStore = getStore()
-  const date = getDate()
+  const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
   const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
 

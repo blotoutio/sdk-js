@@ -1,5 +1,5 @@
 import * as storage from '../storage'
-import * as utils from '../utils'
+import * as domain from '../common/domainUtil'
 import { getSDK, setSDK } from './storage'
 import { updateRoot } from '../storage/store'
 
@@ -34,13 +34,13 @@ describe('setSDK', () => {
   })
 
   it('ok', () => {
-    const domain = 'test.com'
+    const domainName = 'test.com'
     const spyDomain = jest
-      .spyOn(utils, 'getDomain')
-      .mockImplementation(() => domain)
+      .spyOn(domain, 'getDomain')
+      .mockImplementation(() => domainName)
     const obj = {
-      domains: [domain],
-      [domain]: {
+      domains: [domainName],
+      [domainName]: {
         retention: {}
       }
     }

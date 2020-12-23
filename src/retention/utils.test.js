@@ -11,8 +11,11 @@ import {
 import * as commonUtils from '../utils'
 import * as retentionStorage from './storage'
 import * as eventStorage from '../event/storage'
+import * as domain from '../common/domainUtil'
+import * as timeUtil from '../common/timeUtil'
 
 let spyGetUserObject
+
 beforeEach(() => {
   spyGetUserObject = jest
     .spyOn(commonUtils, 'getMid')
@@ -62,7 +65,7 @@ describe('getTimestampFromKey', () => {
   })
 
   it('from function', () => {
-    const result = getTimestampFromKey(commonUtils.getDate())
+    const result = getTimestampFromKey(timeUtil.getStringDate())
     expect(result).toBe(1607904000000)
   })
 })
@@ -95,7 +98,7 @@ describe('getUserObject', () => {
 describe('getRetentionSDK', () => {
   it('ok', () => {
     const spy = jest
-      .spyOn(commonUtils, 'getDomain')
+      .spyOn(domain, 'getDomain')
       .mockImplementation(() => 'blotout.io')
 
     const result = getRetentionSDK()
