@@ -7,14 +7,43 @@ import { syncEvents } from '../event'
 import { getDomain } from '../common/domainUtil'
 const parser = require('ua-parser-js')
 
+const getPLF = (deviceType, OS) => {
+  if (deviceType === 'tablet' && OS === 'iOS') {
+    return 15
+  }
+
+  if (deviceType === 'mobile' && OS === 'iOS') {
+    return 14
+  }
+
+  if (deviceType === 'tablet' && OS === 'Android') {
+    return 12
+  }
+
+  if (deviceType === 'mobile' && OS === 'Android') {
+    return 11
+  }
+  if (OS === 'Mac OS') {
+    return 27
+  }
+  if (OS === 'Windows') {
+    return 26
+  }
+  if (OS === 'Linux') {
+    return 28
+  }
+  if (deviceType === 'tablet' || deviceType === 'mobile') {
+    return constants.MOBILE_PLATFORM_CODE
+  }
+
+  return constants.WEB_PLATFORM_CODE
+}
+
 const createMetaObject = () => {
   const parsedUA = parser(navigator.userAgent)
-  const plf = (parsedUA.device.type === 'mobile' || parsedUA.device.type === 'tablet')
-    ? constants.MOBILE_PLATFORM_CODE
-    : constants.WEB_PLATFORM_CODE
 
   return {
-    plf: plf,
+    plf: getPLF(parsedUA.device.type, parsedUA.os.name),
     domain: getDomain(),
     osv: parsedUA.os.version || '0',
     hostOS: parsedUA.os.name || '',
