@@ -165,7 +165,6 @@ describe('maybeSync', () => {
 describe('createSessionObject', () => {
   beforeEach(() => {
     navigator.__defineGetter__('userAgent', () => '')
-    navigator.__defineGetter__('appVersion', () => '')
   })
 
   it('null', () => {
@@ -187,7 +186,7 @@ describe('createSessionObject', () => {
       meta: {
         browser: 'unknown',
         domain: 'localhost',
-        dplatform: 'desktop',
+        dplatform: '',
         hostOS: '',
         osv: '0',
         plf: 70,
@@ -252,14 +251,14 @@ describe('createSessionObject', () => {
       geo: {},
       lastServerSyncTime: 0,
       meta: {
-        browser: 'Safari',
+        browser: 'Android Browser',
         domain: 'localhost',
-        dplatform: 'mobile',
-        hostOS: '',
-        osv: '0',
+        dplatform: 'tablet',
+        hostOS: 'Android',
+        osv: '2.2',
         plf: 16,
         ua: 'Mozilla/5.0 (Linux; U; Android 2.2; en-us; SCH-I800 Build/FROYO) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1',
-        version: '533'
+        version: '4.0'
       },
       sdkVersion: undefined,
       startTime: 1580775120000,
@@ -292,14 +291,14 @@ describe('createSessionObject', () => {
       geo: {},
       lastServerSyncTime: 0,
       meta: {
-        browser: 'Safari',
+        browser: 'Mobile Safari',
         domain: 'localhost',
         dplatform: 'tablet',
-        hostOS: '',
-        osv: '0',
-        plf: 70,
+        hostOS: 'iOS',
+        osv: '12.2',
+        plf: 16,
         ua: 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
-        version: '604'
+        version: '12.1'
       },
       sdkVersion: undefined,
       startTime: 1580775120000,
@@ -316,7 +315,7 @@ describe('createSessionObject', () => {
   })
 
   it('OS is Mac', () => {
-    navigator.__defineGetter__('appVersion', () => '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36')
+    navigator.__defineGetter__('userAgent', () => '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36')
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -333,14 +332,14 @@ describe('createSessionObject', () => {
       geo: {},
       lastServerSyncTime: 0,
       meta: {
-        browser: 'unknown',
+        browser: 'Chrome',
         domain: 'localhost',
-        dplatform: 'desktop',
-        hostOS: 'MacOS',
-        osv: '0',
+        dplatform: '',
+        hostOS: 'Mac OS',
+        osv: '11.1.0',
         plf: 70,
-        ua: '',
-        version: '0.0.0.0'
+        ua: '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+        version: '87.0.4280.101'
       },
       sdkVersion: undefined,
       startTime: 1580775120000,
@@ -357,7 +356,7 @@ describe('createSessionObject', () => {
   })
 
   it('OS is Windows', () => {
-    navigator.__defineGetter__('appVersion', () => '5.0 (Windows; en-US)')
+    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47')
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -374,14 +373,14 @@ describe('createSessionObject', () => {
       geo: {},
       lastServerSyncTime: 0,
       meta: {
-        browser: 'unknown',
+        browser: 'Edge',
         domain: 'localhost',
-        dplatform: 'desktop',
+        dplatform: '',
         hostOS: 'Windows',
-        osv: '0',
+        osv: '10',
         plf: 70,
-        ua: '',
-        version: '0.0.0.0'
+        ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47',
+        version: '87.0.664.47'
       },
       sdkVersion: undefined,
       startTime: 1580775120000,
