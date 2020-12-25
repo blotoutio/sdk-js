@@ -182,3 +182,24 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
   })
   return result
 }
+
+export const getNavigationTime = (sessionId, date) => {
+  const sdkDataForDate = getEventsByDate(date)
+  if (!sdkDataForDate || !sdkDataForDate.sessions || !sdkDataForDate.sessions[sessionId] || !sdkDataForDate.sessions[sessionId].eventsData) {
+    return
+  }
+  const eventsData = sdkDataForDate.sessions[sessionId].eventsData
+  const sesssionStartTime = sdkDataForDate.sessions[sessionId].startTime
+  const navigationsTime = eventsData.stayTimeBeforeNav
+
+  if (!navigationsTime || navigationsTime.length === 0) {
+    return
+  }
+
+  return navigationsTime.map((val, index) => {
+    if (index === 0) {
+      return Math.ceil((val - sesssionStartTime) / 1000)
+    }
+    return Math.ceil((val - navigationsTime[index - 1]) / 1000)
+  })
+}

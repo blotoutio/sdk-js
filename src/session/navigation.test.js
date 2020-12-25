@@ -95,8 +95,8 @@ describe('updateNavTime', () => {
                 'http://domain.com/'
               ],
               stayTimeBeforeNav: [
-                10,
-                30
+                1580794568000,
+                1580794688000
               ]
             }
           }
@@ -111,9 +111,8 @@ describe('updateNavTime', () => {
               'http://domain.com/'
             ],
             stayTimeBeforeNav: [
-              10,
-              30,
-              1580650956
+              1580794568000,
+              1580775120000
             ]
           }
         }
@@ -146,7 +145,7 @@ describe('updateNavTime', () => {
               'http://domain.com/'
             ],
             stayTimeBeforeNav: [
-              1580650996
+              1580775120000
             ]
           }
         }
@@ -179,7 +178,7 @@ describe('updateNavTime', () => {
               'http://localhost/'
             ],
             stayTimeBeforeNav: [
-              1580650996
+              1580775120000
             ]
           }
         }
@@ -199,8 +198,8 @@ describe('updateNavTime', () => {
                 'http://localhost/'
               ],
               stayTimeBeforeNav: [
-                20,
-                40
+                1580794688000,
+                1580794808000
               ]
             }
           }
@@ -215,8 +214,8 @@ describe('updateNavTime', () => {
               'http://localhost/'
             ],
             stayTimeBeforeNav: [
-              20,
-              1580650936
+              1580794688000,
+              1580775120000
             ]
           }
         }

@@ -12,7 +12,8 @@ import {
   eventsChunkArr,
   eventSync,
   getEventPayloadArr,
-  shouldCollectSystemEvents
+  shouldCollectSystemEvents,
+  getNavigationTime
 } from './utils'
 import { getSession } from '../storage'
 import {
@@ -64,7 +65,8 @@ const sendNavigation = (date, sessionId) => {
   }
   const eventsData = sdkData.sessions[sessionId].eventsData
   const navigations = eventsData.navigationPath && eventsData.navigationPath.slice()
-  const navigationsTime = eventsData.stayTimeBeforeNav && eventsData.stayTimeBeforeNav.slice()
+  const navigationsTime = getNavigationTime(sessionId, date)
+
   if (!navigations || !navigationsTime || navigations.length === 0 || navigations.length !== navigationsTime.length) {
     return
   }

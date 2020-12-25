@@ -15,8 +15,6 @@ export const updateNavTime = () => {
   }
 
   const eventsData = sdkData.sessions[sessionId].eventsData
-  const startTime = parseInt(getSession(constants.SESSION_START_TIME))
-  const timeArray = eventsData.stayTimeBeforeNav || []
   const navPaths = eventsData.navigationPath
   const currentTime = Date.now()
 
@@ -24,33 +22,11 @@ export const updateNavTime = () => {
     return
   }
 
-  if (window.location.href !== navPaths[navPaths.length - 1]) {
-    let diffTime
-    if (timeArray.length > 0) {
-      const totalLogTime = timeArray.reduce((total, num) => total + num)
-      const totalTimeInMilli = totalLogTime * 1000
-      const totalTime = startTime + totalTimeInMilli
-      diffTime = currentTime - totalTime
-    } else {
-      diffTime = currentTime - startTime
-    }
-
-    const diffTimeInSecs = Math.floor(diffTime / 1000)
-    eventsData.stayTimeBeforeNav.push(diffTimeInSecs)
-    setEventsByDate(date, sdkData)
-    return
+  if (navPaths.length === 1 || window.location.href === navPaths[navPaths.length - 1]) {
+    eventsData.stayTimeBeforeNav.pop()
   }
 
-  let totalTimeInMilli = 0
-  if (timeArray.length > 1) {
-    totalTimeInMilli = timeArray.reduce((total, num) => total + num) * 1000
-  }
-  const totalTime = startTime + totalTimeInMilli
-  const diffTime = currentTime - totalTime
-  const diffTimeInSecs = Math.floor(diffTime / 1000)
-  eventsData.stayTimeBeforeNav.pop()
-  eventsData.stayTimeBeforeNav.push(diffTimeInSecs)
-
+  eventsData.stayTimeBeforeNav.push(currentTime)
   setEventsByDate(date, sdkData)
 }
 
