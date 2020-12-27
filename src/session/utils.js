@@ -131,7 +131,7 @@ export const createSessionObject = (eventName, objectName) => {
 
   const eventsInfo = createEventInfoObj(eventName, objectName)
   if (eventsInfo) {
-    data.eventsData.eventsInfo = eventsInfo
+    data.eventsData.eventsInfo = [eventsInfo]
   }
 
   return data
