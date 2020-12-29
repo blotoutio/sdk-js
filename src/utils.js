@@ -6,7 +6,7 @@ import {
 } from './config'
 import { setRetentionData } from './retention'
 import { getLocal, getSession } from './storage'
-import { checkEventsInterval, getEventsByDate, getStore, setEventsByDate, setStore } from './event/storage'
+import { checkEventsInterval, getStore, setStore } from './event/storage'
 import { getRoot, updateRoot } from './storage/store'
 import { getTempUseValue } from './storage/sharedPreferences'
 import { checkAndGetSessionId, createSessionObject } from './session/utils'
@@ -21,18 +21,22 @@ import { getPreviousDateReferrer } from './common/referrerUtil'
 import { createDomain, getDomain, setCustomDomain } from './common/domainUtil'
 import { getStringDate } from './common/timeUtil'
 import { getRootKey, setRootKey } from './storage/key'
-import { getPreviousDateData } from './event/session'
+import { getPreviousDateData, getSessionForDate, setSessionForDate } from './event/session'
 import { resetPreviousDate } from './session/navigation'
 
 const setUIDInInitEvent = () => {
   const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
-  const sdkDataForDate = getEventsByDate(date)
-  const eventArr = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
+    return
+  }
+
+  const eventArr = session.eventsData.eventsInfo
   const index = findObjIndex(eventArr, 'init')
   setTimeout(() => {
-    sdkDataForDate.sessions[sessionId].eventsData.eventsInfo[index].mid = getMid()
-    setEventsByDate(date, sdkDataForDate)
+    session.eventsData.eventsInfo[index].mid = getMid()
+    setSessionForDate(date, session)
   })
 }
 
@@ -86,6 +90,8 @@ export const debounce = (func, delay) => {
   }
 }
 
+// TODO(nejc): we should be using helpers to get data and not use
+//  localData direct access
 export const initialize = (isDecryptionError) => {
   const localData = isDecryptionError ? null : getRoot()
   const hostname = getDomain()

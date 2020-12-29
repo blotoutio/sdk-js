@@ -1,7 +1,8 @@
 import { constants, highFreqEvents, isHighFreqEventOff, systemEventCode } from '../config'
 import {
   findObjIndex,
-  getMid, getNotSyncedDate,
+  getMid,
+  getNotSyncedDate,
   getObjectTitle,
   getSelector,
   setNewDateObject
@@ -57,39 +58,41 @@ export const setEvent = function (eventName, event, meta = {}) {
     return
   }
 
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
 
-  const eventData = sdkData.sessions[sessionId].eventsData
+  const eventData = session.eventsData
   if (!eventData.eventsInfo) {
     eventData.eventsInfo = []
   }
   eventData.eventsInfo.push(createEventInfoObj(eventName, objectName, meta, event))
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
 }
 
 export const setDevEvent = (eventName, objectName, meta) => {
   if (!eventName) {
     return
   }
+
   const sessionId = getSession(constants.SESSION_ID)
   const date = getStringDate()
-  const obj = createDevEventInfoObj(eventName, objectName, meta, false, false)
 
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
-  const eventsData = sdkData.sessions[sessionId].eventsData
+  const eventsData = session.eventsData
   if (!eventsData.devCodifiedEventsInfo) {
     eventsData.devCodifiedEventsInfo = []
   }
+
+  const obj = createDevEventInfoObj(eventName, objectName, meta, false, false)
   eventsData.devCodifiedEventsInfo.push(obj)
 
   maybeSync(eventsData)
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
 }
 
 export const setStartDevEvent = (eventName, objectName, meta) => {
@@ -138,19 +141,19 @@ export const setEndDevEvent = (eventName) => {
 
   const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
 
-  const eventsData = sdkData.sessions[sessionId].eventsData
+  const eventsData = session.eventsData
   if (!eventsData.devCodifiedEventsInfo) {
     eventsData.devCodifiedEventsInfo = []
   }
   eventsData.devCodifiedEventsInfo.push(eventObject)
 
   maybeSync(eventsData)
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
   eventArray.splice(index, 1)
   eventArray = JSON.stringify(eventArray)
   setSession('startEvents', eventArray)
@@ -161,9 +164,8 @@ export const createEventInfoObj = (eventName, objectName, meta = {}, event = {})
     return null
   }
 
-  return {
+  const data = {
     sentToServer: false,
-    objectName,
     name: eventName,
     urlPath: window.location.href,
     tstmp: Date.now(),
@@ -172,18 +174,57 @@ export const createEventInfoObj = (eventName, objectName, meta = {}, event = {})
     evc: constants.EVENT_CATEGORY,
     evcs: systemEventCode[eventName],
     position: getPositionObject(event),
-    metaInfo: meta,
     objectTitle: getObjectTitle(event, eventName),
     extraInfo: {
-      mousePosX: event.clientX,
-      mousePosY: event.clientY
+      mousePosX: event.clientX || -1,
+      mousePosY: event.clientY || -1
     }
   }
+
+  if (meta) {
+    data.metaInfo = meta
+  }
+
+  if (objectName) {
+    data.objectName = objectName
+  }
+
+  return data
 }
 
 export const getPreviousDateData = () => {
-  const notSyncDate = getNotSyncedDate()
-  const sdkDataForDate = getEventsByDate(notSyncDate)
-  const sessionId = getNotSynced(sdkDataForDate.sessions)
-  return sdkDataForDate.sessions[sessionId].eventsData
+  const date = getNotSyncedDate()
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions) {
+    return null
+  }
+
+  const sessionId = getNotSynced(sdkData.sessions)
+  if (!sessionId) {
+    return null
+  }
+  return sdkData.sessions[sessionId].eventsData
+}
+
+export const getSessionForDate = (date, sessionId) => {
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+    return null
+  }
+
+  return sdkData.sessions[sessionId]
+}
+
+export const setSessionForDate = (date, sessionId, data) => {
+  if (!sessionId) {
+    return
+  }
+
+  const sdkData = getEventsByDate(date)
+  if (!sdkData || !sdkData.sessions) {
+    return
+  }
+
+  sdkData.sessions[sessionId] = data
+  setEventsByDate(date, sdkData)
 }

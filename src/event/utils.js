@@ -5,9 +5,9 @@ import { stringToIntSum } from '../common/securityUtil'
 import { getNormalUseValue, getTempUseValue, setNormalUseValue } from '../storage/sharedPreferences'
 import { updateRoot } from '../storage/store'
 import { getAllEventsOfDate } from './index'
-import { getEventsByDate } from './storage'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getNearestTimestamp } from '../common/timeUtil'
+import { getSessionForDate } from './session'
 
 const chunk = (arr, size) => {
   return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -120,12 +120,11 @@ export const codeForCustomCodifiedEvent = (eventName) => {
 }
 
 export const getEventPayloadArr = (arr, date, sessionId) => {
-  const dateEvents = getAllEventsOfDate(date)
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
     return null
   }
-  const session = sdkData.sessions[sessionId]
+
   const viewportLength = (session.viewPort || []).length
   const viewPortObj = viewportLength > 0 ? session.viewPort[viewportLength - 1] : {}
 
@@ -163,6 +162,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       propObj.codifiedInfo = val.metaInfo
     }
 
+    const dateEvents = getAllEventsOfDate(date)
     const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(val.tstmp) : val.tstmp
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     const obj = {
@@ -184,25 +184,25 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
 }
 
 export const getNavigationTime = (sessionId, date) => {
-  const sdkDataForDate = getEventsByDate(date)
-  if (!sdkDataForDate || !sdkDataForDate.sessions || !sdkDataForDate.sessions[sessionId] || !sdkDataForDate.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
-  const eventsData = sdkDataForDate.sessions[sessionId].eventsData
-  const sesssionStartTime = sdkDataForDate.sessions[sessionId].startTime
+  const eventsData = session.eventsData
+  const sessionStartTime = session.startTime
   const navigationsTime = eventsData.stayTimeBeforeNav
 
   if (!navigationsTime || navigationsTime.length === 0) {
     return
   }
 
-  if ((navigationsTime[0] - sesssionStartTime) < 0) {
+  if ((navigationsTime[0] - sessionStartTime) < 0) {
     return navigationsTime
   }
 
   return navigationsTime.map((val, index) => {
     if (index === 0) {
-      return Math.ceil((val - sesssionStartTime) / 1000)
+      return Math.ceil((val - sessionStartTime) / 1000)
     }
     return Math.ceil((val - navigationsTime[index - 1]) / 1000)
   })

@@ -11,10 +11,10 @@ import { postRequest } from '../../common/networkUtil'
 import { getNearestTimestamp, getStringDate } from '../../common/timeUtil'
 import { getManifestUrl } from '../../common/endPointUrlUtil'
 import { getSession } from '../../storage'
-import { getEventsByDate, getStore } from '../storage'
+import { getStore } from '../storage'
 import { getTempUseValue } from '../../storage/sharedPreferences'
 import { updatePreviousDayEndTime } from '../../session'
-import { createEventInfoObj } from '../session'
+import { createEventInfoObj, getSessionForDate } from '../session'
 import { getReferrerUrlOfDateSession } from '../../common/referrerUtil'
 import { getEventPayloadArr, shouldCollectSystemEvents } from '../utils'
 import { getAllEventsOfDate } from '../.'
@@ -46,9 +46,12 @@ const createScrollEventInfo = (eventName, objectName, meta = {}, event = {}, mou
 
 const send = (eventsArray) => {
   const sessionId = getSession(constants.SESSION_ID)
-  const sdkDataForDate = getEventsByDate(getStringDate())
+  const session = getSessionForDate(getStringDate(), sessionId)
+  if (!session) {
+    return
+  }
 
-  const payload = getPayload(sdkDataForDate.sessions[sessionId], eventsArray)
+  const payload = getPayload(session, eventsArray)
   const url = getManifestUrl()
 
   postRequest(url, JSON.stringify(payload))
@@ -139,9 +142,13 @@ export const sendScrollEvents = (arr, startTime, endTime) => {
   }
 
   const sessionId = getSession(constants.SESSION_ID)
-  const sdkDataForDate = getEventsByDate(date)
-  const viewportLen = sdkDataForDate.sessions[sessionId].viewPort.length
-  const viewPortObj = sdkDataForDate.sessions[sessionId].viewPort[viewportLen - 1]
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
+    return
+  }
+
+  const viewportLen = session.viewPort.length
+  const viewPortObj = session.viewPort[viewportLen - 1]
   const eventsArray = getScrollPayloadArray(
     arr,
     date,

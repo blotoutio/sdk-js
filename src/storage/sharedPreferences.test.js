@@ -13,7 +13,7 @@ import { updateRoot } from './store'
 describe('getTempUseValue', () => {
   it('null', () => {
     const result = getTempUseValue()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('key is not present', () => {
@@ -69,7 +69,7 @@ describe('setTempUseValue', () => {
 
     setTempUseValue('data', true)
     const result = getTempUseValue('data')
-    expect(result).toBe(null)
+    expect(result).toBeNull()
     spyDomain.mockRestore()
   })
 
@@ -98,7 +98,7 @@ describe('setTempUseValue', () => {
 describe('getNormalUseValue', () => {
   it('null', () => {
     const result = getNormalUseValue()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('key is not present', () => {
@@ -154,7 +154,7 @@ describe('setNormalUseValue', () => {
 
     setNormalUseValue('data', true)
     const result = getNormalUseValue('data')
-    expect(result).toBe(null)
+    expect(result).toBeNull()
     spyDomain.mockRestore()
   })
 
@@ -183,7 +183,7 @@ describe('setNormalUseValue', () => {
 describe('getCustomUseValue', () => {
   it('null', () => {
     const result = getCustomUseValue()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('key is not present', () => {
@@ -239,7 +239,7 @@ describe('setCustomUseValue', () => {
 
     setCustomUseValue('data', true)
     const result = getCustomUseValue('data')
-    expect(result).toBe(null)
+    expect(result).toBeNull()
     spyDomain.mockRestore()
   })
 

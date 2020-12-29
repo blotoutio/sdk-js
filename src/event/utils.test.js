@@ -1,6 +1,6 @@
 import { codeForCustomCodifiedEvent, getNavigationTime } from './utils'
 import * as storage from '../storage/sharedPreferences'
-import * as eventStorage from './storage'
+import * as eventSession from './session'
 
 describe('codeForCustomCodifiedEvent', () => {
   it('null', () => {
@@ -50,21 +50,10 @@ describe('getNavigationTime', () => {
     expect(result).toBeUndefined()
   })
 
-  it('no sessions', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => null)
-    const result = getNavigationTime(124123423, '20-3-2020')
-    expect(result).toBeUndefined()
-    spyEvents.mockRestore()
-  })
-
   it('no session', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {}
-      }))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => null)
     const result = getNavigationTime(124123423, '20-3-2020')
     expect(result).toBeUndefined()
     spyEvents.mockRestore()
@@ -72,12 +61,8 @@ describe('getNavigationTime', () => {
 
   it('no eventsData', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {}
-        }
-      }))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => ({}))
     const result = getNavigationTime(124123423, '20-3-2020')
     expect(result).toBeUndefined()
     spyEvents.mockRestore()
@@ -85,18 +70,14 @@ describe('getNavigationTime', () => {
 
   it('no navigation time', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            startTime: 1608912608000,
-            eventsData: {
-              navigationPath: [],
-              stayTimeBeforeNav: [],
-              devCodifiedEventsInfo: [],
-              sentToServer: false
-            }
-          }
+        startTime: 1608912608000,
+        eventsData: {
+          navigationPath: [],
+          stayTimeBeforeNav: [],
+          devCodifiedEventsInfo: [],
+          sentToServer: false
         }
       }))
     const result = getNavigationTime(124123423, '20-3-2020')
@@ -106,56 +87,46 @@ describe('getNavigationTime', () => {
 
   it('get navigation time', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            startTime: 1608912608000,
-            eventsData: {
-              navigationPath: [
-                'http://localhost:8080/new_page.html',
-                'http://localhost:8080/index.html'
-              ],
-              stayTimeBeforeNav: [
-                1608913208000,
-                1608913328000
-              ],
-              devCodifiedEventsInfo: [],
-              sentToServer: false
-            }
-          }
+        startTime: 1608912608000,
+        eventsData: {
+          navigationPath: [
+            'http://localhost:8080/new_page.html',
+            'http://localhost:8080/index.html'
+          ],
+          stayTimeBeforeNav: [
+            1608913208000,
+            1608913328000
+          ],
+          devCodifiedEventsInfo: [],
+          sentToServer: false
         }
       }))
     const result = getNavigationTime(124123423, '20-3-2020')
-    expect(result.length).toBe(2)
     expect(result).toStrictEqual([600, 120])
     spyEvents.mockRestore()
   })
 
   it('old state', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            startTime: 1608912608000,
-            eventsData: {
-              navigationPath: [
-                'http://localhost:8080/new_page.html',
-                'http://localhost:8080/index.html'
-              ],
-              stayTimeBeforeNav: [
-                20000,
-                300000
-              ],
-              devCodifiedEventsInfo: [],
-              sentToServer: false
-            }
-          }
+        startTime: 1608912608000,
+        eventsData: {
+          navigationPath: [
+            'http://localhost:8080/new_page.html',
+            'http://localhost:8080/index.html'
+          ],
+          stayTimeBeforeNav: [
+            20000,
+            300000
+          ],
+          devCodifiedEventsInfo: [],
+          sentToServer: false
         }
       }))
     const result = getNavigationTime(124123423, '20-3-2020')
-    expect(result.length).toBe(2)
     expect(result).toStrictEqual([20000, 300000])
     spyEvents.mockRestore()
   })

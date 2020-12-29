@@ -1,4 +1,4 @@
-import * as eventStorage from '../event/storage'
+import * as eventSession from '../event/session'
 import * as eventUtils from '../event/utils'
 import * as storage from '../storage'
 import * as utils from '../utils'
@@ -21,7 +21,7 @@ beforeEach(() => {
     .mockImplementation(() => 124123423)
 
   spySet = jest
-    .spyOn(eventStorage, 'setEventsByDate')
+    .spyOn(eventSession, 'setSessionForDate')
     .mockImplementation()
 
   jest.useFakeTimers('modern')
@@ -41,21 +41,10 @@ describe('updatePreviousDayEndTime', () => {
     expect(spySet).toBeCalledTimes(0)
   })
 
-  it('no sessions', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => null)
-    updatePreviousDayEndTime()
-    expect(spySet).toBeCalledTimes(0)
-    spyEvents.mockRestore()
-  })
-
   it('no session', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {}
-      }))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => null)
     updatePreviousDayEndTime()
     expect(spySet).toBeCalledTimes(0)
     spyEvents.mockRestore()
@@ -63,19 +52,11 @@ describe('updatePreviousDayEndTime', () => {
 
   it('set endTime', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {}
-        }
-      }))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => ({}))
     updatePreviousDayEndTime()
-    expect(spySet).toBeCalledWith('3-2-2020', {
-      sessions: {
-        124123423: {
-          endTime: 1580775120000
-        }
-      }
+    expect(spySet).toBeCalledWith('3-2-2020', 124123423, {
+      endTime: 1580775120000
     })
     spyEvents.mockRestore()
   })
@@ -89,19 +70,8 @@ describe('updateEndTime', () => {
 
   it('no sessions', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => null)
-    updateEndTime()
-    expect(spySet).toBeCalledTimes(0)
-    spyEvents.mockRestore()
-  })
-
-  it('no session', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {}
-      }))
     updateEndTime()
     expect(spySet).toBeCalledTimes(0)
     spyEvents.mockRestore()
@@ -109,19 +79,11 @@ describe('updateEndTime', () => {
 
   it('set endTime', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {}
-        }
-      }))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => ({}))
     updateEndTime()
-    expect(spySet).toBeCalledWith('20-3-2020', {
-      sessions: {
-        124123423: {
-          endTime: 1580775120000
-        }
-      }
+    expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
+      endTime: 1580775120000
     })
     spyEvents.mockRestore()
   })
@@ -133,45 +95,30 @@ describe('addSessionInfoEvent', () => {
       .spyOn(eventUtils, 'shouldCollectSystemEvents')
       .mockImplementation(() => false)
     const result = addSessionInfoEvent()
-    expect(result).toBe(undefined)
+    expect(result).toBeUndefined()
     spySystem.mockRestore()
   })
 
   it('null', () => {
     const result = addSessionInfoEvent()
-    expect(result).toBe(undefined)
+    expect(result).toBeUndefined()
   })
 
   it('sessions is missing', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({}))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => null)
     const result = addSessionInfoEvent()
-    expect(result).toBe(undefined)
-    spyEvents.mockRestore()
-  })
-
-  it('session is missing', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {}
-      }))
-    const result = addSessionInfoEvent()
-    expect(result).toBe(undefined)
+    expect(result).toBeUndefined()
     spyEvents.mockRestore()
   })
 
   it('viewport is missing and end time is 0', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            startTime: 2312313123,
-            endTime: 0
-          }
-        }
+        startTime: 2312313123,
+        endTime: 0
       }))
     const result = addSessionInfoEvent([], [], '20-3-2020', 124123423)
     expect(result).toStrictEqual([
@@ -208,26 +155,22 @@ describe('addSessionInfoEvent', () => {
       .spyOn(utils, 'shouldApproximateTimestamp')
       .mockImplementation(() => true)
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            startTime: 2312313123,
-            endTime: 2313316123,
-            viewPort: [
-              {
-                timeStamp: 314412412241242,
-                width: 10,
-                height: 20
-              },
-              {
-                timeStamp: 314412412341242,
-                width: 10,
-                height: 20
-              }
-            ]
+        startTime: 2312313123,
+        endTime: 2313316123,
+        viewPort: [
+          {
+            timeStamp: 314412412241242,
+            width: 10,
+            height: 20
+          },
+          {
+            timeStamp: 314412412341242,
+            width: 10,
+            height: 20
           }
-        }
+        ]
       }))
     const result = addSessionInfoEvent(
       [],
@@ -275,15 +218,11 @@ describe('addSessionInfoEvent', () => {
 
   it('session event goes in the same chunk', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            startTime: 2312313123,
-            endTime: 2313316123,
-            viewPort: []
-          }
-        }
+        startTime: 2312313123,
+        endTime: 2313316123,
+        viewPort: []
       }))
     const result = addSessionInfoEvent(
       [],

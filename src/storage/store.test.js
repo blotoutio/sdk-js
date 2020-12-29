@@ -24,7 +24,7 @@ describe('getRoot', () => {
 
   it('null', () => {
     const result = getRoot()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('memory value set', () => {
@@ -42,7 +42,7 @@ describe('getRoot', () => {
       .spyOn(storage, 'getLocal')
       .mockImplementation(() => '{"domains":[}')
     const result = getRoot()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
     spyGet.mockRestore()
   })
 
@@ -87,7 +87,7 @@ describe('getRoot', () => {
       .spyOn(utils, 'initialize')
       .mockImplementation(() => {})
     const result = getRoot()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
     spyGet.mockRestore()
     spyInit.mockRestore()
   })

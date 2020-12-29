@@ -6,7 +6,7 @@ import * as store from '../storage/store'
 describe('getStore', () => {
   it('null', () => {
     const result = getStore()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('store present, but no events', () => {
@@ -16,7 +16,7 @@ describe('getStore', () => {
         test: {}
       }))
     const result = getStore()
-    expect(result).toBe(undefined)
+    expect(result).toBeUndefined()
     spyDomain.mockRestore()
   })
 
@@ -68,12 +68,12 @@ describe('setStore', () => {
 describe('getEventsByDate', () => {
   it('null', () => {
     const result = getEventsByDate()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('store null', () => {
     const result = getEventsByDate('15-20-2020')
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('sdkData missing', () => {
@@ -91,7 +91,7 @@ describe('getEventsByDate', () => {
     }
     store.updateRoot(obj)
     const result = getEventsByDate('15-20-2020')
-    expect(result).toBe(undefined)
+    expect(result).toBeUndefined()
     spyDomain.mockRestore()
   })
 

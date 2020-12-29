@@ -6,7 +6,7 @@ describe('setLocal/getLocal', () => {
   it('null', () => {
     setLocal('', JSON.stringify({ data: 'test' }))
     const result = getLocal('')
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('data', () => {
@@ -21,7 +21,7 @@ describe('setSession/getSession', () => {
   it('null', () => {
     setSession('', JSON.stringify({ data: 'test' }))
     const result = getSession('')
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('data', () => {
@@ -35,14 +35,14 @@ describe('setSession/getSession', () => {
 describe('getStoreByDomain', () => {
   it('null', () => {
     const result = getStoreByDomain()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
   it('domain generated', () => {
     const spyDomain = jest
       .spyOn(domain, 'getDomain')
       .mockImplementation(() => 'test.com')
     const result = getStoreByDomain()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
     spyDomain.mockRestore()
   })
 
@@ -53,7 +53,7 @@ describe('getStoreByDomain', () => {
         'test.com': {}
       }))
     const result = getStoreByDomain('ok.com')
-    expect(result).toBe(undefined)
+    expect(result).toBeUndefined()
     spyRoot.mockRestore()
   })
 

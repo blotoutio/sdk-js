@@ -1,8 +1,7 @@
 import { debounce } from '../../utils'
 import { constants, isSysEvtStore } from '../../config'
 import { getSession } from '../../storage'
-import { getEventsByDate } from '../storage'
-import { setEvent } from '../session'
+import { getSessionForDate, setEvent } from '../session'
 import { setDNTEvent, setViewPort } from '../../session/system'
 import { updateNavPath, updateNavTime } from '../../session/navigation'
 import { updateEndTime } from '../../session'
@@ -59,14 +58,17 @@ export const load = (window) => {
         setEvent(eventName, e)
 
         const sessionId = getSession(constants.SESSION_ID)
-        const sdkDataForDate = getEventsByDate(getStringDate())
-        const sessionIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
+        const session = getSessionForDate(getStringDate(), sessionId)
+        if (!session) {
+          return
+        }
+        const sessionIndex = session.eventsData.eventsInfo
           .findIndex((obj) => obj.name === constants.SESSION)
         if (sessionIndex === -1) {
           setEvent(constants.SESSION, e)
         }
 
-        const mailerIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
+        const mailerIndex = session.eventsData.eventsInfo
           .findIndex((obj) => obj.name === constants.MAILER)
         if (detectQueryString() && mailerIndex === -1) {
           setEvent(constants.MAILER, e)
@@ -112,14 +114,17 @@ export const beforeUnload = (window) => {
     }
 
     const date = getStringDate()
-    const sdkDataForDate = getEventsByDate(date)
     const sessionId = getSession(constants.SESSION_ID)
-    const bncIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
+    const session = getSessionForDate(date, sessionId)
+    if (!session) {
+      return
+    }
+    const bncIndex = session.eventsData.eventsInfo
       .findIndex((obj) => obj.name === constants.BOUNCE)
-    const startTime = sdkDataForDate.sessions[sessionId].startTime
+    const startTime = session.startTime
     const diffTime = Date.now() - startTime
     const diffTimeInSecs = Math.floor(diffTime / 1000)
-    const clkIndex = sdkDataForDate.sessions[sessionId].eventsData.eventsInfo
+    const clkIndex = session.eventsData.eventsInfo
       .findIndex((obj) => obj.name === 'click')
     if (diffTimeInSecs <= 5 && clkIndex === -1) {
       if (bncIndex === -1) {

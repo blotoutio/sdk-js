@@ -6,7 +6,7 @@ import { updateRoot } from '../storage/store'
 describe('getSDK', () => {
   it('null', () => {
     const result = getSDK()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('ok', () => {

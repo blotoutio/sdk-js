@@ -11,7 +11,7 @@ import { updateRoot } from '../storage/store'
 describe('getStore', () => {
   it('null', () => {
     const result = getStore()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('store present, but no events', () => {
@@ -21,7 +21,7 @@ describe('getStore', () => {
         test: {}
       }))
     const result = getStore()
-    expect(result).toBe(undefined)
+    expect(result).toBeUndefined()
     spyDomain.mockRestore()
   })
 
@@ -79,7 +79,7 @@ describe('setData', () => {
 describe('getData', () => {
   it('null', () => {
     const result = getData()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('ok', () => {
@@ -103,7 +103,7 @@ describe('getData', () => {
 describe('getModifiedDate', () => {
   it('null', () => {
     const result = getModifiedDate()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('ok', () => {

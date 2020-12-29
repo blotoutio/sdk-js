@@ -1,9 +1,8 @@
 import { getSelector } from '../utils'
 import { getSession } from '../storage'
 import { constants } from '../config'
-import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { createViewPortObject } from './utils'
-import { createEventInfoObj } from '../event/session'
+import { createEventInfoObj, getSessionForDate, setSessionForDate } from '../event/session'
 import { getStringDate } from '../common/timeUtil'
 
 export const setDNTEvent = function (event) {
@@ -14,11 +13,11 @@ export const setDNTEvent = function (event) {
   const objectName = getSelector(event.target)
   const sessionId = getSession(constants.SESSION_ID)
   const date = getStringDate()
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
-  const eventsInfo = sdkData.sessions[sessionId].eventsData.eventsInfo
+  const eventsInfo = session.eventsData.eventsInfo
   if (!eventsInfo) {
     return
   }
@@ -28,21 +27,21 @@ export const setDNTEvent = function (event) {
   }
 
   eventsInfo.push(createEventInfoObj(eventName, objectName, {}, event))
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
 }
 
 export const setViewPort = () => {
   const sessionId = getSession(constants.SESSION_ID)
   const date = getStringDate()
-  const obj = createViewPortObject()
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
     return
   }
-  const session = sdkData.sessions[sessionId]
+
   if (!session.viewPort) {
     session.viewPort = []
   }
+  const obj = createViewPortObject()
   session.viewPort.push(obj)
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
 }

@@ -10,12 +10,12 @@ import { shouldApproximateTimestamp } from '../utils'
 import { getNearestTimestamp, getStringDate, millisecondsToHours } from '../common/timeUtil'
 import { postRequest } from '../common/networkUtil'
 import { updateRoot } from '../storage/store'
-import { getEventsByDate } from '../event/storage'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { info, error } from '../common/logUtil'
 import { getRetentionSDK } from './utils'
 import { getModifiedDate, setModifiedDate, setData } from '../manifest/storage'
 import { getPayload } from '../common/payloadUtil'
+import { getSessionForDate } from '../event/session'
 
 const getRetentionPayloadArr = (arr, name) => {
   const eventName = name === constants.IS_NEW_USER ? constants.DNU : name
@@ -259,9 +259,12 @@ export const syncData = () => {
 
     const date = getStringDate()
     const sessionId = getSession(constants.SESSION_ID)
-    const sdkDataForDate = getEventsByDate(date)
+    const session = getSessionForDate(date, sessionId)
+    if (!session) {
+      return
+    }
     const valueFromSPTempUseStore = getCustomUseValue(constants.PREVIOUS_RETENTION_META)
-    const payload = getPayload(sdkDataForDate.sessions[sessionId], arr)
+    const payload = getPayload(session, arr)
 
     if (valueFromSPTempUseStore) {
       payload.pmeta = getPmeta(payload.meta, valueFromSPTempUseStore)

@@ -6,7 +6,11 @@ import {
   shouldApproximateTimestamp,
   shouldSyncStoredData
 } from '../utils'
-import { createEventInfoObj } from './session'
+import {
+  createEventInfoObj,
+  getSessionForDate,
+  setSessionForDate
+} from './session'
 import {
   createDevEventInfoObj,
   eventsChunkArr,
@@ -24,7 +28,7 @@ import {
   isHighFreqEventOff,
   systemEventCode
 } from '../config'
-import { getEventsByDate, getStore, setEventsByDate } from './storage'
+import { getEventsByDate, getStore } from './storage'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
@@ -59,11 +63,12 @@ const getNavigationPayloadArr = (navigations, navigationsTime) => {
 }
 
 const sendNavigation = (date, sessionId) => {
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
-  const eventsData = sdkData.sessions[sessionId].eventsData
+
+  const eventsData = session.eventsData
   const navigations = eventsData.navigationPath && eventsData.navigationPath.slice()
   const navigationsTime = getNavigationTime(sessionId, date)
 
@@ -78,7 +83,7 @@ const sendNavigation = (date, sessionId) => {
   }
 
   const navEventArr = getNavigationPayloadArr(navigations, navigationsTime)
-  const payload = getPayload(sdkData.sessions[sessionId], navEventArr)
+  const payload = getPayload(session, navEventArr)
   const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))
     .then(() => { })
@@ -97,13 +102,16 @@ const getEventData = (eventName, event, type) => {
 const sendEvents = (arr) => {
   const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
-  const sdkData = getEventsByDate(date)
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
+    return
+  }
   const eventsArr = getEventPayloadArr(arr, date, sessionId)
   if (eventsArr.length === 0) {
     return
   }
 
-  const payload = getPayload(sdkData.sessions[sessionId], eventsArr)
+  const payload = getPayload(session, eventsArr)
   const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))
     .then(() => { })
@@ -130,12 +138,12 @@ export const sendPIIPHIEvent = (events, date, type) => {
 
   const key = type === 'pii' ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
   const sessionId = getSession(constants.SESSION_ID)
-  const sdkData = getEventsByDate(date)
+  const session = getSessionForDate(date, sessionId)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
   const publicKey = getManifestVariable(key)
   const obj = encryptRSA(publicKey, JSON.stringify(eventsArr))
 
-  const payload = getPayload(sdkData.sessions[sessionId])
+  const payload = getPayload(session)
 
   if (type === 'pii') {
     payload.pii = obj
@@ -200,26 +208,26 @@ export const setSyncEventsInterval = () => {
 export const setEventsSentToServer = (arr, date, sessionId) => {
   const currentSessionId = getSession(constants.SESSION_ID)
   arr.forEach((val) => {
-    const sdkDataOfDate = getEventsByDate(date)
-    if (!sdkDataOfDate) {
+    const session = getSessionForDate(date, sessionId)
+    if (!session) {
       return
     }
     const mID = val.mid
-    const evtIndex = sdkDataOfDate.sessions[sessionId].eventsData.eventsInfo
+    const evtIndex = session.eventsData.eventsInfo
       .findIndex((obj) => obj.mid === mID)
-    const devEventIndex = sdkDataOfDate.sessions[sessionId].eventsData.devCodifiedEventsInfo
+    const devEventIndex = session.eventsData.devCodifiedEventsInfo
       .findIndex((obj) => obj.mid === mID)
 
     if (evtIndex !== -1) {
-      sdkDataOfDate.sessions[sessionId].eventsData.eventsInfo[evtIndex].sentToServer = true
+      session.eventsData.eventsInfo[evtIndex].sentToServer = true
     }
     if (devEventIndex !== -1) {
-      sdkDataOfDate.sessions[sessionId].eventsData.devCodifiedEventsInfo[devEventIndex].sentToServer = true
+      session.eventsData.devCodifiedEventsInfo[devEventIndex].sentToServer = true
     }
     if (currentSessionId !== sessionId) {
-      sdkDataOfDate.sessions[sessionId].eventsData.sentToServer = true
+      session.eventsData.sentToServer = true
     }
-    setEventsByDate(date, sdkDataOfDate)
+    setSessionForDate(date, sessionId, session)
   })
   eventSync.progressStatus = false
 }
@@ -229,8 +237,9 @@ export const getAllEventsOfDate = (date) => {
   const sessions = sdkData.sessions
   let arrEvent = []
   for (const x in sessions) {
-    arrEvent = arrEvent.concat(sdkData.sessions[x].eventsData.eventsInfo)
-    arrEvent = arrEvent.concat(sdkData.sessions[x].eventsData.devCodifiedEventsInfo)
+    arrEvent = arrEvent
+      .concat(sdkData.sessions[x].eventsData.eventsInfo)
+      .concat(sdkData.sessions[x].eventsData.devCodifiedEventsInfo)
   }
   return arrEvent
 }
@@ -246,18 +255,18 @@ export const syncEvents = (sessionId, date) => {
     date = getStringDate()
   }
 
-  let session = true
+  let hasSession = true
   if (!sessionId) {
     sessionId = getSession(constants.SESSION_ID)
-    session = false
+    hasSession = false
   }
 
   let eventsArrayChunk = []
   let regularEvents = []
-  const sdkData = getEventsByDate(date)
-  if (sdkData && sdkData.sessions && sdkData.sessions[sessionId] && sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (session && session.eventsData) {
     const { events, devEvents, piiEvents, phiEvents } =
-    getNotSyncedEvents(sdkData.sessions[sessionId].eventsData)
+    getNotSyncedEvents(session.eventsData)
 
     sendPIIPHIEvent(piiEvents, date, 'pii')
     sendPIIPHIEvent(phiEvents, date, 'phi')
@@ -265,7 +274,7 @@ export const syncEvents = (sessionId, date) => {
     regularEvents = events
   }
 
-  if (session) {
+  if (hasSession) {
     eventsArrayChunk = addSessionInfoEvent(regularEvents, eventsArrayChunk, date, sessionId)
     sendNavigation(date, sessionId)
   }
@@ -276,7 +285,7 @@ export const syncEvents = (sessionId, date) => {
       return
     }
 
-    const payload = getPayload(sdkData.sessions[sessionId], eventsArr)
+    const payload = getPayload(session, eventsArr)
     const url = getManifestUrl()
     postRequest(url, JSON.stringify(payload))
       .then(() => {
@@ -316,18 +325,21 @@ export const syncPreviousDateEvents = () => {
   syncEvents(sessionId, date)
 }
 
-const getBounceAndSessionEvents = (obj) => {
-  const sessionId = getSession(constants.SESSION_ID)
-  return obj.sessions[sessionId].eventsData.eventsInfo
+const getBounceAndSessionEvents = (session) => {
+  return session.eventsData.eventsInfo
     .filter((evt) => evt.name === constants.BOUNCE || constants.SESSION)
 }
 
 export const sendBounceEvent = (date) => {
-  const sdkData = getEventsByDate(date)
-  const events = getBounceAndSessionEvents(sdkData)
   const sessionId = getSession(constants.SESSION_ID)
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
+    return
+  }
+
+  const events = getBounceAndSessionEvents(session)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
-  const payload = getPayload(sdkData.sessions[sessionId], eventsArr)
+  const payload = getPayload(session, eventsArr)
 
   const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))

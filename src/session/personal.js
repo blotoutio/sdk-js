@@ -1,9 +1,9 @@
 import { getSession } from '../storage'
 import { constants } from '../config'
-import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { maybeSync } from './utils'
 import { createDevEventInfoObj } from '../event/utils'
 import { getStringDate } from '../common/timeUtil'
+import { getSessionForDate, setSessionForDate } from '../event/session'
 
 const setPersonalEvent = (eventName, objectName, meta, isPII) => {
   if (!eventName) {
@@ -12,19 +12,19 @@ const setPersonalEvent = (eventName, objectName, meta, isPII) => {
 
   const sessionId = getSession(constants.SESSION_ID)
   const date = getStringDate()
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
 
-  const eventsData = sdkData.sessions[sessionId].eventsData
+  const eventsData = session.eventsData
   if (!eventsData.devCodifiedEventsInfo) {
     eventsData.devCodifiedEventsInfo = []
   }
   eventsData.devCodifiedEventsInfo.push(createDevEventInfoObj(eventName, objectName, meta, isPII, !isPII))
 
   maybeSync(eventsData)
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
 }
 
 export const setSessionPIIEvent = (eventName, objectName, meta) => {

@@ -5,16 +5,17 @@ import { createReferrerEventInfo } from '../common/referrerUtil'
 import { getStringDate } from '../common/timeUtil'
 import { getNotSyncedDate } from '../utils'
 import { getNotSynced } from './utils'
+import { getSessionForDate, setSessionForDate } from '../event/session'
 
 export const updateNavTime = () => {
   const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
 
-  const eventsData = sdkData.sessions[sessionId].eventsData
+  const eventsData = session.eventsData
   const navPaths = eventsData.navigationPath
   const currentTime = Date.now()
 
@@ -27,17 +28,17 @@ export const updateNavTime = () => {
   }
 
   eventsData.stayTimeBeforeNav.push(currentTime)
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
 }
 
 export const updateNavPath = () => {
   const sessionId = getSession(constants.SESSION_ID)
   const date = getStringDate()
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
-  const eventsData = sdkData.sessions[sessionId].eventsData
+  const eventsData = session.eventsData
   const navPaths = eventsData.navigationPath
 
   if (!navPaths || navPaths.length === 0) {
@@ -49,7 +50,7 @@ export const updateNavPath = () => {
     return
   }
   eventsData.navigationPath.push(window.location.href)
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
 }
 
 export const setReferrerEvent = (eventName, ref, meta) => {
@@ -59,12 +60,12 @@ export const setReferrerEvent = (eventName, ref, meta) => {
 
   const sessionId = getSession(constants.SESSION_ID)
   const date = getStringDate()
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId] || !sdkData.sessions[sessionId].eventsData) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session || !session.eventsData) {
     return
   }
 
-  const eventsData = sdkData.sessions[sessionId].eventsData
+  const eventsData = session.eventsData
   if (!eventsData.eventsInfo) {
     return
   }
@@ -75,12 +76,12 @@ export const setReferrerEvent = (eventName, ref, meta) => {
   }
 
   eventsData.eventsInfo.push(createReferrerEventInfo(eventName, ref, meta))
-  setEventsByDate(date, sdkData)
+  setSessionForDate(date, sessionId, session)
 }
 
 export const resetPreviousDate = () => {
-  const notSyncDate = getNotSyncedDate()
-  const sdkData = getEventsByDate(notSyncDate)
+  const date = getNotSyncedDate()
+  const sdkData = getEventsByDate(date)
   if (!sdkData || !sdkData.sessions) {
     return
   }
@@ -91,4 +92,5 @@ export const resetPreviousDate = () => {
 
   sdkData.sessions[sessionId].eventsData.navigationPath = []
   sdkData.sessions[sessionId].eventsData.stayTimeBeforeNav = []
+  setEventsByDate(date, sdkData)
 }

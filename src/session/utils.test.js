@@ -62,14 +62,14 @@ describe('checkAndGetSessionId', () => {
 describe('getNotSynced', () => {
   it('null', () => {
     const result = getNotSynced()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('event data missing', () => {
     const result = getNotSynced({
       23423423: {}
     })
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('session in between was missed', () => {
@@ -222,8 +222,8 @@ describe('createSessionObject', () => {
             evc: 10001,
             evcs: undefined,
             extraInfo: {
-              mousePosX: undefined,
-              mousePosY: undefined
+              mousePosX: -1,
+              mousePosY: -1
             },
             metaInfo: {},
             mid: '',

@@ -125,12 +125,12 @@ describe('getCurrentMonthNumber', () => {
 describe('getFormattedDate', () => {
   it('null', () => {
     const result = getFormattedDate(null)
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('random input', () => {
     const result = getFormattedDate('asfasdfdsf')
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('ok', () => {

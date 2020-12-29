@@ -1,4 +1,4 @@
-import * as eventStorage from '../event/storage'
+import * as eventSession from '../event/session'
 import * as storage from '../storage'
 import * as timeUtil from '../common/timeUtil'
 import { setDNTEvent, setViewPort } from './system'
@@ -16,7 +16,7 @@ beforeEach(() => {
     .mockImplementation(() => 124123423)
 
   spySet = jest
-    .spyOn(eventStorage, 'setEventsByDate')
+    .spyOn(eventSession, 'setSessionForDate')
     .mockImplementation()
 
   jest.useFakeTimers('modern')
@@ -39,19 +39,10 @@ describe('setDNTEvent', () => {
     expect(spySet).toBeCalledTimes(0)
   })
 
-  it('no sessions', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => null)
-    setDNTEvent(event)
-    expect(spySet).toBeCalledTimes(0)
-    spyEvents.mockRestore()
-  })
-
   it('no session', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => {})
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => null)
     setDNTEvent(event)
     expect(spySet).toBeCalledTimes(0)
     spyEvents.mockRestore()
@@ -59,12 +50,8 @@ describe('setDNTEvent', () => {
 
   it('null events in session', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {}
-        }
-      }))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => ({}))
     setDNTEvent(event)
     expect(spySet).toBeCalledTimes(0)
     spyEvents.mockRestore()
@@ -72,13 +59,9 @@ describe('setDNTEvent', () => {
 
   it('eventsInfo is missing', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            eventsData: {}
-          }
-        }
+        eventsData: {}
       }))
     setDNTEvent(event)
     expect(spySet).toBeCalledTimes(0)
@@ -87,18 +70,14 @@ describe('setDNTEvent', () => {
 
   it('dnt event already set', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            eventsData: {
-              eventsInfo: [
-                {
-                  name: 'dnt'
-                }
-              ]
+        eventsData: {
+          eventsInfo: [
+            {
+              name: 'dnt'
             }
-          }
+          ]
         }
       }))
     setDNTEvent(event)
@@ -108,48 +87,40 @@ describe('setDNTEvent', () => {
 
   it('dnt event created', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            eventsData: {
-              eventsInfo: []
-            }
-          }
+        eventsData: {
+          eventsInfo: []
         }
       }))
     setDNTEvent(event)
-    expect(spySet).toBeCalledWith('20-3-2020', {
-      sessions: {
-        124123423: {
-          eventsData: {
-            eventsInfo: [
-              {
-                evc: 10001,
-                evcs: 11502,
-                extraInfo: {
-                  mousePosX: undefined,
-                  mousePosY: undefined
-                },
-                metaInfo: {},
-                mid: '',
-                name: 'dnt',
-                nmo: 1,
-                objectName: 'Unknown',
-                objectTitle: '',
-                position: {
-                  height: -1,
-                  width: -1,
-                  x: -1,
-                  y: -1
-                },
-                sentToServer: false,
-                tstmp: 1580775120000,
-                urlPath: 'http://localhost/'
-              }
-            ]
+    expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
+      eventsData: {
+        eventsInfo: [
+          {
+            evc: 10001,
+            evcs: 11502,
+            extraInfo: {
+              mousePosX: -1,
+              mousePosY: -1
+            },
+            metaInfo: {},
+            mid: '',
+            name: 'dnt',
+            nmo: 1,
+            objectName: 'Unknown',
+            objectTitle: '',
+            position: {
+              height: -1,
+              width: -1,
+              x: -1,
+              y: -1
+            },
+            sentToServer: false,
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/'
           }
-        }
+        ]
       }
     })
     spyEvents.mockRestore()
@@ -164,11 +135,8 @@ describe('setViewPort', () => {
 
   it('session is missing', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-        }
-      }))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => null)
     setViewPort()
     expect(spySet).toBeCalledTimes(0)
     spyEvents.mockRestore()
@@ -176,62 +144,45 @@ describe('setViewPort', () => {
 
   it('viewPort is missing', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-          }
-        }
-      }))
+      .spyOn(eventSession, 'getSessionForDate')
+      .mockImplementation(() => ({}))
     setViewPort()
-    expect(spySet).toBeCalledWith('20-3-2020', {
-      sessions: {
-        124123423: {
-          viewPort: [
-            {
-              docHeight: 0,
-              docWidth: 0,
-              height: 0,
-              timeStamp: 1580775120000,
-              width: 0
-            }
-          ]
+    expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
+      viewPort: [
+        {
+          docHeight: 0,
+          docWidth: 0,
+          height: 0,
+          timeStamp: 1580775120000,
+          width: 0
         }
-      }
+      ]
     })
     spyEvents.mockRestore()
   })
 
   it('viewPort is already there', () => {
     const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
+      .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            viewPort: [{
-              data: true
-            }]
-          }
-        }
+        viewPort: [{
+          data: true
+        }]
       }))
     setViewPort()
-    expect(spySet).toBeCalledWith('20-3-2020', {
-      sessions: {
-        124123423: {
-          viewPort: [
-            {
-              data: true
-            },
-            {
-              docHeight: 0,
-              docWidth: 0,
-              height: 0,
-              timeStamp: 1580775120000,
-              width: 0
-            }
-          ]
+    expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
+      viewPort: [
+        {
+          data: true
+        },
+        {
+          docHeight: 0,
+          docWidth: 0,
+          height: 0,
+          timeStamp: 1580775120000,
+          width: 0
         }
-      }
+      ]
     })
     spyEvents.mockRestore()
   })

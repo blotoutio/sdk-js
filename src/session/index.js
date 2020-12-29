@@ -5,18 +5,14 @@ import {
   getSystemMergeCounter,
   shouldApproximateTimestamp
 } from '../utils'
-import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { getNearestTimestamp, getPreviousDateString, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { shouldCollectSystemEvents } from '../event/utils'
+import { getSessionForDate, setSessionForDate } from '../event/session'
 
 const getInfoPayload = (date, sessionId) => {
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions) {
-    return null
-  }
-  const session = sdkData.sessions[sessionId]
+  const session = getSessionForDate(date, sessionId)
   if (!session) {
     return null
   }
@@ -73,24 +69,23 @@ export const addSessionInfoEvent = (events, eventsArrayChunk, date, sessionId) =
 export const updatePreviousDayEndTime = () => {
   const sessionId = getSession(constants.SESSION_ID)
   const date = getPreviousDateString()
-
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
     return
   }
 
-  sdkData.sessions[sessionId].endTime = Date.now()
-  setEventsByDate(date, sdkData)
+  session.endTime = Date.now()
+  setSessionForDate(date, sessionId, session)
 }
 
 export const updateEndTime = () => {
   const sessionId = getSession(constants.SESSION_ID)
   const date = getStringDate()
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
     return
   }
 
-  sdkData.sessions[sessionId].endTime = Date.now()
-  setEventsByDate(date, sdkData)
+  session.endTime = Date.now()
+  setSessionForDate(date, sessionId, session)
 }

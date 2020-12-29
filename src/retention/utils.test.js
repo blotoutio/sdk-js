@@ -41,17 +41,17 @@ describe('getTimestampFromKey', () => {
 
   it('empty', () => {
     const result = getTimestampFromKey()
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('null', () => {
     const result = getTimestampFromKey(null)
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('wrong format', () => {
     const result = getTimestampFromKey('5-14-12-2020')
-    expect(result).toBe(null)
+    expect(result).toBeNull()
   })
 
   it('with key', () => {

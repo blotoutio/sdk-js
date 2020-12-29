@@ -34,6 +34,10 @@ const getStoreByDate = (dateString) => {
 }
 
 export const getEventsByDate = (dateString) => {
+  if (!dateString) {
+    return null
+  }
+
   const store = getStoreByDate(dateString)
   if (!store) {
     return null
