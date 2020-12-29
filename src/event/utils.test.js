@@ -131,4 +131,32 @@ describe('getNavigationTime', () => {
     expect(result).toStrictEqual([600, 120])
     spyEvents.mockRestore()
   })
+
+  it('old state', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            startTime: 1608912608000,
+            eventsData: {
+              navigationPath: [
+                'http://localhost:8080/new_page.html',
+                'http://localhost:8080/index.html'
+              ],
+              stayTimeBeforeNav: [
+                20000,
+                300000
+              ],
+              devCodifiedEventsInfo: [],
+              sentToServer: false
+            }
+          }
+        }
+      }))
+    const result = getNavigationTime(124123423, '20-3-2020')
+    expect(result.length).toBe(2)
+    expect(result).toStrictEqual([20000, 300000])
+    spyEvents.mockRestore()
+  })
 })

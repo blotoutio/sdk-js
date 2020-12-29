@@ -84,6 +84,132 @@ describe('updateNavTime', () => {
     spyEvents.mockRestore()
   })
 
+  it('single path is saved', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            eventsData: {
+              navigationPath: [
+                'http://domain.com/'
+              ],
+              stayTimeBeforeNav: [
+                1580794568000
+              ]
+            }
+          }
+        }
+      }))
+    updateNavTime()
+    expect(spySet).toBeCalledWith('20-3-2020', {
+      sessions: {
+        124123423: {
+          eventsData: {
+            navigationPath: [
+              'http://domain.com/'
+            ],
+            stayTimeBeforeNav: [
+              1580775120000
+            ]
+          }
+        }
+      }
+    })
+    spyEvents.mockRestore()
+  })
+
+  it('last path is similar', () => {
+    const url = 'http://localhost/'
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: url,
+        hostname: 'localhost'
+      }
+    })
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            eventsData: {
+              navigationPath: [
+                'http://localhost/test',
+                'http://localhost/'
+              ],
+              stayTimeBeforeNav: [
+                1580794568000,
+                1580794688000
+              ]
+            }
+          }
+        }
+      }))
+    updateNavTime()
+    expect(spySet).toBeCalledWith('20-3-2020', {
+      sessions: {
+        124123423: {
+          eventsData: {
+            navigationPath: [
+              'http://localhost/test',
+              'http://localhost/'
+            ],
+            stayTimeBeforeNav: [
+              1580794568000,
+              1580775120000
+            ]
+          }
+        }
+      }
+    })
+    spyEvents.mockRestore()
+  })
+
+  it('multiple paths are saved and last path is different', () => {
+    const url = 'http://localhost/'
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: url,
+        hostname: 'localhost'
+      }
+    })
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            eventsData: {
+              navigationPath: [
+                'http://localhost/',
+                'http://localhost/test'
+              ],
+              stayTimeBeforeNav: [
+                1580794568000
+              ]
+            }
+          }
+        }
+      }))
+    updateNavTime()
+    expect(spySet).toBeCalledWith('20-3-2020', {
+      sessions: {
+        124123423: {
+          eventsData: {
+            navigationPath: [
+              'http://localhost/',
+              'http://localhost/test'
+            ],
+            stayTimeBeforeNav: [
+              1580794568000,
+              1580775120000
+            ]
+          }
+        }
+      }
+    })
+    spyEvents.mockRestore()
+  })
+
   it('last path is different then saved', () => {
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')

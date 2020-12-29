@@ -196,6 +196,10 @@ export const getNavigationTime = (sessionId, date) => {
     return
   }
 
+  if ((navigationsTime[0] - sesssionStartTime) < 0) {
+    return navigationsTime
+  }
+
   return navigationsTime.map((val, index) => {
     if (index === 0) {
       return Math.ceil((val - sesssionStartTime) / 1000)
