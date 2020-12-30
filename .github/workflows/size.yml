@@ -104,7 +104,8 @@ jobs:
     - name: Comment
       uses: NejcZdovc/comment-pr@v1
       with:
-        file: 'comment.md'
+        file: 'comment_size.md'
+        identifier: 'GITHUB_ACTION_COMMENT_SIZE'
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         OLD: ${{steps.get-diff.outputs.base_file_string}}
