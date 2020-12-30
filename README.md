@@ -1,4 +1,4 @@
-![codecov](https://codecov.io/gh/blotoutio/sdk-js/branch/main/graph/badge.svg?token=4NVM8A3SW2)](https://codecov.io/gh/blotoutio/sdk-js)
+[![codecov](https://codecov.io/gh/blotoutio/sdk-js/branch/main/graph/badge.svg?token=4NVM8A3SW2)](https://codecov.io/gh/blotoutio/sdk-js)
 
 # Blotout JS SDK
 
