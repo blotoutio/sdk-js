@@ -1,6 +1,8 @@
-name: Vercel - Staging
+name: Vercel
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
