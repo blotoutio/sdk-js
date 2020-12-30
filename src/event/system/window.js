@@ -31,8 +31,8 @@ export const resize = (window) => {
   }, 3000))
 }
 
-export const unload = (window) => {
-  const eventName = 'unload'
+export const pagehide = (window) => {
+  const eventName = 'onpagehide' in self ? 'pagehide' : 'unload'
   window.addEventListener(eventName, function (e) {
     if (isSysEvtStore) {
       updateNavTime()
@@ -119,18 +119,21 @@ export const beforeUnload = (window) => {
     if (!session) {
       return
     }
+
+    const clkIndex = session.eventsData.eventsInfo
     const bncIndex = session.eventsData.eventsInfo
       .findIndex((obj) => obj.name === constants.BOUNCE)
+    if (bncIndex !== -1 || clkIndex !== -1) {
+      return
+    }
+
     const startTime = session.startTime
     const diffTime = Date.now() - startTime
     const diffTimeInSecs = Math.floor(diffTime / 1000)
-    const clkIndex = session.eventsData.eventsInfo
       .findIndex((obj) => obj.name === 'click')
-    if (diffTimeInSecs <= 5 && clkIndex === -1) {
-      if (bncIndex === -1) {
-        setEvent(constants.BOUNCE, e)
-        sendBounceEvent(date)
-      }
+    if (diffTimeInSecs <= 5) {
+      setEvent(constants.BOUNCE, e)
+      sendBounceEvent(date)
     }
   })
 }

@@ -9,7 +9,7 @@ import { online, offline } from './network'
 import { print } from './print'
 import { touchEnd } from './touch'
 import { hashChange } from './hash'
-import { resize, unload, load, beforeUnload, domActive, domSubTreeModified } from './window'
+import { resize, pagehide, load, beforeUnload, domActive, domSubTreeModified } from './window'
 import { error } from './resource'
 import { shouldCollectSystemEvents } from '../utils'
 
@@ -49,7 +49,7 @@ export const startEvents = (window) => {
   hashChange(window)
 
   resize(window)
-  unload(window)
+  pagehide(window)
   load(window)
   beforeUnload(window)
   domActive(window)

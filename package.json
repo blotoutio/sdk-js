@@ -74,7 +74,8 @@
       "context",
       "cy",
       "Cypress",
-      "assert"
+      "assert",
+      "self"
     ]
   }
 }
