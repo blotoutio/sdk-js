@@ -1,4 +1,4 @@
-name: Unit tests
+name: Tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  unit_test:
+  test:
     if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !github.event.pull_request.draft) }}
     runs-on: ubuntu-latest
     timeout-minutes: 2
@@ -27,7 +27,9 @@ jobs:
       id: cache-modules
       uses: actions/cache@v2
       with:
-        path: node_modules
+        path: |
+          ~/.cache/Cypress
+          node_modules
         key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
 
     - name: Install dependencies
@@ -36,8 +38,11 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
-    - name: Run tests
-      run: npm test
+    - name: Run integration tests
+      run: npm run test:integration
+
+    - name: Run unit tests
+      run: npm run test:unit
 
     - name: Coverage
       uses: codecov/codecov-action@v1

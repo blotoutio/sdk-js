@@ -8,7 +8,6 @@ module.exports = merge(common, {
   devtool: 'eval-source-map',
   devServer: {
     hot: true,
-    open: true,
     contentBase: path.join(__dirname, './src/demo')
   },
   plugins: [

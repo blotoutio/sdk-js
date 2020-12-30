@@ -10,20 +10,20 @@
   <h1>Blotout JS SDK</h1>
   <nav>
     <div class="navWrapper">
-      <a href="/index.html">Events</a>
-      <a href="/new_page.html">New page</a>
-      <a href="mailto:sales@blotout.io">Mail</a>
+      <a id="nav-events" href="/index.html">Events</a>
+      <a id="nav-scroll" href="/new_page.html">Scroll page</a>
+      <a id="nav-mail" href="mailto:sales@blotout.io">Mail</a>
     </div>
   </nav>
   <div class="content">
     <div class="events">
       <div class="eventsActions">
-        <button onclick="bojs.logEvent('Click',{})">Log Event</button>
-        <button onclick="bojs.startTimedEvent('Click')">Start Log Event</button>
-        <button onclick="bojs.endTimedEvent('Click')">End Log Event</button>
-        <button onclick="bojs.logEvent('Sign up',{})">Sign up</button>
-        <button onclick="bojs.logEvent('Log in',{})">Log in</button>
-        <button onclick="getUserId()">Get User Id</button>
+        <button id="log-event" onclick="bojs.logEvent('Click',{})">Log Event</button>
+        <button id="log-event-start" onclick="bojs.startTimedEvent('Click')">Start Log Event</button>
+        <button id="log-event-end" onclick="bojs.endTimedEvent('Click')">End Log Event</button>
+        <button id="sign-up" onclick="bojs.logEvent('Sign up',{})">Sign up</button>
+        <button id="log-in" onclick="bojs.logEvent('Log in',{})">Log in</button>
+        <button id="get-user-id" onclick="getUserId()">Get User Id</button>
       </div>
       <div id="eventData"></div>
     </div>
