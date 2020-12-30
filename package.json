@@ -51,6 +51,7 @@
       "/src/3rdParty/*",
       "/dist",
       "/demo",
+      "/src/demo",
       "jest.config.js"
     ],
     "globals": [

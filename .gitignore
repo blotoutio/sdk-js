@@ -1,7 +1,7 @@
 .idea
 node_modules
-dist
+/dist
 .DS_Store
 .vscode
-demo
-coverage
+/demo
+/coverage

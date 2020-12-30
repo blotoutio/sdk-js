@@ -1,0 +1,32 @@
+<html lang="en">
+<head>
+  <title>Blotout - JS SDK</title>
+      <link rel='icon' href='/favicon.png' />
+  <script type="text/javascript" src="/index.js"></script>
+  <script type="text/javascript" src="/app.js"></script>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <h1>Blotout JS SDK</h1>
+  <nav>
+    <div class="navWrapper">
+      <a href="/index.html">Events</a>
+      <a href="/new_page.html">New page</a>
+      <a href="mailto:sales@blotout.io">Mail</a>
+    </div>
+  </nav>
+  <div class="content">
+    <div class="events">
+      <div class="eventsActions">
+        <button onclick="bojs.logEvent('Click',{})">Log Event</button>
+        <button onclick="bojs.startTimedEvent('Click')">Start Log Event</button>
+        <button onclick="bojs.endTimedEvent('Click')">End Log Event</button>
+        <button onclick="bojs.logEvent('Sign up',{})">Sign up</button>
+        <button onclick="bojs.logEvent('Log in',{})">Log in</button>
+        <button onclick="getUserId()">Get User Id</button>
+      </div>
+      <div id="eventData"></div>
+    </div>
+  </div>
+</body>
+</html>
