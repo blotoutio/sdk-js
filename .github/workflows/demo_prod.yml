@@ -1,12 +1,11 @@
-name: Netlify - Staging
+name: Netlify - Production
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
 
 jobs:
   deloy:
-    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !github.event.pull_request.draft) }}
     runs-on: ubuntu-latest
     timeout-minutes: 2
 
@@ -25,7 +24,9 @@ jobs:
       id: cache-modules
       uses: actions/cache@v2
       with:
-        path: node_modules
+        path: |
+          ~/.cache/Cypress
+          node_modules
         key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
 
     - name: Install dependencies
@@ -41,13 +42,13 @@ jobs:
       uses: nwtgck/actions-netlify@v1.1
       with:
         publish-dir: './demo'
+        production-deploy: true
         production-branch: main
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        deploy-message: ${{ github.event.pull_request.number }}-${{ github.event.pull_request.title }}
-        enable-pull-request-comment: true
+        deploy-message: main-${{ github.event.after }}
+        enable-pull-request-comment: false
         enable-commit-comment: false
-        overwrites-pull-request-comment: true
-        alias: pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+        alias: main-${{ github.event.after }}
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
