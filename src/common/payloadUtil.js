@@ -49,8 +49,8 @@ const getMetaPayload = (meta) => {
   if (deviceGrain == null) {
     deviceGrain = constants.DEFAULT_EVENT_DEVICEINFO_GRAIN
   }
-  let dmftStr = ''
-  if (meta.hostOS === 'MacOS') {
+  let dmftStr = 'unknown'
+  if (meta.hostOS === 'Mac OS') {
     dmftStr = 'Apple'
   } else if (meta.hostOS === 'Windows') {
     dmftStr = 'Microsoft'
