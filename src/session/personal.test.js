@@ -71,10 +71,8 @@ describe('setPersonalEvent', () => {
       eventsData: {
         devCodifiedEventsInfo: [
           {
-            duration: null,
             evc: 20001,
             evcs: 23950,
-            isPhi: false,
             isPii: true,
             metaInfo: {
               meta: true
@@ -116,10 +114,8 @@ describe('setPersonalEvent', () => {
             data: true
           },
           {
-            duration: null,
             evc: 20001,
             evcs: 23950,
-            isPhi: false,
             isPii: true,
             metaInfo: {
               meta: true
@@ -163,11 +159,9 @@ describe('setSessionPHIEvent', () => {
             data: true
           },
           {
-            duration: null,
             evc: 20001,
             evcs: 23950,
             isPhi: true,
-            isPii: false,
             metaInfo: {
               meta: true
             },

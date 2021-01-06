@@ -11,14 +11,14 @@ import { pullManifest, updateManifest, checkManifest } from './manifest'
 import { checkUpdateForManifest, setRetentionData } from './retention'
 import { setReferrer } from './common/referrerUtil'
 import { setGeoDetails, checkGeo } from './common/geoUtil'
-import { collectEvent } from './event'
+import { collectEvent, mapIDEvent } from './event'
 
 (function (window) {
   const SDK = function () {}
 
-  SDK.prototype.logEvent = function (eventName, meta = {}, objectName = '') {
+  SDK.prototype.logEvent = function (eventName, data = null, objectName = null) {
     if (isDevEvtStore) {
-      setDevEvent(eventName, objectName, meta)
+      setDevEvent(eventName, data, objectName)
       return
     }
 
@@ -27,8 +27,8 @@ import { collectEvent } from './event'
     }
   }
 
-  SDK.prototype.startTimedEvent = function (eventName, meta = {}, objectName = '') {
-    setStartDevEvent(eventName, objectName, meta)
+  SDK.prototype.startTimedEvent = function (eventName, data = null, objectName = null) {
+    setStartDevEvent(eventName, objectName, data)
   }
 
   SDK.prototype.endTimedEvent = function (eventName) {
@@ -85,9 +85,9 @@ import { collectEvent } from './event'
     return getTempUseValue(constants.UID)
   }
 
-  SDK.prototype.logPIIEvent = function (eventName, meta = {}, objectName = '') {
+  SDK.prototype.logPIIEvent = function (eventName, data = null, objectName = null) {
     if (isDevEvtStore) {
-      setSessionPIIEvent(eventName, objectName, meta)
+      setSessionPIIEvent(eventName, objectName, data)
       return
     }
 
@@ -96,15 +96,19 @@ import { collectEvent } from './event'
     }
   }
 
-  SDK.prototype.logPHIEvent = function (eventName, meta = {}, objectName = '') {
+  SDK.prototype.logPHIEvent = function (eventName, data = null, objectName = null) {
     if (isDevEvtStore) {
-      setSessionPHIEvent(eventName, objectName, meta)
+      setSessionPHIEvent(eventName, objectName, data)
       return
     }
 
     if (isDevEvtCollect) {
       collectEvent(eventName, {}, constants.DEV_EVENT)
     }
+  }
+
+  SDK.prototype.mapID = function (id, provider, data = null) {
+    mapIDEvent(id, provider, data)
   }
 
   window.bojs = new SDK()

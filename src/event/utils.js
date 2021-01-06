@@ -40,22 +40,30 @@ export const eventsChunkArr = (events, devEvents) => {
   return mergeArr
 }
 
-export const createDevEventInfoObj = (eventName, objectName, meta, isPii, isPhi, duration = null) => {
-  return {
+export const createDevEventInfoObj = (eventName, objectName, data = null, eventCode = null) => {
+  const event = {
     sentToServer: false,
-    objectName,
-    name: eventName,
     urlPath: window.location.href,
     tstmp: Date.now(),
     mid: getMid(),
     nmo: 1,
     evc: constants.EVENT_DEV_CATEGORY,
-    evcs: codeForCustomCodifiedEvent(eventName),
-    duration,
-    metaInfo: meta,
-    isPii,
-    isPhi
+    evcs: eventCode || codeForCustomCodifiedEvent(eventName)
   }
+
+  if (eventName) {
+    event.name = eventName
+  }
+
+  if (objectName) {
+    event.objectName = objectName
+  }
+
+  if (data) {
+    event.metaInfo = data
+  }
+
+  return event
 }
 
 export const eventSync = {

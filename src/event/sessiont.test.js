@@ -225,16 +225,11 @@ describe('setDevEvent', () => {
           eventsData: {
             devCodifiedEventsInfo: [
               {
-                duration: null,
                 evc: 20001,
                 evcs: 24146,
-                isPhi: false,
-                isPii: false,
-                metaInfo: undefined,
                 mid: 'localhost-null-1580775120000',
                 name: 'some_event',
                 nmo: 1,
-                objectName: undefined,
                 sentToServer: false,
                 tstmp: 1580775120000,
                 urlPath: 'http://localhost/'
@@ -266,16 +261,11 @@ describe('setDevEvent', () => {
           eventsData: {
             devCodifiedEventsInfo: [
               {
-                duration: null,
                 evc: 20001,
                 evcs: 24146,
-                isPhi: false,
-                isPii: false,
-                metaInfo: undefined,
                 mid: 'localhost-null-1580775120000',
                 name: 'some_event',
                 nmo: 1,
-                objectName: undefined,
                 sentToServer: false,
                 tstmp: 1580775120000,
                 urlPath: 'http://localhost/'
@@ -327,7 +317,7 @@ describe('setStartDevEvent', () => {
       .spyOn(storage, 'getSession')
       .mockImplementation(() => '')
     setStartDevEvent('some_event')
-    expect(spySetSession).toBeCalledWith('startEvents', '[{"sentToServer":false,"name":"some_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146,"duration":null,"isPii":false,"isPhi":false}]')
+    expect(spySetSession).toBeCalledWith('startEvents', '[{"sentToServer":false,"urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146,"name":"some_event"}]')
   })
 
   it('event exists', () => {
@@ -388,7 +378,7 @@ describe('setEndDevEvent', () => {
   it('event did not start yet', () => {
     spySession = jest
       .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[{"sentToServer":false,"name":"different_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146,"duration":null,"isPii":false,"isPhi":false}]')
+      .mockImplementation(() => '[{"sentToServer":false,"name":"different_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146}]')
     setEndDevEvent('some_event')
     expect(spySetSession).toBeCalledTimes(0)
     expect(spySet).toBeCalledTimes(0)
@@ -397,7 +387,7 @@ describe('setEndDevEvent', () => {
   it('sdk is null', () => {
     spySession = jest
       .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[{"sentToServer":false,"name":"different_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146,"duration":null,"isPii":false,"isPhi":false}]')
+      .mockImplementation(() => '[{"sentToServer":false,"name":"different_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146}]')
     setEndDevEvent('some_event')
     expect(spySetSession).toBeCalledTimes(0)
     expect(spySet).toBeCalledTimes(0)

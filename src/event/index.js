@@ -9,6 +9,7 @@ import {
 import {
   createEventInfoObj,
   getSessionForDate,
+  setDevEvent,
   setSessionForDate
 } from './session'
 import {
@@ -96,7 +97,7 @@ const getEventData = (eventName, event, type) => {
     return createEventInfoObj(eventName, objectName, {}, event)
   }
 
-  return createDevEventInfoObj(eventName, objectName, {}, false, false)
+  return createDevEventInfoObj(eventName, objectName)
 }
 
 const sendEvents = (arr) => {
@@ -347,4 +348,16 @@ export const sendBounceEvent = (date) => {
       setEventsSentToServer(events, date, sessionId)
     })
     .catch(error)
+}
+
+export const mapIDEvent = (id, provider, data = {}) => {
+  if (!id) {
+    error('ID mapping is missing id')
+    return
+  }
+
+  data.map_id = id
+  data.map_provider = provider
+
+  setDevEvent(constants.MAP_ID_EVENT, data, '', constants.MAP_ID_EVENT_CODE)
 }

@@ -71,7 +71,7 @@ export const setEvent = function (eventName, event, meta = {}) {
   setSessionForDate(date, sessionId, session)
 }
 
-export const setDevEvent = (eventName, objectName, meta) => {
+export const setDevEvent = (eventName, data, objectName, eventCode = null) => {
   if (!eventName) {
     return
   }
@@ -88,14 +88,14 @@ export const setDevEvent = (eventName, objectName, meta) => {
     eventsData.devCodifiedEventsInfo = []
   }
 
-  const obj = createDevEventInfoObj(eventName, objectName, meta, false, false)
+  const obj = createDevEventInfoObj(eventName, objectName, data, eventCode)
   eventsData.devCodifiedEventsInfo.push(obj)
 
   maybeSync(eventsData)
   setSessionForDate(date, sessionId, session)
 }
 
-export const setStartDevEvent = (eventName, objectName, meta) => {
+export const setStartDevEvent = (eventName, objectName, data) => {
   if (!eventName) {
     return
   }
@@ -109,7 +109,7 @@ export const setStartDevEvent = (eventName, objectName, meta) => {
 
   const index = findObjIndex(eventArray, eventName)
   if (index === -1) {
-    eventArray.push(createDevEventInfoObj(eventName, objectName, meta, false, false))
+    eventArray.push(createDevEventInfoObj(eventName, objectName, data))
   } else {
     eventArray[index].startTime = Date.now()
   }
@@ -169,7 +169,7 @@ export const createEventInfoObj = (eventName, objectName, meta = {}, event = {})
     name: eventName,
     urlPath: window.location.href,
     tstmp: Date.now(),
-    mid: getRoot() ? getMid() : '',
+    mid: getRoot() ? getMid() : '', // TODO(nejc): why do we check root here?
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
     evcs: systemEventCode[eventName],

@@ -1,10 +1,11 @@
 import * as eventStorage from '../event/storage'
+import * as eventSession from '../event/session'
 import * as utils from '../utils'
 import * as storage from '../storage'
 import * as eventUtils from './utils'
 import * as network from '../common/networkUtil'
 import * as timeUtil from '../common/timeUtil'
-import { syncPreviousDateEvents, syncPreviousEvents } from './'
+import { mapIDEvent, syncPreviousDateEvents, syncPreviousEvents } from '.'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -386,5 +387,44 @@ describe('syncPreviousDateEvents', () => {
     expect(spyPost).toBeCalledTimes(0)
     spyEvents.mockRestore()
     spyPayload.mockRestore()
+  })
+})
+
+describe('mapIDEvent', () => {
+  let spySet
+  beforeEach(() => {
+    spySet = jest
+      .spyOn(eventSession, 'setDevEvent')
+      .mockImplementation()
+  })
+
+  afterEach(() => {
+    spySet.mockRestore()
+  })
+
+  it('null', () => {
+    mapIDEvent()
+    expect(spySet).toBeCalledTimes(0)
+  })
+
+  it('no data', () => {
+    mapIDEvent('sdfasfasdfds', 'service')
+    expect(spySet).toBeCalledWith('map_id', {
+      map_id: 'sdfasfasdfds',
+      map_provider: 'service'
+    },
+    '',
+    21001)
+  })
+
+  it('with data', () => {
+    mapIDEvent('sdfasfasdfds', 'service', { custom: true })
+    expect(spySet).toBeCalledWith('map_id', {
+      map_id: 'sdfasfasdfds',
+      map_provider: 'service',
+      custom: true
+    },
+    '',
+    21001)
   })
 })

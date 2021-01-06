@@ -68,7 +68,9 @@ export const constants = {
   SESSION_START_TIME: 'session_start_time',
   SESSION_INFO: 'Session Info',
   CUSTOM_EVENT_STORAGE: 'EventsSubCode',
-  DEVELOPER_EVENT_CUSTOM: 21100
+  DEVELOPER_EVENT_CUSTOM: 21100,
+  MAP_ID_EVENT: 'map_id',
+  MAP_ID_EVENT_CODE: 21001
 }
 export const manifestConst = {
   Geo_Ip_Path: 'v1/geo/city',
