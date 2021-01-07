@@ -119,7 +119,7 @@ export const beforeUnload = (window) => {
     const diffTime = Date.now() - startTime
     const diffTimeInSecs = Math.floor(diffTime / 1000)
       .findIndex((obj) => obj.name === 'click')
-    if (diffTimeInSecs <= 5) {
+    if (diffTimeInSecs <= 2) {
       setEvent(constants.BOUNCE, e)
       sendBounceEvent(date)
     }

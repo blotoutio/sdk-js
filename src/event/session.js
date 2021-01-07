@@ -68,7 +68,9 @@ export const setEvent = function (eventName, event, meta = {}) {
     eventData.eventsInfo = []
   }
   eventData.eventsInfo.push(createEventInfoObj(eventName, objectName, meta, event))
+
   setSessionForDate(date, sessionId, session)
+  maybeSync(eventData)
 }
 
 export const setDevEvent = (eventName, data, objectName, eventCode = null) => {
@@ -91,8 +93,8 @@ export const setDevEvent = (eventName, data, objectName, eventCode = null) => {
   const obj = createDevEventInfoObj(eventName, objectName, data, eventCode)
   eventsData.devCodifiedEventsInfo.push(obj)
 
-  maybeSync(eventsData)
   setSessionForDate(date, sessionId, session)
+  maybeSync(eventsData)
 }
 
 export const setStartDevEvent = (eventName, objectName, data) => {
@@ -152,8 +154,8 @@ export const setEndDevEvent = (eventName) => {
   }
   eventsData.devCodifiedEventsInfo.push(eventObject)
 
-  maybeSync(eventsData)
   setSessionForDate(date, sessionId, session)
+  maybeSync(eventsData)
   eventArray.splice(index, 1)
   eventArray = JSON.stringify(eventArray)
   setSession('startEvents', eventArray)
