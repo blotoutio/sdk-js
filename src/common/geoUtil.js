@@ -45,7 +45,7 @@ export const setGeoDetails = () => {
     const url = `${getUrl()}/${relativeGeoPath}`
     getRequest(url)
       .then((data) => {
-        setTempUseValue(constants.GEO, data)
+        setTempUseValue(constants.GEO, data.geo)
         setGeoData()
       })
       .catch(error)
