@@ -81,6 +81,7 @@ const getMetaPayload = (meta) => {
     obj.dm = deviceModel // Should be laptop model but for now this is ok.
     obj.bnme = meta.browser
     obj.dplatform = dplatform
+    obj.sdkv = meta.sdkVersion
   }
 
   if (deviceGrain >= 2 || isManualManifest) {

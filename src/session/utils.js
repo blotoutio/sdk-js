@@ -50,7 +50,8 @@ const createMetaObject = () => {
     browser: parsedUA.browser.name || 'unknown',
     version: parsedUA.browser.version || '0.0.0.0',
     dplatform: parsedUA.device.type || 'unknown',
-    ua: navigator.userAgent
+    ua: navigator.userAgent,
+    sdkVersion: process.env.PACKAGE_VERSION
   }
 }
 
@@ -116,7 +117,6 @@ export const createSessionObject = (eventName, objectName) => {
     startTime: Date.now(),
     endTime: 0,
     lastServerSyncTime: 0,
-    sdkVersion: process.env.PACKAGE_VERSION,
     geo: {},
     meta: createMetaObject(),
     viewPort: [createViewPortObject()],
