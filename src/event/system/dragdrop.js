@@ -2,15 +2,12 @@ import { setEvent } from '../session'
 import { constants, isSysEvtStore } from '../../config'
 import { shouldCollectSystemEvents } from '../utils'
 import { collectEvent } from '../.'
-import { getSession } from '../../storage'
 
 export const dragStart = (window) => {
   const eventName = 'dragstart'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event)
-      }
+      setEvent(eventName, event)
       return
     }
 
@@ -24,9 +21,7 @@ export const dragEnd = (window) => {
   const eventName = 'dragend'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event)
-      }
+      setEvent(eventName, event)
       return
     }
 

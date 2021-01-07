@@ -18,10 +18,8 @@ export const resize = (window) => {
   const eventName = 'resize'
   window.addEventListener(eventName, debounce((e) => {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, e, {})
-        setViewPort()
-      }
+      setEvent(eventName, e, {})
+      setViewPort()
       return
     }
 
@@ -37,10 +35,7 @@ export const pagehide = (window) => {
     if (isSysEvtStore) {
       updateNavTime()
       updateNavPath()
-
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, e)
-      }
+      setEvent(eventName, e)
       return
     }
 
@@ -54,27 +49,6 @@ export const load = (window) => {
   const eventName = 'load'
   window.addEventListener(eventName, function (e) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, e)
-
-        const sessionId = getSession(constants.SESSION_ID)
-        const session = getSessionForDate(getStringDate(), sessionId)
-        if (!session) {
-          return
-        }
-        const sessionIndex = session.eventsData.eventsInfo
-          .findIndex((obj) => obj.name === constants.SESSION)
-        if (sessionIndex === -1) {
-          setEvent(constants.SESSION, e)
-        }
-
-        const mailerIndex = session.eventsData.eventsInfo
-          .findIndex((obj) => obj.name === constants.MAILER)
-        if (detectQueryString() && mailerIndex === -1) {
-          setEvent(constants.MAILER, e)
-        }
-      }
-
       if (
         window.doNotTrack ||
       navigator.doNotTrack ||
@@ -93,6 +67,24 @@ export const load = (window) => {
           setDNTEvent(e)
         }
       }
+
+      setEvent(eventName, e)
+      const sessionId = getSession(constants.SESSION_ID)
+      const session = getSessionForDate(getStringDate(), sessionId)
+      if (!session) {
+        return
+      }
+      const sessionIndex = session.eventsData.eventsInfo
+        .findIndex((obj) => obj.name === constants.SESSION)
+      if (sessionIndex === -1) {
+        setEvent(constants.SESSION, e)
+      }
+
+      const mailerIndex = session.eventsData.eventsInfo
+        .findIndex((obj) => obj.name === constants.MAILER)
+      if (detectQueryString() && mailerIndex === -1) {
+        setEvent(constants.MAILER, e)
+      }
       return
     }
 
@@ -109,10 +101,6 @@ export const beforeUnload = (window) => {
     }
 
     updateEndTime()
-    if (!getSession(constants.SESSION_ID)) {
-      return
-    }
-
     const date = getStringDate()
     const sessionId = getSession(constants.SESSION_ID)
     const session = getSessionForDate(date, sessionId)
@@ -142,9 +130,7 @@ export const domSubTreeModified = (window) => {
   const eventName = 'DOMSubtreeModified'
   window.addEventListener(eventName, debounce((event) => {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event)
-      }
+      setEvent(eventName, event)
       return
     }
 
@@ -158,9 +144,7 @@ export const domActive = (window) => {
   const eventName = 'DOMActivate'
   window.addEventListener(eventName, function (e) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, e)
-      }
+      setEvent(eventName, e)
       return
     }
 

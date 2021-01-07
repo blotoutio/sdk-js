@@ -1,5 +1,4 @@
 import { setEvent } from '../session'
-import { getSession } from '../../storage'
 import { constants, isSysEvtStore, isHighFreqEventOff } from '../../config'
 import { shouldCollectSystemEvents } from '../utils'
 import { collectEvent } from '../.'
@@ -9,9 +8,7 @@ export const click = (window) => {
   const eventName = 'click'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event)
-      }
+      setEvent(eventName, event)
       return
     }
 
@@ -25,9 +22,7 @@ export const doubleClick = (window) => {
   const eventName = 'dblclick'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event)
-      }
+      setEvent(eventName, event)
       return
     }
 
@@ -41,9 +36,7 @@ export const contextMenu = (window) => {
   const eventName = 'contextmenu'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event)
-      }
+      setEvent(eventName, event)
       return
     }
 
@@ -67,58 +60,54 @@ export const mouse = (window) => {
   window.addEventListener('mouseover', function (event) {
     mousePosX = event.pageX
     mousePosY = event.pageY
-    if (isSysEvtStore) {
-      if (!getSession(constants.SESSION_ID)) {
-        return
-      }
-
-      setTimeoutConst = setTimeout(function () {
-        setEvent('hover', event)
-      }, 1000)
-
-      if (isHighFreqEventOff) {
-        return
-      }
-
-      hoverEvents.push(
-        getHoverEventData('hoverc', event, {})
-      )
-
-      setTimeout(function () {
-        const eventsArr = hoverEvents
-        hoverEvents = []
-        if (eventsArr.length > 0) {
-          sendEvents(eventsArr)
-        }
-      }, 30000)
+    if (!isSysEvtStore) {
+      return
     }
+
+    setTimeoutConst = setTimeout(function () {
+      setEvent('hover', event)
+    }, 1000)
+
+    if (isHighFreqEventOff) {
+      return
+    }
+
+    hoverEvents.push(
+      getHoverEventData('hoverc', event, {})
+    )
+
+    setTimeout(function () {
+      const eventsArr = hoverEvents
+      hoverEvents = []
+      if (eventsArr.length > 0) {
+        sendEvents(eventsArr)
+      }
+    }, 30000)
   })
 
   window.addEventListener('scroll', function (event) {
-    if (isSysEvtStore) {
-      if (!getSession(constants.SESSION_ID)) {
-        return
-      }
-
-      if (timer === null) {
-        startTime = Date.now()
-      } else {
-        clearTimeout(timer)
-      }
-
-      timer = setTimeout(function () {
-        const eventsArr = []
-        eventsArr.push(
-          getsScrollEventData(
-            'scroll',
-            event,
-            {},
-            { mousePosX, mousePosY }
-          )
-        )
-        sendScrollEvents(eventsArr, startTime, Date.now())
-      }, 2000)
+    if (!isSysEvtStore) {
+      return
     }
+
+    if (timer === null) {
+      startTime = Date.now()
+    } else {
+      clearTimeout(timer)
+    }
+
+    timer = setTimeout(function () {
+      const eventsArr = []
+      eventsArr.push(
+        getsScrollEventData(
+          'scroll',
+          event,
+          {},
+          { mousePosX, mousePosY }
+        )
+      )
+      sendScrollEvents(eventsArr, startTime, Date.now())
+    }, 2000)
   })
 
   window.addEventListener('mouseout', function () {

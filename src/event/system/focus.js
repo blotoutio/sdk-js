@@ -1,5 +1,4 @@
 import { setEvent } from '../session'
-import { getSession } from '../../storage'
 import { shouldCollectSystemEvents } from '../utils'
 import { collectEvent } from '../.'
 import { constants, isSysEvtStore } from '../../config'
@@ -8,9 +7,7 @@ export const blur = (window) => {
   const eventName = 'blur'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event, {})
-      }
+      setEvent(eventName, event, {})
       return
     }
 
@@ -24,9 +21,7 @@ export const focus = (window) => {
   const eventName = 'focus'
   window.addEventListener(eventName, function (event) {
     if (isSysEvtStore) {
-      if (getSession(constants.SESSION_ID)) {
-        setEvent(eventName, event)
-      }
+      setEvent(eventName, event)
       return
     }
 
