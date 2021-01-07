@@ -10,7 +10,7 @@ import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 import { pullManifest, updateManifest, checkManifest } from './manifest'
 import { checkUpdateForManifest, setRetentionData } from './retention'
 import { setReferrer } from './common/referrerUtil'
-import { setGeoDetails, checkGeo } from './common/geoUtil'
+import { setGeoDetails } from './common/geoUtil'
 import { collectEvent, mapIDEvent } from './event'
 
 (function (window) {
@@ -55,18 +55,17 @@ import { collectEvent, mapIDEvent } from './event'
     setTempUseValue(constants.SDK_TOKEN, preferences.token)
     if (!checkManifest()) {
       pullManifest()
-        .then(() => {})
+        .then(() => {
+          setGeoDetails()
+        })
         .catch(function (error) {
           log.error(error)
         })
     } else {
+      setGeoDetails()
       if (checkUpdateForManifest()) {
         updateManifest()
       }
-    }
-
-    if (!checkGeo()) {
-      setGeoDetails()
     }
 
     const ref = document.referrer

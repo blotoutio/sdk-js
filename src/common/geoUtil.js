@@ -32,6 +32,10 @@ const setGeoData = () => {
 }
 
 export const setGeoDetails = () => {
+  if (!checkGeo()) {
+    return
+  }
+
   const sessionGeo = getTempUseValue(constants.GEO)
   const relativeGeoPath = getManifestVariable(constants.GEO_IP_PATH)
     ? getManifestVariable(constants.GEO_IP_PATH)
@@ -53,16 +57,15 @@ export const setGeoDetails = () => {
 
 export const checkGeo = () => {
   const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
-  if (mode && mode !== constants.PRIVACY_MODE) {
+  if (!mode || mode !== constants.PRIVACY_MODE) {
     return false
   }
 
   const sessionId = getSession(constants.SESSION_ID)
   const session = getSessionForDate(getStringDate(), sessionId)
-
   if (!sessionId || !session) {
     return false
   }
 
-  return session.geo && session.geo.conc && mode === constants.PRIVACY_MODE
+  return session.geo && session.geo.conc
 }
