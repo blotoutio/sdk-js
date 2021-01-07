@@ -36,7 +36,7 @@ const setUIDInInitEvent = () => {
   const index = findObjIndex(eventArr, 'init')
   setTimeout(() => {
     session.eventsData.eventsInfo[index].mid = getMid()
-    setSessionForDate(date, session)
+    setSessionForDate(date, sessionId, session)
   })
 }
 
