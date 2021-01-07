@@ -82,6 +82,7 @@ const getMetaPayload = (meta) => {
     obj.bnme = meta.browser
     obj.dplatform = dplatform
     obj.sdkv = meta.sdkVersion
+    obj.tz_offset = meta.timeZoneOffset
   }
 
   if (deviceGrain >= 2 || isManualManifest) {

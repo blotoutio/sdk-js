@@ -51,7 +51,8 @@ const createMetaObject = () => {
     version: parsedUA.browser.version || '0.0.0.0',
     dplatform: parsedUA.device.type || 'unknown',
     ua: navigator.userAgent,
-    sdkVersion: process.env.PACKAGE_VERSION
+    sdkVersion: process.env.PACKAGE_VERSION,
+    timeZoneOffset: new Date().getTimezoneOffset()
   }
 }
 
