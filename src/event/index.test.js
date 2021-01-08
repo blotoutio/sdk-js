@@ -1,11 +1,11 @@
-import * as eventStorage from '../event/storage'
-import * as eventSession from '../event/session'
+import * as eventStorage from './storage'
+import * as eventSession from './session'
+import * as eventUtils from './utils'
 import * as utils from '../utils'
 import * as storage from '../storage'
-import * as eventUtils from './utils'
 import * as network from '../common/networkUtil'
 import * as timeUtil from '../common/timeUtil'
-import { mapIDEvent, syncPreviousDateEvents, syncPreviousEvents } from '.'
+import { mapIDEvent, sendStartEvent, syncPreviousDateEvents, syncPreviousEvents } from '.'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -426,5 +426,37 @@ describe('mapIDEvent', () => {
     },
     '',
     21001)
+  })
+})
+
+describe('sendStartEvent', () => {
+  it('ok', () => {
+    const spySend = jest
+      .spyOn(eventUtils, 'sendEvents')
+      .mockImplementation()
+    sendStartEvent()
+    expect(spySend).toBeCalledWith([{
+      evc: 10001,
+      evcs: 11130,
+      extraInfo: {
+        mousePosX: -1,
+        mousePosY: -1
+      },
+      metaInfo: {},
+      mid: '',
+      name: 'sdk_start',
+      nmo: 1,
+      objectTitle: '',
+      position: {
+        height: -1,
+        width: -1,
+        x: -1,
+        y: -1
+      },
+      sentToServer: false,
+      tstmp: 1580775120000,
+      urlPath: 'http://localhost/'
+    }])
+    spySend.mockRestore()
   })
 })

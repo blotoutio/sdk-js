@@ -6,8 +6,13 @@ import { getNormalUseValue, getTempUseValue, setNormalUseValue } from '../storag
 import { updateRoot } from '../storage/store'
 import { getAllEventsOfDate } from './index'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
-import { getNearestTimestamp } from '../common/timeUtil'
+import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
 import { getSessionForDate } from './session'
+import { getSession } from '../storage'
+import { getPayload } from '../common/payloadUtil'
+import { getManifestUrl } from '../common/endPointUrlUtil'
+import { postRequest } from '../common/networkUtil'
+import { error } from '../common/logUtil'
 
 const chunk = (arr, size) => {
   return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -214,4 +219,23 @@ export const getNavigationTime = (sessionId, date) => {
     }
     return Math.ceil((val - navigationsTime[index - 1]) / 1000)
   })
+}
+
+export const sendEvents = (arr) => {
+  const date = getStringDate()
+  const sessionId = getSession(constants.SESSION_ID)
+  const session = getSessionForDate(date, sessionId)
+  if (!session) {
+    return
+  }
+  const eventsArr = getEventPayloadArr(arr, date, sessionId)
+  if (eventsArr.length === 0) {
+    return
+  }
+
+  const payload = getPayload(session, eventsArr)
+  const url = getManifestUrl()
+  postRequest(url, JSON.stringify(payload))
+    .then(() => { })
+    .catch(error)
 }

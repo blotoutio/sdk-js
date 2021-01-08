@@ -18,7 +18,8 @@ import {
   eventSync,
   getEventPayloadArr,
   shouldCollectSystemEvents,
-  getNavigationTime
+  getNavigationTime,
+  sendEvents
 } from './utils'
 import { getSession } from '../storage'
 import {
@@ -98,25 +99,6 @@ const getEventData = (eventName, event, type) => {
   }
 
   return createDevEventInfoObj(eventName, objectName)
-}
-
-const sendEvents = (arr) => {
-  const date = getStringDate()
-  const sessionId = getSession(constants.SESSION_ID)
-  const session = getSessionForDate(date, sessionId)
-  if (!session) {
-    return
-  }
-  const eventsArr = getEventPayloadArr(arr, date, sessionId)
-  if (eventsArr.length === 0) {
-    return
-  }
-
-  const payload = getPayload(session, eventsArr)
-  const url = getManifestUrl()
-  postRequest(url, JSON.stringify(payload))
-    .then(() => { })
-    .catch(error)
 }
 
 export const collectEvent = (eventName, event, type) => {
@@ -360,4 +342,9 @@ export const mapIDEvent = (id, provider, data = {}) => {
   data.map_provider = provider
 
   setDevEvent(constants.MAP_ID_EVENT, data, '', constants.MAP_ID_EVENT_CODE)
+}
+
+export const sendStartEvent = () => {
+  const event = createEventInfoObj('sdk_start')
+  sendEvents([event])
 }

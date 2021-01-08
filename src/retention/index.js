@@ -1,19 +1,18 @@
-import { callInterval, constants } from '../config'
+import { constants } from '../config'
 import * as dailyActive from './dailyActive'
 import * as weeklyActive from './weeklyActive'
 import * as monthlyActive from './monthlyActive'
 import { getLocal, getSession } from '../storage'
-import { getManifestVariable, pullManifest } from '../manifest'
+import { getManifestVariable } from '../manifest'
 import { getSDK, setSDK } from './storage'
 import { getCustomUseValue, getTempUseValue, setCustomUseValue, setTempUseValue } from '../storage/sharedPreferences'
 import { shouldApproximateTimestamp } from '../utils'
-import { getNearestTimestamp, getStringDate, millisecondsToHours } from '../common/timeUtil'
+import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
 import { postRequest } from '../common/networkUtil'
 import { updateRoot } from '../storage/store'
 import { getManifestUrl } from '../common/endPointUrlUtil'
-import { info, error } from '../common/logUtil'
+import { info } from '../common/logUtil'
 import { getRetentionSDK } from './utils'
-import { getModifiedDate, setModifiedDate, setData } from '../manifest/storage'
 import { getPayload } from '../common/payloadUtil'
 import { getSessionForDate } from '../event/session'
 
@@ -302,28 +301,6 @@ export const setRetentionObject = () => {
   const retentionSdkData = getRetentionSDK()
   setSDK(retentionSdkData)
   updateRoot()
-}
-
-export const checkUpdateForManifest = () => {
-  const modifiedDate = getModifiedDate()
-  const diffTime = millisecondsToHours(Date.now() - modifiedDate)
-  let manifestRefData = getManifestVariable(constants.MANIFEST_REFRESH_INTERVAL)
-  manifestRefData = manifestRefData || callInterval
-  if (diffTime >= manifestRefData) {
-    return true
-  }
-
-  const callTime = manifestRefData - diffTime
-  setTimeout(() => {
-    pullManifest()
-      .then((data) => {
-        setModifiedDate(Date.now())
-        setData(data)
-        updateRoot()
-      })
-      .catch(error)
-  }, callTime)
-  return false
 }
 
 export const setRetentionData = () => {

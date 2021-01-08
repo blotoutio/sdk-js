@@ -116,7 +116,8 @@ export const systemEventCode = {
   hover: 11508,
   hoverc: 11509,
   scroll: 11129,
-  sessionInfo: 11024
+  sessionInfo: 11024,
+  sdk_start: 11130
 }
 export const isDevMode = process.env.NODE_ENV === 'development'
 export const isManualManifest = true

@@ -7,11 +7,11 @@ import { setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
-import { pullManifest, updateManifest, checkManifest } from './manifest'
-import { checkUpdateForManifest, setRetentionData } from './retention'
+import { pullManifest, updateManifest, checkManifest, checkUpdateForManifest } from './manifest'
+import { setRetentionData, syncData } from './retention'
 import { setReferrer } from './common/referrerUtil'
 import { setGeoDetails } from './common/geoUtil'
-import { collectEvent, mapIDEvent } from './event'
+import { collectEvent, mapIDEvent, sendStartEvent } from './event'
 
 (function (window) {
   const SDK = function () {}
@@ -50,27 +50,28 @@ import { collectEvent, mapIDEvent } from './event'
     setUrl(preferences.endpointUrl)
     setInitialConfiguration(preferences)
     initialize(false)
-    setRetentionData()
-
     setTempUseValue(constants.SDK_TOKEN, preferences.token)
-    if (!checkManifest()) {
-      pullManifest()
-        .then(() => {
-          setGeoDetails()
-        })
-        .catch(function (error) {
-          log.error(error)
-        })
-    } else {
-      setGeoDetails()
-      if (checkUpdateForManifest()) {
-        updateManifest()
-      }
-    }
-
     const ref = document.referrer
     if (ref) {
       setReferrer(ref)
+    }
+
+    sendStartEvent()
+    if (!checkManifest()) {
+      pullManifest()
+        .then(() => {
+          setRetentionData()
+          setGeoDetails()
+          syncData()
+        })
+        .catch(log.error)
+    } else {
+      if (checkUpdateForManifest()) {
+        updateManifest()
+      }
+
+      setGeoDetails()
+      setRetentionData()
     }
 
     startEvents(window)
