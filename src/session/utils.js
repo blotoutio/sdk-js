@@ -41,13 +41,14 @@ const getPLF = (deviceType, OS) => {
 
 const createMetaObject = () => {
   const parsedUA = parser(navigator.userAgent)
+  const browser = navigator.brave ? 'Brave' : (parsedUA.browser.name || 'unknown')
 
   return {
     plf: getPLF(parsedUA.device.type, parsedUA.os.name),
     domain: getDomain(),
     osv: parsedUA.os.version || '0',
     hostOS: parsedUA.os.name || '',
-    browser: parsedUA.browser.name || 'unknown',
+    browser,
     version: parsedUA.browser.version || '0.0.0.0',
     dplatform: parsedUA.device.type || 'unknown',
     ua: navigator.userAgent,

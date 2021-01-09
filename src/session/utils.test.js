@@ -164,6 +164,10 @@ describe('createSessionObject', () => {
     navigator.__defineGetter__('userAgent', () => '')
   })
 
+  afterEach(() => {
+    navigator.brave = undefined
+  })
+
   it('null', () => {
     navigator.__defineGetter__('userAgent', () => null)
     const result = createSessionObject()
@@ -594,6 +598,48 @@ describe('createSessionObject', () => {
         plf: 14,
         ua: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20',
         version: '3.1.1',
+        sdkVersion: undefined,
+        timeZoneOffset: 0
+      },
+      startTime: 1580775120000,
+      viewPort: [
+        {
+          docHeight: 0,
+          docWidth: 0,
+          height: 0,
+          timeStamp: 1580775120000,
+          width: 0
+        }
+      ]
+    })
+  })
+
+  it('brave detection', () => {
+    navigator.brave = {}
+    const result = createSessionObject()
+    expect(result).toStrictEqual({
+      endTime: 0,
+      eventsData: {
+        devCodifiedEventsInfo: [],
+        eventsInfo: [],
+        navigationPath: [
+          'http://localhost/'
+        ],
+        sentToServer: false,
+        stayTimeBeforeNav: []
+      },
+      geo: {},
+      lastServerSyncTime: 0,
+      meta: {
+        browser: 'Brave',
+        domain: 'localhost',
+
+        dplatform: 'unknown',
+        hostOS: '',
+        osv: '0',
+        plf: 70,
+        ua: '',
+        version: '0.0.0.0',
         sdkVersion: undefined,
         timeZoneOffset: 0
       },
