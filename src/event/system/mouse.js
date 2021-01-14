@@ -2,7 +2,7 @@ import { setEvent } from '../session'
 import { constants, isSysEvtStore, isHighFreqEventOff } from '../../config'
 import { shouldCollectSystemEvents } from '../utils'
 import { collectEvent } from '../.'
-import { getHoverEventData, getsScrollEventData, sendEvents, sendScrollEvents } from './pocUtil'
+import { getHoverEventData, sendEvents } from './pocUtil'
 
 export const click = (window) => {
   const eventName = 'click'
@@ -52,7 +52,6 @@ export const contextMenu = (window) => {
 export const mouse = (window) => {
   let hoverEvents = []
   let timer
-  let startTime
   let setTimeoutConst
   let mousePosX
   let mousePosY = null
@@ -86,27 +85,19 @@ export const mouse = (window) => {
   })
 
   window.addEventListener('scroll', function (event) {
-    if (!isSysEvtStore) {
-      return
-    }
-
-    if (timer === null) {
-      startTime = Date.now()
-    } else {
+    if (timer != null) {
       clearTimeout(timer)
     }
 
     timer = setTimeout(function () {
-      const eventsArr = []
-      eventsArr.push(
-        getsScrollEventData(
-          'scroll',
-          event,
-          {},
-          { mousePosX, mousePosY }
-        )
-      )
-      sendScrollEvents(eventsArr, startTime, Date.now())
+      if (isSysEvtStore) {
+        setEvent('scroll', event, {}, { mousePosX, mousePosY })
+        return
+      }
+
+      if (shouldCollectSystemEvents()) {
+        collectEvent('scroll', event, constants.SCROLL_EVENT, { mousePosX, mousePosY })
+      }
     }, 2000)
   })
 

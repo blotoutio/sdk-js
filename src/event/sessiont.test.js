@@ -109,6 +109,65 @@ describe('setEvent', () => {
     spyEvents.mockRestore()
   })
 
+  it('scroll event', () => {
+    const spyEvents = jest
+      .spyOn(eventStorage, 'getEventsByDate')
+      .mockImplementation(() => ({
+        sessions: {
+          124123423: {
+            eventsData: {
+              eventsInfo: []
+            }
+          }
+        }
+      }))
+    setEvent(
+      'scroll', {
+        event: {
+          target: '#id'
+        }
+      },
+      {
+        data: true
+      },
+      {
+        mousePosX: 832,
+        mousePosY: 512
+      })
+    expect(spySet).toBeCalledWith('20-3-2020', {
+      sessions: {
+        124123423: {
+          eventsData: {
+            eventsInfo: [
+              {
+                evc: 10001,
+                evcs: 11129,
+                metaInfo: {
+                  data: true
+                },
+                mid: 'localhost-null-1580775120000',
+                name: 'scroll',
+                nmo: 1,
+                objectName: 'Unknown',
+                objectTitle: '',
+                position: {
+                  height: -1,
+                  width: -1,
+                  x: 832,
+                  y: 512
+                },
+                sentToServer: false,
+                tstmp: 1580775120000,
+                urlPath: 'http://localhost/'
+              }
+            ]
+          }
+        }
+      }
+    })
+    spyEvents.mockRestore()
+  })
+
   it('ok', () => {
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')

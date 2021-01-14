@@ -59,6 +59,7 @@ export const constants = {
   DOM_SUB_TREE_MODIFIED_INTERVAL: 1800000,
   SYSTEM_EVENT: 'system',
   DEV_EVENT: 'dev',
+  SCROLL_EVENT: 'scroll',
   COLLECT_TIMEOUT: 5000,
   PHI_PUBLIC_KEY: 'PHI_Public_Key',
   PII_PUBLIC_KEY: 'PII_Public_Key',

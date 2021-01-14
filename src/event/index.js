@@ -42,6 +42,7 @@ import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getPayload } from '../common/payloadUtil'
+import { createScrollEventInfo } from './system/pocUtil.js'
 
 let collectEventsArr = []
 let globalEventInterval = null
@@ -92,21 +93,25 @@ const sendNavigation = (date, sessionId) => {
     .catch(error)
 }
 
-const getEventData = (eventName, event, type) => {
+const getEventData = (eventName, event, type, mousePos) => {
   const objectName = getSelector(event.target)
   if (type === 'system') {
     return createEventInfoObj(eventName, objectName, {}, event)
   }
 
+  if (type === 'scroll') {
+    return createScrollEventInfo(eventName, objectName, {}, event, mousePos)
+  }
+
   return createDevEventInfoObj(eventName, objectName)
 }
 
-export const collectEvent = (eventName, event, type) => {
+export const collectEvent = (eventName, event, type, mousePos = {}) => {
   if (isHighFreqEventOff && highFreqEvents.includes(eventName)) {
     return
   }
 
-  collectEventsArr.push(getEventData(eventName, event, type))
+  collectEventsArr.push(getEventData(eventName, event, type, mousePos))
   setTimeout(() => {
     const eventsArray = collectEventsArr
     collectEventsArr = []
