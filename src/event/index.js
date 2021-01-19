@@ -346,7 +346,7 @@ export const mapIDEvent = (id, provider, data = {}) => {
   data.map_id = id
   data.map_provider = provider
 
-  setDevEvent(constants.MAP_ID_EVENT, data, '', constants.MAP_ID_EVENT_CODE)
+  setDevEvent(constants.MAP_ID_EVENT, data, constants.MAP_ID_EVENT_CODE)
 }
 
 export const sendStartEvent = () => {

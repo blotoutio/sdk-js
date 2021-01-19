@@ -40,7 +40,7 @@ describe('setPersonalEvent', () => {
     const spyEvents = jest
       .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => null)
-    setSessionPIIEvent('personal', 'obName', {
+    setSessionPIIEvent('personal', {
       meta: true
     })
     expect(spySet).toBeCalledTimes(0)
@@ -51,7 +51,7 @@ describe('setPersonalEvent', () => {
     const spyEvents = jest
       .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({}))
-    setSessionPIIEvent('personal', 'obName', {
+    setSessionPIIEvent('personal', {
       meta: true
     })
     expect(spySet).toBeCalledTimes(0)
@@ -64,7 +64,7 @@ describe('setPersonalEvent', () => {
       .mockImplementation(() => ({
         eventsData: {}
       }))
-    setSessionPIIEvent('personal', 'obName', {
+    setSessionPIIEvent('personal', {
       meta: true
     })
     expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
@@ -80,7 +80,6 @@ describe('setPersonalEvent', () => {
             mid: 'localhost-null-1580775120000',
             name: 'personal',
             nmo: 1,
-            objectName: 'obName',
             sentToServer: false,
             tstmp: 1580775120000,
             urlPath: 'http://localhost/'
@@ -104,7 +103,7 @@ describe('setPersonalEvent', () => {
         }
       }))
 
-    setSessionPIIEvent('personal', 'obName', {
+    setSessionPIIEvent('personal', {
       meta: true
     })
     expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
@@ -123,7 +122,6 @@ describe('setPersonalEvent', () => {
             mid: 'localhost-null-1580775120000',
             name: 'personal',
             nmo: 1,
-            objectName: 'obName',
             sentToServer: false,
             tstmp: 1580775120000,
             urlPath: 'http://localhost/'
@@ -149,7 +147,7 @@ describe('setSessionPHIEvent', () => {
         }
       }))
 
-    setSessionPHIEvent('personal', 'obName', {
+    setSessionPHIEvent('personal', {
       meta: true
     })
     expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
@@ -168,7 +166,6 @@ describe('setSessionPHIEvent', () => {
             mid: 'localhost-null-1580775120000',
             name: 'personal',
             nmo: 1,
-            objectName: 'obName',
             sentToServer: false,
             tstmp: 1580775120000,
             urlPath: 'http://localhost/'

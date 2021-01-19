@@ -16,9 +16,9 @@ import { collectEvent, mapIDEvent, sendStartEvent } from './event'
 (function (window) {
   const SDK = function () {}
 
-  SDK.prototype.logEvent = function (eventName, data = null, objectName = null) {
+  SDK.prototype.logEvent = function (eventName, data = null) {
     if (isDevEvtStore) {
-      setDevEvent(eventName, data, objectName)
+      setDevEvent(eventName, data)
       return
     }
 
@@ -27,8 +27,8 @@ import { collectEvent, mapIDEvent, sendStartEvent } from './event'
     }
   }
 
-  SDK.prototype.startTimedEvent = function (eventName, data = null, objectName = null) {
-    setStartDevEvent(eventName, objectName, data)
+  SDK.prototype.startTimedEvent = function (eventName, data = null) {
+    setStartDevEvent(eventName, data)
   }
 
   SDK.prototype.endTimedEvent = function (eventName) {
@@ -85,9 +85,9 @@ import { collectEvent, mapIDEvent, sendStartEvent } from './event'
     return getTempUseValue(constants.UID)
   }
 
-  SDK.prototype.logPIIEvent = function (eventName, data = null, objectName = null) {
+  SDK.prototype.logPIIEvent = function (eventName, data = null) {
     if (isDevEvtStore) {
-      setSessionPIIEvent(eventName, objectName, data)
+      setSessionPIIEvent(eventName, data)
       return
     }
 
@@ -96,9 +96,9 @@ import { collectEvent, mapIDEvent, sendStartEvent } from './event'
     }
   }
 
-  SDK.prototype.logPHIEvent = function (eventName, data = null, objectName = null) {
+  SDK.prototype.logPHIEvent = function (eventName, data = null) {
     if (isDevEvtStore) {
-      setSessionPHIEvent(eventName, objectName, data)
+      setSessionPHIEvent(eventName, data)
       return
     }
 

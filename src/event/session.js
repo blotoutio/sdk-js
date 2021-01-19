@@ -83,7 +83,7 @@ export const setEvent = function (eventName, event, meta = {}, mousePos = {}) {
   maybeSync(eventData)
 }
 
-export const setDevEvent = (eventName, data, objectName, eventCode = null) => {
+export const setDevEvent = (eventName, data, eventCode = null) => {
   if (!eventName) {
     return
   }
@@ -100,14 +100,14 @@ export const setDevEvent = (eventName, data, objectName, eventCode = null) => {
     eventsData.devCodifiedEventsInfo = []
   }
 
-  const obj = createDevEventInfoObj(eventName, objectName, data, eventCode)
+  const obj = createDevEventInfoObj(eventName, null, data, eventCode)
   eventsData.devCodifiedEventsInfo.push(obj)
 
   setSessionForDate(date, sessionId, session)
   maybeSync(eventsData)
 }
 
-export const setStartDevEvent = (eventName, objectName, data) => {
+export const setStartDevEvent = (eventName, data) => {
   if (!eventName) {
     return
   }
@@ -121,7 +121,7 @@ export const setStartDevEvent = (eventName, objectName, data) => {
 
   const index = findObjIndex(eventArray, eventName)
   if (index === -1) {
-    eventArray.push(createDevEventInfoObj(eventName, objectName, data))
+    eventArray.push(createDevEventInfoObj(eventName, null, data))
   } else {
     eventArray[index].startTime = Date.now()
   }

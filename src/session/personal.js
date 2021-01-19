@@ -5,7 +5,7 @@ import { createDevEventInfoObj } from '../event/utils'
 import { getStringDate } from '../common/timeUtil'
 import { getSessionForDate, setSessionForDate } from '../event/session'
 
-const setPersonalEvent = (eventName, objectName, data, isPII) => {
+const setPersonalEvent = (eventName, data, isPII) => {
   if (!eventName) {
     return
   }
@@ -21,7 +21,7 @@ const setPersonalEvent = (eventName, objectName, data, isPII) => {
   if (!eventsData.devCodifiedEventsInfo) {
     eventsData.devCodifiedEventsInfo = []
   }
-  const event = createDevEventInfoObj(eventName, objectName, data)
+  const event = createDevEventInfoObj(eventName, null, data)
   if (isPII) {
     event.isPii = true
   } else {
@@ -33,10 +33,10 @@ const setPersonalEvent = (eventName, objectName, data, isPII) => {
   setSessionForDate(date, sessionId, session)
 }
 
-export const setSessionPIIEvent = (eventName, objectName, meta) => {
-  setPersonalEvent(eventName, objectName, meta, true)
+export const setSessionPIIEvent = (eventName, meta) => {
+  setPersonalEvent(eventName, meta, true)
 }
 
-export const setSessionPHIEvent = (eventName, objectName, meta) => {
-  setPersonalEvent(eventName, objectName, meta, false)
+export const setSessionPHIEvent = (eventName, meta) => {
+  setPersonalEvent(eventName, meta, false)
 }

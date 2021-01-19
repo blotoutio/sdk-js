@@ -413,7 +413,6 @@ describe('mapIDEvent', () => {
       map_id: 'sdfasfasdfds',
       map_provider: 'service'
     },
-    '',
     21001)
   })
 
@@ -424,7 +423,6 @@ describe('mapIDEvent', () => {
       map_provider: 'service',
       custom: true
     },
-    '',
     21001)
   })
 })
