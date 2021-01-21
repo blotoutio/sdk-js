@@ -81,9 +81,13 @@ export const eventSync = {
   }
 }
 
-// TODO get this from manifest variable or default to false
 export const shouldCollectSystemEvents = () => {
-  return true
+  let collect = getManifestVariable(constants.PUSH_SYSTEM_EVENTS)
+  if (collect == null || collect === '0') {
+    collect = constants.DEFAULT_PUSH_SYSTEM_EVENTS
+  }
+
+  return collect
 }
 
 const checkIfCodeExists = (eventName) => {

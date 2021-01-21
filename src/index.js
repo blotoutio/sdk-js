@@ -1,4 +1,4 @@
-import { startEvents } from './event/system'
+import { requiredEvents, optionalEvents } from './event/system'
 import { setInitialConfiguration, initialize } from './utils'
 import { setUrl } from './common/endPointUrlUtil'
 import * as log from './common/logUtil'
@@ -43,13 +43,15 @@ import { mapIDEvent, sendStartEvent } from './event'
     }
 
     sendStartEvent()
+    requiredEvents(window)
+
     if (!checkManifest()) {
       pullManifest()
         .then(() => {
           setRetentionData()
           setGeoDetails()
           syncData()
-          startEvents(window)
+          optionalEvents(window)
         })
         .catch(log.error)
     } else {
@@ -59,7 +61,7 @@ import { mapIDEvent, sendStartEvent } from './event'
 
       setGeoDetails()
       setRetentionData()
-      startEvents(window)
+      optionalEvents(window)
     }
   }
 

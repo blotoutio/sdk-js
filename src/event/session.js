@@ -15,7 +15,6 @@ import { getNotSynced, maybeSync } from '../session/utils'
 import { getRoot } from '../storage/store'
 import { createDevEventInfoObj } from './utils'
 import { getStringDate } from '../common/timeUtil'
-import { createScrollEventInfo } from './system/utils.js'
 
 const getPositionObject = (event) => {
   let height = -1
@@ -43,7 +42,7 @@ const getPositionObject = (event) => {
   return { x, y, width, height }
 }
 
-export const setEvent = function (eventName, event, mousePos = {}) {
+export const setEvent = function (eventName, event) {
   if (!eventName || (isHighFreqEventOff && highFreqEvents.includes(eventName))) {
     return
   }
@@ -68,17 +67,8 @@ export const setEvent = function (eventName, event, mousePos = {}) {
   if (!eventData.eventsInfo) {
     eventData.eventsInfo = []
   }
-  if (eventName === 'scroll') {
-    eventData.eventsInfo.push(createScrollEventInfo(
-      eventName,
-      objectName,
-      { },
-      event,
-      mousePos))
-  } else {
-    eventData.eventsInfo.push(createEventInfoObj(eventName, objectName, { }, event))
-  }
 
+  eventData.eventsInfo.push(createEventInfoObj(eventName, objectName, { }, event))
   setSessionForDate(date, sessionId, session)
   maybeSync(eventData)
 }

@@ -1,7 +1,6 @@
 import {
   getMid,
   getNotSyncedDate,
-  getSelector,
   setNewDateObject,
   shouldApproximateTimestamp
 } from '../utils'
@@ -12,7 +11,6 @@ import {
   setSessionForDate
 } from './session'
 import {
-  createDevEventInfoObj,
   eventsChunkArr,
   eventSync,
   getEventPayloadArr,
@@ -23,8 +21,6 @@ import { getSession } from '../storage'
 import {
   callInterval,
   constants,
-  highFreqEvents,
-  isHighFreqEventOff,
   systemEventCode
 } from '../config'
 import { getEventsByDate, getStore } from './storage'
@@ -39,9 +35,7 @@ import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getPayload } from '../common/payloadUtil'
-import { createScrollEventInfo } from './system/utils.js'
 
-let collectEventsArr = []
 let globalEventInterval = null
 
 const getNavigationPayloadArr = (navigations, navigationsTime) => {
@@ -88,32 +82,6 @@ const sendNavigation = (date, sessionId) => {
   postRequest(url, JSON.stringify(payload))
     .then(() => { })
     .catch(error)
-}
-
-const getEventData = (eventName, event, type, mousePos) => {
-  const objectName = getSelector(event.target)
-  if (type === 'system') {
-    return createEventInfoObj(eventName, objectName, {}, event)
-  }
-
-  if (type === 'scroll') {
-    return createScrollEventInfo(eventName, objectName, {}, event, mousePos)
-  }
-
-  return createDevEventInfoObj(eventName, objectName)
-}
-
-export const collectEvent = (eventName, event, type, mousePos = {}) => {
-  if (isHighFreqEventOff && highFreqEvents.includes(eventName)) {
-    return
-  }
-
-  collectEventsArr.push(getEventData(eventName, event, type, mousePos))
-  setTimeout(() => {
-    const eventsArray = collectEventsArr
-    collectEventsArr = []
-    sendEvents(eventsArray)
-  }, constants.COLLECT_TIMEOUT)
 }
 
 export const sendPIIPHIEvent = (events, date, type) => {

@@ -113,3 +113,16 @@ export const domActive = (window) => {
     setEvent(eventName, event)
   })
 }
+
+export const scroll = (window) => {
+  let timer
+  window.addEventListener('scroll', function (event) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+
+    timer = setTimeout(function () {
+      setEvent('scroll', event)
+    }, 2000)
+  })
+}

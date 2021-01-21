@@ -3,17 +3,16 @@ import { copy, cut, paste } from './clipboard'
 import { blur, focus } from './focus'
 import { reset, submit } from './form'
 import { keyPressed, keyDown } from './keyboard'
-import { click, doubleClick, contextMenu, mouse } from './mouse'
+import { click, doubleClick, contextMenu, hover } from './mouse'
 import { online, offline } from './network'
 import { print } from './print'
 import { touchEnd } from './touch'
 import { hashChange } from './hash'
-import { resize, pagehide, load, beforeUnload, domActive, domSubTreeModified } from './window'
+import { resize, pagehide, load, beforeUnload, domActive, domSubTreeModified, scroll } from './window'
 import { error } from './resource'
 import { shouldCollectSystemEvents } from '../utils'
 
-// TODO some events are needed for basic things to work
-export const startEvents = (window) => {
+export const optionalEvents = (window) => {
   if (!shouldCollectSystemEvents()) {
     return
   }
@@ -37,7 +36,7 @@ export const startEvents = (window) => {
   click(window)
   doubleClick(window)
   contextMenu(window)
-  mouse(window)
+  hover(window)
 
   online(window)
   offline(window)
@@ -49,11 +48,15 @@ export const startEvents = (window) => {
   hashChange(window)
 
   resize(window)
-  pagehide(window)
-  load(window)
   beforeUnload(window)
   domActive(window)
   domSubTreeModified(window)
+  scroll(window)
 
   error(window)
+}
+
+export const requiredEvents = (window) => {
+  load(window)
+  pagehide(window)
 }

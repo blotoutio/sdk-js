@@ -21,27 +21,15 @@ export const contextMenu = (window) => {
   })
 }
 
-export const mouse = (window) => {
-  let timer
-  let setTimeoutConst
-
+export const hover = (window) => {
+  let timeout
   window.addEventListener('mouseover', function (event) {
-    setTimeoutConst = setTimeout(function () {
+    timeout = setTimeout(function () {
       setEvent('hover', event)
     }, 1000)
   })
 
-  window.addEventListener('scroll', function (event) {
-    if (timer) {
-      clearTimeout(timer)
-    }
-
-    timer = setTimeout(function () {
-      setEvent('scroll', event)
-    }, 2000)
-  })
-
   window.addEventListener('mouseout', function () {
-    clearTimeout(setTimeoutConst)
+    clearTimeout(timeout)
   })
 }

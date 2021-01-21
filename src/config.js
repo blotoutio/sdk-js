@@ -72,7 +72,8 @@ export const constants = {
   DEVELOPER_EVENT_CUSTOM: 21100,
   MAP_ID_EVENT: 'map_id',
   MAP_ID_EVENT_CODE: 21001,
-  PUSH_SYSTEM_EVENTS: 'SDK_Push_System_Events'
+  PUSH_SYSTEM_EVENTS: 'SDK_Push_System_Events',
+  DEFAULT_PUSH_SYSTEM_EVENTS: false
 }
 export const manifestConst = {
   Geo_Ip_Path: 'v1/geo/city',
