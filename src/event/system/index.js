@@ -1,4 +1,3 @@
-import { isSysEvtStore } from '../../config'
 import { dragStart, dragEnd } from './dragdrop'
 import { copy, cut, paste } from './clipboard'
 import { blur, focus } from './focus'
@@ -13,8 +12,9 @@ import { resize, pagehide, load, beforeUnload, domActive, domSubTreeModified } f
 import { error } from './resource'
 import { shouldCollectSystemEvents } from '../utils'
 
+// TODO some events are needed for basic things to work
 export const startEvents = (window) => {
-  if (!isSysEvtStore && !shouldCollectSystemEvents()) {
+  if (!shouldCollectSystemEvents()) {
     return
   }
 

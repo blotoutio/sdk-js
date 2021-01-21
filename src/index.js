@@ -2,7 +2,7 @@ import { startEvents } from './event/system'
 import { setInitialConfiguration, initialize } from './utils'
 import { setUrl } from './common/endPointUrlUtil'
 import * as log from './common/logUtil'
-import { constants, isDevEvtCollect, isDevEvtStore } from './config'
+import { constants } from './config'
 import { setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
@@ -11,20 +11,13 @@ import { pullManifest, updateManifest, checkManifest, checkUpdateForManifest } f
 import { setRetentionData, syncData } from './retention'
 import { setReferrer } from './common/referrerUtil'
 import { setGeoDetails } from './common/geoUtil'
-import { collectEvent, mapIDEvent, sendStartEvent } from './event'
+import { mapIDEvent, sendStartEvent } from './event'
 
 (function (window) {
   const SDK = function () {}
 
   SDK.prototype.logEvent = function (eventName, data = null) {
-    if (isDevEvtStore) {
-      setDevEvent(eventName, data)
-      return
-    }
-
-    if (isDevEvtCollect) {
-      collectEvent(eventName, {}, constants.DEV_EVENT)
-    }
+    setDevEvent(eventName, data)
   }
 
   SDK.prototype.startTimedEvent = function (eventName, data = null) {
@@ -32,14 +25,7 @@ import { collectEvent, mapIDEvent, sendStartEvent } from './event'
   }
 
   SDK.prototype.endTimedEvent = function (eventName) {
-    if (isDevEvtStore) {
-      setEndDevEvent(eventName)
-      return
-    }
-
-    if (isDevEvtCollect) {
-      collectEvent(eventName, {}, constants.DEV_EVENT)
-    }
+    setEndDevEvent(eventName)
   }
 
   SDK.prototype.init = function (preferences) {
@@ -63,6 +49,7 @@ import { collectEvent, mapIDEvent, sendStartEvent } from './event'
           setRetentionData()
           setGeoDetails()
           syncData()
+          startEvents(window)
         })
         .catch(log.error)
     } else {
@@ -72,9 +59,8 @@ import { collectEvent, mapIDEvent, sendStartEvent } from './event'
 
       setGeoDetails()
       setRetentionData()
+      startEvents(window)
     }
-
-    startEvents(window)
   }
 
   SDK.prototype.setPayingUser = function () {
@@ -86,25 +72,11 @@ import { collectEvent, mapIDEvent, sendStartEvent } from './event'
   }
 
   SDK.prototype.logPIIEvent = function (eventName, data = null) {
-    if (isDevEvtStore) {
-      setSessionPIIEvent(eventName, data)
-      return
-    }
-
-    if (isDevEvtCollect) {
-      collectEvent(eventName, {}, constants.DEV_EVENT)
-    }
+    setSessionPIIEvent(eventName, data)
   }
 
   SDK.prototype.logPHIEvent = function (eventName, data = null) {
-    if (isDevEvtStore) {
-      setSessionPHIEvent(eventName, data)
-      return
-    }
-
-    if (isDevEvtCollect) {
-      collectEvent(eventName, {}, constants.DEV_EVENT)
-    }
+    setSessionPHIEvent(eventName, data)
   }
 
   SDK.prototype.mapID = function (id, provider, data = null) {

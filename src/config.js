@@ -71,7 +71,8 @@ export const constants = {
   CUSTOM_EVENT_STORAGE: 'EventsSubCode',
   DEVELOPER_EVENT_CUSTOM: 21100,
   MAP_ID_EVENT: 'map_id',
-  MAP_ID_EVENT_CODE: 21001
+  MAP_ID_EVENT_CODE: 21001,
+  PUSH_SYSTEM_EVENTS: 'SDK_Push_System_Events'
 }
 export const manifestConst = {
   Geo_Ip_Path: 'v1/geo/city',
@@ -121,12 +122,7 @@ export const systemEventCode = {
   sdk_start: 11130
 }
 export const isDevMode = process.env.NODE_ENV === 'development'
-export const isManualManifest = true
 export const isApprox = false
-export const isSysEvtCollect = true
-export const isSysEvtStore = true
-export const isDevEvtCollect = true
-export const isDevEvtStore = true
 export const isHighFreqEventOff = true
 export const highFreqEvents = ['DOMActivate', 'DOMSubtreeModified', 'focus', 'blur', 'keypress', 'hoverc', 'touchend']
 export const dataEncryptionEnabled = true

@@ -1,9 +1,4 @@
-import {
-  constants,
-  isApprox,
-  isSysEvtStore,
-  isDevEvtStore
-} from './config'
+import { constants, isApprox } from './config'
 import { setRetentionData } from './retention'
 import { getLocal, getSession } from './storage'
 import { checkEventsInterval, getStore, setStore } from './event/storage'
@@ -277,10 +272,6 @@ export const getSystemMergeCounter = (events) => {
   }
 
   return 0
-}
-
-export const shouldSyncStoredData = () => {
-  return isSysEvtStore || isDevEvtStore
 }
 
 export const getNotSyncedDate = () => {

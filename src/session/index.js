@@ -8,7 +8,6 @@ import {
 import { getNearestTimestamp, getPreviousDateString, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
-import { shouldCollectSystemEvents } from '../event/utils'
 import { getSessionForDate, setSessionForDate } from '../event/session'
 
 const getInfoPayload = (date, sessionId) => {
@@ -47,10 +46,6 @@ const getInfoPayload = (date, sessionId) => {
 }
 
 export const addSessionInfoEvent = (events, eventsArrayChunk, date, sessionId) => {
-  if (!shouldCollectSystemEvents()) {
-    return eventsArrayChunk
-  }
-
   const sysMergeCounterValue = getSystemMergeCounter(events)
   const info = getInfoPayload(date, sessionId)
   if (!info) {

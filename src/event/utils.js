@@ -1,4 +1,4 @@
-import { constants, isSysEvtCollect } from '../config'
+import { constants } from '../config'
 import { getManifestVariable } from '../manifest'
 import { getMid, getSystemMergeCounter, shouldApproximateTimestamp } from '../utils'
 import { stringToIntSum } from '../common/securityUtil'
@@ -81,8 +81,9 @@ export const eventSync = {
   }
 }
 
+// TODO get this from manifest variable or default to false
 export const shouldCollectSystemEvents = () => {
-  return isSysEvtCollect
+  return true
 }
 
 const checkIfCodeExists = (eventName) => {

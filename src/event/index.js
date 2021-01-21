@@ -3,8 +3,7 @@ import {
   getNotSyncedDate,
   getSelector,
   setNewDateObject,
-  shouldApproximateTimestamp,
-  shouldSyncStoredData
+  shouldApproximateTimestamp
 } from '../utils'
 import {
   createEventInfoObj,
@@ -17,7 +16,6 @@ import {
   eventsChunkArr,
   eventSync,
   getEventPayloadArr,
-  shouldCollectSystemEvents,
   getNavigationTime,
   sendEvents
 } from './utils'
@@ -26,7 +24,6 @@ import {
   callInterval,
   constants,
   highFreqEvents,
-  isDevEvtCollect,
   isHighFreqEventOff,
   systemEventCode
 } from '../config'
@@ -42,7 +39,7 @@ import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getPayload } from '../common/payloadUtil'
-import { createScrollEventInfo } from './system/pocUtil.js'
+import { createScrollEventInfo } from './system/utils.js'
 
 let collectEventsArr = []
 let globalEventInterval = null
@@ -152,26 +149,22 @@ export const getNotSyncedEvents = (obj) => {
   let devEvents = []
   let piiEvents = []
   let phiEvents = []
-  if (shouldCollectSystemEvents() && obj.eventsInfo) {
+  if (obj.eventsInfo) {
     events = obj.eventsInfo.filter((evt) => !evt.sentToServer && !evt.isPii && !evt.isPhi)
   }
-  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
+  if (obj.devCodifiedEventsInfo) {
     piiEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer && evt.isPii)
   }
-  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
+  if (obj.devCodifiedEventsInfo) {
     phiEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer && evt.isPhi)
   }
-  if (isDevEvtCollect && obj.devCodifiedEventsInfo) {
+  if (obj.devCodifiedEventsInfo) {
     devEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer)
   }
   return { events, devEvents, piiEvents, phiEvents }
 }
 
 export const setSyncEventsInterval = () => {
-  if (!shouldSyncStoredData()) {
-    return
-  }
-
   let eventPushInterval = getManifestVariable(constants.EVENT_PUSH_INTERVAL)
   if (eventPushInterval == null) {
     eventPushInterval = constants.DEFAULT_EVENT_PUSH_INTERVAL
@@ -233,11 +226,6 @@ export const getAllEventsOfDate = (date) => {
 }
 
 export const syncEvents = (sessionId, date) => {
-  if (!shouldSyncStoredData()) {
-    eventSync.progressStatus = false
-    return
-  }
-
   setSyncEventsInterval()
   if (!date) {
     date = getStringDate()

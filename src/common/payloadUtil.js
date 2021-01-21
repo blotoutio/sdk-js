@@ -1,4 +1,4 @@
-import { constants, isManualManifest } from '../config'
+import { constants } from '../config'
 import { getManifestVariable } from '../manifest'
 
 const getGeoPayload = (geo) => {
@@ -14,10 +14,6 @@ const getGeoPayload = (geo) => {
   let geoGrain = getManifestVariable(constants.EVENT_GEOLOCATION_GRAIN)
   if (!geoGrain) {
     geoGrain = constants.DEFAULT_EVENT_GEOLOCATION_GRAIN
-  }
-
-  if (isManualManifest) {
-    return geo
   }
 
   const geoObject = {}
@@ -72,7 +68,7 @@ const getMetaPayload = (meta) => {
     }
   }
   const obj = {}
-  if (deviceGrain >= 1 || isManualManifest) {
+  if (deviceGrain >= 1) {
     obj.plf = meta.plf
     obj.appn = meta.domain
     obj.osv = meta.osv
@@ -85,7 +81,7 @@ const getMetaPayload = (meta) => {
     obj.tz_offset = meta.timeZoneOffset
   }
 
-  if (deviceGrain >= 2 || isManualManifest) {
+  if (deviceGrain >= 2) {
     obj.osn = meta.hostOS
   }
 
