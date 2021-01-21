@@ -566,18 +566,9 @@ describe('setReferrerEvent', () => {
               {
                 evc: 10001,
                 evcs: undefined,
-                metaInfo: {},
                 mid: 'localhost-null-1580775120000',
                 name: 'some_event',
                 nmo: 1,
-                objectName: '',
-                objectTitle: '',
-                position: {
-                  height: -1,
-                  width: -1,
-                  x: -1,
-                  y: -1
-                },
                 sentToServer: false,
                 tstmp: 1580775120000,
                 urlPath: 'http://localhost/',

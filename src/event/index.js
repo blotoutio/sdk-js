@@ -293,10 +293,14 @@ export const sendBounceEvent = (date) => {
     .catch(error)
 }
 
-export const mapIDEvent = (id, provider, data = {}) => {
+export const mapIDEvent = (id, provider, data) => {
   if (!id) {
     error('ID mapping is missing id')
     return
+  }
+
+  if (!data) {
+    data = {}
   }
 
   data.map_id = id

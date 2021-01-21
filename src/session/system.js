@@ -26,7 +26,7 @@ export const setDNTEvent = function (event) {
     return
   }
 
-  eventsInfo.push(createEventInfoObj(eventName, objectName, {}, event))
+  eventsInfo.push(createEventInfoObj(eventName, objectName, event))
   setSessionForDate(date, sessionId, session)
 }
 

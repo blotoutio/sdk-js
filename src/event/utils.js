@@ -144,7 +144,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
   }
 
   const viewportLength = (session.viewPort || []).length
-  const viewPortObj = viewportLength > 0 ? session.viewPort[viewportLength - 1] : {}
+  const viewPortObj = viewportLength > 0 ? session.viewPort[viewportLength - 1] : null
 
   const result = []
   arr.forEach((val) => {
@@ -154,10 +154,13 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
     }
     const propObj = {
       referrer: getReferrerUrlOfDateSession(date, sessionId),
-      screen: viewPortObj,
       obj: val.objectName,
       position: val.position,
       session_id: sessionId
+    }
+
+    if (viewPortObj) {
+      propObj.screen = viewPortObj
     }
 
     if (val.objectTitle) {

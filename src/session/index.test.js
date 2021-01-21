@@ -135,7 +135,6 @@ describe('addSessionInfoEvent', () => {
             duration: 0,
             end: 0,
             referrer: null,
-            screen: {},
             session_id: 124123423,
             start: 2312313123
           },
@@ -252,7 +251,6 @@ describe('addSessionInfoEvent', () => {
             duration: 1003,
             end: 2313316123,
             referrer: null,
-            screen: {},
             session_id: 124123423,
             start: 2312313123
           },

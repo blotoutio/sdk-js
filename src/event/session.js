@@ -68,7 +68,7 @@ export const setEvent = function (eventName, event) {
     eventData.eventsInfo = []
   }
 
-  eventData.eventsInfo.push(createEventInfoObj(eventName, objectName, { }, event))
+  eventData.eventsInfo.push(createEventInfoObj(eventName, objectName, event))
   setSessionForDate(date, sessionId, session)
   maybeSync(eventData)
 }
@@ -161,7 +161,7 @@ export const setEndDevEvent = (eventName) => {
   setSession('startEvents', eventArray)
 }
 
-export const createEventInfoObj = (eventName, objectName, meta = {}, event = {}) => {
+export const createEventInfoObj = (eventName, objectName, event) => {
   if (!eventName) {
     return null
   }
@@ -171,20 +171,22 @@ export const createEventInfoObj = (eventName, objectName, meta = {}, event = {})
     name: eventName,
     urlPath: window.location.href,
     tstmp: Date.now(),
-    mid: getRoot() ? getMid() : '', // TODO(nejc): why do we check root here?
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
-    evcs: systemEventCode[eventName],
-    position: getPositionObject(event),
-    objectTitle: getObjectTitle(event, eventName),
-    extraInfo: {
+    evcs: systemEventCode[eventName]
+  }
+
+  if (getRoot()) {
+    data.mid = getMid()
+  }
+
+  if (event) {
+    data.position = getPositionObject(event)
+    data.objectTitle = getObjectTitle(event, eventName)
+    data.extraInfo = {
       mousePosX: event.clientX || -1,
       mousePosY: event.clientY || -1
     }
-  }
-
-  if (meta) {
-    data.metaInfo = meta
   }
 
   if (objectName) {

@@ -45,8 +45,7 @@ export const createDaySchema = (session) => {
   return {
     date: getStringDate(),
     domain: getDomain(),
-    sessions,
-    retentionData: ''
+    sessions
   }
 }
 

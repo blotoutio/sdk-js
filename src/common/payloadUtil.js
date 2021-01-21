@@ -38,7 +38,7 @@ const getGeoPayload = (geo) => {
 
 const getMetaPayload = (meta) => {
   if (!meta) {
-    return {}
+    return null
   }
 
   let deviceGrain = getManifestVariable(constants.EVENT_DEVICEINFO_GRAIN)
@@ -91,7 +91,7 @@ const getMetaPayload = (meta) => {
 export const getPayload = (session, events) => {
   const payload = {}
   const meta = getMetaPayload(session.meta)
-  if (Object.keys(meta).length !== 0) {
+  if (meta && Object.keys(meta).length !== 0) {
     payload.meta = meta
   }
 

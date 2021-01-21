@@ -16,7 +16,7 @@ const getInfoPayload = (date, sessionId) => {
     return null
   }
   const viewportLen = (session.viewPort || []).length
-  const viewPortObj = viewportLen > 0 ? session.viewPort[viewportLen - 1] : {}
+  const viewPortObj = viewportLen > 0 ? session.viewPort[viewportLen - 1] : null
   const startTime = session.startTime
   const endTime = session.endTime
   let durationInSecs = Math.floor((endTime - startTime) / 1000)
@@ -24,7 +24,7 @@ const getInfoPayload = (date, sessionId) => {
     durationInSecs = 0
   }
 
-  return {
+  const info = {
     mid: getMid(),
     userid: getTempUseValue(constants.UID),
     evn: constants.SESSION_INFO,
@@ -34,7 +34,6 @@ const getInfoPayload = (date, sessionId) => {
     evt: shouldApproximateTimestamp() ? getNearestTimestamp(Date.now()) : Date.now(),
     properties: {
       referrer: getReferrerUrlOfDateSession(date, sessionId),
-      screen: viewPortObj,
       session_id: sessionId,
       start: startTime,
       end: endTime,
@@ -43,6 +42,12 @@ const getInfoPayload = (date, sessionId) => {
     nmo: 1,
     evc: constants.EVENT_CATEGORY
   }
+
+  if (viewPortObj) {
+    info.properties.screen = viewPortObj
+  }
+
+  return info
 }
 
 export const addSessionInfoEvent = (events, eventsArrayChunk, date, sessionId) => {

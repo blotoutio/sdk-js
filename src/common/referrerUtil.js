@@ -14,10 +14,9 @@ const getDomainOfReferrer = (ref) => {
   return ref
 }
 
-export const createReferrerEventInfo = (eventName, ref, meta = {}) => {
-  return {
+export const createReferrerEventInfo = (eventName, ref, meta) => {
+  const info = {
     sentToServer: false,
-    objectName: '',
     name: eventName,
     urlPath: window.location.href,
     tstmp: Date.now(),
@@ -25,25 +24,28 @@ export const createReferrerEventInfo = (eventName, ref, meta = {}) => {
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
     evcs: systemEventCode[eventName],
-    position: { x: -1, y: -1, width: -1, height: -1 },
-    metaInfo: meta,
-    value: ref,
-    objectTitle: ''
+    value: ref
   }
+
+  if (meta) {
+    info.metaInfo = meta
+  }
+
+  return info
 }
 
 export const setReferrer = (ref) => {
   if (ref && ref !== '') {
     const refDomain = getDomainOfReferrer(ref)
     if (refDomain && refDomain !== window.location.hostname) {
-      setReferrerEvent('referrer', ref, {})
+      setReferrerEvent('referrer', ref)
     } else if (ref.includes(window.location.hostname)) {
-      setReferrerEvent('referrer', 'none', {})
+      setReferrerEvent('referrer', 'none')
     }
     return
   }
 
-  setReferrerEvent('referrer', 'none', {})
+  setReferrerEvent('referrer', 'none')
 }
 
 export const getPreviousDateReferrer = () => {

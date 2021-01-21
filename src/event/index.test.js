@@ -169,8 +169,8 @@ describe('syncPreviousEvents', () => {
         }
       }))
     syncPreviousEvents()
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}}]}')
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213","start":1231312321,"end":0,"duration":0},"nmo":1,"evc":10001}]}')
+    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}')
+    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536},"start":1231312321,"end":0,"duration":0},"nmo":1,"evc":10001}]}')
     spyEvents.mockRestore()
     spyCount.mockRestore()
   })
@@ -336,8 +336,8 @@ describe('syncPreviousDateEvents', () => {
         }
       }))
     syncPreviousDateEvents()
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}}]}')
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213"}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"screen":{"timeStamp":1608506665536},"session_id":"12341234213","duration":null},"nmo":1,"evc":10001}]}')
+    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}')
+    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"session_id":"12341234213","duration":null},"screen":{"timeStamp":1608506665536},"nmo":1,"evc":10001}]}')
     spyEvents.mockRestore()
     spyCount.mockRestore()
   })
@@ -436,21 +436,8 @@ describe('sendStartEvent', () => {
     expect(spySend).toBeCalledWith([{
       evc: 10001,
       evcs: 11130,
-      extraInfo: {
-        mousePosX: -1,
-        mousePosY: -1
-      },
-      metaInfo: {},
-      mid: '',
       name: 'sdk_start',
       nmo: 1,
-      objectTitle: '',
-      position: {
-        height: -1,
-        width: -1,
-        x: -1,
-        y: -1
-      },
       sentToServer: false,
       tstmp: 1580775120000,
       urlPath: 'http://localhost/'

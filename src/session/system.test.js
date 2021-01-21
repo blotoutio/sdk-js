@@ -104,8 +104,6 @@ describe('setDNTEvent', () => {
               mousePosX: -1,
               mousePosY: -1
             },
-            metaInfo: {},
-            mid: '',
             name: 'dnt',
             nmo: 1,
             objectName: 'Unknown',

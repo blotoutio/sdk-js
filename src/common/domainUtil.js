@@ -5,12 +5,12 @@ import { getStringDate } from './timeUtil'
 const createDateObject = (event, objectName) => {
   const session = createSessionObject(event, objectName)
   const dateString = getStringDate()
-  const obj = {}
-  obj[dateString] = {
-    isSynced: false,
-    sdkData: createDaySchema(session)
+  return {
+    [dateString]: {
+      isSynced: false,
+      sdkData: createDaySchema(session)
+    }
   }
-  return obj
 }
 
 let customDomain = null

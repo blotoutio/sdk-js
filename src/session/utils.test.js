@@ -223,23 +223,10 @@ describe('createSessionObject', () => {
           {
             evc: 10001,
             evcs: undefined,
-            extraInfo: {
-              mousePosX: -1,
-              mousePosY: -1
-            },
-            metaInfo: {},
-            mid: '',
             name: 'some_event',
             nmo: 1,
             objectName: {
               data: false
-            },
-            objectTitle: '',
-            position: {
-              height: -1,
-              width: -1,
-              x: -1,
-              y: -1
             },
             sentToServer: false,
             tstmp: 1580775120000,

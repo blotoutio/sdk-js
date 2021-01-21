@@ -69,6 +69,7 @@ export const setReferrerEvent = (eventName, ref, meta) => {
   if (!eventsData.eventsInfo) {
     return
   }
+
   const refIndex = eventsData.eventsInfo
     .findIndex((obj) => obj.name === eventName)
   if (refIndex !== -1) {
