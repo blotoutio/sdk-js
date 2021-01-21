@@ -247,3 +247,8 @@ export const sendEvents = (arr) => {
     .then(() => { })
     .catch(error)
 }
+
+export const detectQueryString = () => {
+  const currentUrl = window.location.href
+  return (/\?.+=.*/g).test(currentUrl)
+}

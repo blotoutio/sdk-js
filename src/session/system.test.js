@@ -100,20 +100,8 @@ describe('setDNTEvent', () => {
           {
             evc: 10001,
             evcs: 11502,
-            extraInfo: {
-              mousePosX: -1,
-              mousePosY: -1
-            },
             name: 'dnt',
             nmo: 1,
-            objectName: 'Unknown',
-            objectTitle: '',
-            position: {
-              height: -1,
-              width: -1,
-              x: -1,
-              y: -1
-            },
             sentToServer: false,
             tstmp: 1580775120000,
             urlPath: 'http://localhost/'

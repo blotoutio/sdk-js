@@ -2,16 +2,11 @@ import { debounce } from '../../utils'
 import { constants } from '../../config'
 import { getSession } from '../../storage'
 import { getSessionForDate, setEvent } from '../session'
-import { setDNTEvent, setViewPort } from '../../session/system'
+import { setViewPort } from '../../session/system'
 import { updateNavPath, updateNavTime } from '../../session/navigation'
 import { updateEndTime } from '../../session'
 import { sendBounceEvent } from '../.'
 import { getStringDate } from '../../common/timeUtil'
-
-const detectQueryString = () => {
-  const currentUrl = window.location.href
-  return (/\?.+=.*/g).test(currentUrl)
-}
 
 export const resize = (window) => {
   const eventName = 'resize'
@@ -27,48 +22,6 @@ export const pagehide = (window) => {
     updateNavTime()
     updateNavPath()
     setEvent(eventName, e)
-  })
-}
-
-export const load = (window) => {
-  const eventName = 'load'
-  window.addEventListener(eventName, function (event) {
-    if (
-      window.doNotTrack ||
-      navigator.doNotTrack ||
-      navigator.msDoNotTrack ||
-      (window.external && 'msTrackingProtectionEnabled' in window.external)
-    ) {
-      // The browser supports Do Not Track!
-      if (
-        window.doNotTrack === '1' ||
-        navigator.doNotTrack === 'yes' ||
-        navigator.doNotTrack === '1' ||
-        navigator.msDoNotTrack === '1' ||
-        (window.external.msTrackingProtectionEnabled && window.external.msTrackingProtectionEnabled())
-      ) {
-        // Do Not Track is enabled!
-        setDNTEvent(event)
-      }
-    }
-
-    setEvent(eventName, event)
-    const sessionId = getSession(constants.SESSION_ID)
-    const session = getSessionForDate(getStringDate(), sessionId)
-    if (!session) {
-      return
-    }
-    const sessionIndex = session.eventsData.eventsInfo
-      .findIndex((obj) => obj.name === constants.SESSION)
-    if (sessionIndex === -1) {
-      setEvent(constants.SESSION, event)
-    }
-
-    const mailerIndex = session.eventsData.eventsInfo
-      .findIndex((obj) => obj.name === constants.MAILER)
-    if (detectQueryString() && mailerIndex === -1) {
-      setEvent(constants.MAILER, event)
-    }
   })
 }
 

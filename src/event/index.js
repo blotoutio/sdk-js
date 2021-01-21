@@ -7,10 +7,11 @@ import {
 import {
   createEventInfoObj,
   getSessionForDate,
-  setDevEvent,
+  setDevEvent, setEvent,
   setSessionForDate
 } from './session'
 import {
+  detectQueryString,
   eventsChunkArr,
   eventSync,
   getEventPayloadArr,
@@ -35,6 +36,7 @@ import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getPayload } from '../common/payloadUtil'
+import { setDNTEvent } from '../session/system'
 
 let globalEventInterval = null
 
@@ -310,6 +312,35 @@ export const mapIDEvent = (id, provider, data) => {
 }
 
 export const sendStartEvent = () => {
-  const event = createEventInfoObj('sdk_start')
-  sendEvents([event])
+  sendEvents([createEventInfoObj('sdk_start')])
+
+  if (window.doNotTrack || navigator.doNotTrack) {
+    if (
+      window.doNotTrack === '1' ||
+      navigator.doNotTrack === 'yes' ||
+      navigator.doNotTrack === '1'
+    ) {
+      setDNTEvent()
+    }
+  }
+
+  const sessionId = getSession(constants.SESSION_ID)
+  const session = getSessionForDate(getStringDate(), sessionId)
+  if (!session) {
+    return
+  }
+
+  const sessionIndex = session.eventsData.eventsInfo
+    .findIndex((obj) => obj.name === constants.SESSION)
+  if (sessionIndex === -1) {
+    setEvent(constants.SESSION)
+  }
+
+  if (detectQueryString()) {
+    const mailerIndex = session.eventsData.eventsInfo
+      .findIndex((obj) => obj.name === constants.MAILER)
+    if (mailerIndex === -1) {
+      setEvent(constants.MAILER)
+    }
+  }
 }

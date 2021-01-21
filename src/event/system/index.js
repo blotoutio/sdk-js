@@ -8,7 +8,7 @@ import { online, offline } from './network'
 import { print } from './print'
 import { touchEnd } from './touch'
 import { hashChange } from './hash'
-import { resize, pagehide, load, beforeUnload, domActive, domSubTreeModified, scroll } from './window'
+import { resize, pagehide, beforeUnload, domActive, domSubTreeModified, scroll } from './window'
 import { error } from './resource'
 import { shouldCollectSystemEvents } from '../utils'
 
@@ -57,6 +57,5 @@ export const optionalEvents = (window) => {
 }
 
 export const requiredEvents = (window) => {
-  load(window)
   pagehide(window)
 }

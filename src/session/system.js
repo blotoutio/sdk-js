@@ -1,16 +1,11 @@
-import { getSelector } from '../utils'
 import { getSession } from '../storage'
 import { constants } from '../config'
 import { createViewPortObject } from './utils'
 import { createEventInfoObj, getSessionForDate, setSessionForDate } from '../event/session'
 import { getStringDate } from '../common/timeUtil'
 
-export const setDNTEvent = function (event) {
+export const setDNTEvent = function () {
   const eventName = 'dnt'
-  if (!event) {
-    return
-  }
-  const objectName = getSelector(event.target)
   const sessionId = getSession(constants.SESSION_ID)
   const date = getStringDate()
   const session = getSessionForDate(date, sessionId)
@@ -26,7 +21,7 @@ export const setDNTEvent = function (event) {
     return
   }
 
-  eventsInfo.push(createEventInfoObj(eventName, objectName, event))
+  eventsInfo.push(createEventInfoObj(eventName))
   setSessionForDate(date, sessionId, session)
 }
 
