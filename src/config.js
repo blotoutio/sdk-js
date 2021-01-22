@@ -123,7 +123,6 @@ export const systemEventCode = {
   sdk_start: 11130
 }
 export const isDevMode = process.env.NODE_ENV === 'development'
-export const isApprox = false
 export const isHighFreqEventOff = true
 export const highFreqEvents = ['DOMActivate', 'DOMSubtreeModified', 'focus', 'blur', 'keypress', 'hoverc', 'touchend']
 export const dataEncryptionEnabled = true

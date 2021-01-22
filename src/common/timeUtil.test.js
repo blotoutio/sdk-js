@@ -1,7 +1,6 @@
 import {
   getWeekNumber,
   millisecondsToHours,
-  getNearestTimestamp,
   millisecondsToDays,
   getMonthNumber,
   getCurrentWeekNumber,
@@ -74,13 +73,6 @@ describe('getMonthNumber', () => {
   it('data', () => {
     const result = getMonthNumber(1601648651)
     expect(result).toBe(0)
-  })
-})
-
-describe('getNearestTimestamp', () => {
-  it('data', () => {
-    const result = getNearestTimestamp(1601648651)
-    expect(result).toBe(1601649000)
   })
 })
 

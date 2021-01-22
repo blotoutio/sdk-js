@@ -82,10 +82,6 @@ describe('syncPreviousEvents', () => {
   })
 
   it('nothing to sync', () => {
-    const spyApproximate = jest
-      .spyOn(utils, 'shouldApproximateTimestamp')
-      .mockImplementation(() => true)
-
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
@@ -100,7 +96,6 @@ describe('syncPreviousEvents', () => {
     syncPreviousEvents()
     expect(spyPost).toBeCalledTimes(0)
     spyEvents.mockRestore()
-    spyApproximate.mockRestore()
   })
 
   it('do not collect system events', () => {
@@ -251,10 +246,6 @@ describe('syncPreviousDateEvents', () => {
   })
 
   it('nothing to sync', () => {
-    const spyApproximate = jest
-      .spyOn(utils, 'shouldApproximateTimestamp')
-      .mockImplementation(() => true)
-
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
@@ -269,7 +260,6 @@ describe('syncPreviousDateEvents', () => {
     syncPreviousDateEvents()
     expect(spyPost).toBeCalledTimes(0)
     spyEvents.mockRestore()
-    spyApproximate.mockRestore()
   })
 
   it('do not collect system events', () => {

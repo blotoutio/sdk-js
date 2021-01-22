@@ -39,11 +39,6 @@ export const getCurrentMonthNumber = () => {
   return getMonthNumber(new Date())
 }
 
-export const getNearestTimestamp = function (timestamp) {
-  const prev = timestamp - (timestamp % 1800)
-  return prev + 1800
-}
-
 export const getFormattedDate = (date) => {
   if (!date || !isValidDate(date)) {
     return null

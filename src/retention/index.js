@@ -6,8 +6,7 @@ import { getLocal, getSession } from '../storage'
 import { getManifestVariable } from '../manifest'
 import { getSDK, setSDK } from './storage'
 import { getCustomUseValue, getTempUseValue, setCustomUseValue, setTempUseValue } from '../storage/sharedPreferences'
-import { shouldApproximateTimestamp } from '../utils'
-import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
+import { getStringDate } from '../common/timeUtil'
 import { postRequest } from '../common/networkUtil'
 import { updateRoot } from '../storage/store'
 import { getManifestUrl } from '../common/endPointUrlUtil'
@@ -21,15 +20,12 @@ const getRetentionPayloadArr = (arr, name) => {
   const result = []
   const UID = getTempUseValue(constants.UID)
   arr.forEach((val) => {
-    const eventTime = shouldApproximateTimestamp()
-      ? getNearestTimestamp(val.tstmp)
-      : val.tstmp
     const data = {
       mid: val.mid,
       userid: UID,
       evn: eventName,
       evcs: val.evcs,
-      evt: eventTime,
+      evt: val.tstmp,
       nmo: val.nmo,
       evc: val.evc
     }

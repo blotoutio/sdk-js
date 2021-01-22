@@ -1,8 +1,7 @@
 import {
   getMid,
   getNotSyncedDate,
-  setNewDateObject,
-  shouldApproximateTimestamp
+  setNewDateObject
 } from '../utils'
 import {
   createEventInfoObj,
@@ -33,7 +32,7 @@ import { encryptRSA } from '../common/securityUtil'
 import { addSessionInfoEvent, updatePreviousDayEndTime } from '../session'
 import { getNotSynced } from '../session/utils'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
-import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
+import { getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getPayload } from '../common/payloadUtil'
 import { setDNTEvent } from '../session/system'
@@ -42,7 +41,6 @@ let globalEventInterval = null
 
 const getNavigationPayloadArr = (navigations, navigationsTime) => {
   const UID = getTempUseValue(constants.UID)
-  const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(Date.now()) : Date.now()
   return [{
     mid: getMid(),
     userid: UID,
@@ -50,7 +48,7 @@ const getNavigationPayloadArr = (navigations, navigationsTime) => {
     evcs: systemEventCode[constants.NAVIGATION],
     evdc: 1,
     scrn: window.location.href,
-    evt: eventTime,
+    evt: Date.now(),
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
     nvg: navigations,

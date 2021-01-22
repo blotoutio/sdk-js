@@ -1,11 +1,7 @@
 import { getSession } from '../storage'
 import { constants, systemEventCode } from '../config'
-import {
-  getMid,
-  getSystemMergeCounter,
-  shouldApproximateTimestamp
-} from '../utils'
-import { getNearestTimestamp, getPreviousDateString, getStringDate } from '../common/timeUtil'
+import { getMid, getSystemMergeCounter } from '../utils'
+import { getPreviousDateString, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getSessionForDate, setSessionForDate } from '../event/session'
@@ -31,7 +27,7 @@ const getInfoPayload = (date, sessionId) => {
     evcs: systemEventCode.sessionInfo,
     evdc: 1,
     scrn: window.location.href,
-    evt: shouldApproximateTimestamp() ? getNearestTimestamp(Date.now()) : Date.now(),
+    evt: Date.now(),
     properties: {
       referrer: getReferrerUrlOfDateSession(date, sessionId),
       session_id: sessionId,

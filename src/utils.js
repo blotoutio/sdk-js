@@ -1,4 +1,4 @@
-import { constants, isApprox } from './config'
+import { constants } from './config'
 import { setRetentionData } from './retention'
 import { getLocal, getSession } from './storage'
 import { checkEventsInterval, getStore, setStore } from './event/storage'
@@ -283,8 +283,4 @@ export const getNotSyncedDate = () => {
     }
   }
   return notSyncDate
-}
-
-export const shouldApproximateTimestamp = () => {
-  return isApprox
 }

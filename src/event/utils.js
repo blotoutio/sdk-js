@@ -1,12 +1,12 @@
 import { constants } from '../config'
 import { getManifestVariable } from '../manifest'
-import { getMid, getSystemMergeCounter, shouldApproximateTimestamp } from '../utils'
+import { getMid, getSystemMergeCounter } from '../utils'
 import { stringToIntSum } from '../common/securityUtil'
 import { getNormalUseValue, getTempUseValue, setNormalUseValue } from '../storage/sharedPreferences'
 import { updateRoot } from '../storage/store'
 import { getAllEventsOfDate } from './index'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
-import { getNearestTimestamp, getStringDate } from '../common/timeUtil'
+import { getStringDate } from '../common/timeUtil'
 import { getSessionForDate } from './session'
 import { getSession } from '../storage'
 import { getPayload } from '../common/payloadUtil'
@@ -184,7 +184,6 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
     }
 
     const dateEvents = getAllEventsOfDate(date)
-    const eventTime = shouldApproximateTimestamp() ? getNearestTimestamp(val.tstmp) : val.tstmp
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     const obj = {
       mid: val.mid,
@@ -193,7 +192,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       evcs: val.evcs,
       evdc: eventCount.length,
       scrn: val.urlPath,
-      evt: eventTime,
+      evt: val.tstmp,
       properties: propObj,
       nmo: val.nmo,
       evc: val.evc

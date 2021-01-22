@@ -150,9 +150,6 @@ describe('addSessionInfoEvent', () => {
     const spyCount = jest
       .spyOn(utils, 'getSystemMergeCounter')
       .mockImplementation(() => 2)
-    const spyApproximate = jest
-      .spyOn(utils, 'shouldApproximateTimestamp')
-      .mockImplementation(() => true)
     const spyEvents = jest
       .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
@@ -190,7 +187,7 @@ describe('addSessionInfoEvent', () => {
           evcs: 11024,
           evdc: 1,
           evn: 'Session Info',
-          evt: 1580775121800,
+          evt: 1580775120000,
           mid: 'localhost-null-1580775120000',
           nmo: 1,
           properties: {
@@ -211,7 +208,6 @@ describe('addSessionInfoEvent', () => {
       ]
     ])
     spyEvents.mockRestore()
-    spyApproximate.mockRestore()
     spyCount.mockRestore()
   })
 
