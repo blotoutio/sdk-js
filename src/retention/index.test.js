@@ -1,7 +1,7 @@
 import {
   setDailyActiveUsage,
   setWeeklyActiveUsage,
-  setMonthlyActiveUsage
+  setMonthlyActiveUsage,
 } from '.'
 import * as storage from '../storage'
 import * as daily from './dailyActive'
@@ -10,10 +10,8 @@ import * as monthly from './monthlyActive'
 
 describe('setDailyActiveUsage', () => {
   it('normal', () => {
-    const spyCount = jest
-      .spyOn(daily, 'setCount')
-    const spySession = jest
-      .spyOn(daily, 'setCount')
+    const spyCount = jest.spyOn(daily, 'setCount')
+    const spySession = jest.spyOn(daily, 'setCount')
     setDailyActiveUsage()
     expect(spyCount).toHaveBeenCalledWith('dau', 41001)
     expect(spySession).toHaveBeenCalledTimes(1)
@@ -22,10 +20,8 @@ describe('setDailyActiveUsage', () => {
   })
 
   it('normal + paying user', () => {
-    const spyCount = jest
-      .spyOn(daily, 'setCount')
-    const spySession = jest
-      .spyOn(daily, 'setSession')
+    const spyCount = jest.spyOn(daily, 'setCount')
+    const spySession = jest.spyOn(daily, 'setSession')
     const spyLocale = jest
       .spyOn(storage, 'getLocal')
       .mockImplementation((name) => {
@@ -47,10 +43,8 @@ describe('setDailyActiveUsage', () => {
 
 describe('setWeeklyActiveUsage', () => {
   it('normal', () => {
-    const spyCount = jest
-      .spyOn(weekly, 'setCount')
-    const spySession = jest
-      .spyOn(weekly, 'setSession')
+    const spyCount = jest.spyOn(weekly, 'setCount')
+    const spySession = jest.spyOn(weekly, 'setSession')
     setWeeklyActiveUsage()
     expect(spyCount).toHaveBeenCalledWith('wau', 41002)
     expect(spySession).toHaveBeenCalledTimes(1)
@@ -59,10 +53,8 @@ describe('setWeeklyActiveUsage', () => {
   })
 
   it('normal + paying user', () => {
-    const spyCount = jest
-      .spyOn(weekly, 'setCount')
-    const spySession = jest
-      .spyOn(weekly, 'setSession')
+    const spyCount = jest.spyOn(weekly, 'setCount')
+    const spySession = jest.spyOn(weekly, 'setSession')
     const spyLocale = jest
       .spyOn(storage, 'getLocal')
       .mockImplementation((name) => {
@@ -84,10 +76,8 @@ describe('setWeeklyActiveUsage', () => {
 
 describe('setMonthlyActiveUsage', () => {
   it('normal', () => {
-    const spyCount = jest
-      .spyOn(monthly, 'setCount')
-    const spySession = jest
-      .spyOn(monthly, 'setSession')
+    const spyCount = jest.spyOn(monthly, 'setCount')
+    const spySession = jest.spyOn(monthly, 'setSession')
     setMonthlyActiveUsage()
     expect(spyCount).toHaveBeenCalledWith('mau', 41003)
     expect(spySession).toHaveBeenCalledTimes(1)
@@ -96,10 +86,8 @@ describe('setMonthlyActiveUsage', () => {
   })
 
   it('normal + paying user', () => {
-    const spyCount = jest
-      .spyOn(monthly, 'setCount')
-    const spySession = jest
-      .spyOn(monthly, 'setSession')
+    const spyCount = jest.spyOn(monthly, 'setCount')
+    const spySession = jest.spyOn(monthly, 'setSession')
     const spyLocale = jest
       .spyOn(storage, 'getLocal')
       .mockImplementation((name) => {

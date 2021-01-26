@@ -11,7 +11,7 @@ export const getWeekNumber = (date) => {
   target.setUTCMonth(0, 1)
 
   if (target.getUTCDay() !== 4) {
-    target.setUTCMonth(0, 1 + ((4 - target.getUTCDay()) + 7) % 7)
+    target.setUTCMonth(0, 1 + ((4 - target.getUTCDay() + 7) % 7))
   }
 
   return Math.ceil((firstThursday - target) / (7 * 24 * 3600 * 1000)) + 1
@@ -44,13 +44,11 @@ export const getFormattedDate = (date) => {
     return null
   }
 
-  return new Intl.DateTimeFormat(
-    'en',
-    {
-      month: '2-digit',
-      day: '2-digit',
-      year: '2-digit'
-    }).format(date)
+  return new Intl.DateTimeFormat('en', {
+    month: '2-digit',
+    day: '2-digit',
+    year: '2-digit',
+  }).format(date)
 }
 
 export const getStringDate = () => {

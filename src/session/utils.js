@@ -41,7 +41,7 @@ const getPLF = (deviceType, OS) => {
 
 const createMetaObject = () => {
   const parsedUA = parser(navigator.userAgent)
-  const browser = navigator.brave ? 'Brave' : (parsedUA.browser.name || 'unknown')
+  const browser = navigator.brave ? 'Brave' : parsedUA.browser.name || 'unknown'
 
   return {
     plf: getPLF(parsedUA.device.type, parsedUA.os.name),
@@ -53,7 +53,7 @@ const createMetaObject = () => {
     dplatform: parsedUA.device.type || 'unknown',
     ua: navigator.userAgent,
     sdkVersion: process.env.PACKAGE_VERSION,
-    timeZoneOffset: new Date().getTimezoneOffset()
+    timeZoneOffset: new Date().getTimezoneOffset(),
   }
 }
 
@@ -127,8 +127,8 @@ export const createSessionObject = (eventName, objectName) => {
       navigationPath: [window.location.href],
       stayTimeBeforeNav: [],
       devCodifiedEventsInfo: [],
-      sentToServer: false
-    }
+      sentToServer: false,
+    },
   }
 
   const eventsInfo = createEventInfoObj(eventName, objectName)
@@ -145,6 +145,6 @@ export const createViewPortObject = () => {
     width: document.documentElement.clientWidth,
     height: document.documentElement.clientHeight,
     docHeight: document.documentElement.scrollHeight,
-    docWidth: document.documentElement.scrollWidth
+    docWidth: document.documentElement.scrollWidth,
   }
 }

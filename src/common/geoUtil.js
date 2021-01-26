@@ -25,7 +25,7 @@ const setGeoData = () => {
     conc: sessionGeo.geo.conc,
     couc: sessionGeo.geo.couc,
     reg: sessionGeo.geo.reg,
-    city: sessionGeo.geo.city
+    city: sessionGeo.geo.city,
   }
 
   setSessionForDate(date, sessionId, session)

@@ -15,7 +15,7 @@ const getRetentionData = () => {
       newUser: false,
       nmo: 1,
       evc: constants.RETENTION_CATEGORY,
-      evcs: constants.DNUCode
+      evcs: constants.DNUCode,
     },
     dau: [],
     dast: [],
@@ -25,7 +25,7 @@ const getRetentionData = () => {
     wpu: [],
     mau: [],
     mast: [],
-    mpu: []
+    mpu: [],
   }
 }
 
@@ -45,8 +45,8 @@ export const getTimestampFromKey = (key) => {
   return new Date(
     parseInt(eventDate[2]),
     parseInt(eventDate[1]) - 1,
-    parseInt(eventDate[0]))
-    .valueOf()
+    parseInt(eventDate[0])
+  ).valueOf()
 }
 
 export const getUserObject = (code) => {
@@ -55,7 +55,7 @@ export const getUserObject = (code) => {
     tstmp: Date.now(),
     mid: getMid(),
     nmo: 1,
-    evc: constants.RETENTION_CATEGORY
+    evc: constants.RETENTION_CATEGORY,
   }
 
   if (code) {
@@ -71,14 +71,15 @@ export const getRetentionSDK = () => {
     createdDate: date,
     modifiedDate: date, // TODO(nejc): do we need this? I don't see being used
     domain: getDomain(),
-    retentionData: getRetentionData()
+    retentionData: getRetentionData(),
   }
 }
 
 export const getHighestTimestamp = (retentions) => {
   return Math.max.apply(
     Math,
-    retentions.map((item) => item.tstmp || 0))
+    retentions.map((item) => item.tstmp || 0)
+  )
 }
 
 export const getLastNextDayEvent = (timestamp) => {
@@ -86,7 +87,7 @@ export const getLastNextDayEvent = (timestamp) => {
   if (!eventStore || !timestamp) {
     return {
       eventKey: '',
-      eventStamp: 0
+      eventStamp: 0,
     }
   }
 
@@ -97,14 +98,14 @@ export const getLastNextDayEvent = (timestamp) => {
     if (keyTimestamp > timestamp && currentDate !== eventDate) {
       return {
         eventKey: key,
-        eventStamp: keyTimestamp
+        eventStamp: keyTimestamp,
       }
     }
   }
 
   return {
     eventKey: '',
-    eventStamp: 0
+    eventStamp: 0,
   }
 }
 
@@ -128,7 +129,7 @@ export const getSessionAvgObject = (code, date, averageTime) => {
     logtstmp: Date.now(),
     mid: getMid(),
     nmo: 1,
-    evc: constants.RETENTION_CATEGORY
+    evc: constants.RETENTION_CATEGORY,
   }
 
   if (code) {

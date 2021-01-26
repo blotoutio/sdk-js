@@ -2,7 +2,7 @@ name: Size diff
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-base:
@@ -12,42 +12,42 @@ jobs:
     timeout-minutes: 2
 
     steps:
-    - name: Checkout PR
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.base_ref }}
+      - name: Checkout PR
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.base_ref }}
 
-    - name: Use Node.js 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-        registry-url: https://npm.pkg.github.com
-        scope: blotoutio
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com
+          scope: blotoutio
 
-    - name: Cache node_modules
-      id: cache-modules
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cache/Cypress
-          node_modules
-        key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/Cypress
+            node_modules
+          key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
 
-    - name: Install dependencies
-      if: steps.cache-modules.outputs.cache-hit != 'true'
-      run: npm ci
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
+      - name: Install dependencies
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: npm run build
 
-    - name: Upload stats.json
-      uses: actions/upload-artifact@v2
-      with:
-        name: base
-        path: ./dist/stats.json
-        retention-days: 1
+      - name: Upload stats.json
+        uses: actions/upload-artifact@v2
+        with:
+          name: base
+          path: ./dist/stats.json
+          retention-days: 1
 
   build-pr:
     if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !github.event.pull_request.draft) }}
@@ -56,40 +56,40 @@ jobs:
     timeout-minutes: 2
 
     steps:
-    - name: Checkout PR
-      uses: actions/checkout@v2
+      - name: Checkout PR
+        uses: actions/checkout@v2
 
-    - name: Use Node.js 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-        registry-url: https://npm.pkg.github.com
-        scope: blotoutio
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com
+          scope: blotoutio
 
-    - name: Cache node_modules
-      id: cache-modules
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cache/Cypress
-          node_modules
-        key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/Cypress
+            node_modules
+          key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
 
-    - name: Install dependencies
-      if: steps.cache-modules.outputs.cache-hit != 'true'
-      run: npm ci
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
+      - name: Install dependencies
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: npm run build
 
-    - name: Upload head stats.json
-      uses: actions/upload-artifact@v2
-      with:
-        name: pr
-        path: ./dist/stats.json
-        retention-days: 1
+      - name: Upload head stats.json
+        uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: ./dist/stats.json
+          retention-days: 1
 
   compare:
     if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !github.event.pull_request.draft) }}
@@ -99,36 +99,36 @@ jobs:
     timeout-minutes: 3
 
     steps:
-    - name: Checkout PR
-      uses: actions/checkout@v2
+      - name: Checkout PR
+        uses: actions/checkout@v2
 
-    - name: Download base stats
-      uses: actions/download-artifact@v2
-      with:
-        name: base
-        path: base
+      - name: Download base stats
+        uses: actions/download-artifact@v2
+        with:
+          name: base
+          path: base
 
-    - name: Download head stats
-      uses: actions/download-artifact@v2
-      with:
-        name: pr
-        path: pr
+      - name: Download head stats
+        uses: actions/download-artifact@v2
+        with:
+          name: pr
+          path: pr
 
-    - name: Get diff
-      id: get-diff
-      uses: NejcZdovc/bundle-size-diff@v1
-      with:
-        base_path: './base/stats.json'
-        pr_path: './pr/stats.json'
+      - name: Get diff
+        id: get-diff
+        uses: NejcZdovc/bundle-size-diff@v1
+        with:
+          base_path: './base/stats.json'
+          pr_path: './pr/stats.json'
 
-    - name: Comment
-      uses: NejcZdovc/comment-pr@v1
-      with:
-        file: 'comment_size.md'
-        identifier: 'GITHUB_ACTION_COMMENT_SIZE'
-      env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        OLD: ${{steps.get-diff.outputs.base_file_string}}
-        NEW: ${{steps.get-diff.outputs.pr_file_string}}
-        DIFF: ${{steps.get-diff.outputs.diff_file_string}}
-        DIFF_PERCENT: ${{steps.get-diff.outputs.percent}}
+      - name: Comment
+        uses: NejcZdovc/comment-pr@v1
+        with:
+          file: 'comment_size.md'
+          identifier: 'GITHUB_ACTION_COMMENT_SIZE'
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          OLD: ${{steps.get-diff.outputs.base_file_string}}
+          NEW: ${{steps.get-diff.outputs.pr_file_string}}
+          DIFF: ${{steps.get-diff.outputs.diff_file_string}}
+          DIFF_PERCENT: ${{steps.get-diff.outputs.percent}}

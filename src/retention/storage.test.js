@@ -15,14 +15,14 @@ describe('getSDK', () => {
       .mockImplementation(() => ({
         retention: {
           retentionSDK: {
-            data: true
-          }
-        }
+            data: true,
+          },
+        },
       }))
 
     const result = getSDK()
     expect(result).toStrictEqual({
-      data: true
+      data: true,
     })
     spyGet.mockRestore()
   })
@@ -41,17 +41,17 @@ describe('setSDK', () => {
     const obj = {
       domains: [domainName],
       [domainName]: {
-        retention: {}
-      }
+        retention: {},
+      },
     }
     updateRoot(obj)
 
     setSDK({
-      data: false
+      data: false,
     })
     const result = getSDK()
     expect(result).toStrictEqual({
-      data: false
+      data: false,
     })
     spyDomain.mockRestore()
   })

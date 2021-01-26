@@ -6,7 +6,7 @@ import {
   getTempUseValue,
   setCustomUseValue,
   setNormalUseValue,
-  setTempUseValue
+  setTempUseValue,
 } from './sharedPreferences'
 import { updateRoot } from './store'
 
@@ -22,9 +22,9 @@ describe('getTempUseValue', () => {
       .mockImplementation(() => ({
         sharedPreference: {
           tempUse: {
-            data: true
-          }
-        }
+            data: true,
+          },
+        },
       }))
 
     const result = getTempUseValue('foo')
@@ -38,9 +38,9 @@ describe('getTempUseValue', () => {
       .mockImplementation(() => ({
         sharedPreference: {
           tempUse: {
-            data: true
-          }
-        }
+            data: true,
+          },
+        },
       }))
 
     const result = getTempUseValue('data')
@@ -62,8 +62,8 @@ describe('setTempUseValue', () => {
     const obj = {
       domains: [domainName],
       [domainName]: {
-        sharedPreference: {}
-      }
+        sharedPreference: {},
+      },
     }
     updateRoot(obj)
 
@@ -82,9 +82,9 @@ describe('setTempUseValue', () => {
       domains: [domainName],
       [domainName]: {
         sharedPreference: {
-          tempUse: {}
-        }
-      }
+          tempUse: {},
+        },
+      },
     }
     updateRoot(obj)
 
@@ -107,9 +107,9 @@ describe('getNormalUseValue', () => {
       .mockImplementation(() => ({
         sharedPreference: {
           normalUse: {
-            data: true
-          }
-        }
+            data: true,
+          },
+        },
       }))
 
     const result = getNormalUseValue('foo')
@@ -123,9 +123,9 @@ describe('getNormalUseValue', () => {
       .mockImplementation(() => ({
         sharedPreference: {
           normalUse: {
-            data: true
-          }
-        }
+            data: true,
+          },
+        },
       }))
 
     const result = getNormalUseValue('data')
@@ -147,8 +147,8 @@ describe('setNormalUseValue', () => {
     const obj = {
       domains: [domainName],
       [domainName]: {
-        sharedPreference: {}
-      }
+        sharedPreference: {},
+      },
     }
     updateRoot(obj)
 
@@ -167,9 +167,9 @@ describe('setNormalUseValue', () => {
       domains: [domainName],
       [domainName]: {
         sharedPreference: {
-          normalUse: {}
-        }
-      }
+          normalUse: {},
+        },
+      },
     }
     updateRoot(obj)
 
@@ -192,9 +192,9 @@ describe('getCustomUseValue', () => {
       .mockImplementation(() => ({
         sharedPreference: {
           customUse: {
-            data: true
-          }
-        }
+            data: true,
+          },
+        },
       }))
 
     const result = getCustomUseValue('foo')
@@ -208,9 +208,9 @@ describe('getCustomUseValue', () => {
       .mockImplementation(() => ({
         sharedPreference: {
           customUse: {
-            data: true
-          }
-        }
+            data: true,
+          },
+        },
       }))
 
     const result = getCustomUseValue('data')
@@ -232,8 +232,8 @@ describe('setCustomUseValue', () => {
     const obj = {
       domains: [domainName],
       [domainName]: {
-        sharedPreference: {}
-      }
+        sharedPreference: {},
+      },
     }
     updateRoot(obj)
 
@@ -252,9 +252,9 @@ describe('setCustomUseValue', () => {
       domains: [domainName],
       [domainName]: {
         sharedPreference: {
-          customUse: {}
-        }
-      }
+          customUse: {},
+        },
+      },
     }
     updateRoot(obj)
 

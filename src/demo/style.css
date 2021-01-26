@@ -1,0 +1,65 @@
+body {
+  font-size: 15px;
+  font-family: Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+nav {
+  margin: 0 0 30px;
+  background: darkgray;
+}
+
+.navWrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+nav a {
+  margin: 20px;
+  display: inline-block;
+  color: #efeaea;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.anchor {
+  margin-bottom: 3000px;
+  display: block;
+}
+
+.content {
+  padding: 10px;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.events {
+  display: flex;
+}
+
+.eventsActions {
+  width: 200px;
+}
+
+.events button {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  background: none;
+  border: 2px solid darkgray;
+  height: 30px;
+  cursor: pointer;
+}
+
+#eventData {
+  padding: 20px 40px 0;
+}

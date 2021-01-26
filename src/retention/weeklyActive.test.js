@@ -24,12 +24,11 @@ describe('setCount', () => {
       .spyOn(retentionStorage, 'getSDK')
       .mockImplementation(() => ({
         retentionData: {
-          wau: []
-        }
+          wau: [],
+        },
       }))
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setCount('wau', 41002)
     expect(spySet).toHaveBeenCalledWith({
@@ -41,10 +40,10 @@ describe('setCount', () => {
             mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
             nmo: 1,
             sentToServer: false,
-            tstmp: 1607904720000
-          }
-        ]
-      }
+            tstmp: 1607904720000,
+          },
+        ],
+      },
     })
     spyGet.mockRestore()
     spySet.mockRestore()
@@ -62,14 +61,13 @@ describe('setCount', () => {
               mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
               nmo: 1,
               sentToServer: false,
-              tstmp: 1607904720000
-            }
-          ]
-        }
+              tstmp: 1607904720000,
+            },
+          ],
+        },
       }))
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setCount('wau', 41002)
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -89,14 +87,13 @@ describe('setCount', () => {
               mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
               nmo: 1,
               sentToServer: false,
-              tstmp: 1637904720000
-            }
-          ]
-        }
+              tstmp: 1637904720000,
+            },
+          ],
+        },
       }))
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setCount('wau', 41002)
     expect(spySet).toHaveBeenCalledWith({
@@ -108,7 +105,7 @@ describe('setCount', () => {
             mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
             nmo: 1,
             sentToServer: false,
-            tstmp: 1637904720000
+            tstmp: 1637904720000,
           },
           {
             evc: 40001,
@@ -116,10 +113,10 @@ describe('setCount', () => {
             mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
             nmo: 1,
             sentToServer: false,
-            tstmp: 1607904720000
-          }
-        ]
-      }
+            tstmp: 1607904720000,
+          },
+        ],
+      },
     })
     spyGet.mockRestore()
     spySet.mockRestore()
@@ -132,16 +129,15 @@ describe('setSession', () => {
       .spyOn(retentionStorage, 'getSDK')
       .mockImplementation(() => ({
         retentionData: {
-          wast: []
-        }
+          wast: [],
+        },
       }))
 
     const spyEvents = jest
       .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => null)
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setSession()
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -154,18 +150,17 @@ describe('setSession', () => {
       .spyOn(retentionStorage, 'getSDK')
       .mockImplementation(() => ({
         retentionData: {
-          wast: []
-        }
+          wast: [],
+        },
       }))
 
     const spyEvents = jest
       .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({
-        '9-12-2020': {}
+        '9-12-2020': {},
       }))
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setSession()
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -180,14 +175,13 @@ describe('setSession', () => {
         retentionData: {
           wast: [
             {
-              tstmp: 1608016191253
-            }
-          ]
-        }
+              tstmp: 1608016191253,
+            },
+          ],
+        },
       }))
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setSession()
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -201,14 +195,13 @@ describe('setSession', () => {
         retentionData: {
           wast: [
             {
-              tstmp: 1308016191253
-            }
-          ]
-        }
+              tstmp: 1308016191253,
+            },
+          ],
+        },
       }))
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setSession()
     expect(spySet).toHaveBeenCalledTimes(0)
@@ -220,8 +213,8 @@ describe('setSession', () => {
       .spyOn(retentionStorage, 'getSDK')
       .mockImplementation(() => ({
         retentionData: {
-          wast: []
-        }
+          wast: [],
+        },
       }))
 
     const spyEvents = jest
@@ -232,19 +225,18 @@ describe('setSession', () => {
             sessions: {
               1607952235992: {
                 startTime: 1308016181253,
-                endTime: 1308016191253
+                endTime: 1308016191253,
               },
               1607952235234992: {
                 startTime: 1308016191253,
-                endTime: 1308016192253
-              }
-            }
-          }
-        }
+                endTime: 1308016192253,
+              },
+            },
+          },
+        },
       }))
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setSession()
     expect(spySet).toHaveBeenCalledWith({
@@ -258,10 +250,10 @@ describe('setSession', () => {
             mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
             nmo: 1,
             sentToServer: false,
-            tstmp: 1607952235992
-          }
-        ]
-      }
+            tstmp: 1607952235992,
+          },
+        ],
+      },
     })
     spyRetention.mockRestore()
     spyEvents.mockRestore()
@@ -274,10 +266,10 @@ describe('setSession', () => {
         retentionData: {
           wast: [
             {
-              tstmp: 1208016191253
-            }
-          ]
-        }
+              tstmp: 1208016191253,
+            },
+          ],
+        },
       }))
 
     const spyEvents = jest
@@ -288,31 +280,30 @@ describe('setSession', () => {
             sessions: {
               1607952235992: {
                 startTime: 1308016181253,
-                endTime: 1308016191253
+                endTime: 1308016191253,
               },
               1607952235234992: {
                 startTime: 1308016191253,
-                endTime: 1308016192253
-              }
-            }
-          }
+                endTime: 1308016192253,
+              },
+            },
+          },
         },
         '15-12-2020': {
           sdkData: {
-            sessions: {}
-          }
-        }
+            sessions: {},
+          },
+        },
       }))
 
-    const spySet = jest.spyOn(retentionStorage, 'setSDK')
-      .mockImplementation()
+    const spySet = jest.spyOn(retentionStorage, 'setSDK').mockImplementation()
 
     setSession()
     expect(spySet).toHaveBeenCalledWith({
       retentionData: {
         wast: [
           {
-            tstmp: 1208016191253
+            tstmp: 1208016191253,
           },
           {
             avgtime: 5500,
@@ -322,10 +313,10 @@ describe('setSession', () => {
             mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
             nmo: 1,
             sentToServer: false,
-            tstmp: 1607952235992
-          }
-        ]
-      }
+            tstmp: 1607952235992,
+          },
+        ],
+      },
     })
     spyRetention.mockRestore()
     spyEvents.mockRestore()

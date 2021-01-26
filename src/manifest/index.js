@@ -1,4 +1,10 @@
-import { getData, setData, setCreatedDate, setModifiedDate, getModifiedDate } from './storage'
+import {
+  getData,
+  setData,
+  setCreatedDate,
+  setModifiedDate,
+  getModifiedDate,
+} from './storage'
 import { setRetentionObject, syncData } from '../retention'
 import { getRoot, updateRoot } from '../storage/store'
 import { getUrl } from '../common/endPointUrlUtil'
@@ -40,7 +46,9 @@ const setManifest = (data) => {
 }
 
 const setManifestRefreshInterval = () => {
-  const manifestRefData = getManifestVariable(constants.MANIFEST_REFRESH_INTERVAL)
+  const manifestRefData = getManifestVariable(
+    constants.MANIFEST_REFRESH_INTERVAL
+  )
   const manifestIntervalInMSec = manifestRefData
     ? manifestRefData * 60 * 60 * 1000
     : callInterval
@@ -58,7 +66,7 @@ export const pullManifest = () => {
     const url = `${getUrl()}/${manifestConst.MANIFEST_PATH}`
     const payload = JSON.stringify({
       lastUpdatedTime: 0,
-      bundleId: getDomain()
+      bundleId: getDomain(),
     })
     postRequest(url, payload)
       .then((data) => {
@@ -93,7 +101,9 @@ export const checkManifest = () => {
   }
 
   const domainName = getDomain()
-  return localData[domainName] && localData[domainName].manifest.createdDate != null
+  return (
+    localData[domainName] && localData[domainName].manifest.createdDate != null
+  )
 }
 
 export const checkUpdateForManifest = () => {

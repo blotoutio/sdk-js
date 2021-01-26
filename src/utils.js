@@ -8,7 +8,7 @@ import { checkAndGetSessionId, createSessionObject } from './session/utils'
 import {
   syncPreviousDateEvents,
   syncPreviousEvents,
-  setSyncEventsInterval
+  setSyncEventsInterval,
 } from './event'
 import { checkManifest, getManifestVariable } from './manifest'
 import { setClientToken, setUID } from './common/uuidUtil'
@@ -16,7 +16,11 @@ import { getPreviousDateReferrer } from './common/referrerUtil'
 import { createDomain, getDomain, setCustomDomain } from './common/domainUtil'
 import { getStringDate } from './common/timeUtil'
 import { getRootKey, setRootKey } from './storage/key'
-import { getPreviousDateData, getSessionForDate, setSessionForDate } from './event/session'
+import {
+  getPreviousDateData,
+  getSessionForDate,
+  setSessionForDate,
+} from './event/session'
 import { resetPreviousDate } from './session/navigation'
 
 const setUIDInInitEvent = () => {
@@ -45,7 +49,7 @@ export const createDaySchema = (session) => {
   return {
     date: getStringDate(),
     domain: getDomain(),
-    sessions
+    sessions,
   }
 }
 
@@ -107,7 +111,7 @@ export const initialize = (isDecryptionError) => {
       const sdkObj = createDaySchema(session)
       localData[hostname].events[date] = {
         isSynced: false,
-        sdkData: sdkObj
+        sdkData: sdkObj,
       }
     } else {
       if (localData[hostname]) {
@@ -117,7 +121,9 @@ export const initialize = (isDecryptionError) => {
 
         if (!localData[hostname].events[date].sdkData.sessions[sessionId]) {
           const session = createSessionObject(constants.INIT, constants.INIT)
-          localData[hostname].events[date].sdkData.sessions[sessionId] = Object.assign(session)
+          localData[hostname].events[date].sdkData.sessions[
+            sessionId
+          ] = Object.assign(session)
         }
       } else {
         localData[hostname] = createDomain(constants.INIT)
@@ -131,7 +137,7 @@ export const initialize = (isDecryptionError) => {
   const domainSchema = createDomain(constants.INIT)
   const obj = {
     domains: [hostname],
-    [hostname]: domainSchema
+    [hostname]: domainSchema,
   }
   updateRoot(obj)
   setUIDInInitEvent()
@@ -163,7 +169,7 @@ export const setNewDateObject = (date, eventStore) => {
   const sdkObj = createDaySchema(session)
   eventStore[date] = {
     isSynced: false,
-    sdkData: sdkObj
+    sdkData: sdkObj,
   }
 
   setRetentionData()
@@ -193,7 +199,7 @@ export const getObjectTitle = (event, eventName) => {
     'h3',
     'h4',
     'h5',
-    'h6'
+    'h6',
   ]
 
   if (event.target && event.target.localName) {
@@ -202,7 +208,10 @@ export const getObjectTitle = (event, eventName) => {
       return event.target.innerText
     }
 
-    if (event.target.firstElementChild && event.target.firstElementChild.localName !== 'head') {
+    if (
+      event.target.firstElementChild &&
+      event.target.firstElementChild.localName !== 'head'
+    ) {
       return event.target.firstElementChild.innerText
     }
   } else if (event.target && event.target.querySelector) {
@@ -244,11 +253,19 @@ export const getSelector = (ele) => {
   }
 
   if (ele.localName) {
-    return (ele.localName + (ele.id ? '#' + ele.id : '') + (ele.className ? '.' + ele.className : ''))
+    return (
+      ele.localName +
+      (ele.id ? '#' + ele.id : '') +
+      (ele.className ? '.' + ele.className : '')
+    )
   }
 
   if (ele.nodeName) {
-    return (ele.nodeName + (ele.id ? '#' + ele.id : '') + (ele.className ? '.' + ele.className : ''))
+    return (
+      ele.nodeName +
+      (ele.id ? '#' + ele.id : '') +
+      (ele.className ? '.' + ele.className : '')
+    )
   }
 
   if (ele && ele.document && ele.location && ele.alert && ele.setInterval) {

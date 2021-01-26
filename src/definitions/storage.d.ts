@@ -23,8 +23,8 @@ export interface SharedPreference {
 }
 
 export interface Manifest {
-  createdDate: number    // timestamp (1609759019141)
-  modifiedDate: number    // timestamp (1609759019141)
+  createdDate: number // timestamp (1609759019141)
+  modifiedDate: number // timestamp (1609759019141)
   manifestData: {
     [key: string]: Variables
   }
@@ -41,15 +41,15 @@ export interface DateObject {
 }
 
 export interface TempUse {
-  uid: string    // 0bb1ca394c488cf4-7304296f-e34fcb6a-84d721e4-bf60f032551818f9d7dbaa40
-  sdkToken: string   // YJ9NSY556HG9YSK
+  uid: string // 0bb1ca394c488cf4-7304296f-e34fcb6a-84d721e4-bf60f032551818f9d7dbaa40
+  sdkToken: string // YJ9NSY556HG9YSK
   geo: Geo
   failed_retention: {
     [index: string]: {
       meta: RetentionMeta
       geo: Geo
       events: {
-          [key: number]: FailedRetentionEvent
+        [key: number]: FailedRetentionEvent
       }
     }
   }
@@ -67,7 +67,7 @@ export interface RetentionSDK {
 }
 
 export interface SdkData {
-  date: string   // 4-1-2021
+  date: string // 4-1-2021
   domain: string // www.localhost.com
   sessions: {
     [key: string]: Sessions
@@ -83,7 +83,7 @@ export interface Geo {
 
 export interface CommonMeta {
   plf: number
-  osv: string    // OS version (10.14.6)
+  osv: string // OS version (10.14.6)
   dplatform: string // Device platform
 }
 
@@ -235,7 +235,7 @@ export interface ViewPort {
 export interface Meta extends CommonMeta {
   domain: string
   hostOS: string // OS name (Mac OS)
-  browser: string    // Browser name (Chrome)
-  version: string    // Browser version (87.0.4280.88)
+  browser: string // Browser name (Chrome)
+  version: string // Browser version (87.0.4280.88)
   ua: string // User agent
 }

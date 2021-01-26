@@ -55,7 +55,8 @@ const getMetaPayload = (meta) => {
   } else if (meta.hostOS === 'UNIX') {
     dmftStr = 'UNIX'
   }
-  const isIntelBased = meta.ua.includes('Intel') || meta.ua.indexOf('Intel') !== -1
+  const isIntelBased =
+    meta.ua.includes('Intel') || meta.ua.indexOf('Intel') !== -1
   let deviceModel = 'Intel Based'
   const dplatform = meta.dplatform
   if (dplatform === 'mobile' || dplatform === 'tablet') {

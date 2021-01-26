@@ -11,7 +11,7 @@ import {
   setEndDevEvent,
   setEvent,
   setSessionForDate,
-  setStartDevEvent
+  setStartDevEvent,
 } from './session'
 
 let spyDate
@@ -26,9 +26,7 @@ beforeEach(() => {
     .spyOn(storage, 'getSession')
     .mockImplementation((name) => 124123423)
 
-  spySet = jest
-    .spyOn(eventStorage, 'setEventsByDate')
-    .mockImplementation()
+  spySet = jest.spyOn(eventStorage, 'setEventsByDate').mockImplementation()
 
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
@@ -51,9 +49,7 @@ describe('setEvent', () => {
     const spyStore = jest
       .spyOn(eventStorage, 'getStore')
       .mockImplementation(() => ({}))
-    const spyNew = jest
-      .spyOn(utils, 'setNewDateObject')
-      .mockImplementation()
+    const spyNew = jest.spyOn(utils, 'setNewDateObject').mockImplementation()
     setEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
     expect(spyNew).toBeCalledTimes(1)
@@ -74,7 +70,7 @@ describe('setEvent', () => {
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
-        sessions: {}
+        sessions: {},
       }))
     setEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -86,8 +82,8 @@ describe('setEvent', () => {
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
         sessions: {
-          124123423: {}
-        }
+          124123423: {},
+        },
       }))
     setEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -100,9 +96,9 @@ describe('setEvent', () => {
       .mockImplementation(() => ({
         sessions: {
           124123423: {
-            eventsData: []
-          }
-        }
+            eventsData: [],
+          },
+        },
       }))
     setEvent('some_event')
     expect(spySet).toBeCalledTimes(1)
@@ -116,17 +112,16 @@ describe('setEvent', () => {
         sessions: {
           124123423: {
             eventsData: {
-              eventsInfo: []
-            }
-          }
-        }
+              eventsInfo: [],
+            },
+          },
+        },
       }))
-    setEvent(
-      'some_event', {
-        event: {
-          target: '#id'
-        }
-      })
+    setEvent('some_event', {
+      event: {
+        target: '#id',
+      },
+    })
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
@@ -137,7 +132,7 @@ describe('setEvent', () => {
                 evcs: undefined,
                 extraInfo: {
                   mousePosX: -1,
-                  mousePosY: -1
+                  mousePosY: -1,
                 },
                 name: 'some_event',
                 nmo: 1,
@@ -147,16 +142,16 @@ describe('setEvent', () => {
                   height: -1,
                   width: -1,
                   x: -1,
-                  y: -1
+                  y: -1,
                 },
                 sentToServer: false,
                 tstmp: 1580775120000,
-                urlPath: 'http://localhost/'
-              }
-            ]
-          }
-        }
-      }
+                urlPath: 'http://localhost/',
+              },
+            ],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -181,7 +176,7 @@ describe('setDevEvent', () => {
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
-        sessions: {}
+        sessions: {},
       }))
     setDevEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -193,8 +188,8 @@ describe('setDevEvent', () => {
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
         sessions: {
-          124123423: {}
-        }
+          124123423: {},
+        },
       }))
     setDevEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -207,9 +202,9 @@ describe('setDevEvent', () => {
       .mockImplementation(() => ({
         sessions: {
           124123423: {
-            eventsData: {}
-          }
-        }
+            eventsData: {},
+          },
+        },
       }))
     setDevEvent('some_event')
     expect(spySet).toBeCalledWith('20-3-2020', {
@@ -225,12 +220,12 @@ describe('setDevEvent', () => {
                 nmo: 1,
                 sentToServer: false,
                 tstmp: 1580775120000,
-                urlPath: 'http://localhost/'
-              }
-            ]
-          }
-        }
-      }
+                urlPath: 'http://localhost/',
+              },
+            ],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -242,10 +237,10 @@ describe('setDevEvent', () => {
         sessions: {
           124123423: {
             eventsData: {
-              devCodifiedEventsInfo: []
-            }
-          }
-        }
+              devCodifiedEventsInfo: [],
+            },
+          },
+        },
       }))
     setDevEvent('some_event')
     expect(spySet).toBeCalledWith('20-3-2020', {
@@ -261,12 +256,12 @@ describe('setDevEvent', () => {
                 nmo: 1,
                 sentToServer: false,
                 tstmp: 1580775120000,
-                urlPath: 'http://localhost/'
-              }
-            ]
-          }
-        }
-      }
+                urlPath: 'http://localhost/',
+              },
+            ],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -275,9 +270,7 @@ describe('setDevEvent', () => {
 describe('setStartDevEvent', () => {
   let spySetSession
   beforeEach(() => {
-    spySetSession = jest
-      .spyOn(storage, 'setSession')
-      .mockImplementation()
+    spySetSession = jest.spyOn(storage, 'setSession').mockImplementation()
   })
 
   afterEach(() => {
@@ -290,9 +283,7 @@ describe('setStartDevEvent', () => {
   })
 
   it('corrupted JSON', () => {
-    spySession = jest
-      .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[')
+    spySession = jest.spyOn(storage, 'getSession').mockImplementation(() => '[')
     setStartDevEvent('some_event')
     expect(spySetSession).toBeCalledTimes(1)
   })
@@ -306,33 +297,35 @@ describe('setStartDevEvent', () => {
   })
 
   it('new event', () => {
-    spySession = jest
-      .spyOn(storage, 'getSession')
-      .mockImplementation(() => '')
+    spySession = jest.spyOn(storage, 'getSession').mockImplementation(() => '')
     setStartDevEvent('some_event')
-    expect(spySetSession).toBeCalledWith('startEvents', '[{"sentToServer":false,"urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146,"name":"some_event"}]')
+    expect(spySetSession).toBeCalledWith(
+      'startEvents',
+      '[{"sentToServer":false,"urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146,"name":"some_event"}]'
+    )
   })
 
   it('event exists', () => {
-    spySession = jest
-      .spyOn(storage, 'getSession')
-      .mockImplementation(() => JSON.stringify([
+    spySession = jest.spyOn(storage, 'getSession').mockImplementation(() =>
+      JSON.stringify([
         {
           name: 'some_event',
-          startTime: 1231232
-        }
-      ]))
+          startTime: 1231232,
+        },
+      ])
+    )
     setStartDevEvent('some_event')
-    expect(spySetSession).toBeCalledWith('startEvents', '[{"name":"some_event","startTime":1580775120000}]')
+    expect(spySetSession).toBeCalledWith(
+      'startEvents',
+      '[{"name":"some_event","startTime":1580775120000}]'
+    )
   })
 })
 
 describe('setEndDevEvent', () => {
   let spySetSession
   beforeEach(() => {
-    spySetSession = jest
-      .spyOn(storage, 'setSession')
-      .mockImplementation()
+    spySetSession = jest.spyOn(storage, 'setSession').mockImplementation()
   })
 
   afterEach(() => {
@@ -346,12 +339,8 @@ describe('setEndDevEvent', () => {
   })
 
   it('parsing failed', () => {
-    const spyRemove = jest
-      .spyOn(storage, 'removeSession')
-      .mockImplementation()
-    spySession = jest
-      .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[')
+    const spyRemove = jest.spyOn(storage, 'removeSession').mockImplementation()
+    spySession = jest.spyOn(storage, 'getSession').mockImplementation(() => '[')
     setEndDevEvent('some_event')
     expect(spyRemove).toBeCalledWith('startEvents')
     expect(spySetSession).toBeCalledTimes(0)
@@ -371,7 +360,10 @@ describe('setEndDevEvent', () => {
   it('event did not start yet', () => {
     spySession = jest
       .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[{"sentToServer":false,"name":"different_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146}]')
+      .mockImplementation(
+        () =>
+          '[{"sentToServer":false,"name":"different_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146}]'
+      )
     setEndDevEvent('some_event')
     expect(spySetSession).toBeCalledTimes(0)
     expect(spySet).toBeCalledTimes(0)
@@ -380,7 +372,10 @@ describe('setEndDevEvent', () => {
   it('sdk is null', () => {
     spySession = jest
       .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[{"sentToServer":false,"name":"different_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146}]')
+      .mockImplementation(
+        () =>
+          '[{"sentToServer":false,"name":"different_event","urlPath":"http://localhost/","tstmp":1580775120000,"mid":"localhost-null-1580775120000","nmo":1,"evc":20001,"evcs":24146}]'
+      )
     setEndDevEvent('some_event')
     expect(spySetSession).toBeCalledTimes(0)
     expect(spySet).toBeCalledTimes(0)
@@ -389,7 +384,9 @@ describe('setEndDevEvent', () => {
   it('session is missing', () => {
     spySession = jest
       .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[{"name":"some_event","startTime":1580775120000}]')
+      .mockImplementation(
+        () => '[{"name":"some_event","startTime":1580775120000}]'
+      )
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({}))
@@ -401,11 +398,13 @@ describe('setEndDevEvent', () => {
   it('session id is missing', () => {
     spySession = jest
       .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[{"name":"some_event","startTime":1580775120000}]')
+      .mockImplementation(
+        () => '[{"name":"some_event","startTime":1580775120000}]'
+      )
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
-        sessions: {}
+        sessions: {},
       }))
     setEndDevEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -416,13 +415,15 @@ describe('setEndDevEvent', () => {
   it('event data is missing', () => {
     spySession = jest
       .spyOn(storage, 'getSession')
-      .mockImplementation(() => '[{"name":"some_event","startTime":1580775120000}]')
+      .mockImplementation(
+        () => '[{"name":"some_event","startTime":1580775120000}]'
+      )
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
         sessions: {
-          124123423: {}
-        }
+          124123423: {},
+        },
       }))
     setEndDevEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -445,9 +446,9 @@ describe('setEndDevEvent', () => {
       .mockImplementation(() => ({
         sessions: {
           124123423: {
-            eventsData: {}
-          }
-        }
+            eventsData: {},
+          },
+        },
       }))
     setEndDevEvent('some_event')
     expect(spySet).toBeCalledWith('20-3-2020', {
@@ -459,12 +460,12 @@ describe('setEndDevEvent', () => {
                 duration: 10,
                 name: 'some_event',
                 startTime: 1580775120000,
-                tstmp: 1580775110000
-              }
-            ]
-          }
-        }
-      }
+                tstmp: 1580775110000,
+              },
+            ],
+          },
+        },
+      },
     })
     expect(spySetSession).toBeCalledWith('startEvents', '[]')
     spyEvents.mockRestore()
@@ -486,10 +487,10 @@ describe('setEndDevEvent', () => {
         sessions: {
           124123423: {
             eventsData: {
-              devCodifiedEventsInfo: []
-            }
-          }
-        }
+              devCodifiedEventsInfo: [],
+            },
+          },
+        },
       }))
     setEndDevEvent('some_event')
     expect(spySet).toBeCalledWith('20-3-2020', {
@@ -501,14 +502,17 @@ describe('setEndDevEvent', () => {
                 duration: 10,
                 name: 'some_event',
                 startTime: 1580775120000,
-                tstmp: 1580775110000
-              }
-            ]
-          }
-        }
-      }
+                tstmp: 1580775110000,
+              },
+            ],
+          },
+        },
+      },
     })
-    expect(spySetSession).toBeCalledWith('startEvents', '[{"name":"different_event","startTime":1580775120000,"tstmp":1580775110000}]')
+    expect(spySetSession).toBeCalledWith(
+      'startEvents',
+      '[{"name":"different_event","startTime":1580775120000,"tstmp":1580775110000}]'
+    )
     spyEvents.mockRestore()
   })
 })
@@ -543,7 +547,7 @@ describe('getSessionForDate', () => {
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
-        sessions: {}
+        sessions: {},
       }))
 
     const result = getSessionForDate('20-3-2020', 124123423)
@@ -558,10 +562,10 @@ describe('getSessionForDate', () => {
         sessions: {
           124123423: {
             eventsData: {
-              devCodifiedEventsInfo: []
-            }
-          }
-        }
+              devCodifiedEventsInfo: [],
+            },
+          },
+        },
       }))
 
     const result = getSessionForDate('20-3-2020', 24123423)
@@ -576,17 +580,17 @@ describe('getSessionForDate', () => {
         sessions: {
           124123423: {
             eventsData: {
-              devCodifiedEventsInfo: []
-            }
-          }
-        }
+              devCodifiedEventsInfo: [],
+            },
+          },
+        },
       }))
 
     const result = getSessionForDate('20-3-2020', 124123423)
     expect(result).toStrictEqual({
       eventsData: {
-        devCodifiedEventsInfo: []
-      }
+        devCodifiedEventsInfo: [],
+      },
     })
     spyEvents.mockRestore()
   })
@@ -623,18 +627,18 @@ describe('setSessionForDate', () => {
         sessions: {
           124123423: {
             eventsData: {
-              devCodifiedEventsInfo: []
-            }
-          }
-        }
+              devCodifiedEventsInfo: [],
+            },
+          },
+        },
       }))
     setSessionForDate('20-03-2020', 124123423, { data: true })
     expect(spySet).toBeCalledWith('20-03-2020', {
       sessions: {
         124123423: {
-          data: true
-        }
-      }
+          data: true,
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -643,9 +647,7 @@ describe('setSessionForDate', () => {
 describe('getPreviousDateData', () => {
   let spyDate
   beforeEach(() => {
-    spyDate = jest
-      .spyOn(utils, 'getNotSyncedDate')
-      .mockImplementation()
+    spyDate = jest.spyOn(utils, 'getNotSyncedDate').mockImplementation()
   })
 
   afterEach(() => {
@@ -673,10 +675,10 @@ describe('getPreviousDateData', () => {
         sessions: {
           124123423: {
             eventsData: {
-              sentToServer: true
-            }
-          }
-        }
+              sentToServer: true,
+            },
+          },
+        },
       }))
     const result = getPreviousDateData()
     expect(result).toBeNull()
@@ -690,14 +692,14 @@ describe('getPreviousDateData', () => {
         sessions: {
           124123423: {
             eventsData: {
-              sentToServer: false
-            }
-          }
-        }
+              sentToServer: false,
+            },
+          },
+        },
       }))
     const result = getPreviousDateData()
     expect(result).toStrictEqual({
-      sentToServer: false
+      sentToServer: false,
     })
     spyEvents.mockRestore()
   })
@@ -710,30 +712,29 @@ describe('createEventInfoObj', () => {
   })
 
   it('ok', () => {
-    const result = createEventInfoObj(
-      'some_event',
-      'name',
-      {
-        target: {
-        }
-      })
+    const result = createEventInfoObj('some_event', 'name', {
+      target: {},
+    })
     expect(result).toStrictEqual({
       evc: 10001,
       evcs: undefined,
       extraInfo: {
         mousePosX: -1,
-        mousePosY: -1
+        mousePosY: -1,
       },
       name: 'some_event',
       nmo: 1,
       objectName: 'name',
       objectTitle: '',
       position: {
-        height: -1, width: -1, x: -1, y: -1
+        height: -1,
+        width: -1,
+        x: -1,
+        y: -1,
       },
       sentToServer: false,
       tstmp: 1580775120000,
-      urlPath: 'http://localhost/'
+      urlPath: 'http://localhost/',
     })
   })
 
@@ -742,25 +743,22 @@ describe('createEventInfoObj', () => {
       .spyOn(storageStore, 'getRoot')
       .mockImplementation(() => ({}))
 
-    const result = createEventInfoObj(
-      'some_event',
-      'name',
-      {
-        target: {
-          offsetHeight: 10,
-          offsetWidth: 10
-        },
-        screenX: 1024,
-        offsetX: 10,
-        screenY: 768,
-        offsetY: 5
-      })
+    const result = createEventInfoObj('some_event', 'name', {
+      target: {
+        offsetHeight: 10,
+        offsetWidth: 10,
+      },
+      screenX: 1024,
+      offsetX: 10,
+      screenY: 768,
+      offsetY: 5,
+    })
     expect(result).toStrictEqual({
       evc: 10001,
       evcs: undefined,
       extraInfo: {
         mousePosX: -1,
-        mousePosY: -1
+        mousePosY: -1,
       },
       mid: 'localhost-null-1580775120000',
       name: 'some_event',
@@ -771,11 +769,11 @@ describe('createEventInfoObj', () => {
         height: 10,
         width: 10,
         x: 1014,
-        y: 763
+        y: 763,
       },
       sentToServer: false,
       tstmp: 1580775120000,
-      urlPath: 'http://localhost/'
+      urlPath: 'http://localhost/',
     })
     spyStore.mockRestore()
   })

@@ -47,28 +47,24 @@ describe('getStoreByDomain', () => {
   })
 
   it('root do not have domain in', () => {
-    const spyRoot = jest
-      .spyOn(store, 'getRoot')
-      .mockImplementation(() => ({
-        'test.com': {}
-      }))
+    const spyRoot = jest.spyOn(store, 'getRoot').mockImplementation(() => ({
+      'test.com': {},
+    }))
     const result = getStoreByDomain('ok.com')
     expect(result).toBeUndefined()
     spyRoot.mockRestore()
   })
 
   it('all ok', () => {
-    const spyRoot = jest
-      .spyOn(store, 'getRoot')
-      .mockImplementation(() => ({
-        'test.com': {},
-        'ok.com': {
-          data: true
-        }
-      }))
+    const spyRoot = jest.spyOn(store, 'getRoot').mockImplementation(() => ({
+      'test.com': {},
+      'ok.com': {
+        data: true,
+      },
+    }))
     const result = getStoreByDomain('ok.com')
     expect(result).toStrictEqual({
-      data: true
+      data: true,
     })
     spyRoot.mockRestore()
   })

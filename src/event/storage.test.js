@@ -13,7 +13,7 @@ describe('getStore', () => {
     const spyDomain = jest
       .spyOn(storage, 'getStoreByDomain')
       .mockImplementation(() => ({
-        test: {}
+        test: {},
       }))
     const result = getStore()
     expect(result).toBeUndefined()
@@ -25,12 +25,12 @@ describe('getStore', () => {
       .spyOn(storage, 'getStoreByDomain')
       .mockImplementation(() => ({
         events: {
-          data: true
-        }
+          data: true,
+        },
       }))
     const result = getStore()
     expect(result).toStrictEqual({
-      data: true
+      data: true,
     })
     spyDomain.mockRestore()
   })
@@ -49,17 +49,17 @@ describe('setStore', () => {
     const obj = {
       domains: [domainName],
       [domainName]: {
-        test: {}
-      }
+        test: {},
+      },
     }
     store.updateRoot(obj)
 
     setStore({
-      data: false
+      data: false,
     })
     const result = getStore()
     expect(result).toStrictEqual({
-      data: false
+      data: false,
     })
     spyDomain.mockRestore()
   })
@@ -85,9 +85,9 @@ describe('getEventsByDate', () => {
       domains: [domainName],
       [domainName]: {
         events: {
-          '15-20-2020': {}
-        }
-      }
+          '15-20-2020': {},
+        },
+      },
     }
     store.updateRoot(obj)
     const result = getEventsByDate('15-20-2020')
@@ -106,16 +106,16 @@ describe('getEventsByDate', () => {
         events: {
           '15-20-2020': {
             sdkData: {
-              data: false
-            }
-          }
-        }
-      }
+              data: false,
+            },
+          },
+        },
+      },
     }
     store.updateRoot(obj)
     const result = getEventsByDate('15-20-2020')
     expect(result).toStrictEqual({
-      data: false
+      data: false,
     })
     spyDomain.mockRestore()
   })
@@ -139,23 +139,21 @@ describe('setEventsByDate', () => {
       domains: [domainName],
       [domainName]: {
         events: {
-          '15-20-2020': {}
-        }
-      }
+          '15-20-2020': {},
+        },
+      },
     }
     store.updateRoot(obj)
 
-    const spyUpdate = jest
-      .spyOn(store, 'updateRoot')
-      .mockImplementation()
+    const spyUpdate = jest.spyOn(store, 'updateRoot').mockImplementation()
 
     setEventsByDate('15-20-2020', {
-      data: false
+      data: false,
     })
     expect(spyUpdate).toBeCalledTimes(1)
     const result = getEventsByDate('15-20-2020')
     expect(result).toStrictEqual({
-      data: false
+      data: false,
     })
     spyDomain.mockRestore()
   })

@@ -7,13 +7,17 @@ import { setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
-import { pullManifest, updateManifest, checkManifest, checkUpdateForManifest } from './manifest'
+import {
+  pullManifest,
+  updateManifest,
+  checkManifest,
+  checkUpdateForManifest,
+} from './manifest'
 import { setRetentionData, syncData } from './retention'
 import { setReferrer } from './common/referrerUtil'
 import { setGeoDetails } from './common/geoUtil'
 import { mapIDEvent, sendStartEvent } from './event'
-
-(function (window) {
+;(function (window) {
   const SDK = function () {}
 
   SDK.prototype.logEvent = function (eventName, data = null) {

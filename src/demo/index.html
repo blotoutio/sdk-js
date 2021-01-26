@@ -1,33 +1,54 @@
 <html lang="en">
-<head>
-  <title>Blotout - JS SDK</title>
-      <link rel='icon' href='/favicon.png' />
-  <script type="text/javascript" src="/index.js"></script>
-  <script type="text/javascript" src="/app.js"></script>
-  <link rel="stylesheet" href="/style.css" />
-</head>
-<body>
-  <h1>Blotout JS SDK</h1>
-  <nav>
-    <div class="navWrapper">
-      <a id="nav-events" href="/index.html">Events</a>
-      <a id="nav-scroll" href="/new_page.html">Scroll page</a>
-      <a id="nav-mail" href="mailto:sales@blotout.io">Mail</a>
-    </div>
-  </nav>
-  <div class="content">
-    <div class="events">
-      <div class="eventsActions">
-        <button id="log-event" onclick="bojs.logEvent('Dev Click',{})">Log Event</button>
-        <button id="log-event-start" onclick="bojs.startTimedEvent('Timed Click')">Start Log Event</button>
-        <button id="log-event-end" onclick="bojs.endTimedEvent('Timed Click')">End Log Event</button>
-        <button id="sign-up" onclick="bojs.logEvent('Sign up',{})">Sign up</button>
-        <button id="log-in" onclick="bojs.logEvent('Log in',{})">Log in</button>
-        <button id="map-id" onclick="bojs.mapID('234234234', 'service', { lang: 'es' })">Map id</button>
-        <button id="get-user-id" onclick="getUserId()">Get User Id</button>
+  <head>
+    <title>Blotout - JS SDK</title>
+    <link rel="icon" href="/favicon.png" />
+    <script type="text/javascript" src="/index.js"></script>
+    <script type="text/javascript" src="/app.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h1>Blotout JS SDK</h1>
+    <nav>
+      <div class="navWrapper">
+        <a id="nav-events" href="/index.html">Events</a>
+        <a id="nav-scroll" href="/new_page.html">Scroll page</a>
+        <a id="nav-mail" href="mailto:sales@blotout.io">Mail</a>
       </div>
-      <div id="eventData"></div>
+    </nav>
+    <div class="content">
+      <div class="events">
+        <div class="eventsActions">
+          <button id="log-event" onclick="bojs.logEvent('Dev Click',{})">
+            Log Event
+          </button>
+          <button
+            id="log-event-start"
+            onclick="bojs.startTimedEvent('Timed Click')"
+          >
+            Start Log Event
+          </button>
+          <button
+            id="log-event-end"
+            onclick="bojs.endTimedEvent('Timed Click')"
+          >
+            End Log Event
+          </button>
+          <button id="sign-up" onclick="bojs.logEvent('Sign up',{})">
+            Sign up
+          </button>
+          <button id="log-in" onclick="bojs.logEvent('Log in',{})">
+            Log in
+          </button>
+          <button
+            id="map-id"
+            onclick="bojs.mapID('234234234', 'service', { lang: 'es' })"
+          >
+            Map id
+          </button>
+          <button id="get-user-id" onclick="getUserId()">Get User Id</button>
+        </div>
+        <div id="eventData"></div>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

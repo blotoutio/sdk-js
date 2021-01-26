@@ -6,7 +6,7 @@ import {
   getSessionTotalDuration,
   getSessionAvgObject,
   getTimestampFromKey,
-  retentionWrapper
+  retentionWrapper,
 } from './utils'
 import { getStore } from '../event/storage'
 
@@ -53,9 +53,13 @@ export const setSession = () => {
       }
 
       const eventMonthNumber = getMonthNumber(getTimestampFromKey(key))
-      const highestCheck = !highestMonthNumber || eventMonthNumber > highestMonthNumber
+      const highestCheck =
+        !highestMonthNumber || eventMonthNumber > highestMonthNumber
       if (highestCheck && eventMonthNumber < currentMonthNumber) {
-        sessionObject = Object.assign(sessionObject, eventStore[key].sdkData.sessions)
+        sessionObject = Object.assign(
+          sessionObject,
+          eventStore[key].sdkData.sessions
+        )
       }
     })
 
@@ -66,7 +70,11 @@ export const setSession = () => {
 
     const totalDuration = getSessionTotalDuration(sessionObject)
     const avgTime = totalDuration / sessionCount
-    const obj = getSessionAvgObject(constants.MASTCode, Object.keys(sessionObject)[0], avgTime)
+    const obj = getSessionAvgObject(
+      constants.MASTCode,
+      Object.keys(sessionObject)[0],
+      avgTime
+    )
 
     retentions.push(obj)
     return retentions

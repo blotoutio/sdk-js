@@ -24,7 +24,7 @@ export const createReferrerEventInfo = (eventName, ref, meta) => {
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
     evcs: systemEventCode[eventName],
-    value: ref
+    value: ref,
   }
 
   if (meta) {
@@ -56,8 +56,9 @@ export const getPreviousDateReferrer = () => {
   }
   const sessionId = getNotSynced(sdkData.sessions)
 
-  const refIndex = sdkData.sessions[sessionId].eventsData.eventsInfo
-    .findIndex((obj) => obj.name === 'referrer')
+  const refIndex = sdkData.sessions[sessionId].eventsData.eventsInfo.findIndex(
+    (obj) => obj.name === 'referrer'
+  )
   if (refIndex !== -1) {
     const referrer = sdkData.sessions[sessionId].eventsData.eventsInfo[refIndex]
     referrer.sentToServer = true
@@ -78,7 +79,9 @@ export const getReferrerUrlOfDateSession = (date, sessionId) => {
     return null
   }
 
-  const refIndex = eventsData.eventsInfo.findIndex((obj) => obj.name === 'referrer')
+  const refIndex = eventsData.eventsInfo.findIndex(
+    (obj) => obj.name === 'referrer'
+  )
 
   if (refIndex === -1) {
     return null

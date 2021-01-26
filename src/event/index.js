@@ -1,13 +1,10 @@
-import {
-  getMid,
-  getNotSyncedDate,
-  setNewDateObject
-} from '../utils'
+import { getMid, getNotSyncedDate, setNewDateObject } from '../utils'
 import {
   createEventInfoObj,
   getSessionForDate,
-  setDevEvent, setEvent,
-  setSessionForDate
+  setDevEvent,
+  setEvent,
+  setSessionForDate,
 } from './session'
 import {
   detectQueryString,
@@ -15,14 +12,10 @@ import {
   eventSync,
   getEventPayloadArr,
   getNavigationTime,
-  sendEvents
+  sendEvents,
 } from './utils'
 import { getSession } from '../storage'
-import {
-  callInterval,
-  constants,
-  systemEventCode
-} from '../config'
+import { callInterval, constants, systemEventCode } from '../config'
 import { getEventsByDate, getStore } from './storage'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
@@ -41,19 +34,21 @@ let globalEventInterval = null
 
 const getNavigationPayloadArr = (navigations, navigationsTime) => {
   const UID = getTempUseValue(constants.UID)
-  return [{
-    mid: getMid(),
-    userid: UID,
-    evn: constants.NAVIGATION,
-    evcs: systemEventCode[constants.NAVIGATION],
-    evdc: 1,
-    scrn: window.location.href,
-    evt: Date.now(),
-    nmo: 1,
-    evc: constants.EVENT_CATEGORY,
-    nvg: navigations,
-    nvg_tm: navigationsTime
-  }]
+  return [
+    {
+      mid: getMid(),
+      userid: UID,
+      evn: constants.NAVIGATION,
+      evcs: systemEventCode[constants.NAVIGATION],
+      evdc: 1,
+      scrn: window.location.href,
+      evt: Date.now(),
+      nmo: 1,
+      evc: constants.EVENT_CATEGORY,
+      nvg: navigations,
+      nvg_tm: navigationsTime,
+    },
+  ]
 }
 
 const sendNavigation = (date, sessionId) => {
@@ -63,10 +58,16 @@ const sendNavigation = (date, sessionId) => {
   }
 
   const eventsData = session.eventsData
-  const navigations = eventsData.navigationPath && eventsData.navigationPath.slice()
+  const navigations =
+    eventsData.navigationPath && eventsData.navigationPath.slice()
   const navigationsTime = getNavigationTime(sessionId, date)
 
-  if (!navigations || !navigationsTime || navigations.length === 0 || navigations.length !== navigationsTime.length) {
+  if (
+    !navigations ||
+    !navigationsTime ||
+    navigations.length === 0 ||
+    navigations.length !== navigationsTime.length
+  ) {
     return
   }
 
@@ -80,7 +81,7 @@ const sendNavigation = (date, sessionId) => {
   const payload = getPayload(session, navEventArr)
   const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))
-    .then(() => { })
+    .then(() => {})
     .catch(error)
 }
 
@@ -89,7 +90,8 @@ export const sendPIIPHIEvent = (events, date, type) => {
     return
   }
 
-  const key = type === 'pii' ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
+  const key =
+    type === 'pii' ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
   const sessionId = getSession(constants.SESSION_ID)
   const session = getSessionForDate(date, sessionId)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
@@ -118,13 +120,19 @@ export const getNotSyncedEvents = (obj) => {
   let piiEvents = []
   let phiEvents = []
   if (obj.eventsInfo) {
-    events = obj.eventsInfo.filter((evt) => !evt.sentToServer && !evt.isPii && !evt.isPhi)
+    events = obj.eventsInfo.filter(
+      (evt) => !evt.sentToServer && !evt.isPii && !evt.isPhi
+    )
   }
   if (obj.devCodifiedEventsInfo) {
-    piiEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer && evt.isPii)
+    piiEvents = obj.devCodifiedEventsInfo.filter(
+      (evt) => !evt.sentToServer && evt.isPii
+    )
   }
   if (obj.devCodifiedEventsInfo) {
-    phiEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer && evt.isPhi)
+    phiEvents = obj.devCodifiedEventsInfo.filter(
+      (evt) => !evt.sentToServer && evt.isPhi
+    )
   }
   if (obj.devCodifiedEventsInfo) {
     devEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer)
@@ -162,16 +170,20 @@ export const setEventsSentToServer = (arr, date, sessionId) => {
       return
     }
     const mID = val.mid
-    const evtIndex = session.eventsData.eventsInfo
-      .findIndex((obj) => obj.mid === mID)
-    const devEventIndex = session.eventsData.devCodifiedEventsInfo
-      .findIndex((obj) => obj.mid === mID)
+    const evtIndex = session.eventsData.eventsInfo.findIndex(
+      (obj) => obj.mid === mID
+    )
+    const devEventIndex = session.eventsData.devCodifiedEventsInfo.findIndex(
+      (obj) => obj.mid === mID
+    )
 
     if (evtIndex !== -1) {
       session.eventsData.eventsInfo[evtIndex].sentToServer = true
     }
     if (devEventIndex !== -1) {
-      session.eventsData.devCodifiedEventsInfo[devEventIndex].sentToServer = true
+      session.eventsData.devCodifiedEventsInfo[
+        devEventIndex
+      ].sentToServer = true
     }
     if (currentSessionId !== sessionId) {
       session.eventsData.sentToServer = true
@@ -209,8 +221,9 @@ export const syncEvents = (sessionId, date) => {
   let regularEvents = []
   const session = getSessionForDate(date, sessionId)
   if (session && session.eventsData) {
-    const { events, devEvents, piiEvents, phiEvents } =
-    getNotSyncedEvents(session.eventsData)
+    const { events, devEvents, piiEvents, phiEvents } = getNotSyncedEvents(
+      session.eventsData
+    )
 
     sendPIIPHIEvent(piiEvents, date, 'pii')
     sendPIIPHIEvent(phiEvents, date, 'phi')
@@ -219,7 +232,12 @@ export const syncEvents = (sessionId, date) => {
   }
 
   if (hasSession) {
-    eventsArrayChunk = addSessionInfoEvent(regularEvents, eventsArrayChunk, date, sessionId)
+    eventsArrayChunk = addSessionInfoEvent(
+      regularEvents,
+      eventsArrayChunk,
+      date,
+      sessionId
+    )
     sendNavigation(date, sessionId)
   }
 
@@ -270,8 +288,9 @@ export const syncPreviousDateEvents = () => {
 }
 
 const getBounceAndSessionEvents = (session) => {
-  return session.eventsData.eventsInfo
-    .filter((evt) => evt.name === constants.BOUNCE || constants.SESSION)
+  return session.eventsData.eventsInfo.filter(
+    (evt) => evt.name === constants.BOUNCE || constants.SESSION
+  )
 }
 
 export const sendBounceEvent = (date) => {
@@ -328,15 +347,17 @@ export const sendStartEvent = () => {
     return
   }
 
-  const sessionIndex = session.eventsData.eventsInfo
-    .findIndex((obj) => obj.name === constants.SESSION)
+  const sessionIndex = session.eventsData.eventsInfo.findIndex(
+    (obj) => obj.name === constants.SESSION
+  )
   if (sessionIndex === -1) {
     setEvent(constants.SESSION)
   }
 
   if (detectQueryString()) {
-    const mailerIndex = session.eventsData.eventsInfo
-      .findIndex((obj) => obj.name === constants.MAILER)
+    const mailerIndex = session.eventsData.eventsInfo.findIndex(
+      (obj) => obj.name === constants.MAILER
+    )
     if (mailerIndex === -1) {
       setEvent(constants.MAILER)
     }

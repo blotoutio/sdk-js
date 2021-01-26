@@ -18,7 +18,7 @@ describe('getRequest', () => {
     const result = { success: true }
     window.fetch.mockResolvedValueOnce({
       status: 200,
-      json: async () => result
+      json: async () => result,
     })
 
     await expect(getRequest('https://blotout.io')).resolves.toBe(result)
@@ -29,18 +29,21 @@ describe('getRequest', () => {
         headers: {
           Accept: 'application/json; charset=utf-8',
           version: 'v1',
-          token: 'aosdfkaosfkoaskfo23e23'
-        }
-      }))
+          token: 'aosdfkaosfkoaskfo23e23',
+        },
+      })
+    )
   })
 
   it('500', async () => {
     window.fetch.mockResolvedValueOnce({
       status: 500,
-      json: async () => 'Server error'
+      json: async () => 'Server error',
     })
 
-    await expect(getRequest('https://blotout.io')).rejects.toThrow('Server error')
+    await expect(getRequest('https://blotout.io')).rejects.toThrow(
+      'Server error'
+    )
     expect(window.fetch).toHaveBeenCalledWith(
       'https://blotout.io',
       expect.objectContaining({
@@ -48,9 +51,10 @@ describe('getRequest', () => {
         headers: {
           Accept: 'application/json; charset=utf-8',
           version: 'v1',
-          token: ''
-        }
-      }))
+          token: '',
+        },
+      })
+    )
   })
 })
 
@@ -66,7 +70,7 @@ describe('postRequest', () => {
     const result = { success: true }
     window.fetch.mockResolvedValueOnce({
       status: 200,
-      json: async () => result
+      json: async () => result,
     })
 
     await expect(postRequest('https://blotout.io')).resolves.toBe(result)
@@ -78,10 +82,11 @@ describe('postRequest', () => {
           'Content-type': 'application/json; charset=utf-8',
           Accept: 'application/json; charset=utf-8',
           version: 'v1',
-          token: ''
+          token: '',
         },
-        body: ''
-      }))
+        body: '',
+      })
+    )
   })
 
   it('200', async () => {
@@ -92,10 +97,12 @@ describe('postRequest', () => {
     const result = { success: true }
     window.fetch.mockResolvedValueOnce({
       status: 200,
-      json: async () => result
+      json: async () => result,
     })
 
-    await expect(postRequest('https://blotout.io', payload)).resolves.toBe(result)
+    await expect(postRequest('https://blotout.io', payload)).resolves.toBe(
+      result
+    )
     expect(window.fetch).toHaveBeenCalledWith(
       'https://blotout.io',
       expect.objectContaining({
@@ -104,19 +111,22 @@ describe('postRequest', () => {
           'Content-type': 'application/json; charset=utf-8',
           Accept: 'application/json; charset=utf-8',
           version: 'v1',
-          token: 'aosdfkaosfkoaskfo23e23'
+          token: 'aosdfkaosfkoaskfo23e23',
         },
-        body: payload
-      }))
+        body: payload,
+      })
+    )
   })
 
   it('500', async () => {
     window.fetch.mockResolvedValueOnce({
       status: 500,
-      json: async () => 'Server error'
+      json: async () => 'Server error',
     })
 
-    await expect(postRequest('https://blotout.io', payload)).rejects.toThrow('Server error')
+    await expect(postRequest('https://blotout.io', payload)).rejects.toThrow(
+      'Server error'
+    )
     expect(window.fetch).toHaveBeenCalledWith(
       'https://blotout.io',
       expect.objectContaining({
@@ -125,9 +135,10 @@ describe('postRequest', () => {
           'Content-type': 'application/json; charset=utf-8',
           Accept: 'application/json; charset=utf-8',
           version: 'v1',
-          token: ''
+          token: '',
         },
-        body: payload
-      }))
+        body: payload,
+      })
+    )
   })
 })

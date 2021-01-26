@@ -1,4 +1,8 @@
-import { codeForCustomCodifiedEvent, createDevEventInfoObj, getNavigationTime } from './utils'
+import {
+  codeForCustomCodifiedEvent,
+  createDevEventInfoObj,
+  getNavigationTime,
+} from './utils'
 import * as storage from '../storage/sharedPreferences'
 import * as eventSession from './session'
 import * as utilsGeneral from '../utils'
@@ -30,26 +34,26 @@ describe('codeForCustomCodifiedEvent', () => {
   })
 
   it('long name', () => {
-    expect(codeForCustomCodifiedEvent('event event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_event')).toBe(23962)
+    expect(
+      codeForCustomCodifiedEvent(
+        'event event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_event'
+      )
+    ).toBe(23962)
   })
 
   it('event already exists with the same name for different events', () => {
-    jest
-      .spyOn(storage, 'getNormalUseValue')
-      .mockImplementation(() => ({
-        event1: 24008,
-        event2: 21545
-      }))
+    jest.spyOn(storage, 'getNormalUseValue').mockImplementation(() => ({
+      event1: 24008,
+      event2: 21545,
+    }))
     expect(codeForCustomCodifiedEvent('awesome_event')).toBe(24009)
   })
 
   it('event already exists with the same name same event', () => {
-    jest
-      .spyOn(storage, 'getNormalUseValue')
-      .mockImplementation(() => ({
-        awesome_event: 24008,
-        event2: 21545
-      }))
+    jest.spyOn(storage, 'getNormalUseValue').mockImplementation(() => ({
+      awesome_event: 24008,
+      event2: 21545,
+    }))
     expect(codeForCustomCodifiedEvent('awesome_event')).toBe(24008)
   })
 })
@@ -87,8 +91,8 @@ describe('getNavigationTime', () => {
           navigationPath: [],
           stayTimeBeforeNav: [],
           devCodifiedEventsInfo: [],
-          sentToServer: false
-        }
+          sentToServer: false,
+        },
       }))
     const result = getNavigationTime(124123423, '20-3-2020')
     expect(result).toBeUndefined()
@@ -103,15 +107,12 @@ describe('getNavigationTime', () => {
         eventsData: {
           navigationPath: [
             'http://localhost:8080/new_page.html',
-            'http://localhost:8080/index.html'
+            'http://localhost:8080/index.html',
           ],
-          stayTimeBeforeNav: [
-            1608913208000,
-            1608913328000
-          ],
+          stayTimeBeforeNav: [1608913208000, 1608913328000],
           devCodifiedEventsInfo: [],
-          sentToServer: false
-        }
+          sentToServer: false,
+        },
       }))
     const result = getNavigationTime(124123423, '20-3-2020')
     expect(result).toStrictEqual([600, 120])
@@ -126,15 +127,12 @@ describe('getNavigationTime', () => {
         eventsData: {
           navigationPath: [
             'http://localhost:8080/new_page.html',
-            'http://localhost:8080/index.html'
+            'http://localhost:8080/index.html',
           ],
-          stayTimeBeforeNav: [
-            20000,
-            300000
-          ],
+          stayTimeBeforeNav: [20000, 300000],
           devCodifiedEventsInfo: [],
-          sentToServer: false
-        }
+          sentToServer: false,
+        },
       }))
     const result = getNavigationTime(124123423, '20-3-2020')
     expect(result).toStrictEqual([20000, 300000])
@@ -164,7 +162,7 @@ describe('createDevEventInfoObj', () => {
       nmo: 1,
       sentToServer: false,
       tstmp: 1580775120000,
-      urlPath: 'http://localhost/'
+      urlPath: 'http://localhost/',
     })
   })
 
@@ -178,35 +176,42 @@ describe('createDevEventInfoObj', () => {
       nmo: 1,
       sentToServer: false,
       tstmp: 1580775120000,
-      urlPath: 'http://localhost/'
+      urlPath: 'http://localhost/',
     })
   })
 
   it('everything', () => {
-    const result = createDevEventInfoObj('some_event', 'objName', { custom: true })
+    const result = createDevEventInfoObj('some_event', 'objName', {
+      custom: true,
+    })
     expect(result).toStrictEqual({
       evc: 20001,
       evcs: 24146,
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
       name: 'some_event',
       metaInfo: {
-        custom: true
+        custom: true,
       },
       objectName: 'objName',
       nmo: 1,
       sentToServer: false,
       tstmp: 1580775120000,
-      urlPath: 'http://localhost/'
+      urlPath: 'http://localhost/',
     })
   })
 
   it('with custom code', () => {
-    const result = createDevEventInfoObj('some_event', 'objName', { custom: true }, 123123)
+    const result = createDevEventInfoObj(
+      'some_event',
+      'objName',
+      { custom: true },
+      123123
+    )
     expect(result).toStrictEqual({
       evc: 20001,
       evcs: 123123,
       metaInfo: {
-        custom: true
+        custom: true,
       },
       objectName: 'objName',
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
@@ -214,7 +219,7 @@ describe('createDevEventInfoObj', () => {
       nmo: 1,
       sentToServer: false,
       tstmp: 1580775120000,
-      urlPath: 'http://localhost/'
+      urlPath: 'http://localhost/',
     })
   })
 })

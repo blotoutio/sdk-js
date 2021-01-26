@@ -8,11 +8,12 @@ module.exports = merge(common, {
   devtool: 'eval-source-map',
   devServer: {
     hot: true,
-    contentBase: path.join(__dirname, './src/demo')
+    port: 9000,
+    contentBase: path.join(__dirname, './src/demo'),
   },
   plugins: [
     new Webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
-  ]
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
+  ],
 })

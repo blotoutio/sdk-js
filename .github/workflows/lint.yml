@@ -2,7 +2,7 @@ name: Linter
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   linter:
@@ -11,30 +11,30 @@ jobs:
     timeout-minutes: 2
 
     steps:
-    - name: Checkout PR
-      uses: actions/checkout@v2
+      - name: Checkout PR
+        uses: actions/checkout@v2
 
-    - name: Use Node.js 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-        registry-url: https://npm.pkg.github.com
-        scope: blotoutio
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com
+          scope: blotoutio
 
-    - name: Cache node_modules
-      id: cache-modules
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.cache/Cypress
-          node_modules
-        key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/Cypress
+            node_modules
+          key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
 
-    - name: Install dependencies
-      if: steps.cache-modules.outputs.cache-hit != 'true'
-      run: npm ci
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
+      - name: Install dependencies
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
-    - name: Run linter
-      run: npm run lint
+      - name: Run linter
+        run: npm run lint

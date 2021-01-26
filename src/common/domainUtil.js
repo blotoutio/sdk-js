@@ -8,8 +8,8 @@ const createDateObject = (event, objectName) => {
   return {
     [dateString]: {
       isSynced: false,
-      sdkData: createDaySchema(session)
-    }
+      sdkData: createDaySchema(session),
+    },
   }
 }
 
@@ -20,18 +20,18 @@ export const createDomain = (objectName) => {
     sharedPreference: {
       tempUse: {},
       normalUse: {},
-      customUse: {}
+      customUse: {},
     },
     manifest: {
       createdDate: null,
       modifiedDate: null,
-      manifestData: null
+      manifestData: null,
     },
     retention: {
       isSynced: false,
-      retentionSDK: null
+      retentionSDK: null,
     },
-    events: createDateObject('init', objectName)
+    events: createDateObject('init', objectName),
   }
 }
 

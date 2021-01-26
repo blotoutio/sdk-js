@@ -4,7 +4,9 @@ import {
   setData,
   getData,
   getStore,
-  getModifiedDate, setCreatedDate, setModifiedDate
+  getModifiedDate,
+  setCreatedDate,
+  setModifiedDate,
 } from './storage'
 import { updateRoot } from '../storage/store'
 
@@ -18,7 +20,7 @@ describe('getStore', () => {
     const spyDomain = jest
       .spyOn(storage, 'getStoreByDomain')
       .mockImplementation(() => ({
-        test: {}
+        test: {},
       }))
     const result = getStore()
     expect(result).toBeUndefined()
@@ -30,12 +32,12 @@ describe('getStore', () => {
       .spyOn(storage, 'getStoreByDomain')
       .mockImplementation(() => ({
         manifest: {
-          data: true
-        }
+          data: true,
+        },
       }))
     const result = getStore()
     expect(result).toStrictEqual({
-      data: true
+      data: true,
     })
     spyDomain.mockRestore()
   })
@@ -48,7 +50,7 @@ describe('setData', () => {
 
   it('store null', () => {
     setData({
-      data: false
+      data: false,
     })
   })
 
@@ -60,17 +62,17 @@ describe('setData', () => {
     const obj = {
       domains: [domainName],
       [domainName]: {
-        manifest: {}
-      }
+        manifest: {},
+      },
     }
     updateRoot(obj)
 
     setData({
-      data: false
+      data: false,
     })
     const result = getData()
     expect(result).toStrictEqual({
-      data: false
+      data: false,
     })
     spyDomain.mockRestore()
   })
@@ -88,13 +90,13 @@ describe('getData', () => {
       .mockImplementation(() => ({
         manifest: {
           manifestData: {
-            data: true
-          }
-        }
+            data: true,
+          },
+        },
       }))
     const result = getData()
     expect(result).toStrictEqual({
-      data: true
+      data: true,
     })
     spyDomain.mockRestore()
   })
@@ -111,8 +113,8 @@ describe('getModifiedDate', () => {
       .spyOn(storage, 'getStoreByDomain')
       .mockImplementation(() => ({
         manifest: {
-          modifiedDate: 43513245235
-        }
+          modifiedDate: 43513245235,
+        },
       }))
     const result = getModifiedDate()
     expect(result).toBe(43513245235)
@@ -133,8 +135,8 @@ describe('setModifiedDate', () => {
     const obj = {
       domains: [domainName],
       [domainName]: {
-        manifest: {}
-      }
+        manifest: {},
+      },
     }
     updateRoot(obj)
     setModifiedDate(3241241234234)
@@ -158,15 +160,15 @@ describe('setCreatedDate', () => {
       domains: [domainName],
       [domainName]: {
         manifest: {
-          createdDate: 12312312312312
-        }
-      }
+          createdDate: 12312312312312,
+        },
+      },
     }
     updateRoot(obj)
     setCreatedDate(234234234)
     const result = getStore()
     expect(result).toStrictEqual({
-      createdDate: 12312312312312
+      createdDate: 12312312312312,
     })
     spyDomain.mockRestore()
   })
@@ -179,14 +181,14 @@ describe('setCreatedDate', () => {
     const obj = {
       domains: [domainName],
       [domainName]: {
-        manifest: {}
-      }
+        manifest: {},
+      },
     }
     updateRoot(obj)
     setCreatedDate(234234234)
     const result = getStore()
     expect(result).toStrictEqual({
-      createdDate: 234234234
+      createdDate: 234234234,
     })
     spyDomain.mockRestore()
   })

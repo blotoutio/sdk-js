@@ -2,7 +2,11 @@ import { constants } from '../config'
 import { getManifestVariable } from '../manifest'
 import { getMid, getSystemMergeCounter } from '../utils'
 import { stringToIntSum } from '../common/securityUtil'
-import { getNormalUseValue, getTempUseValue, setNormalUseValue } from '../storage/sharedPreferences'
+import {
+  getNormalUseValue,
+  getTempUseValue,
+  setNormalUseValue,
+} from '../storage/sharedPreferences'
 import { updateRoot } from '../storage/store'
 import { getAllEventsOfDate } from './index'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
@@ -21,16 +25,22 @@ const chunk = (arr, size) => {
 }
 
 export const eventsChunkArr = (events, devEvents) => {
-  let codifiedMergeCounter = getManifestVariable(constants.EVENT_CODIFIED_MERGECOUNTER)
+  let codifiedMergeCounter = getManifestVariable(
+    constants.EVENT_CODIFIED_MERGECOUNTER
+  )
   if (codifiedMergeCounter == null) {
     codifiedMergeCounter = constants.DEFAULT_EVENT_CODIFIED_MERGECOUNTER
   }
 
   const sysMergeCounterValue = getSystemMergeCounter(events)
-  const sysEvents = sysMergeCounterValue != null ? chunk(events, sysMergeCounterValue) : []
+  const sysEvents =
+    sysMergeCounterValue != null ? chunk(events, sysMergeCounterValue) : []
   const codifiedEvents = chunk(devEvents, codifiedMergeCounter)
 
-  const length = sysEvents.length > codifiedEvents.length ? sysEvents.length : codifiedEvents.length
+  const length =
+    sysEvents.length > codifiedEvents.length
+      ? sysEvents.length
+      : codifiedEvents.length
   const mergeArr = []
   for (let i = 0; i < length; i++) {
     let inArr = []
@@ -45,7 +55,12 @@ export const eventsChunkArr = (events, devEvents) => {
   return mergeArr
 }
 
-export const createDevEventInfoObj = (eventName, objectName, data = null, eventCode = null) => {
+export const createDevEventInfoObj = (
+  eventName,
+  objectName,
+  data = null,
+  eventCode = null
+) => {
   const event = {
     sentToServer: false,
     urlPath: window.location.href,
@@ -53,7 +68,7 @@ export const createDevEventInfoObj = (eventName, objectName, data = null, eventC
     mid: getMid(),
     nmo: 1,
     evc: constants.EVENT_DEV_CATEGORY,
-    evcs: eventCode || codeForCustomCodifiedEvent(eventName)
+    evcs: eventCode || codeForCustomCodifiedEvent(eventName),
   }
 
   if (eventName) {
@@ -73,12 +88,12 @@ export const createDevEventInfoObj = (eventName, objectName, data = null, eventC
 
 export const eventSync = {
   inProgress: false,
-  set progressStatus (status) {
+  set progressStatus(status) {
     this.inProgress = status
   },
-  get progressStatus () {
+  get progressStatus() {
     return this.inProgress
-  }
+  },
 }
 
 export const shouldCollectSystemEvents = () => {
@@ -119,7 +134,8 @@ export const codeForCustomCodifiedEvent = (eventName) => {
   let eventNameIntSum = stringToIntSum(eventName)
   eventSubCode = generateSubCode(eventNameIntSum)
 
-  const customEventStore = getNormalUseValue(constants.CUSTOM_EVENT_STORAGE) || {}
+  const customEventStore =
+    getNormalUseValue(constants.CUSTOM_EVENT_STORAGE) || {}
   const keys = Object.keys(customEventStore)
   for (let i = 0; i < keys.length; i++) {
     const valAsEventName = keys[i]
@@ -144,7 +160,8 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
   }
 
   const viewportLength = (session.viewPort || []).length
-  const viewPortObj = viewportLength > 0 ? session.viewPort[viewportLength - 1] : null
+  const viewPortObj =
+    viewportLength > 0 ? session.viewPort[viewportLength - 1] : null
 
   const result = []
   arr.forEach((val) => {
@@ -156,7 +173,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       referrer: getReferrerUrlOfDateSession(date, sessionId),
       obj: val.objectName,
       position: val.position,
-      session_id: sessionId
+      session_id: sessionId,
     }
 
     if (viewPortObj) {
@@ -175,7 +192,10 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       val.name === 'dblclick'
     ) {
       if (val.extraInfo) {
-        propObj.mouse = { x: val.extraInfo.mousePosX, y: val.extraInfo.mousePosY }
+        propObj.mouse = {
+          x: val.extraInfo.mousePosX,
+          y: val.extraInfo.mousePosY,
+        }
       }
     }
 
@@ -195,7 +215,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       evt: val.tstmp,
       properties: propObj,
       nmo: val.nmo,
-      evc: val.evc
+      evc: val.evc,
     }
 
     result.push(obj)
@@ -216,7 +236,7 @@ export const getNavigationTime = (sessionId, date) => {
     return
   }
 
-  if ((navigationsTime[0] - sessionStartTime) < 0) {
+  if (navigationsTime[0] - sessionStartTime < 0) {
     return navigationsTime
   }
 
@@ -243,11 +263,11 @@ export const sendEvents = (arr) => {
   const payload = getPayload(session, eventsArr)
   const url = getManifestUrl()
   postRequest(url, JSON.stringify(payload))
-    .then(() => { })
+    .then(() => {})
     .catch(error)
 }
 
 export const detectQueryString = () => {
   const currentUrl = window.location.href
-  return (/\?.+=.*/g).test(currentUrl)
+  return /\?.+=.*/g.test(currentUrl)
 }

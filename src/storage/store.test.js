@@ -8,9 +8,7 @@ import * as security from '../common/securityUtil'
 
 let spyRoot
 beforeEach(() => {
-  spyRoot = jest
-    .spyOn(key, 'getRootKey')
-    .mockImplementation(() => 'localhost')
+  spyRoot = jest.spyOn(key, 'getRootKey').mockImplementation(() => 'localhost')
 })
 
 afterEach(() => {
@@ -29,11 +27,11 @@ describe('getRoot', () => {
 
   it('memory value set', () => {
     updateRoot({
-      data: true
+      data: true,
     })
     const result = getRoot()
     expect(result).toStrictEqual({
-      data: true
+      data: true,
     })
   })
 
@@ -53,7 +51,7 @@ describe('getRoot', () => {
 
     const result = getRoot()
     expect(result).toStrictEqual({
-      domains: []
+      domains: [],
     })
     spyGet.mockRestore()
   })
@@ -68,7 +66,7 @@ describe('getRoot', () => {
 
     const result = getRoot()
     expect(result).toStrictEqual({
-      domains: []
+      domains: [],
     })
     spyGet.mockRestore()
     spyDecrypt.mockRestore()
@@ -83,9 +81,7 @@ describe('getRoot', () => {
         }
         return null
       })
-    const spyInit = jest
-      .spyOn(utils, 'initialize')
-      .mockImplementation(() => {})
+    const spyInit = jest.spyOn(utils, 'initialize').mockImplementation(() => {})
     const result = getRoot()
     expect(result).toBeNull()
     spyGet.mockRestore()
@@ -96,9 +92,7 @@ describe('getRoot', () => {
 describe('updateRoot', () => {
   let spySet
   beforeEach(() => {
-    spySet = jest
-      .spyOn(storage, 'setLocal')
-      .mockImplementation()
+    spySet = jest.spyOn(storage, 'setLocal').mockImplementation()
   })
 
   afterEach(() => {
@@ -122,7 +116,7 @@ describe('updateRoot', () => {
 
     const spyDate = jest
       .spyOn(manifestStorage, 'getModifiedDate')
-      .mockImplementation(() => Date.now() - (2 * 24 * 60 * 60 * 1000)) // 2 days
+      .mockImplementation(() => Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days
     updateRoot({ data: true })
     expect(spySet).toHaveBeenCalledTimes(0)
     spyManifest.mockRestore()
@@ -138,7 +132,7 @@ describe('updateRoot', () => {
       .mockImplementation(() => ({
         encryptedString: 'sodfkasfijsadifjasfasdf',
         key: 'asdfasfasdfsd',
-        iv: 'dfasfasdfasdf'
+        iv: 'dfasfasdfasdf',
       }))
     updateRoot({ data: true })
     expect(spySet).toHaveBeenCalledWith('localhost', 'sodfkasfijsadifjasfasdf')

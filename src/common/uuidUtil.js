@@ -55,7 +55,13 @@ const userIDUUID = () => {
   const initialUUID = uuidv4()
   const randomNum10Digit1 = Math.floor(100000000 + Math.random() * 900000000)
   const randomNum10Digit2 = Math.floor(100000000 + Math.random() * 900000000)
-  const finalString = startTime + clientToken + initialUUID + randomNum10Digit1 + randomNum10Digit2 + Date.now()
+  const finalString =
+    startTime +
+    clientToken +
+    initialUUID +
+    randomNum10Digit1 +
+    randomNum10Digit2 +
+    Date.now()
   // finalString - "15994815055548B7PNST7CGHSF4N0a624583-c8d9-41c5-a328-43b84408fb4a8127742871616933301599481509479"
 
   const sha64Char = SHA256Encode(finalString) // "38c646a0c2c42534507bd19508ebde2c326bbd5a0415a766a555dd1d9656c5ae"

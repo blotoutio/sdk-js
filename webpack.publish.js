@@ -7,19 +7,19 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = merge(common, {
   mode: 'production',
   output: {
-    filename: './index.min.js'
+    filename: './index.min.js',
   },
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, 'src/*'),
-          flatten: true
-        }
-      ]
+          flatten: true,
+        },
+      ],
     }),
     new Webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
-  ]
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
+  ],
 })

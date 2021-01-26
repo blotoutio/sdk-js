@@ -73,13 +73,13 @@ export const constants = {
   MAP_ID_EVENT: 'map_id',
   MAP_ID_EVENT_CODE: 21001,
   PUSH_SYSTEM_EVENTS: 'SDK_Push_System_Events',
-  DEFAULT_PUSH_SYSTEM_EVENTS: false
+  DEFAULT_PUSH_SYSTEM_EVENTS: false,
 }
 export const manifestConst = {
   Geo_Ip_Path: 'v1/geo/city',
   Event_Path: 'v1/events/publish',
   Event_Retention_Path: 'v1/events/retention/publish',
-  MANIFEST_PATH: 'v1/manifest/pull'
+  MANIFEST_PATH: 'v1/manifest/pull',
 }
 export const systemEventCode = {
   cut: 11101,
@@ -120,9 +120,17 @@ export const systemEventCode = {
   hoverc: 11509,
   scroll: 11129,
   sessionInfo: 11024,
-  sdk_start: 11130
+  sdk_start: 11130,
 }
 export const isDevMode = process.env.NODE_ENV === 'development'
 export const isHighFreqEventOff = true
-export const highFreqEvents = ['DOMActivate', 'DOMSubtreeModified', 'focus', 'blur', 'keypress', 'hoverc', 'touchend']
+export const highFreqEvents = [
+  'DOMActivate',
+  'DOMSubtreeModified',
+  'focus',
+  'blur',
+  'keypress',
+  'hoverc',
+  'touchend',
+]
 export const dataEncryptionEnabled = true

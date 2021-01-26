@@ -33,10 +33,10 @@ const getInfoPayload = (date, sessionId) => {
       session_id: sessionId,
       start: startTime,
       end: endTime,
-      duration: durationInSecs
+      duration: durationInSecs,
     },
     nmo: 1,
-    evc: constants.EVENT_CATEGORY
+    evc: constants.EVENT_CATEGORY,
   }
 
   if (viewPortObj) {
@@ -46,13 +46,20 @@ const getInfoPayload = (date, sessionId) => {
   return info
 }
 
-export const addSessionInfoEvent = (events, eventsArrayChunk, date, sessionId) => {
+export const addSessionInfoEvent = (
+  events,
+  eventsArrayChunk,
+  date,
+  sessionId
+) => {
   const sysMergeCounterValue = getSystemMergeCounter(events)
   const info = getInfoPayload(date, sessionId)
   if (!info) {
     return eventsArrayChunk
   }
-  const chunkIndex = eventsArrayChunk.findIndex((arr) => arr.length < sysMergeCounterValue)
+  const chunkIndex = eventsArrayChunk.findIndex(
+    (arr) => arr.length < sysMergeCounterValue
+  )
   if (chunkIndex === -1) {
     const sessionEvtArr = [info]
     eventsArrayChunk.push(sessionEvtArr)

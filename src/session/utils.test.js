@@ -1,4 +1,9 @@
-import { checkAndGetSessionId, createSessionObject, getNotSynced, maybeSync } from './utils'
+import {
+  checkAndGetSessionId,
+  createSessionObject,
+  getNotSynced,
+  maybeSync,
+} from './utils'
 import * as storage from '../storage'
 import * as event from '../event'
 import * as manifest from '../manifest'
@@ -33,9 +38,7 @@ describe('eventSync', () => {
 describe('checkAndGetSessionId', () => {
   it('session do no exist yet', () => {
     const id = 1580775120000
-    const spySet = jest
-      .spyOn(storage, 'setSession')
-      .mockImplementation()
+    const spySet = jest.spyOn(storage, 'setSession').mockImplementation()
 
     const result = checkAndGetSessionId()
     expect(result).toBe(id)
@@ -64,7 +67,7 @@ describe('getNotSynced', () => {
 
   it('event data missing', () => {
     const result = getNotSynced({
-      23423423: {}
+      23423423: {},
     })
     expect(result).toBeNull()
   })
@@ -73,19 +76,19 @@ describe('getNotSynced', () => {
     const result = getNotSynced({
       23423423: {
         eventsData: {
-          sentToServer: true
-        }
+          sentToServer: true,
+        },
       },
       23423424: {
         eventsData: {
-          sentToServer: false
-        }
+          sentToServer: false,
+        },
       },
       23423425: {
         eventsData: {
-          sentToServer: true
-        }
-      }
+          sentToServer: true,
+        },
+      },
     })
     expect(result).toBe('23423424')
   })
@@ -94,14 +97,14 @@ describe('getNotSynced', () => {
     const result = getNotSynced({
       23423423: {
         eventsData: {
-          sentToServer: true
-        }
+          sentToServer: true,
+        },
       },
       23423424: {
         eventsData: {
-          sentToServer: false
-        }
-      }
+          sentToServer: false,
+        },
+      },
     })
     expect(result).toBe('23423424')
   })
@@ -111,9 +114,7 @@ describe('maybeSync', () => {
   let spySync
 
   beforeEach(() => {
-    spySync = jest
-      .spyOn(event, 'syncEvents')
-      .mockImplementation()
+    spySync = jest.spyOn(event, 'syncEvents').mockImplementation()
     eventSync.progressStatus = false
   })
 
@@ -128,7 +129,7 @@ describe('maybeSync', () => {
 
   it('missing devCodifiedEventsInfo', () => {
     maybeSync({
-      eventsInfo: []
+      eventsInfo: [],
     })
     expect(spySync).toBeCalledTimes(0)
     expect(eventSync.progressStatus).toBe(false)
@@ -141,17 +142,17 @@ describe('maybeSync', () => {
     maybeSync({
       eventsInfo: [
         {
-          sentToServer: false
-        }
+          sentToServer: false,
+        },
       ],
       devCodifiedEventsInfo: [
         {
-          sentToServer: false
+          sentToServer: false,
         },
         {
-          sentToServer: false
-        }
-      ]
+          sentToServer: false,
+        },
+      ],
     })
     expect(spySync).toBeCalledTimes(1)
     expect(eventSync.progressStatus).toBe(true)
@@ -176,11 +177,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -194,7 +193,7 @@ describe('createSessionObject', () => {
         ua: null,
         version: '0.0.0.0',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -203,17 +202,21 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('with event, Android mobile', () => {
-    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (Linux; U; Android 4.0.3; nl-nl; GT-I9000 Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        'Mozilla/5.0 (Linux; U; Android 4.0.3; nl-nl; GT-I9000 Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'
+    )
 
     const result = createSessionObject('some_event', {
-      data: false
+      data: false,
     })
     expect(result).toStrictEqual({
       endTime: 0,
@@ -226,18 +229,16 @@ describe('createSessionObject', () => {
             name: 'some_event',
             nmo: 1,
             objectName: {
-              data: false
+              data: false,
             },
             sentToServer: false,
             tstmp: 1580775120000,
-            urlPath: 'http://localhost/'
-          }
+            urlPath: 'http://localhost/',
+          },
         ],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -248,10 +249,11 @@ describe('createSessionObject', () => {
         hostOS: 'Android',
         osv: '4.0.3',
         plf: 11,
-        ua: 'Mozilla/5.0 (Linux; U; Android 4.0.3; nl-nl; GT-I9000 Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
+        ua:
+          'Mozilla/5.0 (Linux; U; Android 4.0.3; nl-nl; GT-I9000 Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
         version: '4.0',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -260,25 +262,27 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('iPad', () => {
-    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1'
+    )
     const result = createSessionObject()
     expect(result).toStrictEqual({
       endTime: 0,
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -289,10 +293,11 @@ describe('createSessionObject', () => {
         hostOS: 'iOS',
         osv: '12.2',
         plf: 15,
-        ua: 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
+        ua:
+          'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
         version: '12.1',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -301,14 +306,18 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('OS is Mac', () => {
-    navigator.__defineGetter__('userAgent', () => '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36'
+    )
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -316,11 +325,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -331,10 +338,11 @@ describe('createSessionObject', () => {
         hostOS: 'Mac OS',
         osv: '11.1.0',
         plf: 27,
-        ua: '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+        ua:
+          '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
         version: '87.0.4280.101',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -343,14 +351,18 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('OS is Windows', () => {
-    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47'
+    )
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -358,11 +370,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -373,10 +383,11 @@ describe('createSessionObject', () => {
         hostOS: 'Windows',
         osv: '10',
         plf: 26,
-        ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47',
+        ua:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36 Edg/87.0.664.47',
         version: '87.0.664.47',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -385,14 +396,18 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('OS is Linux', () => {
-    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.127 Safari/534.16')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.127 Safari/534.16'
+    )
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -400,11 +415,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -415,10 +428,11 @@ describe('createSessionObject', () => {
         hostOS: 'Linux',
         osv: 'i686',
         plf: 28,
-        ua: 'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.127 Safari/534.16',
+        ua:
+          'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.127 Safari/534.16',
         version: '10.0.648.127',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -427,14 +441,18 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('other phone', () => {
-    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (ZTE-E_N72/N72V1.0.0B02;U;Windows Mobile/6.1;Profile/MIDP-2.0 Configuration/CLDC-1.1;320*240;CTC/2.0) IE/6.0 (compatible; MSIE 4.01; Windows CE; PPC)/UC Browser7.7.1.88')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        'Mozilla/5.0 (ZTE-E_N72/N72V1.0.0B02;U;Windows Mobile/6.1;Profile/MIDP-2.0 Configuration/CLDC-1.1;320*240;CTC/2.0) IE/6.0 (compatible; MSIE 4.01; Windows CE; PPC)/UC Browser7.7.1.88'
+    )
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -442,11 +460,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -457,10 +473,11 @@ describe('createSessionObject', () => {
         hostOS: 'Windows Mobile',
         osv: '6.1',
         plf: 16,
-        ua: 'Mozilla/5.0 (ZTE-E_N72/N72V1.0.0B02;U;Windows Mobile/6.1;Profile/MIDP-2.0 Configuration/CLDC-1.1;320*240;CTC/2.0) IE/6.0 (compatible; MSIE 4.01; Windows CE; PPC)/UC Browser7.7.1.88',
+        ua:
+          'Mozilla/5.0 (ZTE-E_N72/N72V1.0.0B02;U;Windows Mobile/6.1;Profile/MIDP-2.0 Configuration/CLDC-1.1;320*240;CTC/2.0) IE/6.0 (compatible; MSIE 4.01; Windows CE; PPC)/UC Browser7.7.1.88',
         version: '4.01',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -469,14 +486,18 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('other tablet', () => {
-    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (Linux; U; Android 3.2; de-de; Sony Tablet P Build/THMD01900) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        'Mozilla/5.0 (Linux; U; Android 3.2; de-de; Sony Tablet P Build/THMD01900) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13'
+    )
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -484,11 +505,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -499,10 +518,11 @@ describe('createSessionObject', () => {
         hostOS: 'Android',
         osv: '3.2',
         plf: 12,
-        ua: 'Mozilla/5.0 (Linux; U; Android 3.2; de-de; Sony Tablet P Build/THMD01900) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13',
+        ua:
+          'Mozilla/5.0 (Linux; U; Android 3.2; de-de; Sony Tablet P Build/THMD01900) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13',
         version: '4.0',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -511,14 +531,18 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('iPhone', () => {
-    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20'
+    )
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -526,11 +550,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -541,10 +563,11 @@ describe('createSessionObject', () => {
         hostOS: 'iOS',
         osv: '2.1',
         plf: 14,
-        ua: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20',
+        ua:
+          'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20',
         version: '3.1.1',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -553,14 +576,18 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
   it('Android mobile', () => {
-    navigator.__defineGetter__('userAgent', () => 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20')
+    navigator.__defineGetter__(
+      'userAgent',
+      () =>
+        'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20'
+    )
 
     const result = createSessionObject()
     expect(result).toStrictEqual({
@@ -568,11 +595,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -583,10 +608,11 @@ describe('createSessionObject', () => {
         hostOS: 'iOS',
         osv: '2.1',
         plf: 14,
-        ua: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20',
+        ua:
+          'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F136 Safari/525.20',
         version: '3.1.1',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -595,9 +621,9 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 
@@ -609,11 +635,9 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: [
-          'http://localhost/'
-        ],
+        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: []
+        stayTimeBeforeNav: [],
       },
       geo: {},
       lastServerSyncTime: 0,
@@ -628,7 +652,7 @@ describe('createSessionObject', () => {
         ua: '',
         version: '0.0.0.0',
         sdkVersion: undefined,
-        timeZoneOffset: 0
+        timeZoneOffset: 0,
       },
       startTime: 1580775120000,
       viewPort: [
@@ -637,9 +661,9 @@ describe('createSessionObject', () => {
           docWidth: 0,
           height: 0,
           timeStamp: 1580775120000,
-          width: 0
-        }
-      ]
+          width: 0,
+        },
+      ],
     })
   })
 })

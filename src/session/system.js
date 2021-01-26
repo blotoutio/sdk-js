@@ -1,7 +1,11 @@
 import { getSession } from '../storage'
 import { constants } from '../config'
 import { createViewPortObject } from './utils'
-import { createEventInfoObj, getSessionForDate, setSessionForDate } from '../event/session'
+import {
+  createEventInfoObj,
+  getSessionForDate,
+  setSessionForDate,
+} from '../event/session'
 import { getStringDate } from '../common/timeUtil'
 
 export const setDNTEvent = function () {

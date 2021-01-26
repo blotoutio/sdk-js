@@ -5,7 +5,7 @@ import {
   getLastNextDayEvent,
   getSessionTotalDuration,
   getSessionAvgObject,
-  retentionWrapper
+  retentionWrapper,
 } from './utils'
 import { getFormattedDate } from '../common/timeUtil'
 import { getEventsByDate } from '../event/storage'

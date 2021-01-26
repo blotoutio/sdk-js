@@ -10,10 +10,13 @@ import { getStringDate } from '../../common/timeUtil'
 
 export const resize = (window) => {
   const eventName = 'resize'
-  window.addEventListener(eventName, debounce((e) => {
-    setEvent(eventName, e)
-    setViewPort()
-  }, 3000))
+  window.addEventListener(
+    eventName,
+    debounce((e) => {
+      setEvent(eventName, e)
+      setViewPort()
+    }, 3000)
+  )
 }
 
 export const pagehide = (window) => {
@@ -36,16 +39,18 @@ export const beforeUnload = (window) => {
     }
 
     const clkIndex = session.eventsData.eventsInfo
-    const bncIndex = session.eventsData.eventsInfo
-      .findIndex((obj) => obj.name === constants.BOUNCE)
+    const bncIndex = session.eventsData.eventsInfo.findIndex(
+      (obj) => obj.name === constants.BOUNCE
+    )
     if (bncIndex !== -1 || clkIndex !== -1) {
       return
     }
 
     const startTime = session.startTime
     const diffTime = Date.now() - startTime
-    const diffTimeInSecs = Math.floor(diffTime / 1000)
-      .findIndex((obj) => obj.name === 'click')
+    const diffTimeInSecs = Math.floor(diffTime / 1000).findIndex(
+      (obj) => obj.name === 'click'
+    )
     if (diffTimeInSecs <= 2) {
       setEvent(constants.BOUNCE, event)
       sendBounceEvent(date)
@@ -55,9 +60,12 @@ export const beforeUnload = (window) => {
 
 export const domSubTreeModified = (window) => {
   const eventName = 'DOMSubtreeModified'
-  window.addEventListener(eventName, debounce((event) => {
-    setEvent(eventName, event)
-  }, constants.DOM_SUB_TREE_MODIFIED_INTERVAL))
+  window.addEventListener(
+    eventName,
+    debounce((event) => {
+      setEvent(eventName, event)
+    }, constants.DOM_SUB_TREE_MODIFIED_INTERVAL)
+  )
 }
 
 export const domActive = (window) => {

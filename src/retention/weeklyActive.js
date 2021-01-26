@@ -6,7 +6,7 @@ import {
   getSessionTotalDuration,
   getSessionAvgObject,
   getTimestampFromKey,
-  retentionWrapper
+  retentionWrapper,
 } from './utils'
 import { getStore } from '../event/storage'
 
@@ -35,7 +35,9 @@ export const setSession = () => {
     let highestWeekNumber
 
     if (retentions.length > 0) {
-      highestWeekNumber = getWeekNumber(new Date(getHighestTimestamp(retentions)))
+      highestWeekNumber = getWeekNumber(
+        new Date(getHighestTimestamp(retentions))
+      )
       if (highestWeekNumber >= currentWeekNumber) {
         return
       }
@@ -53,9 +55,13 @@ export const setSession = () => {
       }
 
       const eventWeekNumber = getWeekNumber(new Date(getTimestampFromKey(key)))
-      const highestCheck = !highestWeekNumber || eventWeekNumber > highestWeekNumber
+      const highestCheck =
+        !highestWeekNumber || eventWeekNumber > highestWeekNumber
       if (highestCheck && eventWeekNumber < currentWeekNumber) {
-        sessionObject = Object.assign(sessionObject, eventStore[key].sdkData.sessions)
+        sessionObject = Object.assign(
+          sessionObject,
+          eventStore[key].sdkData.sessions
+        )
       }
     })
 
@@ -66,7 +72,11 @@ export const setSession = () => {
 
     const totalDuration = getSessionTotalDuration(sessionObject)
     const avgTime = totalDuration / sessionCount
-    const obj = getSessionAvgObject(constants.WASTCode, Object.keys(sessionObject)[0], avgTime)
+    const obj = getSessionAvgObject(
+      constants.WASTCode,
+      Object.keys(sessionObject)[0],
+      avgTime
+    )
 
     retentions.push(obj)
     return retentions

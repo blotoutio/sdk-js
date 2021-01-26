@@ -1,7 +1,12 @@
 import * as eventStorage from '../event/storage'
 import * as storage from '../storage'
 import * as timeUtil from '../common/timeUtil'
-import { resetPreviousDate, setReferrerEvent, updateNavPath, updateNavTime } from './navigation'
+import {
+  resetPreviousDate,
+  setReferrerEvent,
+  updateNavPath,
+  updateNavTime,
+} from './navigation'
 
 let spyDate
 let spySet
@@ -15,9 +20,7 @@ beforeEach(() => {
     .spyOn(storage, 'getSession')
     .mockImplementation(() => 124123423)
 
-  spySet = jest
-    .spyOn(eventStorage, 'setEventsByDate')
-    .mockImplementation()
+  spySet = jest.spyOn(eventStorage, 'setEventsByDate').mockImplementation()
 
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
@@ -49,7 +52,7 @@ describe('updateNavTime', () => {
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
-        sessions: {}
+        sessions: {},
       }))
     updateNavTime()
     expect(spySet).toBeCalledTimes(0)
@@ -61,8 +64,8 @@ describe('updateNavTime', () => {
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
         sessions: {
-          124123423: {}
-        }
+          124123423: {},
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledTimes(0)
@@ -75,9 +78,9 @@ describe('updateNavTime', () => {
       .mockImplementation(() => ({
         sessions: {
           124123423: {
-            eventsData: {}
-          }
-        }
+            eventsData: {},
+          },
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledTimes(0)
@@ -91,30 +94,22 @@ describe('updateNavTime', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://domain.com/'
-              ],
-              stayTimeBeforeNav: [
-                1580794568000
-              ]
-            }
-          }
-        }
+              navigationPath: ['http://domain.com/'],
+              stayTimeBeforeNav: [1580794568000],
+            },
+          },
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
           eventsData: {
-            navigationPath: [
-              'http://domain.com/'
-            ],
-            stayTimeBeforeNav: [
-              1580775120000
-            ]
-          }
-        }
-      }
+            navigationPath: ['http://domain.com/'],
+            stayTimeBeforeNav: [1580775120000],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -124,8 +119,8 @@ describe('updateNavTime', () => {
     Object.defineProperty(window, 'location', {
       value: {
         href: url,
-        hostname: 'localhost'
-      }
+        hostname: 'localhost',
+      },
     })
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
@@ -133,34 +128,22 @@ describe('updateNavTime', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://localhost/test',
-                'http://localhost/'
-              ],
-              stayTimeBeforeNav: [
-                1580794568000,
-                1580794688000
-              ]
-            }
-          }
-        }
+              navigationPath: ['http://localhost/test', 'http://localhost/'],
+              stayTimeBeforeNav: [1580794568000, 1580794688000],
+            },
+          },
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
           eventsData: {
-            navigationPath: [
-              'http://localhost/test',
-              'http://localhost/'
-            ],
-            stayTimeBeforeNav: [
-              1580794568000,
-              1580775120000
-            ]
-          }
-        }
-      }
+            navigationPath: ['http://localhost/test', 'http://localhost/'],
+            stayTimeBeforeNav: [1580794568000, 1580775120000],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -170,8 +153,8 @@ describe('updateNavTime', () => {
     Object.defineProperty(window, 'location', {
       value: {
         href: url,
-        hostname: 'localhost'
-      }
+        hostname: 'localhost',
+      },
     })
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
@@ -179,33 +162,22 @@ describe('updateNavTime', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://localhost/',
-                'http://localhost/test'
-              ],
-              stayTimeBeforeNav: [
-                1580794568000
-              ]
-            }
-          }
-        }
+              navigationPath: ['http://localhost/', 'http://localhost/test'],
+              stayTimeBeforeNav: [1580794568000],
+            },
+          },
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
           eventsData: {
-            navigationPath: [
-              'http://localhost/',
-              'http://localhost/test'
-            ],
-            stayTimeBeforeNav: [
-              1580794568000,
-              1580775120000
-            ]
-          }
-        }
-      }
+            navigationPath: ['http://localhost/', 'http://localhost/test'],
+            stayTimeBeforeNav: [1580794568000, 1580775120000],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -217,32 +189,22 @@ describe('updateNavTime', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://domain.com/'
-              ],
-              stayTimeBeforeNav: [
-                1580794568000,
-                1580794688000
-              ]
-            }
-          }
-        }
+              navigationPath: ['http://domain.com/'],
+              stayTimeBeforeNav: [1580794568000, 1580794688000],
+            },
+          },
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
           eventsData: {
-            navigationPath: [
-              'http://domain.com/'
-            ],
-            stayTimeBeforeNav: [
-              1580794568000,
-              1580775120000
-            ]
-          }
-        }
-      }
+            navigationPath: ['http://domain.com/'],
+            stayTimeBeforeNav: [1580794568000, 1580775120000],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -254,28 +216,22 @@ describe('updateNavTime', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://domain.com/'
-              ],
-              stayTimeBeforeNav: []
-            }
-          }
-        }
+              navigationPath: ['http://domain.com/'],
+              stayTimeBeforeNav: [],
+            },
+          },
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
           eventsData: {
-            navigationPath: [
-              'http://domain.com/'
-            ],
-            stayTimeBeforeNav: [
-              1580775120000
-            ]
-          }
-        }
-      }
+            navigationPath: ['http://domain.com/'],
+            stayTimeBeforeNav: [1580775120000],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -287,28 +243,22 @@ describe('updateNavTime', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://localhost/'
-              ],
-              stayTimeBeforeNav: []
-            }
-          }
-        }
+              navigationPath: ['http://localhost/'],
+              stayTimeBeforeNav: [],
+            },
+          },
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
           eventsData: {
-            navigationPath: [
-              'http://localhost/'
-            ],
-            stayTimeBeforeNav: [
-              1580775120000
-            ]
-          }
-        }
-      }
+            navigationPath: ['http://localhost/'],
+            stayTimeBeforeNav: [1580775120000],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -320,32 +270,22 @@ describe('updateNavTime', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://localhost/'
-              ],
-              stayTimeBeforeNav: [
-                1580794688000,
-                1580794808000
-              ]
-            }
-          }
-        }
+              navigationPath: ['http://localhost/'],
+              stayTimeBeforeNav: [1580794688000, 1580794808000],
+            },
+          },
+        },
       }))
     updateNavTime()
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
           eventsData: {
-            navigationPath: [
-              'http://localhost/'
-            ],
-            stayTimeBeforeNav: [
-              1580794688000,
-              1580775120000
-            ]
-          }
-        }
-      }
+            navigationPath: ['http://localhost/'],
+            stayTimeBeforeNav: [1580794688000, 1580775120000],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -370,7 +310,7 @@ describe('updateNavPath', () => {
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
-        sessions: {}
+        sessions: {},
       }))
     updateNavPath()
     expect(spySet).toBeCalledTimes(0)
@@ -382,8 +322,8 @@ describe('updateNavPath', () => {
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
         sessions: {
-          124123423: {}
-        }
+          124123423: {},
+        },
       }))
     updateNavPath()
     expect(spySet).toBeCalledTimes(0)
@@ -396,9 +336,9 @@ describe('updateNavPath', () => {
       .mockImplementation(() => ({
         sessions: {
           124123423: {
-            eventsData: {}
-          }
-        }
+            eventsData: {},
+          },
+        },
       }))
     updateNavPath()
     expect(spySet).toBeCalledTimes(0)
@@ -412,10 +352,10 @@ describe('updateNavPath', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: []
-            }
-          }
-        }
+              navigationPath: [],
+            },
+          },
+        },
       }))
     updateNavPath()
     expect(spySet).toBeCalledTimes(0)
@@ -429,12 +369,10 @@ describe('updateNavPath', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://localhost/'
-              ]
-            }
-          }
-        }
+              navigationPath: ['http://localhost/'],
+            },
+          },
+        },
       }))
     updateNavPath()
     expect(spySet).toBeCalledTimes(0)
@@ -448,25 +386,20 @@ describe('updateNavPath', () => {
         sessions: {
           124123423: {
             eventsData: {
-              navigationPath: [
-                'http://domain.com/'
-              ]
-            }
-          }
-        }
+              navigationPath: ['http://domain.com/'],
+            },
+          },
+        },
       }))
     updateNavPath()
     expect(spySet).toBeCalledWith('20-3-2020', {
       sessions: {
         124123423: {
           eventsData: {
-            navigationPath: [
-              'http://domain.com/',
-              'http://localhost/'
-            ]
-          }
-        }
-      }
+            navigationPath: ['http://domain.com/', 'http://localhost/'],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -491,7 +424,7 @@ describe('setReferrerEvent', () => {
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
-        sessions: {}
+        sessions: {},
       }))
     setReferrerEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -503,8 +436,8 @@ describe('setReferrerEvent', () => {
       .spyOn(eventStorage, 'getEventsByDate')
       .mockImplementation(() => ({
         sessions: {
-          124123423: {}
-        }
+          124123423: {},
+        },
       }))
     setReferrerEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -517,9 +450,9 @@ describe('setReferrerEvent', () => {
       .mockImplementation(() => ({
         sessions: {
           124123423: {
-            eventsData: {}
-          }
-        }
+            eventsData: {},
+          },
+        },
       }))
     setReferrerEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -533,12 +466,14 @@ describe('setReferrerEvent', () => {
         sessions: {
           124123423: {
             eventsData: {
-              eventsInfo: [{
-                name: 'some_event'
-              }]
-            }
-          }
-        }
+              eventsInfo: [
+                {
+                  name: 'some_event',
+                },
+              ],
+            },
+          },
+        },
       }))
     setReferrerEvent('some_event')
     expect(spySet).toBeCalledTimes(0)
@@ -552,10 +487,10 @@ describe('setReferrerEvent', () => {
         sessions: {
           124123423: {
             eventsData: {
-              eventsInfo: []
-            }
-          }
-        }
+              eventsInfo: [],
+            },
+          },
+        },
       }))
     setReferrerEvent('some_event')
     expect(spySet).toBeCalledWith('20-3-2020', {
@@ -572,12 +507,12 @@ describe('setReferrerEvent', () => {
                 sentToServer: false,
                 tstmp: 1580775120000,
                 urlPath: 'http://localhost/',
-                value: undefined
-              }
-            ]
-          }
-        }
-      }
+                value: undefined,
+              },
+            ],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })
@@ -605,11 +540,11 @@ describe('resetPreviousDate', () => {
       sessions: {
         234234234242: {
           eventsData: {
-            sentToServer: true
-          }
+            sentToServer: true,
+          },
         },
-        2342342342342: {}
-      }
+        2342342342342: {},
+      },
     }
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
@@ -624,16 +559,12 @@ describe('resetPreviousDate', () => {
       sessions: {
         234234234242: {
           eventsData: {
-            navigationPath: [
-              'http://domain.com/'
-            ],
-            stayTimeBeforeNav: [
-              5
-            ],
-            sentToServer: false
-          }
-        }
-      }
+            navigationPath: ['http://domain.com/'],
+            stayTimeBeforeNav: [5],
+            sentToServer: false,
+          },
+        },
+      },
     }
     const spyEvents = jest
       .spyOn(eventStorage, 'getEventsByDate')
@@ -645,10 +576,10 @@ describe('resetPreviousDate', () => {
           eventsData: {
             navigationPath: [],
             sentToServer: false,
-            stayTimeBeforeNav: []
-          }
-        }
-      }
+            stayTimeBeforeNav: [],
+          },
+        },
+      },
     })
     spyEvents.mockRestore()
   })

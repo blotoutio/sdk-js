@@ -1,11 +1,16 @@
-import { constants, highFreqEvents, isHighFreqEventOff, systemEventCode } from '../config'
+import {
+  constants,
+  highFreqEvents,
+  isHighFreqEventOff,
+  systemEventCode,
+} from '../config'
 import {
   findObjIndex,
   getMid,
   getNotSyncedDate,
   getObjectTitle,
   getSelector,
-  setNewDateObject
+  setNewDateObject,
 } from '../utils'
 import { getSession, removeSession, setSession } from '../storage'
 import { getEventsByDate, getStore, setEventsByDate } from './storage'
@@ -43,7 +48,10 @@ const getPositionObject = (event) => {
 }
 
 export const setEvent = function (eventName, event) {
-  if (!eventName || (isHighFreqEventOff && highFreqEvents.includes(eventName))) {
+  if (
+    !eventName ||
+    (isHighFreqEventOff && highFreqEvents.includes(eventName))
+  ) {
     return
   }
 
@@ -173,7 +181,7 @@ export const createEventInfoObj = (eventName, objectName, event) => {
     tstmp: Date.now(),
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
-    evcs: systemEventCode[eventName]
+    evcs: systemEventCode[eventName],
   }
 
   if (getRoot()) {
@@ -185,7 +193,7 @@ export const createEventInfoObj = (eventName, objectName, event) => {
     data.objectTitle = getObjectTitle(event, eventName)
     data.extraInfo = {
       mousePosX: event.clientX || -1,
-      mousePosY: event.clientY || -1
+      mousePosY: event.clientY || -1,
     }
   }
 

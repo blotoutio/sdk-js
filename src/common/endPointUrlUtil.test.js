@@ -64,7 +64,9 @@ describe('getManifestUrl', () => {
 
   it('retention event, no manifest', () => {
     setUrl('http://blotout.io')
-    expect(getManifestUrl('retention')).toBe('http://blotout.io/v1/events/retention/publish')
+    expect(getManifestUrl('retention')).toBe(
+      'http://blotout.io/v1/events/retention/publish'
+    )
   })
 
   it('retention event, manifest', () => {

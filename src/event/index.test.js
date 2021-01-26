@@ -5,7 +5,12 @@ import * as utils from '../utils'
 import * as storage from '../storage'
 import * as network from '../common/networkUtil'
 import * as timeUtil from '../common/timeUtil'
-import { mapIDEvent, sendStartEvent, syncPreviousDateEvents, syncPreviousEvents } from '.'
+import {
+  mapIDEvent,
+  sendStartEvent,
+  syncPreviousDateEvents,
+  syncPreviousEvents,
+} from '.'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -22,9 +27,7 @@ beforeEach(() => {
     .spyOn(storage, 'getSession')
     .mockImplementation(() => 124123423)
 
-  spySet = jest
-    .spyOn(eventStorage, 'setEventsByDate')
-    .mockImplementation()
+  spySet = jest.spyOn(eventStorage, 'setEventsByDate').mockImplementation()
 
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
@@ -71,10 +74,10 @@ describe('syncPreviousEvents', () => {
         sessions: {
           124123423: {
             eventsData: {
-              sentToServer: false
-            }
-          }
-        }
+              sentToServer: false,
+            },
+          },
+        },
       }))
     syncPreviousEvents()
     expect(spyPost).toBeCalledTimes(0)
@@ -88,10 +91,10 @@ describe('syncPreviousEvents', () => {
         sessions: {
           12341234213: {
             eventsData: {
-              sentToServer: true
-            }
-          }
-        }
+              sentToServer: true,
+            },
+          },
+        },
       }))
     syncPreviousEvents()
     expect(spyPost).toBeCalledTimes(0)
@@ -108,10 +111,10 @@ describe('syncPreviousEvents', () => {
         sessions: {
           12341234213: {
             eventsData: {
-              sentToServer: true
-            }
-          }
-        }
+              sentToServer: true,
+            },
+          },
+        },
       }))
     syncPreviousEvents()
     expect(spyPost).toBeCalledTimes(0)
@@ -130,8 +133,8 @@ describe('syncPreviousEvents', () => {
           12341234213: {
             viewPort: [
               {
-                timeStamp: 1608506665536
-              }
+                timeStamp: 1608506665536,
+              },
             ],
             startTime: 1231312321,
             endTime: 0,
@@ -140,32 +143,38 @@ describe('syncPreviousEvents', () => {
               eventsInfo: [
                 {
                   sentToServer: false,
-                  name: 'init'
+                  name: 'init',
                 },
                 {
                   sentToServer: false,
-                  name: 'load'
+                  name: 'load',
                 },
                 {
                   sentToServer: false,
-                  name: 'click'
-                }
+                  name: 'click',
+                },
               ],
               devCodifiedEventsInfo: [
                 {
                   sentToServer: false,
                   isPii: false,
                   isPhi: false,
-                  name: 'custom_event'
-                }
-              ]
-            }
-          }
-        }
+                  name: 'custom_event',
+                },
+              ],
+            },
+          },
+        },
       }))
     syncPreviousEvents()
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}')
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"session_id":"12341234213","start":1231312321,"end":0,"duration":0,"screen":{"timeStamp":1608506665536}},"nmo":1,"evc":10001}]}')
+    expect(spyPost).toBeCalledWith(
+      '',
+      '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}'
+    )
+    expect(spyPost).toBeCalledWith(
+      '',
+      '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"session_id":"12341234213","start":1231312321,"end":0,"duration":0,"screen":{"timeStamp":1608506665536}},"nmo":1,"evc":10001}]}'
+    )
     spyEvents.mockRestore()
     spyCount.mockRestore()
   })
@@ -181,35 +190,35 @@ describe('syncPreviousEvents', () => {
           12341234213: {
             viewPort: [
               {
-                timeStamp: 1608506665536
-              }
+                timeStamp: 1608506665536,
+              },
             ],
             eventsData: {
               sentToServer: false,
               eventsInfo: [
                 {
                   sentToServer: false,
-                  name: 'init'
+                  name: 'init',
                 },
                 {
                   sentToServer: false,
-                  name: 'load'
+                  name: 'load',
                 },
                 {
                   sentToServer: false,
-                  name: 'click'
-                }
+                  name: 'click',
+                },
               ],
               devCodifiedEventsInfo: [
                 {
                   sentToServer: false,
                   isPii: false,
-                  isPhi: false
-                }
-              ]
-            }
-          }
-        }
+                  isPhi: false,
+                },
+              ],
+            },
+          },
+        },
       }))
     syncPreviousEvents()
     expect(spyPost).toBeCalledTimes(0)
@@ -252,10 +261,10 @@ describe('syncPreviousDateEvents', () => {
         sessions: {
           12341234213: {
             eventsData: {
-              sentToServer: true
-            }
-          }
-        }
+              sentToServer: true,
+            },
+          },
+        },
       }))
     syncPreviousDateEvents()
     expect(spyPost).toBeCalledTimes(0)
@@ -272,10 +281,10 @@ describe('syncPreviousDateEvents', () => {
         sessions: {
           12341234213: {
             eventsData: {
-              sentToServer: true
-            }
-          }
-        }
+              sentToServer: true,
+            },
+          },
+        },
       }))
     syncPreviousDateEvents()
     expect(spyPost).toBeCalledTimes(0)
@@ -294,40 +303,46 @@ describe('syncPreviousDateEvents', () => {
           12341234213: {
             viewPort: [
               {
-                timeStamp: 1608506665536
-              }
+                timeStamp: 1608506665536,
+              },
             ],
             eventsData: {
               sentToServer: false,
               eventsInfo: [
                 {
                   sentToServer: false,
-                  name: 'init'
+                  name: 'init',
                 },
                 {
                   sentToServer: false,
-                  name: 'load'
+                  name: 'load',
                 },
                 {
                   sentToServer: false,
-                  name: 'click'
-                }
+                  name: 'click',
+                },
               ],
               devCodifiedEventsInfo: [
                 {
                   sentToServer: false,
                   isPii: false,
                   isPhi: false,
-                  name: 'custom_event'
-                }
-              ]
-            }
-          }
-        }
+                  name: 'custom_event',
+                },
+              ],
+            },
+          },
+        },
       }))
     syncPreviousDateEvents()
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}')
-    expect(spyPost).toBeCalledWith('', '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"session_id":"12341234213","duration":null,"screen":{"timeStamp":1608506665536}},"nmo":1,"evc":10001}]}')
+    expect(spyPost).toBeCalledWith(
+      '',
+      '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}'
+    )
+    expect(spyPost).toBeCalledWith(
+      '',
+      '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":null,"session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":null,"session_id":"12341234213","duration":null,"screen":{"timeStamp":1608506665536}},"nmo":1,"evc":10001}]}'
+    )
     spyEvents.mockRestore()
     spyCount.mockRestore()
   })
@@ -343,35 +358,35 @@ describe('syncPreviousDateEvents', () => {
           12341234213: {
             viewPort: [
               {
-                timeStamp: 1608506665536
-              }
+                timeStamp: 1608506665536,
+              },
             ],
             eventsData: {
               sentToServer: false,
               eventsInfo: [
                 {
                   sentToServer: false,
-                  name: 'init'
+                  name: 'init',
                 },
                 {
                   sentToServer: false,
-                  name: 'load'
+                  name: 'load',
                 },
                 {
                   sentToServer: false,
-                  name: 'click'
-                }
+                  name: 'click',
+                },
               ],
               devCodifiedEventsInfo: [
                 {
                   sentToServer: false,
                   isPii: false,
-                  isPhi: false
-                }
-              ]
-            }
-          }
-        }
+                  isPhi: false,
+                },
+              ],
+            },
+          },
+        },
       }))
     syncPreviousDateEvents()
     expect(spyPost).toBeCalledTimes(0)
@@ -383,9 +398,7 @@ describe('syncPreviousDateEvents', () => {
 describe('mapIDEvent', () => {
   let spySet
   beforeEach(() => {
-    spySet = jest
-      .spyOn(eventSession, 'setDevEvent')
-      .mockImplementation()
+    spySet = jest.spyOn(eventSession, 'setDevEvent').mockImplementation()
   })
 
   afterEach(() => {
@@ -399,39 +412,45 @@ describe('mapIDEvent', () => {
 
   it('no data', () => {
     mapIDEvent('sdfasfasdfds', 'service')
-    expect(spySet).toBeCalledWith('map_id', {
-      map_id: 'sdfasfasdfds',
-      map_provider: 'service'
-    },
-    21001)
+    expect(spySet).toBeCalledWith(
+      'map_id',
+      {
+        map_id: 'sdfasfasdfds',
+        map_provider: 'service',
+      },
+      21001
+    )
   })
 
   it('with data', () => {
     mapIDEvent('sdfasfasdfds', 'service', { custom: true })
-    expect(spySet).toBeCalledWith('map_id', {
-      map_id: 'sdfasfasdfds',
-      map_provider: 'service',
-      custom: true
-    },
-    21001)
+    expect(spySet).toBeCalledWith(
+      'map_id',
+      {
+        map_id: 'sdfasfasdfds',
+        map_provider: 'service',
+        custom: true,
+      },
+      21001
+    )
   })
 })
 
 describe('sendStartEvent', () => {
   it('ok', () => {
-    const spySend = jest
-      .spyOn(eventUtils, 'sendEvents')
-      .mockImplementation()
+    const spySend = jest.spyOn(eventUtils, 'sendEvents').mockImplementation()
     sendStartEvent()
-    expect(spySend).toBeCalledWith([{
-      evc: 10001,
-      evcs: 11130,
-      name: 'sdk_start',
-      nmo: 1,
-      sentToServer: false,
-      tstmp: 1580775120000,
-      urlPath: 'http://localhost/'
-    }])
+    expect(spySend).toBeCalledWith([
+      {
+        evc: 10001,
+        evcs: 11130,
+        name: 'sdk_start',
+        nmo: 1,
+        sentToServer: false,
+        tstmp: 1580775120000,
+        urlPath: 'http://localhost/',
+      },
+    ])
     spySend.mockRestore()
   })
 })

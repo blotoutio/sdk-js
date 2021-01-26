@@ -5,7 +5,7 @@ import {
   getMonthNumber,
   getCurrentWeekNumber,
   getCurrentMonthNumber,
-  getFormattedDate
+  getFormattedDate,
 } from './timeUtil'
 
 describe('millisecondsToHours', () => {

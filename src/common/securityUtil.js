@@ -36,7 +36,7 @@ const generate256Key = (key) => {
   if (!key) {
     return {
       key256: '',
-      iv: ''
+      iv: '',
     }
   }
 
@@ -49,7 +49,7 @@ const generate256Key = (key) => {
 
   return {
     key256: PBKDF2(keyStr, salt, { keySize: 256 / 32, iterations: 1000 }),
-    iv
+    iv,
   }
 }
 
@@ -86,7 +86,7 @@ export const encryptAES = (data, passCode) => {
   return {
     encryptedString,
     key: key256.toString(),
-    iv: iv.toString()
+    iv: iv.toString(),
   }
 }
 
@@ -112,7 +112,7 @@ export const encryptRSA = (publicKey, data) => {
     return {
       data: '',
       key: '',
-      iv: ''
+      iv: '',
     }
   }
 
@@ -125,7 +125,7 @@ export const encryptRSA = (publicKey, data) => {
   return {
     data: encryptedString,
     key: encrypt2.encrypt(key),
-    iv
+    iv,
   }
 }
 

@@ -15,9 +15,7 @@ beforeEach(() => {
     .spyOn(storage, 'getSession')
     .mockImplementation(() => 124123423)
 
-  spySet = jest
-    .spyOn(eventSession, 'setSessionForDate')
-    .mockImplementation()
+  spySet = jest.spyOn(eventSession, 'setSessionForDate').mockImplementation()
 
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
@@ -41,7 +39,7 @@ describe('setPersonalEvent', () => {
       .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => null)
     setSessionPIIEvent('personal', {
-      meta: true
+      meta: true,
     })
     expect(spySet).toBeCalledTimes(0)
     spyEvents.mockRestore()
@@ -52,7 +50,7 @@ describe('setPersonalEvent', () => {
       .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({}))
     setSessionPIIEvent('personal', {
-      meta: true
+      meta: true,
     })
     expect(spySet).toBeCalledTimes(0)
     spyEvents.mockRestore()
@@ -62,10 +60,10 @@ describe('setPersonalEvent', () => {
     const spyEvents = jest
       .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
-        eventsData: {}
+        eventsData: {},
       }))
     setSessionPIIEvent('personal', {
-      meta: true
+      meta: true,
     })
     expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
       eventsData: {
@@ -75,17 +73,17 @@ describe('setPersonalEvent', () => {
             evcs: 23950,
             isPii: true,
             metaInfo: {
-              meta: true
+              meta: true,
             },
             mid: 'localhost-null-1580775120000',
             name: 'personal',
             nmo: 1,
             sentToServer: false,
             tstmp: 1580775120000,
-            urlPath: 'http://localhost/'
-          }
-        ]
-      }
+            urlPath: 'http://localhost/',
+          },
+        ],
+      },
     })
     spyEvents.mockRestore()
   })
@@ -97,37 +95,37 @@ describe('setPersonalEvent', () => {
         eventsData: {
           devCodifiedEventsInfo: [
             {
-              data: true
-            }
-          ]
-        }
+              data: true,
+            },
+          ],
+        },
       }))
 
     setSessionPIIEvent('personal', {
-      meta: true
+      meta: true,
     })
     expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
       eventsData: {
         devCodifiedEventsInfo: [
           {
-            data: true
+            data: true,
           },
           {
             evc: 20001,
             evcs: 23950,
             isPii: true,
             metaInfo: {
-              meta: true
+              meta: true,
             },
             mid: 'localhost-null-1580775120000',
             name: 'personal',
             nmo: 1,
             sentToServer: false,
             tstmp: 1580775120000,
-            urlPath: 'http://localhost/'
-          }
-        ]
-      }
+            urlPath: 'http://localhost/',
+          },
+        ],
+      },
     })
     spyEvents.mockRestore()
   })
@@ -141,37 +139,37 @@ describe('setSessionPHIEvent', () => {
         eventsData: {
           devCodifiedEventsInfo: [
             {
-              data: true
-            }
-          ]
-        }
+              data: true,
+            },
+          ],
+        },
       }))
 
     setSessionPHIEvent('personal', {
-      meta: true
+      meta: true,
     })
     expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
       eventsData: {
         devCodifiedEventsInfo: [
           {
-            data: true
+            data: true,
           },
           {
             evc: 20001,
             evcs: 23950,
             isPhi: true,
             metaInfo: {
-              meta: true
+              meta: true,
             },
             mid: 'localhost-null-1580775120000',
             name: 'personal',
             nmo: 1,
             sentToServer: false,
             tstmp: 1580775120000,
-            urlPath: 'http://localhost/'
-          }
-        ]
-      }
+            urlPath: 'http://localhost/',
+          },
+        ],
+      },
     })
     spyEvents.mockRestore()
   })

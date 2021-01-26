@@ -23,7 +23,10 @@ export const updateNavTime = () => {
     return
   }
 
-  if (navPaths.length === 1 || window.location.href === navPaths[navPaths.length - 1]) {
+  if (
+    navPaths.length === 1 ||
+    window.location.href === navPaths[navPaths.length - 1]
+  ) {
     eventsData.stayTimeBeforeNav.pop()
   }
 
@@ -70,8 +73,9 @@ export const setReferrerEvent = (eventName, ref, meta) => {
     return
   }
 
-  const refIndex = eventsData.eventsInfo
-    .findIndex((obj) => obj.name === eventName)
+  const refIndex = eventsData.eventsInfo.findIndex(
+    (obj) => obj.name === eventName
+  )
   if (refIndex !== -1) {
     return
   }

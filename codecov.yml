@@ -5,16 +5,16 @@ codecov:
     wait_for_ci: true
 
 ignore:
-  - "src/demo"
+  - 'src/demo'
 
 parsers:
   javascript:
     enable_partials: yes
 
 comment:
-  layout: "diff,flags,files"
+  layout: 'diff,flags,files'
   behavior: once
   require_changes: true
 
 github_checks:
-    annotations: true
+  annotations: true

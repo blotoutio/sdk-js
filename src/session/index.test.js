@@ -3,7 +3,11 @@ import * as eventUtils from '../event/utils'
 import * as storage from '../storage'
 import * as utils from '../utils'
 import * as timeUtil from '../common/timeUtil'
-import { updatePreviousDayEndTime, updateEndTime, addSessionInfoEvent } from './index'
+import {
+  updatePreviousDayEndTime,
+  updateEndTime,
+  addSessionInfoEvent,
+} from './index'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -20,9 +24,7 @@ beforeEach(() => {
     .spyOn(storage, 'getSession')
     .mockImplementation(() => 124123423)
 
-  spySet = jest
-    .spyOn(eventSession, 'setSessionForDate')
-    .mockImplementation()
+  spySet = jest.spyOn(eventSession, 'setSessionForDate').mockImplementation()
 
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
@@ -56,7 +58,7 @@ describe('updatePreviousDayEndTime', () => {
       .mockImplementation(() => ({}))
     updatePreviousDayEndTime()
     expect(spySet).toBeCalledWith('3-2-2020', 124123423, {
-      endTime: 1580775120000
+      endTime: 1580775120000,
     })
     spyEvents.mockRestore()
   })
@@ -83,7 +85,7 @@ describe('updateEndTime', () => {
       .mockImplementation(() => ({}))
     updateEndTime()
     expect(spySet).toBeCalledWith('20-3-2020', 124123423, {
-      endTime: 1580775120000
+      endTime: 1580775120000,
     })
     spyEvents.mockRestore()
   })
@@ -118,7 +120,7 @@ describe('addSessionInfoEvent', () => {
       .spyOn(eventSession, 'getSessionForDate')
       .mockImplementation(() => ({
         startTime: 2312313123,
-        endTime: 0
+        endTime: 0,
       }))
     const result = addSessionInfoEvent([], [], '20-3-2020', 124123423)
     expect(result).toStrictEqual([
@@ -136,12 +138,12 @@ describe('addSessionInfoEvent', () => {
             end: 0,
             referrer: null,
             session_id: 124123423,
-            start: 2312313123
+            start: 2312313123,
           },
           scrn: 'http://localhost/',
-          userid: null
-        }
-      ]
+          userid: null,
+        },
+      ],
     ])
     spyEvents.mockRestore()
   })
@@ -159,28 +161,31 @@ describe('addSessionInfoEvent', () => {
           {
             timeStamp: 314412412241242,
             width: 10,
-            height: 20
+            height: 20,
           },
           {
             timeStamp: 314412412341242,
             width: 10,
-            height: 20
-          }
-        ]
+            height: 20,
+          },
+        ],
       }))
     const result = addSessionInfoEvent(
       [],
-      [[
-        {
-          evn: 'Custom event'
-        }
-      ]],
+      [
+        [
+          {
+            evn: 'Custom event',
+          },
+        ],
+      ],
       '20-3-2020',
-      124123423)
+      124123423
+    )
     expect(result).toStrictEqual([
       [
         {
-          evn: 'Custom event'
+          evn: 'Custom event',
         },
         {
           evc: 10001,
@@ -197,15 +202,15 @@ describe('addSessionInfoEvent', () => {
             screen: {
               timeStamp: 314412412341242,
               width: 10,
-              height: 20
+              height: 20,
             },
             session_id: 124123423,
-            start: 2312313123
+            start: 2312313123,
           },
           scrn: 'http://localhost/',
-          userid: null
-        }
-      ]
+          userid: null,
+        },
+      ],
     ])
     spyEvents.mockRestore()
     spyCount.mockRestore()
@@ -217,22 +222,25 @@ describe('addSessionInfoEvent', () => {
       .mockImplementation(() => ({
         startTime: 2312313123,
         endTime: 2313316123,
-        viewPort: []
+        viewPort: [],
       }))
     const result = addSessionInfoEvent(
       [],
-      [[
-        {
-          evn: 'Custom event'
-        }
-      ]],
+      [
+        [
+          {
+            evn: 'Custom event',
+          },
+        ],
+      ],
       '20-3-2020',
-      124123423)
+      124123423
+    )
     expect(result).toStrictEqual([
       [
         {
-          evn: 'Custom event'
-        }
+          evn: 'Custom event',
+        },
       ],
       [
         {
@@ -248,12 +256,12 @@ describe('addSessionInfoEvent', () => {
             end: 2313316123,
             referrer: null,
             session_id: 124123423,
-            start: 2312313123
+            start: 2312313123,
           },
           scrn: 'http://localhost/',
-          userid: null
-        }
-      ]
+          userid: null,
+        },
+      ],
     ])
     spyEvents.mockRestore()
   })

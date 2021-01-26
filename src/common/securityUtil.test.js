@@ -4,7 +4,7 @@ import {
   encryptAES,
   encryptRSA,
   SHA1Encode,
-  shouldEncrypt
+  shouldEncrypt,
 } from './securityUtil'
 import AES from 'crypto-js/aes'
 import { setLocal } from '../storage'
@@ -22,7 +22,9 @@ describe('SHA256Encode', () => {
 
   it('data', () => {
     const result = SHA256Encode('test string')
-    expect(result).toBe('d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b')
+    expect(result).toBe(
+      'd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+    )
   })
 })
 
@@ -48,7 +50,7 @@ describe('encryptAES', () => {
     expect(result).toStrictEqual({
       encryptedString: 'TRD/UpQ64IRCO6kYlWTtQw==',
       iv: '71ff5f79a75f6f5d3d6f9e3d6f46b76f',
-      key: 'de089061213cb834e8c1fdf7727a64f9fdcd46775ab00a76d360d0b0ab1b5495'
+      key: 'de089061213cb834e8c1fdf7727a64f9fdcd46775ab00a76d360d0b0ab1b5495',
     })
   })
 
@@ -57,18 +59,19 @@ describe('encryptAES', () => {
     expect(result).toStrictEqual({
       encryptedString: 'TRD/UpQ64IRCO6kYlWTtQw==',
       iv: '71ff5f79a75f6f5d3d6f9e3d6f46b76f',
-      key: 'de089061213cb834e8c1fdf7727a64f9fdcd46775ab00a76d360d0b0ab1b5495'
+      key: 'de089061213cb834e8c1fdf7727a64f9fdcd46775ab00a76d360d0b0ab1b5495',
     })
   })
 
   it('long pas code', () => {
     const result = encryptAES(
       'test string',
-      'verystrongthingthoksdfoksdfoksdhfverystrongthingthoksdfoksdfoksdhf')
+      'verystrongthingthoksdfoksdfoksdhfverystrongthingthoksdfoksdfoksdhf'
+    )
     expect(result).toStrictEqual({
       encryptedString: 'b0METN8v1HtFgepaF/4QpA==',
       iv: 'a2782d8629e0b61a24b1d7e892c75fa2',
-      key: 'aed04f8c19d0ebc675a8bf92be5b77c384aa8e64d756a4bb29ff82cf38b427a3'
+      key: 'aed04f8c19d0ebc675a8bf92be5b77c384aa8e64d756a4bb29ff82cf38b427a3',
     })
   })
 
@@ -78,19 +81,17 @@ describe('encryptAES', () => {
     expect(result).toStrictEqual({
       encryptedString: '',
       iv: '',
-      key: ''
+      key: '',
     })
   })
 
   it('encrypt failed', () => {
-    const spy = jest
-      .spyOn(AES, 'encrypt')
-      .mockImplementation(() => null)
+    const spy = jest.spyOn(AES, 'encrypt').mockImplementation(() => null)
     const result = encryptAES('test string')
     expect(result).toStrictEqual({
       encryptedString: '',
       iv: '',
-      key: ''
+      key: '',
     })
     spy.mockRestore()
   })
@@ -110,7 +111,8 @@ describe('decryptAES', () => {
   it('long pas code', () => {
     const result = decryptAES(
       'b0METN8v1HtFgepaF/4QpA==',
-      'verystrongthingthoksdfoksdfoksdhfverystrongthingthoksdfoksdfoksdhf')
+      'verystrongthingthoksdfoksdfoksdhfverystrongthingthoksdfoksdfoksdhf'
+    )
     expect(result).toBe('test string')
   })
 
@@ -121,11 +123,9 @@ describe('decryptAES', () => {
   })
 
   it('decryption failed', () => {
-    const spy = jest
-      .spyOn(AES, 'decrypt')
-      .mockImplementation(() => {
-        return 1 / 0
-      })
+    const spy = jest.spyOn(AES, 'decrypt').mockImplementation(() => {
+      return 1 / 0
+    })
     const result = decryptAES('b0METN8v1HtFgepaF/4QpA==')
     expect(result).toBe('')
     spy.mockRestore()
@@ -138,12 +138,15 @@ describe('encryptRSA', () => {
     expect(result).toStrictEqual({
       data: '',
       iv: '',
-      key: ''
+      key: '',
     })
   })
 
   it('success', () => {
-    const result = encryptRSA('MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZ8GeBqADb2gj/rAAh5NlY7UM6hXF3vuyxI4bhlHMrjXGnSiwR1K4LozDgYlPKLJe/m/TP7ghzTe59hMnZWxbOKo5rZP+ndreI0vm5JuQ85ebpzvQ6xLSbNd98eZl/nTQLYQR9vr9FplMTM/D6UqFg7cnBZMCUNQyeKSDvRGNaPwIDAQAB', 'some data')
+    const result = encryptRSA(
+      'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZ8GeBqADb2gj/rAAh5NlY7UM6hXF3vuyxI4bhlHMrjXGnSiwR1K4LozDgYlPKLJe/m/TP7ghzTe59hMnZWxbOKo5rZP+ndreI0vm5JuQ85ebpzvQ6xLSbNd98eZl/nTQLYQR9vr9FplMTM/D6UqFg7cnBZMCUNQyeKSDvRGNaPwIDAQAB',
+      'some data'
+    )
     expect(result.iv.length).toBe(32)
     expect(result.key.length).toBe(172)
     expect(result.data.length).toBe(24)

@@ -5,7 +5,12 @@ import * as monthlyActive from './monthlyActive'
 import { getLocal, getSession } from '../storage'
 import { getManifestVariable } from '../manifest'
 import { getSDK, setSDK } from './storage'
-import { getCustomUseValue, getTempUseValue, setCustomUseValue, setTempUseValue } from '../storage/sharedPreferences'
+import {
+  getCustomUseValue,
+  getTempUseValue,
+  setCustomUseValue,
+  setTempUseValue,
+} from '../storage/sharedPreferences'
 import { getStringDate } from '../common/timeUtil'
 import { postRequest } from '../common/networkUtil'
 import { updateRoot } from '../storage/store'
@@ -27,7 +32,7 @@ const getRetentionPayloadArr = (arr, name) => {
       evcs: val.evcs,
       evt: val.tstmp,
       nmo: val.nmo,
-      evc: val.evc
+      evc: val.evc,
     }
 
     if (val.avgtime) {
@@ -48,11 +53,11 @@ const getPmeta = (obj1, obj2) => {
   let key
 
   /**
-     * Check if two arrays are equal
-     * @param  {Array}   arr1 The first array
-     * @param  {Array}   arr2 The second array
-     * @return {Boolean}      If true, both arrays are equal
-     */
+   * Check if two arrays are equal
+   * @param  {Array}   arr1 The first array
+   * @param  {Array}   arr2 The second array
+   * @return {Boolean}      If true, both arrays are equal
+   */
   const arraysMatch = (arr1, arr2) => {
     // Check if the arrays are the same length
     if (arr1.length !== arr2.length) return false
@@ -67,11 +72,11 @@ const getPmeta = (obj1, obj2) => {
   }
 
   /**
-     * Compare two items and push non-matches to object
-     * @param  {*}      item1 The first item
-     * @param  {*}      item2 The second item
-     * @param  {String} key   The key in our object
-     */
+   * Compare two items and push non-matches to object
+   * @param  {*}      item1 The first item
+   * @param  {*}      item2 The second item
+   * @param  {String} key   The key in our object
+   */
   const compare = (item1, item2, key) => {
     // Get the object type
     const type1 = Object.prototype.toString.call(item1)
@@ -164,7 +169,9 @@ const setSendToServer = (retentionStore, events) => {
       retentionStore.retentionData[key].sentToServer = true
       return
     }
-    const objIdx = retentionStore.retentionData[key].findIndex((obj) => obj.mid === mid)
+    const objIdx = retentionStore.retentionData[key].findIndex(
+      (obj) => obj.mid === mid
+    )
     retentionStore.retentionData[key][objIdx].sentToServer = true
   })
   setSDK(retentionStore)
@@ -258,7 +265,9 @@ export const syncData = () => {
     if (!session) {
       return
     }
-    const valueFromSPTempUseStore = getCustomUseValue(constants.PREVIOUS_RETENTION_META)
+    const valueFromSPTempUseStore = getCustomUseValue(
+      constants.PREVIOUS_RETENTION_META
+    )
     const payload = getPayload(session, arr)
 
     if (valueFromSPTempUseStore) {

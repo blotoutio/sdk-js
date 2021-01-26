@@ -1,0 +1,32 @@
+{
+  "extends": ["prettier", "standard", "plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "globals": {
+    "fetch": "readonly",
+    "XMLHttpRequest": "readonly",
+    "describe": "readonly",
+    "it": "readonly",
+    "expect": "readonly",
+    "diff": "readonly",
+    "beforeEach": "readonly",
+    "afterEach": "readonly",
+    "beforeAll": "readonly",
+    "afterAll": "readonly",
+    "jest": "readonly",
+    "context": "readonly",
+    "cy": "readonly",
+    "Cypress": "readonly",
+    "assert": "readonly",
+    "self": "readonly"
+  },
+  "ignorePatterns": [
+    "/src/3rdParty/*",
+    "/dist",
+    "/demo",
+    "/src/demo",
+    "jest.config.js"
+  ]
+}
