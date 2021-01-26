@@ -17,7 +17,6 @@ import { getEventsByDate, getStore, setEventsByDate } from './storage'
 import { updatePreviousDayEndTime } from '../session'
 import { error } from '../common/logUtil'
 import { getNotSynced, maybeSync } from '../session/utils'
-import { getRoot } from '../storage/store'
 import { createDevEventInfoObj } from './utils'
 import { getStringDate } from '../common/timeUtil'
 

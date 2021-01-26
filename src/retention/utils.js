@@ -19,13 +19,10 @@ const getRetentionData = () => {
     },
     dau: [],
     dast: [],
-    dpu: [],
     wau: [],
     wast: [],
-    wpu: [],
     mau: [],
     mast: [],
-    mpu: [],
   }
 }
 

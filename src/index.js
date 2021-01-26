@@ -3,7 +3,6 @@ import { setInitialConfiguration, initialize } from './utils'
 import { setUrl } from './common/endPointUrlUtil'
 import * as log from './common/logUtil'
 import { constants } from './config'
-import { setLocal } from './storage'
 import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
@@ -64,10 +63,6 @@ import { mapIDEvent, sendStartEvent } from './event'
       setRetentionData()
       optionalEvents(window)
     }
-  }
-
-  SDK.prototype.setPayingUser = function () {
-    setLocal(constants.IS_PAYING_USER, true)
   }
 
   SDK.prototype.getUserId = function () {

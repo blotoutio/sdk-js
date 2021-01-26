@@ -123,25 +123,16 @@ export interface RetentionData {
   dast: {
     [key: number]: RetentionEvent
   }
-  dpu: {
-    [key: number]: RetentionEvent
-  }
   wau: {
     [key: number]: RetentionEvent
   }
   wast: {
     [key: number]: RetentionEvent
   }
-  wpu: {
-    [key: number]: RetentionEvent
-  }
   mau: {
     [key: number]: RetentionEvent
   }
   mast: {
-    [key: number]: RetentionEvent
-  }
-  mpu: {
     [key: number]: RetentionEvent
   }
 }

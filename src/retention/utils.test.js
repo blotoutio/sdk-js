@@ -118,13 +118,10 @@ describe('getRetentionSDK', () => {
         },
         dau: [],
         dast: [],
-        dpu: [],
         wau: [],
         wast: [],
-        wpu: [],
         mau: [],
         mast: [],
-        mpu: [],
       },
     })
     spy.mockRestore()

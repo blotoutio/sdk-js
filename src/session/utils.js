@@ -1,7 +1,6 @@
 import { getSession, setSession } from '../storage'
 import { constants } from '../config'
 import { getManifestVariable } from '../manifest'
-import { createEventInfoObj } from '../event/session'
 import { eventSync } from '../event/utils'
 import { syncEvents } from '../event'
 import { getDomain } from '../common/domainUtil'
