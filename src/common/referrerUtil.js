@@ -4,18 +4,10 @@ import { setReferrerEvent } from '../session/navigation'
 import { getEventsByDate } from '../event/storage'
 import { getNotSynced } from '../session/utils'
 import { getSessionForDate } from '../event/session'
+import { info } from './logUtil'
 
-const getDomainOfReferrer = (ref) => {
-  const domain = ref.match(/:\/\/(.[^/]+)/)
-  if (domain && domain.length > 1) {
-    return domain[1]
-  }
-
-  return ref
-}
-
-export const createReferrerEventInfo = (eventName, ref, meta) => {
-  const info = {
+export const createReferrerEventInfo = (eventName, ref) => {
+  return {
     sentToServer: false,
     name: eventName,
     urlPath: window.location.href,
@@ -26,26 +18,22 @@ export const createReferrerEventInfo = (eventName, ref, meta) => {
     evcs: systemEventCode[eventName],
     value: ref,
   }
-
-  if (meta) {
-    info.metaInfo = meta
-  }
-
-  return info
 }
 
-export const setReferrer = (ref) => {
-  if (ref && ref !== '') {
-    const refDomain = getDomainOfReferrer(ref)
-    if (refDomain && refDomain !== window.location.hostname) {
-      setReferrerEvent('referrer', ref)
-    } else if (ref.includes(window.location.hostname)) {
-      setReferrerEvent('referrer', 'none')
+export const setReferrer = () => {
+  let referer = 'none'
+  try {
+    if (document.referrer) {
+      const refererUrl = new URL(document.referrer)
+      if (refererUrl === window.location.host) {
+        referer = refererUrl.href
+      }
     }
-    return
+  } catch (error) {
+    info(error)
   }
 
-  setReferrerEvent('referrer', 'none')
+  setReferrerEvent('referrer', referer)
 }
 
 export const getPreviousDateReferrer = () => {

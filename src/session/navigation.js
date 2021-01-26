@@ -56,7 +56,7 @@ export const updateNavPath = () => {
   setSessionForDate(date, sessionId, session)
 }
 
-export const setReferrerEvent = (eventName, ref, meta) => {
+export const setReferrerEvent = (eventName, ref) => {
   if (!eventName) {
     return
   }
@@ -80,7 +80,7 @@ export const setReferrerEvent = (eventName, ref, meta) => {
     return
   }
 
-  eventsData.eventsInfo.push(createReferrerEventInfo(eventName, ref, meta))
+  eventsData.eventsInfo.push(createReferrerEventInfo(eventName, ref))
   setSessionForDate(date, sessionId, session)
 }
 

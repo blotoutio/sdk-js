@@ -41,10 +41,7 @@ import { mapIDEvent, sendStartEvent } from './event'
     setInitialConfiguration(preferences)
     initialize(false)
     setTempUseValue(constants.SDK_TOKEN, preferences.token)
-    const ref = document.referrer
-    if (ref) {
-      setReferrer(ref)
-    }
+    setReferrer()
 
     sendStartEvent()
     requiredEvents(window)
