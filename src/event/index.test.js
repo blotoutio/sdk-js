@@ -1,7 +1,7 @@
 import * as eventStorage from './storage'
 import * as eventSession from './session'
 import * as eventUtils from './utils'
-import * as utils from '../utils'
+import * as utils from '../common/utils'
 import * as storage from '../storage'
 import * as network from '../common/networkUtil'
 import * as timeUtil from '../common/timeUtil'

@@ -1,6 +1,6 @@
 import { getSession } from '../storage'
 import { constants, systemEventCode } from '../config'
-import { getMid, getSystemMergeCounter } from '../utils'
+import { getMid, getSystemMergeCounter } from '../common/utils'
 import { getPreviousDateString, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'

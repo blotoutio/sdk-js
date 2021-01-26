@@ -1,6 +1,6 @@
 import * as eventStorage from './storage'
 import * as storage from '../storage'
-import * as utils from '../utils'
+import * as utils from '../common/utils'
 import * as timeUtil from '../common/timeUtil'
 import * as storageStore from '../storage/store'
 import {

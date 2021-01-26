@@ -8,7 +8,7 @@ import {
   getSessionAvgObject,
   retentionWrapper,
 } from './utils'
-import * as commonUtils from '../utils'
+import * as commonUtils from '../common/utils'
 import * as retentionStorage from './storage'
 import * as eventStorage from '../event/storage'
 import * as domain from '../common/domainUtil'

@@ -5,7 +5,7 @@ import {
 } from './utils'
 import * as storage from '../storage/sharedPreferences'
 import * as eventSession from './session'
-import * as utilsGeneral from '../utils'
+import * as utilsGeneral from '../common/utils'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')

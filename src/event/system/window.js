@@ -1,4 +1,4 @@
-import { debounce } from '../../utils'
+import { debounce } from '../../common/utils'
 import { constants } from '../../config'
 import { getSession } from '../../storage'
 import { getSessionForDate, setEvent } from '../session'

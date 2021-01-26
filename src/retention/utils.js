@@ -1,5 +1,5 @@
 import { constants } from '../config'
-import { getMid } from '../utils'
+import { getMid } from '../common/utils'
 import { getStore } from '../event/storage'
 import { getSDK, setSDK } from './storage'
 import { updateRoot } from '../storage/store'

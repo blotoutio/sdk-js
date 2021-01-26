@@ -1,7 +1,7 @@
 import * as eventSession from '../event/session'
 import * as eventUtils from '../event/utils'
 import * as storage from '../storage'
-import * as utils from '../utils'
+import * as utils from '../common/utils'
 import * as timeUtil from '../common/timeUtil'
 import {
   updatePreviousDayEndTime,

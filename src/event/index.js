@@ -1,4 +1,4 @@
-import { getMid, getNotSyncedDate, setNewDateObject } from '../utils'
+import { getMid, getNotSyncedDate, setNewDateObject } from '../common/utils'
 import {
   createEventInfoObj,
   getSessionForDate,

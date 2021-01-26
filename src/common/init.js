@@ -26,7 +26,7 @@ import { getRoot, updateRoot } from '../storage/store'
 import { checkAndGetSessionId, createSessionObject } from '../session/utils'
 
 import { getStringDate } from './timeUtil'
-import { createDaySchema } from '../utils'
+import { createDaySchema } from './utils'
 
 const setInitialConfiguration = (preferences) => {
   if (!preferences) {

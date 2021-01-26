@@ -3,7 +3,7 @@ import { constants } from '../config'
 import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { createReferrerEventInfo } from '../common/referrerUtil'
 import { getStringDate } from '../common/timeUtil'
-import { getNotSyncedDate } from '../utils'
+import { getNotSyncedDate } from '../common/utils'
 import { getNotSynced } from './utils'
 import { getSessionForDate, setSessionForDate } from '../event/session'
 

@@ -11,7 +11,7 @@ import {
   getObjectTitle,
   getSelector,
   setNewDateObject,
-} from '../utils'
+} from '../common/utils'
 import { getSession, removeSession, setSession } from '../storage'
 import { getEventsByDate, getStore, setEventsByDate } from './storage'
 import { updatePreviousDayEndTime } from '../session'

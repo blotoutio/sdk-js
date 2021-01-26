@@ -1,4 +1,4 @@
-import { getMid, getNotSyncedDate } from '../utils'
+import { getMid, getNotSyncedDate } from './utils'
 import { constants, systemEventCode } from '../config'
 import { setReferrerEvent } from '../session/navigation'
 import { getEventsByDate } from '../event/storage'
