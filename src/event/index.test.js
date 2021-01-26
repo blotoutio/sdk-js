@@ -444,6 +444,7 @@ describe('sendStartEvent', () => {
       {
         evc: 10001,
         evcs: 11130,
+        mid: 'localhost-null-1580775120000',
         name: 'sdk_start',
         nmo: 1,
         sentToServer: false,

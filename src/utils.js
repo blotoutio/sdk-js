@@ -16,28 +16,8 @@ import { getPreviousDateReferrer } from './common/referrerUtil'
 import { createDomain, getDomain, setCustomDomain } from './common/domainUtil'
 import { getStringDate } from './common/timeUtil'
 import { getRootKey, setRootKey } from './storage/key'
-import {
-  getPreviousDateData,
-  getSessionForDate,
-  setSessionForDate,
-} from './event/session'
+import { getPreviousDateData } from './event/session'
 import { resetPreviousDate } from './session/navigation'
-
-const setUIDInInitEvent = () => {
-  const date = getStringDate()
-  const sessionId = getSession(constants.SESSION_ID)
-  const session = getSessionForDate(date, sessionId)
-  if (!session) {
-    return
-  }
-
-  const eventArr = session.eventsData.eventsInfo
-  const index = findObjIndex(eventArr, 'init')
-  setTimeout(() => {
-    session.eventsData.eventsInfo[index].mid = getMid()
-    setSessionForDate(date, sessionId, session)
-  })
-}
 
 export const createDaySchema = (session) => {
   const sessions = {}
@@ -107,7 +87,7 @@ export const initialize = (isDecryptionError) => {
         const firstKey = eventKeys[0]
         delete localData[hostname].events[firstKey]
       }
-      const session = createSessionObject(constants.INIT, constants.INIT)
+      const session = createSessionObject()
       const sdkObj = createDaySchema(session)
       localData[hostname].events[date] = {
         isSynced: false,
@@ -120,13 +100,13 @@ export const initialize = (isDecryptionError) => {
         }
 
         if (!localData[hostname].events[date].sdkData.sessions[sessionId]) {
-          const session = createSessionObject(constants.INIT, constants.INIT)
+          const session = createSessionObject()
           localData[hostname].events[date].sdkData.sessions[
             sessionId
           ] = Object.assign(session)
         }
       } else {
-        localData[hostname] = createDomain(constants.INIT)
+        localData[hostname] = createDomain()
       }
     }
     updateRoot(localData)
@@ -134,13 +114,12 @@ export const initialize = (isDecryptionError) => {
     return
   }
 
-  const domainSchema = createDomain(constants.INIT)
+  const domainSchema = createDomain()
   const obj = {
     domains: [hostname],
     [hostname]: domainSchema,
   }
   updateRoot(obj)
-  setUIDInInitEvent()
   setUID()
 }
 
@@ -160,7 +139,7 @@ export const setNewDateObject = (date, eventStore) => {
     delete eventStore[firstKey]
   }
 
-  const session = createSessionObject(constants.INIT, constants.INIT)
+  const session = createSessionObject()
   session.eventsData.navigationPath = navigationPath
   session.eventsData.stayTimeBeforeNav = stayTimeBeforeNav
   if (referrer !== null) {

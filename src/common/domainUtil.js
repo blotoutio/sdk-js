@@ -2,8 +2,8 @@ import { createSessionObject } from '../session/utils'
 import { createDaySchema } from '../utils'
 import { getStringDate } from './timeUtil'
 
-const createDateObject = (event, objectName) => {
-  const session = createSessionObject(event, objectName)
+const createDateObject = () => {
+  const session = createSessionObject()
   const dateString = getStringDate()
   return {
     [dateString]: {
@@ -15,7 +15,7 @@ const createDateObject = (event, objectName) => {
 
 let customDomain = null
 
-export const createDomain = (objectName) => {
+export const createDomain = () => {
   return {
     sharedPreference: {
       tempUse: {},
@@ -31,7 +31,7 @@ export const createDomain = (objectName) => {
       isSynced: false,
       retentionSDK: null,
     },
-    events: createDateObject('init', objectName),
+    events: createDateObject(),
   }
 }
 

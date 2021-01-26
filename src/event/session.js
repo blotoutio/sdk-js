@@ -182,10 +182,7 @@ export const createEventInfoObj = (eventName, objectName, event) => {
     nmo: 1,
     evc: constants.EVENT_CATEGORY,
     evcs: systemEventCode[eventName],
-  }
-
-  if (getRoot()) {
-    data.mid = getMid()
+    mid: getMid(),
   }
 
   if (event) {

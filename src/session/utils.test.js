@@ -215,27 +215,12 @@ describe('createSessionObject', () => {
         'Mozilla/5.0 (Linux; U; Android 4.0.3; nl-nl; GT-I9000 Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'
     )
 
-    const result = createSessionObject('some_event', {
-      data: false,
-    })
+    const result = createSessionObject()
     expect(result).toStrictEqual({
       endTime: 0,
       eventsData: {
         devCodifiedEventsInfo: [],
-        eventsInfo: [
-          {
-            evc: 10001,
-            evcs: undefined,
-            name: 'some_event',
-            nmo: 1,
-            objectName: {
-              data: false,
-            },
-            sentToServer: false,
-            tstmp: 1580775120000,
-            urlPath: 'http://localhost/',
-          },
-        ],
+        eventsInfo: [],
         navigationPath: ['http://localhost/'],
         sentToServer: false,
         stayTimeBeforeNav: [],

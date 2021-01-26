@@ -114,8 +114,8 @@ export const maybeSync = (eventsData) => {
   }
 }
 
-export const createSessionObject = (eventName, objectName) => {
-  const data = {
+export const createSessionObject = () => {
+  return {
     startTime: Date.now(),
     endTime: 0,
     lastServerSyncTime: 0,
@@ -130,13 +130,6 @@ export const createSessionObject = (eventName, objectName) => {
       sentToServer: false,
     },
   }
-
-  const eventsInfo = createEventInfoObj(eventName, objectName)
-  if (eventsInfo) {
-    data.eventsData.eventsInfo = [eventsInfo]
-  }
-
-  return data
 }
 
 export const createViewPortObject = () => {
