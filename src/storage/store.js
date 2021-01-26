@@ -1,7 +1,7 @@
 import { constants } from '../config'
 import { encryptAES, decryptAES, shouldEncrypt } from '../common/securityUtil'
 import * as log from '../common/logUtil'
-import { initialize } from '../utils'
+import { initialize } from '../common/init'
 import { millisecondsToDays } from '../common/timeUtil'
 import { getModifiedDate } from '../manifest/storage'
 import { getLocal, removeSession, setLocal } from '.'

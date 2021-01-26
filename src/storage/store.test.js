@@ -1,6 +1,6 @@
 import { getRoot, updateRoot } from './store'
 import * as storage from '.'
-import * as utils from '../utils'
+import * as init from '../common/init'
 import * as manifestStorage from '../manifest/storage'
 import * as manifest from '../manifest'
 import * as key from './key'
@@ -81,7 +81,7 @@ describe('getRoot', () => {
         }
         return null
       })
-    const spyInit = jest.spyOn(utils, 'initialize').mockImplementation(() => {})
+    const spyInit = jest.spyOn(init, 'initialize').mockImplementation(() => {})
     const result = getRoot()
     expect(result).toBeNull()
     spyGet.mockRestore()

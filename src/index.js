@@ -1,21 +1,9 @@
-import { requiredEvents, optionalEvents } from './event/system'
-import { setInitialConfiguration, initialize } from './utils'
-import { setUrl } from './common/endPointUrlUtil'
-import * as log from './common/logUtil'
 import { constants } from './config'
-import { getTempUseValue, setTempUseValue } from './storage/sharedPreferences'
+import { getTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
-import {
-  pullManifest,
-  updateManifest,
-  checkManifest,
-  checkUpdateForManifest,
-} from './manifest'
-import { setRetentionData, syncData } from './retention'
-import { setReferrer } from './common/referrerUtil'
-import { setGeoDetails } from './common/geoUtil'
-import { mapIDEvent, sendStartEvent } from './event'
+import { mapIDEvent } from './event'
+import { init } from './common/init'
 ;(function (window) {
   const SDK = function () {}
 
@@ -32,37 +20,7 @@ import { mapIDEvent, sendStartEvent } from './event'
   }
 
   SDK.prototype.init = function (preferences) {
-    if (!preferences) {
-      return
-    }
-
-    setUrl(preferences.endpointUrl)
-    setInitialConfiguration(preferences)
-    initialize(false)
-    setTempUseValue(constants.SDK_TOKEN, preferences.token)
-    setReferrer()
-
-    sendStartEvent()
-    requiredEvents(window)
-
-    if (!checkManifest()) {
-      pullManifest()
-        .then(() => {
-          setRetentionData()
-          setGeoDetails()
-          syncData()
-          optionalEvents(window)
-        })
-        .catch(log.error)
-    } else {
-      if (checkUpdateForManifest()) {
-        updateManifest()
-      }
-
-      setGeoDetails()
-      setRetentionData()
-      optionalEvents(window)
-    }
+    init(preferences)
   }
 
   SDK.prototype.getUserId = function () {
