@@ -18,30 +18,21 @@
     <div class="content">
       <div class="events">
         <div class="eventsActions">
-          <button id="log-event" onclick="bojs.logEvent('Dev Click',{})">
+          <button
+            id="log-event"
+            onclick="trends('logEvent', 'Dev Click', {data: 'foo'})"
+          >
             Log Event
           </button>
-          <button
-            id="log-event-start"
-            onclick="bojs.startTimedEvent('Timed Click')"
-          >
-            Start Log Event
-          </button>
-          <button
-            id="log-event-end"
-            onclick="bojs.endTimedEvent('Timed Click')"
-          >
-            End Log Event
-          </button>
-          <button id="sign-up" onclick="bojs.logEvent('Sign up',{})">
+          <button id="sign-up" onclick="trends('logEvent', 'Sign up',{})">
             Sign up
           </button>
-          <button id="log-in" onclick="bojs.logEvent('Log in',{})">
+          <button id="log-in" onclick="trends('logEvent', 'Log in',{})">
             Log in
           </button>
           <button
             id="map-id"
-            onclick="bojs.mapID('234234234', 'service', { lang: 'es' })"
+            onclick="trends('mapID', '234234234', 'service', { lang: 'es' })"
           >
             Map id
           </button>
