@@ -5,17 +5,15 @@ import {
   systemEventCode,
 } from '../config'
 import {
-  findObjIndex,
   getMid,
   getNotSyncedDate,
   getObjectTitle,
   getSelector,
   setNewDateObject,
 } from '../common/utils'
-import { getSession, removeSession, setSession } from '../storage'
+import { getSession } from '../storage'
 import { getEventsByDate, getStore, setEventsByDate } from './storage'
 import { updatePreviousDayEndTime } from '../session'
-import { error } from '../common/logUtil'
 import { getNotSynced, maybeSync } from '../session/utils'
 import { createDevEventInfoObj } from './utils'
 import { getStringDate } from '../common/timeUtil'
@@ -102,70 +100,6 @@ export const setDevEvent = (eventName, data, eventCode = null) => {
 
   setSessionForDate(date, sessionId, session)
   maybeSync(eventsData)
-}
-
-export const setStartDevEvent = (eventName, data) => {
-  if (!eventName) {
-    return
-  }
-
-  let eventArray = []
-  try {
-    eventArray = JSON.parse(getSession('startEvents')) || []
-  } catch (e) {
-    error(e)
-  }
-
-  const index = findObjIndex(eventArray, eventName)
-  if (index === -1) {
-    eventArray.push(createDevEventInfoObj(eventName, null, data))
-  } else {
-    eventArray[index].startTime = Date.now()
-  }
-  setSession('startEvents', JSON.stringify(eventArray))
-}
-
-export const setEndDevEvent = (eventName) => {
-  if (!eventName) {
-    return
-  }
-
-  let eventArray = []
-  try {
-    eventArray = JSON.parse(getSession('startEvents')) || []
-  } catch (e) {
-    removeSession('startEvents')
-    return
-  }
-
-  const index = findObjIndex(eventArray, eventName)
-  if (index === -1) {
-    error('Event did not start yet')
-    return
-  }
-
-  const eventObject = eventArray[index]
-  const diffTime = Date.now() - eventObject.tstmp
-  eventObject.duration = Math.floor(diffTime / 1000)
-
-  const date = getStringDate()
-  const sessionId = getSession(constants.SESSION_ID)
-  const session = getSessionForDate(date, sessionId)
-  if (!session || !session.eventsData) {
-    return
-  }
-
-  const eventsData = session.eventsData
-  if (!eventsData.devCodifiedEventsInfo) {
-    eventsData.devCodifiedEventsInfo = []
-  }
-  eventsData.devCodifiedEventsInfo.push(eventObject)
-
-  setSessionForDate(date, sessionId, session)
-  maybeSync(eventsData)
-  eventArray.splice(index, 1)
-  eventArray = JSON.stringify(eventArray)
-  setSession('startEvents', eventArray)
 }
 
 export const createEventInfoObj = (eventName, objectName, event) => {

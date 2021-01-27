@@ -1,6 +1,6 @@
 import { constants } from './config'
 import { getTempUseValue } from './storage/sharedPreferences'
-import { setDevEvent, setEndDevEvent, setStartDevEvent } from './event/session'
+import { setDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 import { mapIDEvent } from './event'
 import { init } from './common/init'
@@ -22,14 +22,6 @@ import { init } from './common/init'
 
   SDK.prototype.logEvent = (eventName, data = null) => {
     setDevEvent(eventName, data)
-  }
-
-  SDK.prototype.startTimedEvent = (eventName, data = null) => {
-    setStartDevEvent(eventName, data)
-  }
-
-  SDK.prototype.endTimedEvent = (eventName) => {
-    setEndDevEvent(eventName)
   }
 
   SDK.prototype.init = (preferences) => {

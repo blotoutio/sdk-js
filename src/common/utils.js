@@ -33,10 +33,6 @@ export const getMid = () => {
   return `${domainName}-${userID}-${Date.now()}`
 }
 
-export const findObjIndex = (eventArr, eventName) => {
-  return eventArr.findIndex((obj) => obj.name === eventName)
-}
-
 export const debounce = (func, delay) => {
   let debounceTimer
   return function () {
