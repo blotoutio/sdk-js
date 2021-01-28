@@ -2,9 +2,9 @@ import { getSession } from '../storage'
 import { constants, systemEventCode } from '../common/config'
 import { getMid, getSystemMergeCounter } from '../common/utils'
 import { getPreviousDateString, getStringDate } from '../common/timeUtil'
-import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getSessionForDate, setSessionForDate } from '../event/session'
 import { getUID } from '../common/uuidUtil'
+import { getReferrer } from '../common/referrerUtil'
 
 const getInfoPayload = (date, sessionId) => {
   const session = getSessionForDate(date, sessionId)
@@ -29,7 +29,7 @@ const getInfoPayload = (date, sessionId) => {
     scrn: window.location.href,
     evt: Date.now(),
     properties: {
-      referrer: getReferrerUrlOfDateSession(date, sessionId),
+      referrer: getReferrer(),
       session_id: sessionId,
       start: startTime,
       end: endTime,

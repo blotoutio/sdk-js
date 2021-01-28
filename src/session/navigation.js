@@ -1,7 +1,6 @@
 import { getSession } from '../storage'
 import { constants } from '../common/config'
 import { getEventsByDate, setEventsByDate } from '../event/storage'
-import { createReferrerEventInfo } from '../common/referrerUtil'
 import { getStringDate } from '../common/timeUtil'
 import { getNotSyncedDate } from '../common/utils'
 import { getNotSynced } from './utils'
@@ -53,34 +52,6 @@ export const updateNavPath = () => {
     return
   }
   eventsData.navigationPath.push(window.location.href)
-  setSessionForDate(date, sessionId, session)
-}
-
-export const setReferrerEvent = (eventName, ref) => {
-  if (!eventName) {
-    return
-  }
-
-  const sessionId = getSession(constants.SESSION_ID)
-  const date = getStringDate()
-  const session = getSessionForDate(date, sessionId)
-  if (!session || !session.eventsData) {
-    return
-  }
-
-  const eventsData = session.eventsData
-  if (!eventsData.eventsInfo) {
-    return
-  }
-
-  const refIndex = eventsData.eventsInfo.findIndex(
-    (obj) => obj.name === eventName
-  )
-  if (refIndex !== -1) {
-    return
-  }
-
-  eventsData.eventsInfo.push(createReferrerEventInfo(eventName, ref))
   setSessionForDate(date, sessionId, session)
 }
 

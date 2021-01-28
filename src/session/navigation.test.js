@@ -1,12 +1,7 @@
 import * as eventStorage from '../event/storage'
 import * as storage from '../storage'
 import * as timeUtil from '../common/timeUtil'
-import {
-  resetPreviousDate,
-  setReferrerEvent,
-  updateNavPath,
-  updateNavTime,
-} from './navigation'
+import { resetPreviousDate, updateNavPath, updateNavTime } from './navigation'
 
 let spyDate
 let spySet
@@ -397,119 +392,6 @@ describe('updateNavPath', () => {
         124123423: {
           eventsData: {
             navigationPath: ['http://domain.com/', 'http://localhost/'],
-          },
-        },
-      },
-    })
-    spyEvents.mockRestore()
-  })
-})
-
-describe('setReferrerEvent', () => {
-  it('null', () => {
-    setReferrerEvent()
-    expect(spySet).toBeCalledTimes(0)
-  })
-
-  it('no sessions', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => null)
-    setReferrerEvent('some_event')
-    expect(spySet).toBeCalledTimes(0)
-    spyEvents.mockRestore()
-  })
-
-  it('no session', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {},
-      }))
-    setReferrerEvent('some_event')
-    expect(spySet).toBeCalledTimes(0)
-    spyEvents.mockRestore()
-  })
-
-  it('no eventsData', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {},
-        },
-      }))
-    setReferrerEvent('some_event')
-    expect(spySet).toBeCalledTimes(0)
-    spyEvents.mockRestore()
-  })
-
-  it('no eventsInfo', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            eventsData: {},
-          },
-        },
-      }))
-    setReferrerEvent('some_event')
-    expect(spySet).toBeCalledTimes(0)
-    spyEvents.mockRestore()
-  })
-
-  it('event found', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            eventsData: {
-              eventsInfo: [
-                {
-                  name: 'some_event',
-                },
-              ],
-            },
-          },
-        },
-      }))
-    setReferrerEvent('some_event')
-    expect(spySet).toBeCalledTimes(0)
-    spyEvents.mockRestore()
-  })
-
-  it('event not found', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            eventsData: {
-              eventsInfo: [],
-            },
-          },
-        },
-      }))
-    setReferrerEvent('some_event')
-    expect(spySet).toBeCalledWith('20-3-2020', {
-      sessions: {
-        124123423: {
-          eventsData: {
-            eventsInfo: [
-              {
-                evc: 10001,
-                evcs: undefined,
-                mid: 'localhost-null-1580775120000',
-                name: 'some_event',
-                nmo: 1,
-                sentToServer: false,
-                tstmp: 1580775120000,
-                urlPath: 'http://localhost/',
-                value: undefined,
-              },
-            ],
           },
         },
       },

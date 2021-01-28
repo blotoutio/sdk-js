@@ -22,7 +22,6 @@ import { getManifestVariable } from '../manifest'
 import { encryptRSA } from '../common/securityUtil'
 import { addSessionInfoEvent, updatePreviousDayEndTime } from '../session'
 import { getNotSynced } from '../session/utils'
-import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getStringDate } from '../common/timeUtil'
 import { getPayload } from '../common/payloadUtil'
 import { setDNTEvent } from '../session/system'
@@ -66,12 +65,6 @@ const sendNavigation = (date, sessionId) => {
     navigations.length !== navigationsTime.length
   ) {
     return
-  }
-
-  const referrer = getReferrerUrlOfDateSession(date, sessionId)
-  if (referrer != null) {
-    navigations.unshift(referrer)
-    navigationsTime.unshift(0)
   }
 
   const navEventArr = getNavigationPayloadArr(navigations, navigationsTime)

@@ -24,7 +24,7 @@ import { checkAndGetSessionId, createSessionObject } from '../session/utils'
 import { getStringDate } from './timeUtil'
 import { createDaySchema } from './utils'
 
-const setInitialConfiguration = (preferences) => {
+const setConfiguration = (preferences) => {
   if (!preferences) {
     return
   }
@@ -34,6 +34,7 @@ const setInitialConfiguration = (preferences) => {
     throw Error('SDK token is not valid')
   }
 
+  setUrl(preferences.endpointUrl)
   setClientToken(preferences.token)
   setCustomDomain(preferences.customDomain)
   setRootKey(preferences.storageRootKey)
@@ -98,8 +99,7 @@ export const init = (preferences) => {
     return
   }
 
-  setUrl(preferences.endpointUrl)
-  setInitialConfiguration(preferences)
+  setConfiguration(preferences)
   initialize(false)
   setReferrer()
   sendStartEvent()

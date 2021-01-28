@@ -5,7 +5,6 @@ import { updateRoot } from '../storage/store'
 import { createSessionObject } from '../session/utils'
 import { syncPreviousDateEvents, setSyncEventsInterval } from '../event'
 import { checkManifest, getManifestVariable } from '../manifest'
-import { getPreviousDateReferrer } from './referrerUtil'
 import { getDomain } from './domainUtil'
 import { getStringDate } from './timeUtil'
 import { getPreviousDateData } from '../event/session'
@@ -42,7 +41,6 @@ export const debounce = (func, delay) => {
 
 export const setNewDateObject = (date, eventStore) => {
   const { navigationPath, stayTimeBeforeNav } = getPreviousDateData()
-  const referrer = getPreviousDateReferrer()
   resetPreviousDate()
   if (checkManifest()) {
     // old date sync events
@@ -59,9 +57,6 @@ export const setNewDateObject = (date, eventStore) => {
   const session = createSessionObject()
   session.eventsData.navigationPath = navigationPath
   session.eventsData.stayTimeBeforeNav = stayTimeBeforeNav
-  if (referrer !== null) {
-    session.eventsData.eventsInfo.push(referrer)
-  }
   const sdkObj = createDaySchema(session)
   eventStore[date] = {
     isSynced: false,

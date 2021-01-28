@@ -8,7 +8,6 @@ import {
 } from '../storage/sharedPreferences'
 import { updateRoot } from '../storage/store'
 import { getAllEventsOfDate } from './index'
-import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getStringDate } from '../common/timeUtil'
 import { getSessionForDate } from './session'
 import { getSession } from '../storage'
@@ -17,6 +16,7 @@ import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
 import { getUID } from '../common/uuidUtil'
+import { getReferrer } from '../common/referrerUtil'
 
 const chunk = (arr, size) => {
   return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -170,7 +170,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       return
     }
     const propObj = {
-      referrer: getReferrerUrlOfDateSession(date, sessionId),
+      referrer: getReferrer(),
       obj: val.objectName,
       position: val.position,
       session_id: sessionId,

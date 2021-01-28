@@ -136,7 +136,7 @@ describe('addSessionInfoEvent', () => {
           properties: {
             duration: 0,
             end: 0,
-            referrer: null,
+            referrer: 'none',
             session_id: 124123423,
             start: 2312313123,
           },
@@ -198,7 +198,7 @@ describe('addSessionInfoEvent', () => {
           properties: {
             duration: 1003,
             end: 2313316123,
-            referrer: null,
+            referrer: 'none',
             screen: {
               timeStamp: 314412412341242,
               width: 10,
@@ -254,7 +254,7 @@ describe('addSessionInfoEvent', () => {
           properties: {
             duration: 1003,
             end: 2313316123,
-            referrer: null,
+            referrer: 'none',
             session_id: 124123423,
             start: 2312313123,
           },
