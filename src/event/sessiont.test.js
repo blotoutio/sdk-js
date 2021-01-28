@@ -126,7 +126,6 @@ describe('setEvent', () => {
           eventsData: {
             eventsInfo: [
               {
-                evc: 10001,
                 evcs: undefined,
                 extraInfo: {
                   mousePosX: -1,
@@ -212,7 +211,6 @@ describe('setDevEvent', () => {
           eventsData: {
             devCodifiedEventsInfo: [
               {
-                evc: 20001,
                 evcs: 24146,
                 mid: 'localhost-null-1580775120000',
                 name: 'some_event',
@@ -248,7 +246,6 @@ describe('setDevEvent', () => {
           eventsData: {
             devCodifiedEventsInfo: [
               {
-                evc: 20001,
                 evcs: 24146,
                 mid: 'localhost-null-1580775120000',
                 name: 'some_event',
@@ -465,7 +462,6 @@ describe('createEventInfoObj', () => {
       target: {},
     })
     expect(result).toStrictEqual({
-      evc: 10001,
       evcs: undefined,
       extraInfo: {
         mousePosX: -1,
@@ -504,7 +500,6 @@ describe('createEventInfoObj', () => {
       offsetY: 5,
     })
     expect(result).toStrictEqual({
-      evc: 10001,
       evcs: undefined,
       extraInfo: {
         mousePosX: -1,

@@ -96,7 +96,6 @@ describe('setDNTEvent', () => {
       eventsData: {
         eventsInfo: [
           {
-            evc: 10001,
             evcs: 11502,
             mid: 'localhost-null-1580775120000',
             name: 'dnt',

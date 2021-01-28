@@ -156,7 +156,6 @@ describe('createDevEventInfoObj', () => {
   it('null', () => {
     const result = createDevEventInfoObj()
     expect(result).toStrictEqual({
-      evc: 20001,
       evcs: 0,
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
       nmo: 1,
@@ -169,7 +168,6 @@ describe('createDevEventInfoObj', () => {
   it('with just event', () => {
     const result = createDevEventInfoObj('some_event')
     expect(result).toStrictEqual({
-      evc: 20001,
       evcs: 24146,
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
       name: 'some_event',
@@ -185,7 +183,6 @@ describe('createDevEventInfoObj', () => {
       custom: true,
     })
     expect(result).toStrictEqual({
-      evc: 20001,
       evcs: 24146,
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
       name: 'some_event',
@@ -208,7 +205,6 @@ describe('createDevEventInfoObj', () => {
       123123
     )
     expect(result).toStrictEqual({
-      evc: 20001,
       evcs: 123123,
       metaInfo: {
         custom: true,

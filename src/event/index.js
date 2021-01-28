@@ -36,11 +36,9 @@ const getNavigationPayloadArr = (navigations, navigationsTime) => {
       userid: getUID(),
       evn: constants.NAVIGATION,
       evcs: systemEventCode[constants.NAVIGATION],
-      evdc: 1,
       scrn: window.location.href,
       evt: Date.now(),
       nmo: 1,
-      evc: constants.EVENT_CATEGORY,
       nvg: navigations,
       nvg_tm: navigationsTime,
     },
@@ -181,18 +179,6 @@ export const setEventsSentToServer = (arr, date, sessionId) => {
     setSessionForDate(date, sessionId, session)
   })
   eventSync.progressStatus = false
-}
-
-export const getAllEventsOfDate = (date) => {
-  const sdkData = getEventsByDate(date)
-  const sessions = sdkData.sessions
-  let arrEvent = []
-  for (const x in sessions) {
-    arrEvent = arrEvent
-      .concat(sdkData.sessions[x].eventsData.eventsInfo)
-      .concat(sdkData.sessions[x].eventsData.devCodifiedEventsInfo)
-  }
-  return arrEvent
 }
 
 export const syncEvents = (sessionId, date) => {

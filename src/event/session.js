@@ -113,7 +113,6 @@ export const createEventInfoObj = (eventName, objectName, event) => {
     urlPath: window.location.href,
     tstmp: Date.now(),
     nmo: 1,
-    evc: constants.EVENT_CATEGORY,
     evcs: systemEventCode[eventName],
     mid: getMid(),
   }

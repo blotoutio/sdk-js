@@ -100,7 +100,6 @@ export interface CommonInfo {
   tstmp: number
   mid: string
   nmo: number
-  evc: number
   evcs: number
   metaInfo: object
 }

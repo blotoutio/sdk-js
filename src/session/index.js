@@ -25,7 +25,6 @@ const getInfoPayload = (date, sessionId) => {
     userid: getUID(),
     evn: constants.SESSION_INFO,
     evcs: systemEventCode.sessionInfo,
-    evdc: 1,
     scrn: window.location.href,
     evt: Date.now(),
     properties: {
@@ -36,7 +35,6 @@ const getInfoPayload = (date, sessionId) => {
       duration: durationInSecs,
     },
     nmo: 1,
-    evc: constants.EVENT_CATEGORY,
   }
 
   if (viewPortObj) {

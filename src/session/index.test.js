@@ -126,9 +126,7 @@ describe('addSessionInfoEvent', () => {
     expect(result).toStrictEqual([
       [
         {
-          evc: 10001,
           evcs: 11024,
-          evdc: 1,
           evn: 'Session Info',
           evt: 1580775120000,
           mid: 'localhost-null-1580775120000',
@@ -188,9 +186,7 @@ describe('addSessionInfoEvent', () => {
           evn: 'Custom event',
         },
         {
-          evc: 10001,
           evcs: 11024,
-          evdc: 1,
           evn: 'Session Info',
           evt: 1580775120000,
           mid: 'localhost-null-1580775120000',
@@ -244,9 +240,7 @@ describe('addSessionInfoEvent', () => {
       ],
       [
         {
-          evc: 10001,
           evcs: 11024,
-          evdc: 1,
           evn: 'Session Info',
           evt: 1580775120000,
           mid: 'localhost-null-1580775120000',

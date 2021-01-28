@@ -7,7 +7,6 @@ import {
   setNormalUseValue,
 } from '../storage/sharedPreferences'
 import { updateRoot } from '../storage/store'
-import { getAllEventsOfDate } from './index'
 import { getStringDate } from '../common/timeUtil'
 import { getSessionForDate } from './session'
 import { getSession } from '../storage'
@@ -67,7 +66,6 @@ export const createDevEventInfoObj = (
     tstmp: Date.now(),
     mid: getMid(),
     nmo: 1,
-    evc: constants.EVENT_DEV_CATEGORY,
     evcs: eventCode || codeForCustomCodifiedEvent(eventName),
   }
 
@@ -199,23 +197,19 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       }
     }
 
-    if (val.evc === constants.EVENT_DEV_CATEGORY) {
+    if (val.metaInfo) {
       propObj.codifiedInfo = val.metaInfo
     }
 
-    const dateEvents = getAllEventsOfDate(date)
-    const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     const obj = {
       mid: val.mid,
       userid: getUID(),
       evn: val.name,
       evcs: val.evcs,
-      evdc: eventCount.length,
       scrn: val.urlPath,
       evt: val.tstmp,
       properties: propObj,
       nmo: val.nmo,
-      evc: val.evc,
     }
 
     result.push(obj)

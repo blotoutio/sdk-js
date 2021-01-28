@@ -169,11 +169,11 @@ describe('syncPreviousEvents', () => {
     syncPreviousEvents()
     expect(spyPost).toBeCalledWith(
       '',
-      '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}'
+      '{"events":[{"userid":null,"evn":"init","properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}'
     )
     expect(spyPost).toBeCalledWith(
       '',
-      '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":"none","session_id":"12341234213","start":1231312321,"end":0,"duration":0,"screen":{"timeStamp":1608506665536}},"nmo":1,"evc":10001}]}'
+      '{"events":[{"userid":null,"evn":"click","properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":"none","session_id":"12341234213","start":1231312321,"end":0,"duration":0,"screen":{"timeStamp":1608506665536}},"nmo":1}]}'
     )
     spyEvents.mockRestore()
     spyCount.mockRestore()
@@ -337,11 +337,11 @@ describe('syncPreviousDateEvents', () => {
     syncPreviousDateEvents()
     expect(spyPost).toBeCalledWith(
       '',
-      '{"events":[{"userid":null,"evn":"init","evdc":1,"properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","evdc":1,"properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","evdc":1,"properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}'
+      '{"events":[{"userid":null,"evn":"init","properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"load","properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"userid":null,"evn":"custom_event","properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}}]}'
     )
     expect(spyPost).toBeCalledWith(
       '',
-      '{"events":[{"userid":null,"evn":"click","evdc":1,"properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"evdc":1,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":"none","session_id":"12341234213","duration":null,"screen":{"timeStamp":1608506665536}},"nmo":1,"evc":10001}]}'
+      '{"events":[{"userid":null,"evn":"click","properties":{"referrer":"none","session_id":"12341234213","screen":{"timeStamp":1608506665536}}},{"mid":"localhost-null-1580775120000","userid":null,"evn":"Session Info","evcs":11024,"scrn":"http://localhost/","evt":1580775120000,"properties":{"referrer":"none","session_id":"12341234213","duration":null,"screen":{"timeStamp":1608506665536}},"nmo":1}]}'
     )
     spyEvents.mockRestore()
     spyCount.mockRestore()
@@ -442,7 +442,6 @@ describe('sendStartEvent', () => {
     sendStartEvent()
     expect(spySend).toBeCalledWith([
       {
-        evc: 10001,
         evcs: 11130,
         mid: 'localhost-null-1580775120000',
         name: 'sdk_start',
