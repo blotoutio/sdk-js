@@ -22,7 +22,7 @@ import { getRoot, updateRoot } from '../storage/store'
 import { checkAndGetSessionId, createSessionObject } from '../session/utils'
 
 import { getStringDate } from './timeUtil'
-import { createDaySchema } from './utils'
+import { createDaySchema, DNT } from './utils'
 
 const setConfiguration = (preferences) => {
   if (!preferences) {
@@ -95,13 +95,14 @@ export const initialize = (isDecryptionError) => {
 }
 
 export const init = (preferences) => {
-  if (!preferences) {
+  // we shouldn't do anything if DNT is set
+  if (!preferences || DNT()) {
     return
   }
 
   setConfiguration(preferences)
-  initialize(false)
   setReferrer()
+  initialize(false)
   sendStartEvent()
   requiredEvents(window)
 

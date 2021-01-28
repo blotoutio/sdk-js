@@ -23,7 +23,6 @@ import { updatePreviousDayEndTime } from '../session'
 import { getNotSynced } from '../session/utils'
 import { getStringDate } from '../common/timeUtil'
 import { getPayload } from '../common/payloadUtil'
-import { setDNTEvent } from '../session/system'
 
 let globalEventInterval = null
 
@@ -221,14 +220,4 @@ export const mapIDEvent = (id, provider, data) => {
 
 export const sendStartEvent = () => {
   sendEvents([createEventInfoObj('sdk_start')])
-
-  if (window.doNotTrack || navigator.doNotTrack) {
-    if (
-      window.doNotTrack === '1' ||
-      navigator.doNotTrack === 'yes' ||
-      navigator.doNotTrack === '1'
-    ) {
-      setDNTEvent()
-    }
-  }
 }
