@@ -101,3 +101,7 @@ export const getUUID = () => uuidv4()
 export const setClientToken = (token) => {
   clientToken = token
 }
+
+export const getClientToken = () => {
+  return clientToken
+}

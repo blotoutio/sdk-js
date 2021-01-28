@@ -13,7 +13,6 @@ export const constants = {
   API_ENDPOINT: 'Api_Endpoint',
   ROOT_KEY: 'Root',
   DOMAINS: 'domains',
-  SDK_TOKEN: 'sdkToken',
   BOUNCE: 'bounce',
   SESSION: 'session',
   MAILER: 'mailer',

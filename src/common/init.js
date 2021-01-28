@@ -103,7 +103,6 @@ export const init = (preferences) => {
   setUrl(preferences.endpointUrl)
   setInitialConfiguration(preferences)
   initialize(false)
-  setTempUseValue(constants.SDK_TOKEN, preferences.token)
   setReferrer()
   sendStartEvent()
   requiredEvents(window)

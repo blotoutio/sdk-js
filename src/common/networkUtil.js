@@ -1,12 +1,11 @@
-import { constants } from './config'
-import { getTempUseValue } from '../storage/sharedPreferences'
+import { getClientToken } from './uuidUtil'
 
 export async function getRequest(url) {
   if (!url) {
     return Promise.reject(new Error('URL is empty'))
   }
 
-  const token = getTempUseValue(constants.SDK_TOKEN) || ''
+  const token = getClientToken() || ''
   return await fetch(url, {
     method: 'GET',
     headers: {
@@ -31,7 +30,7 @@ export async function postRequest(url, payload) {
     return Promise.reject(new Error('URL is empty'))
   }
 
-  const token = getTempUseValue(constants.SDK_TOKEN) || ''
+  const token = getClientToken() || ''
   return await fetch(url, {
     method: 'POST',
     headers: {
