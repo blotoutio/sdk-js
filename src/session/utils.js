@@ -118,7 +118,6 @@ export const createSessionObject = () => {
     startTime: Date.now(),
     endTime: 0,
     lastServerSyncTime: 0,
-    geo: {},
     meta: createMetaObject(),
     viewPort: [createViewPortObject()],
     eventsData: {

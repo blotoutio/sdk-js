@@ -16,11 +16,7 @@ export const getUrl = () => endpointUrl
 const pathMapping = {
   event: {
     manifest: constants.EVENT_PATH,
-    defaultPath: manifestConst.Event_Path,
-  },
-  retention: {
-    manifest: constants.EVENT_RETENTION_PATH,
-    defaultPath: manifestConst.Event_Retention_Path,
+    defaultPath: manifestConst.EVENT_PATH,
   },
 }
 

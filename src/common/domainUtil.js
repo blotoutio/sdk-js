@@ -27,10 +27,6 @@ export const createDomain = () => {
       modifiedDate: null,
       manifestData: null,
     },
-    retention: {
-      isSynced: false,
-      retentionSDK: null,
-    },
     events: createDateObject(),
   }
 }

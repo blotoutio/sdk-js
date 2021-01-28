@@ -1,41 +1,6 @@
 import { constants } from '../config'
 import { getManifestVariable } from '../manifest'
 
-const getGeoPayload = (geo) => {
-  if (!geo) {
-    return null
-  }
-
-  const mode = getManifestVariable(constants.MODE_DEPLOYMENT)
-  if (!mode || mode === constants.FIRSTPARTY_MODE) {
-    return null
-  }
-
-  let geoGrain = getManifestVariable(constants.EVENT_GEOLOCATION_GRAIN)
-  if (!geoGrain) {
-    geoGrain = constants.DEFAULT_EVENT_GEOLOCATION_GRAIN
-  }
-
-  const geoObject = {}
-  if (geoGrain >= 1) {
-    geoObject.conc = geo.conc
-  }
-
-  if (geoGrain >= 2) {
-    geoObject.couc = geo.couc
-  }
-
-  if (geoGrain >= 3) {
-    geoObject.reg = geo.reg
-  }
-
-  if (geoGrain >= 4) {
-    geoObject.city = geo.city
-  }
-
-  return geoObject
-}
-
 const getMetaPayload = (meta) => {
   if (!meta) {
     return null
@@ -94,11 +59,6 @@ export const getPayload = (session, events) => {
   const meta = getMetaPayload(session.meta)
   if (meta && Object.keys(meta).length !== 0) {
     payload.meta = meta
-  }
-
-  const geo = getGeoPayload(session.geo)
-  if (geo) {
-    payload.geo = geo
   }
 
   if (events && events.length > 0) {

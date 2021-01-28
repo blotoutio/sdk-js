@@ -1,5 +1,4 @@
 import { constants } from '../config'
-import { setRetentionData } from '../retention'
 import { getSession } from '../storage'
 import { checkEventsInterval, getStore, setStore } from '../event/storage'
 import { updateRoot } from '../storage/store'
@@ -71,7 +70,6 @@ export const setNewDateObject = (date, eventStore) => {
     sdkData: sdkObj,
   }
 
-  setRetentionData()
   setSyncEventsInterval()
   setStore(eventStore)
   updateRoot()

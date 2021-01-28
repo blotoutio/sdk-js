@@ -61,21 +61,4 @@ describe('getManifestUrl', () => {
     setUrl('http://blotout.io')
     expect(getManifestUrl()).toBe('http://manifest.io/v1/path')
   })
-
-  it('retention event, no manifest', () => {
-    setUrl('http://blotout.io')
-    expect(getManifestUrl('retention')).toBe(
-      'http://blotout.io/v1/events/retention/publish'
-    )
-  })
-
-  it('retention event, manifest', () => {
-    jest
-      .spyOn(manifest, 'getManifestVariable')
-      .mockImplementationOnce(() => 'http://manifest.io')
-      .mockImplementationOnce(() => 'v1/retention')
-
-    setUrl('http://blotout.io')
-    expect(getManifestUrl('retention')).toBe('http://manifest.io/v1/retention')
-  })
 })

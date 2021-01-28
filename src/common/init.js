@@ -9,9 +9,7 @@ import {
   checkManifest,
   checkUpdateForManifest,
 } from '../manifest'
-import { setRetentionData, syncData } from '../retention'
 import { setReferrer } from './referrerUtil'
-import { setGeoDetails } from './geoUtil'
 import {
   sendStartEvent,
   syncPreviousDateEvents,
@@ -113,9 +111,6 @@ export const init = (preferences) => {
   if (!checkManifest()) {
     pullManifest()
       .then(() => {
-        setRetentionData()
-        setGeoDetails()
-        syncData()
         optionalEvents(window)
       })
       .catch(log.error)
@@ -124,8 +119,6 @@ export const init = (preferences) => {
       updateManifest()
     }
 
-    setGeoDetails()
-    setRetentionData()
     optionalEvents(window)
   }
 }

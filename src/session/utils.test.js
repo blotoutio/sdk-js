@@ -181,7 +181,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'unknown',
@@ -225,7 +224,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Android Browser',
@@ -269,7 +267,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Mobile Safari',
@@ -314,7 +311,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Chrome',
@@ -359,7 +355,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Edge',
@@ -404,7 +399,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Chrome',
@@ -449,7 +443,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'IE',
@@ -494,7 +487,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Android Browser',
@@ -539,7 +531,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Mobile Safari',
@@ -584,7 +575,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Mobile Safari',
@@ -624,7 +614,6 @@ describe('createSessionObject', () => {
         sentToServer: false,
         stayTimeBeforeNav: [],
       },
-      geo: {},
       lastServerSyncTime: 0,
       meta: {
         browser: 'Brave',

@@ -5,7 +5,6 @@ import {
   setModifiedDate,
   getModifiedDate,
 } from './storage'
-import { setRetentionObject, syncData } from '../retention'
 import { getRoot, updateRoot } from '../storage/store'
 import { getUrl } from '../common/endPointUrlUtil'
 import { manifestConst, constants, callInterval } from '../config'
@@ -14,8 +13,6 @@ import { error } from '../common/logUtil'
 import { setSyncEventsInterval } from '../event'
 import { getDomain } from '../common/domainUtil'
 import { millisecondsToHours } from '../common/timeUtil'
-
-let globalRetentionInterval = null
 
 const removeEmptyValue = (array) => {
   return array.filter((el) => el != null && el !== '')
@@ -41,24 +38,7 @@ const setManifest = (data) => {
   setCreatedDate(Date.now())
   setModifiedDate(Date.now())
   setData(data)
-  setRetentionObject()
   updateRoot()
-}
-
-const setManifestRefreshInterval = () => {
-  const manifestRefData = getManifestVariable(
-    constants.MANIFEST_REFRESH_INTERVAL
-  )
-  const manifestIntervalInMSec = manifestRefData
-    ? manifestRefData * 60 * 60 * 1000
-    : callInterval
-  if (globalRetentionInterval) {
-    clearInterval(globalRetentionInterval)
-  }
-
-  globalRetentionInterval = setInterval(async () => {
-    await pullManifest().catch(error)
-  }, manifestIntervalInMSec)
 }
 
 export const pullManifest = () => {
@@ -71,7 +51,6 @@ export const pullManifest = () => {
     postRequest(url, payload)
       .then((data) => {
         setManifest(data)
-        setManifestRefreshInterval()
         setSyncEventsInterval()
         resolve()
       })
@@ -87,9 +66,7 @@ export const updateManifest = () => {
       setModifiedDate(Date.now())
       setData(data)
       updateRoot()
-      setManifestRefreshInterval()
       setSyncEventsInterval()
-      syncData()
     })
     .catch(error)
 }
