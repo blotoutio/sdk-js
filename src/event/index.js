@@ -7,7 +7,6 @@ import {
   setSessionForDate,
 } from './session'
 import {
-  detectQueryString,
   eventsChunkArr,
   eventSync,
   getEventPayloadArr,
@@ -351,14 +350,5 @@ export const sendStartEvent = () => {
   )
   if (sessionIndex === -1) {
     setEvent(constants.SESSION)
-  }
-
-  if (detectQueryString()) {
-    const mailerIndex = session.eventsData.eventsInfo.findIndex(
-      (obj) => obj.name === constants.MAILER
-    )
-    if (mailerIndex === -1) {
-      setEvent(constants.MAILER)
-    }
   }
 }
