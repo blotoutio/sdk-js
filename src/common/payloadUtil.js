@@ -1,10 +1,61 @@
 import { constants } from './config'
 import { getVariable } from './manifest'
+import { getDomain } from './domainUtil'
+const parser = require('ua-parser-js')
 
-const getMetaPayload = (meta) => {
-  if (!meta) {
-    return null
+const getPLF = (deviceType, OS) => {
+  if (deviceType === 'tablet' && OS === 'iOS') {
+    return 15
   }
+
+  if (deviceType === 'mobile' && OS === 'iOS') {
+    return 14
+  }
+
+  if (deviceType === 'tablet' && OS === 'Android') {
+    return 12
+  }
+
+  if (deviceType === 'mobile' && OS === 'Android') {
+    return 11
+  }
+  if (OS === 'Mac OS') {
+    return 27
+  }
+  if (OS === 'Windows') {
+    return 26
+  }
+  if (OS === 'Linux') {
+    return 28
+  }
+  if (deviceType === 'tablet' || deviceType === 'mobile') {
+    return constants.MOBILE_PLATFORM_CODE
+  }
+
+  return constants.WEB_PLATFORM_CODE
+}
+
+const createMetaObject = () => {
+  const parsedUA = parser(navigator.userAgent)
+  const browser = navigator.brave ? 'Brave' : parsedUA.browser.name || 'unknown'
+
+  return {
+    plf: getPLF(parsedUA.device.type, parsedUA.os.name),
+    domain: getDomain(),
+    osv: parsedUA.os.version || '0',
+    hostOS: parsedUA.os.name || '',
+    browser,
+    version: parsedUA.browser.version || '0.0.0.0',
+    dplatform: parsedUA.device.type || 'unknown',
+    ua: navigator.userAgent,
+    sdkVersion: process.env.PACKAGE_VERSION,
+    timeZoneOffset: new Date().getTimezoneOffset(),
+  }
+}
+
+const getMetaPayload = () => {
+  // TODO this should be simplified in one function
+  const meta = createMetaObject()
 
   let deviceGrain = getVariable(constants.EVENT_DEVICEINFO_GRAIN)
   if (deviceGrain == null) {
@@ -54,9 +105,9 @@ const getMetaPayload = (meta) => {
   return obj
 }
 
-export const getPayload = (session, events) => {
+export const getPayload = (events) => {
   const payload = {}
-  const meta = getMetaPayload(session.meta)
+  const meta = getMetaPayload()
   if (meta && Object.keys(meta).length !== 0) {
     payload.meta = meta
   }

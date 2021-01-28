@@ -1,6 +1,3 @@
-import { getRoot } from './store'
-import { getDomain } from '../common/domainUtil'
-
 export const setLocal = (name, data) => {
   if (!name) {
     return
@@ -27,19 +24,6 @@ export const getSession = (name) => {
     return null
   }
   return window.sessionStorage.getItem(name)
-}
-
-export const getStoreByDomain = (domainName) => {
-  if (!domainName) {
-    domainName = getDomain()
-  }
-
-  const store = getRoot()
-  if (!store) {
-    return null
-  }
-
-  return store[domainName]
 }
 
 export const removeSession = (key) => {

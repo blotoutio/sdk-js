@@ -1,27 +1,5 @@
-import { constants } from './config'
-import { getSession } from '../storage'
-import { checkEventsInterval, setStore } from '../event/storage'
-import { updateRoot } from '../storage/store'
-import { createSessionObject } from '../session/utils'
-import { setSyncEventsInterval } from '../event'
-import { getVariable } from './manifest'
 import { getDomain } from './domainUtil'
-import { getStringDate } from './timeUtil'
 import { getUID } from './uuidUtil'
-
-export const createDaySchema = (session) => {
-  const sessions = {}
-  const id = getSession('sessionId')
-  if (id) {
-    sessions[id] = session
-  }
-
-  return {
-    date: getStringDate(),
-    domain: getDomain(),
-    sessions,
-  }
-}
 
 export const getMid = () => {
   return `${getDomain()}-${getUID()}-${Date.now()}`
@@ -35,26 +13,6 @@ export const debounce = (func, delay) => {
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(() => func.apply(context, args), delay)
   }
-}
-
-export const setNewDateObject = (date, eventStore) => {
-  const storeCheck = checkEventsInterval()
-  if (storeCheck) {
-    const eventKeys = Object.keys(eventStore)
-    const firstKey = eventKeys[0]
-    delete eventStore[firstKey]
-  }
-
-  const session = createSessionObject()
-  const sdkObj = createDaySchema(session)
-  eventStore[date] = {
-    isSynced: false,
-    sdkData: sdkObj,
-  }
-
-  setSyncEventsInterval()
-  setStore(eventStore)
-  updateRoot()
 }
 
 export const getObjectTitle = (event, eventName) => {
@@ -152,21 +110,6 @@ export const getSelector = (ele) => {
   }
 
   return 'Unknown'
-}
-
-export const getSystemMergeCounter = (events) => {
-  let sysMergeCounter = getVariable(constants.EVENT_SYSTEM_MERGECOUNTER)
-  if (sysMergeCounter == null) {
-    sysMergeCounter = constants.DEFAULT_EVENT_SYSTEM_MERGECOUNTER
-  }
-
-  if (sysMergeCounter === '-1') {
-    return (events && events.length) || 0
-  } else if (sysMergeCounter > 0) {
-    return parseInt(sysMergeCounter)
-  }
-
-  return 0
 }
 
 export const DNT = () => {

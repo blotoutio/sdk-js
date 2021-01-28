@@ -1,6 +1,4 @@
-import { getLocal, getSession, setLocal, setSession, getStoreByDomain } from '.'
-import * as domain from '../common/domainUtil'
-import * as store from './store'
+import { getLocal, getSession, setLocal, setSession } from '.'
 
 describe('setLocal/getLocal', () => {
   it('null', () => {
@@ -29,43 +27,5 @@ describe('setSession/getSession', () => {
     setSession('key', data)
     const result = getSession('key')
     expect(result).toBe(data)
-  })
-})
-
-describe('getStoreByDomain', () => {
-  it('null', () => {
-    const result = getStoreByDomain()
-    expect(result).toBeNull()
-  })
-  it('domain generated', () => {
-    const spyDomain = jest
-      .spyOn(domain, 'getDomain')
-      .mockImplementation(() => 'test.com')
-    const result = getStoreByDomain()
-    expect(result).toBeNull()
-    spyDomain.mockRestore()
-  })
-
-  it('root do not have domain in', () => {
-    const spyRoot = jest.spyOn(store, 'getRoot').mockImplementation(() => ({
-      'test.com': {},
-    }))
-    const result = getStoreByDomain('ok.com')
-    expect(result).toBeUndefined()
-    spyRoot.mockRestore()
-  })
-
-  it('all ok', () => {
-    const spyRoot = jest.spyOn(store, 'getRoot').mockImplementation(() => ({
-      'test.com': {},
-      'ok.com': {
-        data: true,
-      },
-    }))
-    const result = getStoreByDomain('ok.com')
-    expect(result).toStrictEqual({
-      data: true,
-    })
-    spyRoot.mockRestore()
   })
 })

@@ -1,14 +1,7 @@
 import { constants } from '../common/config'
 import { getVariable } from '../common/manifest'
-import { getMid, getSystemMergeCounter } from '../common/utils'
+import { getMid } from '../common/utils'
 import { stringToIntSum } from '../common/securityUtil'
-import {
-  getNormalUseValue,
-  setNormalUseValue,
-} from '../storage/sharedPreferences'
-import { updateRoot } from '../storage/store'
-import { getStringDate } from '../common/timeUtil'
-import { getSessionForDate } from './session'
 import { getSession } from '../storage'
 import { getPayload } from '../common/payloadUtil'
 import { getManifestUrl } from '../common/endPointUrlUtil'
@@ -16,41 +9,7 @@ import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
 import { getUID } from '../common/uuidUtil'
 import { getReferrer } from '../common/referrerUtil'
-
-const chunk = (arr, size) => {
-  return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-    arr.slice(i * size, i * size + size)
-  )
-}
-
-export const eventsChunkArr = (events, devEvents) => {
-  let codifiedMergeCounter = getVariable(constants.EVENT_CODIFIED_MERGECOUNTER)
-  if (codifiedMergeCounter == null) {
-    codifiedMergeCounter = constants.DEFAULT_EVENT_CODIFIED_MERGECOUNTER
-  }
-
-  const sysMergeCounterValue = getSystemMergeCounter(events)
-  const sysEvents =
-    sysMergeCounterValue != null ? chunk(events, sysMergeCounterValue) : []
-  const codifiedEvents = chunk(devEvents, codifiedMergeCounter)
-
-  const length =
-    sysEvents.length > codifiedEvents.length
-      ? sysEvents.length
-      : codifiedEvents.length
-  const mergeArr = []
-  for (let i = 0; i < length; i++) {
-    let inArr = []
-    if (sysEvents[i]) {
-      inArr = inArr.concat(sysEvents[i])
-    }
-    if (codifiedEvents[i]) {
-      inArr = inArr.concat(codifiedEvents[i])
-    }
-    mergeArr.push(inArr)
-  }
-  return mergeArr
-}
+import { createViewPortObject } from '../session/utils'
 
 export const createDevEventInfoObj = (
   eventName,
@@ -81,16 +40,6 @@ export const createDevEventInfoObj = (
   return event
 }
 
-export const eventSync = {
-  inProgress: false,
-  set progressStatus(status) {
-    this.inProgress = status
-  },
-  get progressStatus() {
-    return this.inProgress
-  },
-}
-
 export const shouldCollectSystemEvents = () => {
   let collect = getVariable(constants.PUSH_SYSTEM_EVENTS)
   if (collect == null || collect === '0') {
@@ -100,14 +49,15 @@ export const shouldCollectSystemEvents = () => {
   return collect
 }
 
+// TODO what to do with this one?
 const checkIfCodeExists = (eventName) => {
-  const customEventStore = getNormalUseValue(constants.CUSTOM_EVENT_STORAGE)
-  if (customEventStore) {
-    const valueFoundIsEventCode = customEventStore[eventName]
-    if (valueFoundIsEventCode) {
-      return valueFoundIsEventCode
-    }
-  }
+  // const customEventStore = getNormalUseValue(constants.CUSTOM_EVENT_STORAGE)
+  // if (customEventStore) {
+  //   const valueFoundIsEventCode = customEventStore[eventName]
+  //   if (valueFoundIsEventCode) {
+  //     return valueFoundIsEventCode
+  //   }
+  // }
 
   return 0
 }
@@ -116,6 +66,8 @@ const generateSubCode = (eventSum) => {
   return constants.DEVELOPER_EVENT_CUSTOM + (eventSum % 8899)
 }
 
+// TODO this will be a problem as we will not know if event with the
+//  same code was already sent
 export const codeForCustomCodifiedEvent = (eventName) => {
   if (!eventName) {
     return 0
@@ -126,108 +78,89 @@ export const codeForCustomCodifiedEvent = (eventName) => {
     return eventSubCode
   }
 
-  let eventNameIntSum = stringToIntSum(eventName)
-  eventSubCode = generateSubCode(eventNameIntSum)
+  eventSubCode = generateSubCode(stringToIntSum(eventName))
 
-  const customEventStore =
-    getNormalUseValue(constants.CUSTOM_EVENT_STORAGE) || {}
-  const keys = Object.keys(customEventStore)
-  for (let i = 0; i < keys.length; i++) {
-    const valAsEventName = keys[i]
-    if (customEventStore[valAsEventName] === eventSubCode) {
-      eventNameIntSum += 1
-      eventSubCode = generateSubCode(eventNameIntSum)
-      i = 0 // re-looping again to check new code
-    }
-  }
+  // const customEventStore =
+  //   getNormalUseValue(constants.CUSTOM_EVENT_STORAGE) || {}
+  // const keys = Object.keys(customEventStore)
+  // for (let i = 0; i < keys.length; i++) {
+  //   const valAsEventName = keys[i]
+  //   if (customEventStore[valAsEventName] === eventSubCode) {
+  //     eventNameIntSum += 1
+  //     eventSubCode = generateSubCode(eventNameIntSum)
+  //     i = 0 // re-looping again to check new code
+  //   }
+  // }
+  //
+  // customEventStore[eventName] = eventSubCode
+  // setNormalUseValue(constants.CUSTOM_EVENT_STORAGE, customEventStore)
 
-  customEventStore[eventName] = eventSubCode
-  setNormalUseValue(constants.CUSTOM_EVENT_STORAGE, customEventStore)
-
-  updateRoot()
   return eventSubCode
 }
 
-export const getEventPayloadArr = (arr, date, sessionId) => {
-  const session = getSessionForDate(date, sessionId)
-  if (!session) {
-    return null
-  }
+export const getEventPayload = (array) => {
+  const sessionId = getSession(constants.SESSION_ID)
 
-  const viewportLength = (session.viewPort || []).length
-  const viewPortObj =
-    viewportLength > 0 ? session.viewPort[viewportLength - 1] : null
-
-  const result = []
-  arr.forEach((val) => {
-    if (val.evn) {
-      result.push(val)
-      return
-    }
-    const propObj = {
+  return array.map((val) => {
+    const properties = {
       referrer: getReferrer(),
-      obj: val.objectName,
       position: val.position,
       session_id: sessionId,
+      screen: createViewPortObject(),
     }
 
-    if (viewPortObj) {
-      propObj.screen = viewPortObj
+    if (val.objectName) {
+      properties.obj = val.objectName
     }
 
     if (val.objectTitle) {
-      propObj.objT = val.objectTitle
+      properties.objT = val.objectTitle
     }
 
-    if (
-      val.name === 'click' ||
-      val.name === 'mouseover' ||
-      val.name === 'hoverc' ||
-      val.name === 'hover' ||
-      val.name === 'dblclick'
-    ) {
-      if (val.extraInfo) {
-        propObj.mouse = {
-          x: val.extraInfo.mousePosX,
-          y: val.extraInfo.mousePosY,
-        }
-      }
+    if (val.mouse) {
+      properties.mouse = val.mouse
     }
 
     if (val.metaInfo) {
-      propObj.codifiedInfo = val.metaInfo
+      properties.codifiedInfo = val.metaInfo
     }
 
-    const obj = {
+    // TODO
+    // if (
+    //   val.name === 'click' ||
+    //   val.name === 'mouseover' ||
+    //   val.name === 'hoverc' ||
+    //   val.name === 'hover' ||
+    //   val.name === 'dblclick'
+    // ) {
+    //   if (val.extraInfo) {
+    //     properties.mouse = {
+    //       x: val.extraInfo.mousePosX,
+    //       y: val.extraInfo.mousePosY,
+    //     }
+    //   }
+    // }
+
+    return {
       mid: val.mid,
       userid: getUID(),
       evn: val.name,
       evcs: val.evcs,
       scrn: val.urlPath,
       evt: val.tstmp,
-      properties: propObj,
+      properties,
     }
-
-    result.push(obj)
   })
-  return result
 }
 
-export const sendEvents = (arr) => {
-  const date = getStringDate()
-  const sessionId = getSession(constants.SESSION_ID)
-  const session = getSessionForDate(date, sessionId)
-  if (!session) {
-    return
-  }
-  const eventsArr = getEventPayloadArr(arr, date, sessionId)
-  if (eventsArr.length === 0) {
+export const sendEvents = (array) => {
+  const events = getEventPayload(array)
+  if (events.length === 0) {
     return
   }
 
-  const payload = getPayload(session, eventsArr)
-  const url = getManifestUrl()
-  postRequest(url, JSON.stringify(payload))
+  const payload = getPayload(events)
+  postRequest(getManifestUrl(), JSON.stringify(payload))
     .then(() => {})
     .catch(error)
 }

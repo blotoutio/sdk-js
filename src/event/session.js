@@ -1,20 +1,10 @@
 import {
-  constants,
   highFreqEvents,
   isHighFreqEventOff,
   systemEventCode,
 } from '../common/config'
-import {
-  getMid,
-  getObjectTitle,
-  getSelector,
-  setNewDateObject,
-} from '../common/utils'
-import { getSession } from '../storage'
-import { getEventsByDate, getStore, setEventsByDate } from './storage'
-import { updatePreviousDayEndTime } from '../session'
-import { createDevEventInfoObj } from './utils'
-import { getStringDate } from '../common/timeUtil'
+import { getMid, getObjectTitle, getSelector } from '../common/utils'
+import { createDevEventInfoObj, sendEvents } from './utils'
 
 const getPositionObject = (event) => {
   let height = -1
@@ -51,51 +41,17 @@ export const setEvent = function (eventName, event) {
   }
 
   const objectName = event && getSelector(event.target)
-  const sessionId = getSession(constants.SESSION_ID)
-  const date = getStringDate()
-  const eventStore = getStore()
 
-  if (eventStore && !eventStore[date]) {
-    updatePreviousDayEndTime()
-    setNewDateObject(date, eventStore)
-    return
-  }
-
-  const session = getSessionForDate(date, sessionId)
-  if (!session || !session.eventsData) {
-    return
-  }
-
-  const eventData = session.eventsData
-  if (!eventData.eventsInfo) {
-    eventData.eventsInfo = []
-  }
-
-  eventData.eventsInfo.push(createEventInfoObj(eventName, objectName, event))
-  setSessionForDate(date, sessionId, session)
+  const info = createEventInfoObj(eventName, objectName, event)
+  sendEvents([info])
 }
 
 export const setDevEvent = (eventName, data, eventCode = null) => {
   if (!eventName) {
     return
   }
-
-  const sessionId = getSession(constants.SESSION_ID)
-  const date = getStringDate()
-
-  const session = getSessionForDate(date, sessionId)
-  if (!session || !session.eventsData) {
-    return
-  }
-  const eventsData = session.eventsData
-  if (!eventsData.devCodifiedEventsInfo) {
-    eventsData.devCodifiedEventsInfo = []
-  }
-
-  const obj = createDevEventInfoObj(eventName, null, data, eventCode)
-  eventsData.devCodifiedEventsInfo.push(obj)
-
-  setSessionForDate(date, sessionId, session)
+  const event = createDevEventInfoObj(eventName, null, data, eventCode)
+  sendEvents([event])
 }
 
 export const createEventInfoObj = (eventName, objectName, event) => {
@@ -126,27 +82,4 @@ export const createEventInfoObj = (eventName, objectName, event) => {
   }
 
   return data
-}
-
-export const getSessionForDate = (date, sessionId) => {
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions || !sdkData.sessions[sessionId]) {
-    return null
-  }
-
-  return sdkData.sessions[sessionId]
-}
-
-export const setSessionForDate = (date, sessionId, data) => {
-  if (!sessionId) {
-    return
-  }
-
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions) {
-    return
-  }
-
-  sdkData.sessions[sessionId] = data
-  setEventsByDate(date, sdkData)
 }

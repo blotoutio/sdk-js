@@ -12,6 +12,7 @@ import { getRootIndex } from '../storage/key'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
 
 const getUserIndex = () => {
+  // TODO we need to generate root index
   const sdkIndexData = getLocal(getRootIndex())
   if (!sdkIndexData) {
     return ''

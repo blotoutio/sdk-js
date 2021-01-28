@@ -1,8 +1,8 @@
 import { setDevEvent } from './event/session'
-import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 import { mapIDEvent } from './event'
 import { init } from './common/init'
 import { getUID } from './common/uuidUtil'
+import { setPersonalEvent } from './session/personal'
 ;(function () {
   const handleFunction = (arg) => {
     const sliced = [].slice.call(arg)
@@ -32,11 +32,11 @@ import { getUID } from './common/uuidUtil'
   }
 
   SDK.prototype.logPIIEvent = (eventName, data = null) => {
-    setSessionPIIEvent(eventName, data)
+    setPersonalEvent(eventName, data, true)
   }
 
   SDK.prototype.logPHIEvent = (eventName, data = null) => {
-    setSessionPHIEvent(eventName, data)
+    setPersonalEvent(eventName, data)
   }
 
   SDK.prototype.mapID = (id, provider, data = null) => {
