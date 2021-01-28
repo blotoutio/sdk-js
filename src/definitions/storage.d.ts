@@ -93,7 +93,6 @@ export interface CommonInfo {
   urlPath: string
   tstmp: number
   mid: string
-  nmo: number
   evcs: number
   metaInfo: object
 }

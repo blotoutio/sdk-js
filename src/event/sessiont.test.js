@@ -132,7 +132,6 @@ describe('setEvent', () => {
                 },
                 mid: 'localhost-null-1580775120000',
                 name: 'some_event',
-                nmo: 1,
                 objectName: 'Unknown',
                 objectTitle: '',
                 position: {
@@ -213,7 +212,6 @@ describe('setDevEvent', () => {
                 evcs: 24146,
                 mid: 'localhost-null-1580775120000',
                 name: 'some_event',
-                nmo: 1,
                 sentToServer: false,
                 tstmp: 1580775120000,
                 urlPath: 'http://localhost/',
@@ -248,7 +246,6 @@ describe('setDevEvent', () => {
                 evcs: 24146,
                 mid: 'localhost-null-1580775120000',
                 name: 'some_event',
-                nmo: 1,
                 sentToServer: false,
                 tstmp: 1580775120000,
                 urlPath: 'http://localhost/',
@@ -407,7 +404,6 @@ describe('createEventInfoObj', () => {
       },
       mid: 'localhost-null-1580775120000',
       name: 'some_event',
-      nmo: 1,
       objectName: 'name',
       objectTitle: '',
       position: {
@@ -445,7 +441,6 @@ describe('createEventInfoObj', () => {
       },
       mid: 'localhost-null-1580775120000',
       name: 'some_event',
-      nmo: 1,
       objectName: 'name',
       objectTitle: '',
       position: {

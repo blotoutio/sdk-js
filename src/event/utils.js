@@ -65,7 +65,6 @@ export const createDevEventInfoObj = (
     urlPath: window.location.href,
     tstmp: Date.now(),
     mid: getMid(),
-    nmo: 1,
     evcs: eventCode || codeForCustomCodifiedEvent(eventName),
   }
 
@@ -209,7 +208,6 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
       scrn: val.urlPath,
       evt: val.tstmp,
       properties: propObj,
-      nmo: val.nmo,
     }
 
     result.push(obj)
