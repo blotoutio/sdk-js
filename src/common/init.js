@@ -1,18 +1,9 @@
 import { requiredEvents, optionalEvents } from '../event/system'
 import { setUrl } from './endPointUrlUtil'
 import * as log from './logUtil'
-import {
-  pullManifest,
-  updateManifest,
-  checkManifest,
-  checkUpdateForManifest,
-} from '../manifest'
+import { pullManifest } from '../manifest'
 import { setReferrer } from './referrerUtil'
-import {
-  sendStartEvent,
-  syncPreviousDateEvents,
-  syncPreviousEvents,
-} from '../event'
+import { sendStartEvent } from '../event'
 import { setClientToken, setUID } from './uuidUtil'
 import { setCustomDomain, createDomain, getDomain } from './domainUtil'
 import { setRootKey, getRootKey } from '../storage/key'
@@ -50,9 +41,7 @@ export const initialize = (isDecryptionError) => {
   if (getLocal(getRootKey()) && localData) {
     if (localData[hostname] && !localData[hostname].events[date]) {
       const storeCheck = checkEventsInterval()
-      if (checkManifest()) {
-        syncPreviousDateEvents()
-      }
+
       if (storeCheck) {
         const eventKeys = Object.keys(localData[hostname].events)
         const firstKey = eventKeys[0]
@@ -66,10 +55,6 @@ export const initialize = (isDecryptionError) => {
       }
     } else {
       if (localData[hostname]) {
-        if (checkManifest()) {
-          syncPreviousEvents()
-        }
-
         if (!localData[hostname].events[date].sdkData.sessions[sessionId]) {
           const session = createSessionObject()
           localData[hostname].events[date].sdkData.sessions[
@@ -106,17 +91,9 @@ export const init = (preferences) => {
   sendStartEvent()
   requiredEvents(window)
 
-  if (!checkManifest()) {
-    pullManifest()
-      .then(() => {
-        optionalEvents(window)
-      })
-      .catch(log.error)
-  } else {
-    if (checkUpdateForManifest()) {
-      updateManifest()
-    }
-
-    optionalEvents(window)
-  }
+  pullManifest()
+    .then(() => {
+      optionalEvents(window)
+    })
+    .catch(log.error)
 }

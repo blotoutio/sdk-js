@@ -2,10 +2,7 @@ import { constants } from '../common/config'
 import { encryptAES, decryptAES, shouldEncrypt } from '../common/securityUtil'
 import * as log from '../common/logUtil'
 import { initialize } from '../common/init'
-import { millisecondsToDays } from '../common/timeUtil'
-import { getModifiedDate } from '../manifest/storage'
 import { getLocal, removeSession, setLocal } from '.'
-import { getManifestVariable } from '../manifest'
 import { getRootKey } from './key'
 
 let rootStore
@@ -51,17 +48,6 @@ export const updateRoot = (store) => {
   }
 
   if (!rootStore) {
-    return
-  }
-
-  let licenseExp = getManifestVariable(constants.LICENSE_EXPIRE_DAY_ALIVE)
-  if (licenseExp == null) {
-    licenseExp = constants.DEFAULT_LICENSE_EXPIRE_DAY_ALIVE
-  }
-
-  const modifiedDate = getModifiedDate()
-  const diffDays = millisecondsToDays(Date.now() - modifiedDate)
-  if (diffDays > licenseExp) {
     return
   }
 

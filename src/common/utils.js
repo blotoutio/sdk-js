@@ -1,10 +1,10 @@
 import { constants } from './config'
 import { getSession } from '../storage'
-import { checkEventsInterval, getStore, setStore } from '../event/storage'
+import { checkEventsInterval, setStore } from '../event/storage'
 import { updateRoot } from '../storage/store'
 import { createSessionObject } from '../session/utils'
-import { syncPreviousDateEvents, setSyncEventsInterval } from '../event'
-import { checkManifest, getManifestVariable } from '../manifest'
+import { setSyncEventsInterval } from '../event'
+import { getVariable } from '../manifest'
 import { getDomain } from './domainUtil'
 import { getStringDate } from './timeUtil'
 import { getUID } from './uuidUtil'
@@ -38,11 +38,6 @@ export const debounce = (func, delay) => {
 }
 
 export const setNewDateObject = (date, eventStore) => {
-  if (checkManifest()) {
-    // old date sync events
-    syncPreviousDateEvents()
-  }
-
   const storeCheck = checkEventsInterval()
   if (storeCheck) {
     const eventKeys = Object.keys(eventStore)
@@ -160,7 +155,7 @@ export const getSelector = (ele) => {
 }
 
 export const getSystemMergeCounter = (events) => {
-  let sysMergeCounter = getManifestVariable(constants.EVENT_SYSTEM_MERGECOUNTER)
+  let sysMergeCounter = getVariable(constants.EVENT_SYSTEM_MERGECOUNTER)
   if (sysMergeCounter == null) {
     sysMergeCounter = constants.DEFAULT_EVENT_SYSTEM_MERGECOUNTER
   }
@@ -172,18 +167,6 @@ export const getSystemMergeCounter = (events) => {
   }
 
   return 0
-}
-
-export const getNotSyncedDate = () => {
-  const obj = getStore()
-  let notSyncDate
-  for (const x in obj) {
-    notSyncDate = x
-    if (!obj[x].isSynced) {
-      break
-    }
-  }
-  return notSyncDate
 }
 
 export const DNT = () => {

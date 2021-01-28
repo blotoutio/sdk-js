@@ -2,11 +2,8 @@ import {
   checkAndGetSessionId,
   createSessionObject,
   getNotSynced,
-  maybeSync,
 } from './utils'
 import * as storage from '../storage'
-import * as event from '../event'
-import * as manifest from '../manifest'
 import { eventSync } from '../event/utils'
 
 beforeEach(() => {
@@ -106,56 +103,6 @@ describe('getNotSynced', () => {
       },
     })
     expect(result).toBe('23423424')
-  })
-})
-
-describe('maybeSync', () => {
-  let spySync
-
-  beforeEach(() => {
-    spySync = jest.spyOn(event, 'syncEvents').mockImplementation()
-    eventSync.progressStatus = false
-  })
-
-  afterEach(() => {
-    spySync.mockRestore()
-  })
-
-  it('null', () => {
-    maybeSync()
-    expect(spySync).toBeCalledTimes(0)
-  })
-
-  it('missing devCodifiedEventsInfo', () => {
-    maybeSync({
-      eventsInfo: [],
-    })
-    expect(spySync).toBeCalledTimes(0)
-    expect(eventSync.progressStatus).toBe(false)
-  })
-
-  it('event push, no sync in progress', () => {
-    const spyManifest = jest
-      .spyOn(manifest, 'getManifestVariable')
-      .mockImplementation(() => 1)
-    maybeSync({
-      eventsInfo: [
-        {
-          sentToServer: false,
-        },
-      ],
-      devCodifiedEventsInfo: [
-        {
-          sentToServer: false,
-        },
-        {
-          sentToServer: false,
-        },
-      ],
-    })
-    expect(spySync).toBeCalledTimes(1)
-    expect(eventSync.progressStatus).toBe(true)
-    spyManifest.mockRestore()
   })
 })
 

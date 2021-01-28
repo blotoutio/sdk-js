@@ -1,8 +1,5 @@
 import { getSession, setSession } from '../storage'
 import { constants } from '../common/config'
-import { getManifestVariable } from '../manifest'
-import { eventSync } from '../event/utils'
-import { syncEvents } from '../event'
 import { getDomain } from '../common/domainUtil'
 const parser = require('ua-parser-js')
 
@@ -56,26 +53,6 @@ const createMetaObject = () => {
   }
 }
 
-const getNotSyncedEventsCount = (obj) => {
-  if (!obj || !obj.eventsInfo || !obj.devCodifiedEventsInfo) {
-    return 0
-  }
-  let events = obj.eventsInfo.filter((evt) => !evt.sentToServer)
-  const devEvents = obj.devCodifiedEventsInfo.filter((evt) => !evt.sentToServer)
-  events = events.concat(devEvents)
-  return events.length
-}
-
-const checkEventPushEventCounter = (eventsData) => {
-  const eventsCount = getNotSyncedEventsCount(eventsData)
-  let manifestCounter = getManifestVariable(constants.EVENT_PUSH_EVENTSCOUNTER)
-  if (manifestCounter == null) {
-    manifestCounter = constants.DEFAULT_EVENT_PUSH_EVENTSCOUNTER
-  }
-
-  return eventsCount >= parseInt(manifestCounter)
-}
-
 export const checkAndGetSessionId = () => {
   let sessionId = getSession(constants.SESSION_ID)
 
@@ -98,17 +75,6 @@ export const getNotSynced = (sessions) => {
   }
 
   return null
-}
-
-export const maybeSync = (eventsData) => {
-  if (!eventsData) {
-    return
-  }
-  const isEventPush = checkEventPushEventCounter(eventsData)
-  if (isEventPush && !eventSync.progressStatus) {
-    eventSync.progressStatus = true
-    syncEvents()
-  }
 }
 
 export const createSessionObject = () => {

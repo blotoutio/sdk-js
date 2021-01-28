@@ -1,5 +1,5 @@
 import { constants } from '../common/config'
-import { getManifestVariable } from '../manifest'
+import { getVariable } from '../manifest'
 import { getMid, getSystemMergeCounter } from '../common/utils'
 import { stringToIntSum } from '../common/securityUtil'
 import {
@@ -24,9 +24,7 @@ const chunk = (arr, size) => {
 }
 
 export const eventsChunkArr = (events, devEvents) => {
-  let codifiedMergeCounter = getManifestVariable(
-    constants.EVENT_CODIFIED_MERGECOUNTER
-  )
+  let codifiedMergeCounter = getVariable(constants.EVENT_CODIFIED_MERGECOUNTER)
   if (codifiedMergeCounter == null) {
     codifiedMergeCounter = constants.DEFAULT_EVENT_CODIFIED_MERGECOUNTER
   }
@@ -94,7 +92,7 @@ export const eventSync = {
 }
 
 export const shouldCollectSystemEvents = () => {
-  let collect = getManifestVariable(constants.PUSH_SYSTEM_EVENTS)
+  let collect = getVariable(constants.PUSH_SYSTEM_EVENTS)
   if (collect == null || collect === '0') {
     collect = constants.DEFAULT_PUSH_SYSTEM_EVENTS
   }

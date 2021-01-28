@@ -13,7 +13,6 @@ import {
 import { getSession } from '../storage'
 import { getEventsByDate, getStore, setEventsByDate } from './storage'
 import { updatePreviousDayEndTime } from '../session'
-import { maybeSync } from '../session/utils'
 import { createDevEventInfoObj } from './utils'
 import { getStringDate } from '../common/timeUtil'
 
@@ -74,7 +73,6 @@ export const setEvent = function (eventName, event) {
 
   eventData.eventsInfo.push(createEventInfoObj(eventName, objectName, event))
   setSessionForDate(date, sessionId, session)
-  maybeSync(eventData)
 }
 
 export const setDevEvent = (eventName, data, eventCode = null) => {
@@ -98,7 +96,6 @@ export const setDevEvent = (eventName, data, eventCode = null) => {
   eventsData.devCodifiedEventsInfo.push(obj)
 
   setSessionForDate(date, sessionId, session)
-  maybeSync(eventsData)
 }
 
 export const createEventInfoObj = (eventName, objectName, event) => {

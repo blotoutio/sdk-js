@@ -8,7 +8,6 @@ export const constants = {
   EVENT_PUSH_INTERVAL: 'Event_Push_Interval',
   DEFAULT_EVENT_PUSH_INTERVAL: 1,
   SESSION_ID: 'sessionId',
-  MANIFEST_REFRESH_INTERVAL: 'Manifest_Refresh_Interval',
   API_ENDPOINT: 'Api_Endpoint',
   ROOT_KEY: 'Root',
   DOMAINS: 'domains',
@@ -34,7 +33,7 @@ export const constants = {
   PUSH_SYSTEM_EVENTS: 'SDK_Push_System_Events',
   DEFAULT_PUSH_SYSTEM_EVENTS: false,
 }
-export const manifestConst = {
+export const endpoints = {
   EVENT_PATH: 'v1/events/publish',
   MANIFEST_PATH: 'v1/manifest/pull',
 }

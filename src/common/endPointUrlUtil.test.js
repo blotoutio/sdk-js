@@ -27,34 +27,14 @@ describe('getManifestUrl', () => {
     expect(getManifestUrl()).toBe('')
   })
 
-  it('empty type, no manifest', () => {
+  it('no manifest', () => {
     setUrl('http://blotout.io')
     expect(getManifestUrl()).toBe('http://blotout.io/v1/events/publish')
   })
 
-  it('empty type, manifest', () => {
+  it('ok', () => {
     jest
-      .spyOn(manifest, 'getManifestVariable')
-      .mockImplementationOnce(() => 'http://manifest.io')
-      .mockImplementationOnce(() => 'v1/path')
-
-    setUrl('http://blotout.io')
-    expect(getManifestUrl()).toBe('http://manifest.io/v1/path')
-  })
-
-  it('random type, no manifest', () => {
-    setUrl('http://blotout.io')
-    expect(getManifestUrl('random')).toBe('')
-  })
-
-  it('type event, no manifest', () => {
-    setUrl('http://blotout.io')
-    expect(getManifestUrl()).toBe('http://blotout.io/v1/events/publish')
-  })
-
-  it('type event, manifest', () => {
-    jest
-      .spyOn(manifest, 'getManifestVariable')
+      .spyOn(manifest, 'getVariable')
       .mockImplementationOnce(() => 'http://manifest.io')
       .mockImplementationOnce(() => 'v1/path')
 

@@ -1,6 +1,5 @@
 import { getSession } from '../storage'
 import { constants } from '../common/config'
-import { maybeSync } from './utils'
 import { createDevEventInfoObj } from '../event/utils'
 import { getStringDate } from '../common/timeUtil'
 import { getSessionForDate, setSessionForDate } from '../event/session'
@@ -29,7 +28,6 @@ const setPersonalEvent = (eventName, data, isPII) => {
   }
   eventsData.devCodifiedEventsInfo.push(event)
 
-  maybeSync(eventsData)
   setSessionForDate(date, sessionId, session)
 }
 

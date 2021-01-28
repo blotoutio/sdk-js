@@ -1,12 +1,12 @@
 import { constants } from './config'
-import { getManifestVariable } from '../manifest'
+import { getVariable } from '../manifest'
 
 const getMetaPayload = (meta) => {
   if (!meta) {
     return null
   }
 
-  let deviceGrain = getManifestVariable(constants.EVENT_DEVICEINFO_GRAIN)
+  let deviceGrain = getVariable(constants.EVENT_DEVICEINFO_GRAIN)
   if (deviceGrain == null) {
     deviceGrain = constants.DEFAULT_EVENT_DEVICEINFO_GRAIN
   }

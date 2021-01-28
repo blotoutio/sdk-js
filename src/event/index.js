@@ -1,4 +1,4 @@
-import { getNotSyncedDate, setNewDateObject } from '../common/utils'
+import { setNewDateObject } from '../common/utils'
 import {
   createEventInfoObj,
   getSessionForDate,
@@ -17,7 +17,7 @@ import { getEventsByDate, getStore } from './storage'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
-import { getManifestVariable } from '../manifest'
+import { getVariable } from '../manifest'
 import { encryptRSA } from '../common/securityUtil'
 import { updatePreviousDayEndTime } from '../session'
 import { getNotSynced } from '../session/utils'
@@ -36,7 +36,7 @@ export const sendPIIPHIEvent = (events, date, type) => {
   const sessionId = getSession(constants.SESSION_ID)
   const session = getSessionForDate(date, sessionId)
   const eventsArr = getEventPayloadArr(events, date, sessionId)
-  const publicKey = getManifestVariable(key)
+  const publicKey = getVariable(key)
   const obj = encryptRSA(publicKey, JSON.stringify(eventsArr))
 
   const payload = getPayload(session)
@@ -82,7 +82,7 @@ export const getNotSyncedEvents = (obj) => {
 }
 
 export const setSyncEventsInterval = () => {
-  let eventPushInterval = getManifestVariable(constants.EVENT_PUSH_INTERVAL)
+  let eventPushInterval = getVariable(constants.EVENT_PUSH_INTERVAL)
   if (eventPushInterval == null) {
     eventPushInterval = constants.DEFAULT_EVENT_PUSH_INTERVAL
   }
@@ -185,20 +185,6 @@ export const syncPreviousEvents = () => {
     return
   }
 
-  syncEvents(sessionId, date)
-}
-
-export const syncPreviousDateEvents = () => {
-  const date = getNotSyncedDate()
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions) {
-    return
-  }
-
-  const sessionId = getNotSynced(sdkData.sessions)
-  if (!sessionId) {
-    return
-  }
   syncEvents(sessionId, date)
 }
 

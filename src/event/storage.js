@@ -1,7 +1,7 @@
 import { getStoreByDomain } from '../storage'
 import { error } from '../common/logUtil'
 import { updateRoot } from '../storage/store'
-import { getManifestVariable } from '../manifest'
+import { getVariable } from '../manifest'
 import { constants } from '../common/config'
 
 export const getStore = () => {
@@ -56,7 +56,7 @@ export const setEventsByDate = (dateString, data) => {
 }
 
 export const checkEventsInterval = () => {
-  let storeEventsInterval = getManifestVariable(constants.STORE_EVENTS_INTERVAL)
+  let storeEventsInterval = getVariable(constants.STORE_EVENTS_INTERVAL)
   if (storeEventsInterval == null) {
     storeEventsInterval = constants.DEFAULT_STORE_EVENTS_INTERVAL
   }
