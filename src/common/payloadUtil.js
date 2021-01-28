@@ -1,4 +1,4 @@
-import { constants } from '../config'
+import { constants } from './config'
 import { getManifestVariable } from '../manifest'
 
 const getMetaPayload = (meta) => {

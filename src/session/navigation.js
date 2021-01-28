@@ -1,5 +1,5 @@
 import { getSession } from '../storage'
-import { constants } from '../config'
+import { constants } from '../common/config'
 import { getEventsByDate, setEventsByDate } from '../event/storage'
 import { createReferrerEventInfo } from '../common/referrerUtil'
 import { getStringDate } from '../common/timeUtil'

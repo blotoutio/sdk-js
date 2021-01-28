@@ -15,7 +15,7 @@ import {
   sendEvents,
 } from './utils'
 import { getSession } from '../storage'
-import { callInterval, constants, systemEventCode } from '../config'
+import { callInterval, constants, systemEventCode } from '../common/config'
 import { getEventsByDate, getStore } from './storage'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'

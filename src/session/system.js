@@ -1,5 +1,5 @@
 import { getSession } from '../storage'
-import { constants } from '../config'
+import { constants } from '../common/config'
 import { createViewPortObject } from './utils'
 import {
   createEventInfoObj,

@@ -6,7 +6,7 @@ import PBKDF2 from 'crypto-js/pbkdf2'
 import utf8 from 'crypto-js/enc-utf8'
 import { error } from './logUtil'
 import { getLocal } from '../storage'
-import { dataEncryptionEnabled } from '../config'
+import { dataEncryptionEnabled } from './config'
 import { getUUID } from './uuidUtil'
 import { getRootIndex } from '../storage/key'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')

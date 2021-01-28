@@ -7,7 +7,7 @@ import {
 } from './storage'
 import { getRoot, updateRoot } from '../storage/store'
 import { getUrl } from '../common/endPointUrlUtil'
-import { manifestConst, constants, callInterval } from '../config'
+import { manifestConst, constants, callInterval } from '../common/config'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
 import { setSyncEventsInterval } from '../event'

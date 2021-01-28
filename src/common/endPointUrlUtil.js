@@ -1,5 +1,5 @@
 import { getManifestVariable } from '../manifest'
-import { constants, manifestConst } from '../config'
+import { constants, manifestConst } from './config'
 
 let endpointUrl = ''
 

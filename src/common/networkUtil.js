@@ -1,4 +1,4 @@
-import { constants } from '../config'
+import { constants } from './config'
 import { getTempUseValue } from '../storage/sharedPreferences'
 
 export async function getRequest(url) {

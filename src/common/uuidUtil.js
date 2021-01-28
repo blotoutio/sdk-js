@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getLocal, setLocal } from '../storage'
 import { SHA256Encode } from './securityUtil'
 import { getTempUseValue, setTempUseValue } from '../storage/sharedPreferences'
-import { constants } from '../config'
+import { constants } from './config'
 import { updateRoot } from '../storage/store'
 import { getRootIndex } from '../storage/key'
 

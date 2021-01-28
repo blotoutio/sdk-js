@@ -1,4 +1,4 @@
-import { constants } from './config'
+import { constants } from './common/config'
 import { getTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'

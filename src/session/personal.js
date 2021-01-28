@@ -1,5 +1,5 @@
 import { getSession } from '../storage'
-import { constants } from '../config'
+import { constants } from '../common/config'
 import { maybeSync } from './utils'
 import { createDevEventInfoObj } from '../event/utils'
 import { getStringDate } from '../common/timeUtil'

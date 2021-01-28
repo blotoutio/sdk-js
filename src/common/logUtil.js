@@ -1,4 +1,4 @@
-import { isDevMode } from '../config'
+import { isDevMode } from './config'
 
 export const info = (data) => {
   if (isDevMode) {

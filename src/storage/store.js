@@ -1,4 +1,4 @@
-import { constants } from '../config'
+import { constants } from '../common/config'
 import { encryptAES, decryptAES, shouldEncrypt } from '../common/securityUtil'
 import * as log from '../common/logUtil'
 import { initialize } from '../common/init'

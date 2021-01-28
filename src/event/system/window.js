@@ -1,5 +1,5 @@
 import { debounce } from '../../common/utils'
-import { constants } from '../../config'
+import { constants } from '../../common/config'
 import { getSession } from '../../storage'
 import { getSessionForDate, setEvent } from '../session'
 import { setViewPort } from '../../session/system'

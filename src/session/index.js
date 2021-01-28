@@ -1,5 +1,5 @@
 import { getSession } from '../storage'
-import { constants, systemEventCode } from '../config'
+import { constants, systemEventCode } from '../common/config'
 import { getMid, getSystemMergeCounter } from '../common/utils'
 import { getPreviousDateString, getStringDate } from '../common/timeUtil'
 import { getTempUseValue } from '../storage/sharedPreferences'

@@ -3,7 +3,7 @@ import {
   highFreqEvents,
   isHighFreqEventOff,
   systemEventCode,
-} from '../config'
+} from '../common/config'
 import {
   getMid,
   getNotSyncedDate,

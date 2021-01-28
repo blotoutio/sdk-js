@@ -1,5 +1,5 @@
 import { getSession, setSession } from '../storage'
-import { constants } from '../config'
+import { constants } from '../common/config'
 import { getManifestVariable } from '../manifest'
 import { eventSync } from '../event/utils'
 import { syncEvents } from '../event'

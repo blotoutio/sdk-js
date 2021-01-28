@@ -1,4 +1,4 @@
-import { constants } from '../config'
+import { constants } from './config'
 import { getSession } from '../storage'
 import { checkEventsInterval, getStore, setStore } from '../event/storage'
 import { updateRoot } from '../storage/store'
