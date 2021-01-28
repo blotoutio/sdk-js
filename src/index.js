@@ -1,9 +1,8 @@
-import { constants } from './common/config'
-import { getTempUseValue } from './storage/sharedPreferences'
 import { setDevEvent } from './event/session'
 import { setSessionPHIEvent, setSessionPIIEvent } from './session/personal'
 import { mapIDEvent } from './event'
 import { init } from './common/init'
+import { getUID } from './common/uuidUtil'
 ;(function () {
   const handleFunction = (arg) => {
     const sliced = [].slice.call(arg)
@@ -29,7 +28,7 @@ import { init } from './common/init'
   }
 
   SDK.prototype.getUserId = () => {
-    return getTempUseValue(constants.UID)
+    return getUID()
   }
 
   SDK.prototype.logPIIEvent = (eventName, data = null) => {

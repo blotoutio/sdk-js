@@ -4,7 +4,6 @@ import { getMid, getSystemMergeCounter } from '../common/utils'
 import { stringToIntSum } from '../common/securityUtil'
 import {
   getNormalUseValue,
-  getTempUseValue,
   setNormalUseValue,
 } from '../storage/sharedPreferences'
 import { updateRoot } from '../storage/store'
@@ -17,6 +16,7 @@ import { getPayload } from '../common/payloadUtil'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
+import { getUID } from '../common/uuidUtil'
 
 const chunk = (arr, size) => {
   return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -207,7 +207,7 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
     const eventCount = dateEvents.filter((evt) => evt.name === val.name)
     const obj = {
       mid: val.mid,
-      userid: getTempUseValue(constants.UID),
+      userid: getUID(),
       evn: val.name,
       evcs: val.evcs,
       evdc: eventCount.length,

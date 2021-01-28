@@ -1,8 +1,6 @@
 import { requiredEvents, optionalEvents } from '../event/system'
 import { setUrl } from './endPointUrlUtil'
 import * as log from './logUtil'
-import { constants } from './config'
-import { setTempUseValue } from '../storage/sharedPreferences'
 import {
   pullManifest,
   updateManifest,

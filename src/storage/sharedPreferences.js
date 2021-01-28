@@ -8,14 +8,6 @@ const getStore = () => {
   return store.sharedPreference
 }
 
-const getTempUse = () => {
-  const store = getStore()
-  if (!store) {
-    return null
-  }
-  return store.tempUse
-}
-
 const getNormalUse = () => {
   const store = getStore()
   if (!store) {
@@ -44,14 +36,6 @@ const setValue = (store, key, value) => {
     return
   }
   store[key] = value
-}
-
-export const getTempUseValue = (key) => {
-  return getValue(getTempUse(), key)
-}
-
-export const setTempUseValue = (key, value) => {
-  setValue(getTempUse(), key, value)
 }
 
 export const getNormalUseValue = (key) => {

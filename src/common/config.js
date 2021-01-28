@@ -2,7 +2,6 @@ export const callInterval = 3600000
 export const constants = {
   EVENT_CATEGORY: 10001,
   EVENT_DEV_CATEGORY: 20001,
-  UID: 'uid',
   MOBILE_PLATFORM_CODE: 16,
   WEB_PLATFORM_CODE: 70,
   EVENT_PATH: 'Event_Path',

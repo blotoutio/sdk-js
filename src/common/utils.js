@@ -2,7 +2,6 @@ import { constants } from './config'
 import { getSession } from '../storage'
 import { checkEventsInterval, getStore, setStore } from '../event/storage'
 import { updateRoot } from '../storage/store'
-import { getTempUseValue } from '../storage/sharedPreferences'
 import { createSessionObject } from '../session/utils'
 import { syncPreviousDateEvents, setSyncEventsInterval } from '../event'
 import { checkManifest, getManifestVariable } from '../manifest'
@@ -11,6 +10,7 @@ import { getDomain } from './domainUtil'
 import { getStringDate } from './timeUtil'
 import { getPreviousDateData } from '../event/session'
 import { resetPreviousDate } from '../session/navigation'
+import { getUID } from './uuidUtil'
 
 export const createDaySchema = (session) => {
   const sessions = {}
@@ -27,9 +27,7 @@ export const createDaySchema = (session) => {
 }
 
 export const getMid = () => {
-  const domainName = getDomain()
-  const userID = getTempUseValue(constants.UID)
-  return `${domainName}-${userID}-${Date.now()}`
+  return `${getDomain()}-${getUID()}-${Date.now()}`
 }
 
 export const debounce = (func, delay) => {

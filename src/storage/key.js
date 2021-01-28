@@ -26,3 +26,12 @@ export const setRootKey = (key) => {
   }
   rootKey = key
 }
+
+export const getRootUID = () => {
+  let key = constants.ROOT_KEY
+  if (rootKey) {
+    key = rootKey
+  }
+
+  return `sdk${key}User`
+}

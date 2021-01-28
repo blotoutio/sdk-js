@@ -2,9 +2,9 @@ import { getSession } from '../storage'
 import { constants, systemEventCode } from '../common/config'
 import { getMid, getSystemMergeCounter } from '../common/utils'
 import { getPreviousDateString, getStringDate } from '../common/timeUtil'
-import { getTempUseValue } from '../storage/sharedPreferences'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getSessionForDate, setSessionForDate } from '../event/session'
+import { getUID } from '../common/uuidUtil'
 
 const getInfoPayload = (date, sessionId) => {
   const session = getSessionForDate(date, sessionId)
@@ -22,7 +22,7 @@ const getInfoPayload = (date, sessionId) => {
 
   const info = {
     mid: getMid(),
-    userid: getTempUseValue(constants.UID),
+    userid: getUID(),
     evn: constants.SESSION_INFO,
     evcs: systemEventCode.sessionInfo,
     evdc: 1,

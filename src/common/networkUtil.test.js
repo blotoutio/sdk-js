@@ -1,5 +1,5 @@
 import { getRequest, postRequest } from './networkUtil'
-import * as storage from '../storage/sharedPreferences'
+import * as uuid from './uuidUtil'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -12,7 +12,7 @@ describe('getRequest', () => {
 
   it('200', async () => {
     jest
-      .spyOn(storage, 'getTempUseValue')
+      .spyOn(uuid, 'getClientToken')
       .mockImplementation(() => 'aosdfkaosfkoaskfo23e23')
 
     const result = { success: true }
@@ -91,7 +91,7 @@ describe('postRequest', () => {
 
   it('200', async () => {
     jest
-      .spyOn(storage, 'getTempUseValue')
+      .spyOn(uuid, 'getClientToken')
       .mockImplementation(() => 'aosdfkaosfkoaskfo23e23')
 
     const result = { success: true }

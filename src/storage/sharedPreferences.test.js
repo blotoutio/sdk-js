@@ -3,97 +3,10 @@ import * as domain from '../common/domainUtil'
 import {
   getCustomUseValue,
   getNormalUseValue,
-  getTempUseValue,
   setCustomUseValue,
   setNormalUseValue,
-  setTempUseValue,
 } from './sharedPreferences'
 import { updateRoot } from './store'
-
-describe('getTempUseValue', () => {
-  it('null', () => {
-    const result = getTempUseValue()
-    expect(result).toBeNull()
-  })
-
-  it('key is not present', () => {
-    const spyGet = jest
-      .spyOn(storage, 'getStoreByDomain')
-      .mockImplementation(() => ({
-        sharedPreference: {
-          tempUse: {
-            data: true,
-          },
-        },
-      }))
-
-    const result = getTempUseValue('foo')
-    expect(result).toStrictEqual(undefined)
-    spyGet.mockRestore()
-  })
-
-  it('ok', () => {
-    const spyGet = jest
-      .spyOn(storage, 'getStoreByDomain')
-      .mockImplementation(() => ({
-        sharedPreference: {
-          tempUse: {
-            data: true,
-          },
-        },
-      }))
-
-    const result = getTempUseValue('data')
-    expect(result).toBe(true)
-    spyGet.mockRestore()
-  })
-})
-
-describe('setTempUseValue', () => {
-  it('null', () => {
-    setTempUseValue()
-  })
-
-  it('tempUse not present', () => {
-    const domainName = 'test.com'
-    const spyDomain = jest
-      .spyOn(domain, 'getDomain')
-      .mockImplementation(() => domainName)
-    const obj = {
-      domains: [domainName],
-      [domainName]: {
-        sharedPreference: {},
-      },
-    }
-    updateRoot(obj)
-
-    setTempUseValue('data', true)
-    const result = getTempUseValue('data')
-    expect(result).toBeNull()
-    spyDomain.mockRestore()
-  })
-
-  it('ok', () => {
-    const domainName = 'test.com'
-    const spyDomain = jest
-      .spyOn(domain, 'getDomain')
-      .mockImplementation(() => domainName)
-    const obj = {
-      domains: [domainName],
-      [domainName]: {
-        sharedPreference: {
-          tempUse: {},
-        },
-      },
-    }
-    updateRoot(obj)
-
-    setTempUseValue('data', true)
-    const result = getTempUseValue('data')
-    expect(result).toBe(true)
-    spyDomain.mockRestore()
-  })
-})
 
 describe('getNormalUseValue', () => {
   it('null', () => {

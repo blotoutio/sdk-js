@@ -26,18 +26,17 @@ import { addSessionInfoEvent, updatePreviousDayEndTime } from '../session'
 import { getNotSynced } from '../session/utils'
 import { getReferrerUrlOfDateSession } from '../common/referrerUtil'
 import { getStringDate } from '../common/timeUtil'
-import { getTempUseValue } from '../storage/sharedPreferences'
 import { getPayload } from '../common/payloadUtil'
 import { setDNTEvent } from '../session/system'
+import { getUID } from '../common/uuidUtil'
 
 let globalEventInterval = null
 
 const getNavigationPayloadArr = (navigations, navigationsTime) => {
-  const UID = getTempUseValue(constants.UID)
   return [
     {
       mid: getMid(),
-      userid: UID,
+      userid: getUID(),
       evn: constants.NAVIGATION,
       evcs: systemEventCode[constants.NAVIGATION],
       evdc: 1,
