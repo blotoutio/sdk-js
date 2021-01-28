@@ -1,4 +1,4 @@
-import { setEvent } from '../session'
+import { setEvent } from '../'
 
 export const offline = (window) => {
   const eventName = 'offline'

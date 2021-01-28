@@ -53,7 +53,6 @@ export const systemEventCode = {
   dnt: 11502,
   session: 11507,
   hover: 11508,
-  hoverc: 11509,
   scroll: 11129,
   sessionInfo: 11024,
   sdk_start: 11130,
@@ -66,7 +65,6 @@ export const highFreqEvents = [
   'focus',
   'blur',
   'keypress',
-  'hoverc',
   'touchend',
 ]
 export const dataEncryptionEnabled = true

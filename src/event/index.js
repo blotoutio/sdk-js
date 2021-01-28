@@ -1,35 +1,11 @@
-import { setDevEvent, setEvent } from './session'
-import { getEventPayload } from './utils'
-import { constants } from '../common/config'
-import { getManifestUrl } from '../common/endPointUrlUtil'
-import { postRequest } from '../common/networkUtil'
+import { getEventPayload, getSelector, sendEvent } from './utils'
+import { constants, highFreqEvents, isHighFreqEventOff } from '../common/config'
 import { error } from '../common/logUtil'
+import { createDevEvent, createEvent } from './create'
 import { getVariable } from '../common/manifest'
 import { encryptRSA } from '../common/securityUtil'
-import { getPayload } from '../common/payloadUtil'
 
-export const sendPIIPHIEvent = (events, isPII) => {
-  if (events && events.length === 0) {
-    return
-  }
-
-  const key = isPII ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
-  const eventsArr = getEventPayload(events)
-  const publicKey = getVariable(key)
-  const obj = encryptRSA(publicKey, JSON.stringify(eventsArr))
-
-  const payload = getPayload(events)
-
-  if (isPII) {
-    payload.pii = obj
-  } else {
-    payload.phi = obj
-  }
-
-  postRequest(getManifestUrl(), JSON.stringify(payload)).catch(error)
-}
-
-export const mapIDEvent = (id, provider, data) => {
+export const mapID = (id, provider, data) => {
   if (!id) {
     error('ID mapping is missing id')
     return
@@ -41,10 +17,50 @@ export const mapIDEvent = (id, provider, data) => {
 
   data.map_id = id
   data.map_provider = provider
-
   setDevEvent(constants.MAP_ID_EVENT, data, constants.MAP_ID_EVENT_CODE)
 }
 
-export const sendStartEvent = () => {
+export const setStartEvent = () => {
   setEvent('sdk_start')
+}
+
+export const setEvent = function (eventName, event) {
+  if (
+    !eventName ||
+    (isHighFreqEventOff && highFreqEvents.includes(eventName))
+  ) {
+    return
+  }
+
+  const objectName = event && getSelector(event.target)
+
+  const info = createEvent(eventName, objectName, event)
+  sendEvent(info)
+}
+
+export const setDevEvent = (eventName, data, eventCode = null) => {
+  if (!eventName) {
+    return
+  }
+  const event = createDevEvent(eventName, null, data, eventCode)
+  sendEvent(event)
+}
+
+export const setPersonalEvent = (eventName, data, isPII = false) => {
+  if (!eventName) {
+    return
+  }
+  const event = createDevEvent(eventName, null, data)
+  const key = isPII ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
+  const eventPayload = getEventPayload(event)
+  const publicKey = getVariable(key)
+  const obj = encryptRSA(publicKey, JSON.stringify([eventPayload]))
+
+  const extra = {}
+  if (isPII) {
+    extra.pii = obj
+  } else {
+    extra.phi = obj
+  }
+  sendEvent(event, extra)
 }

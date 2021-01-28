@@ -1,5 +1,5 @@
 import { getRequest, postRequest } from './networkUtil'
-import * as uuid from './uuidUtil'
+import * as uuid from './uidUtil'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))

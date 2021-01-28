@@ -1,4 +1,4 @@
-import { setEvent } from '../session'
+import { setEvent } from '../'
 
 export const dragStart = (window) => {
   const eventName = 'dragstart'

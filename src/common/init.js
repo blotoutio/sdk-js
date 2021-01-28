@@ -3,11 +3,11 @@ import { setUrl } from './endPointUrlUtil'
 import * as log from './logUtil'
 import { pullManifest } from './manifest'
 import { setReferrer } from './referrerUtil'
-import { sendStartEvent } from '../event'
-import { setClientToken, setUID } from './uuidUtil'
+import { setStartEvent } from '../event'
+import { setClientToken, setUID } from './uidUtil'
 import { setCustomDomain } from './domainUtil'
 import { setRootKey } from '../storage/key'
-import { checkAndGetSessionId } from '../session/utils'
+import { checkAndGetSessionId } from '../storage'
 
 import { DNT } from './utils'
 
@@ -37,7 +37,7 @@ export const init = (preferences) => {
   checkAndGetSessionId()
   setUID()
   setReferrer()
-  sendStartEvent()
+  setStartEvent()
   requiredEvents(window)
 
   pullManifest()

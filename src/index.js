@@ -1,8 +1,6 @@
-import { setDevEvent } from './event/session'
-import { mapIDEvent } from './event'
+import { mapID, setDevEvent, setPersonalEvent } from './event'
 import { init } from './common/init'
-import { getUID } from './common/uuidUtil'
-import { setPersonalEvent } from './session/personal'
+import { getUID } from './common/uidUtil'
 ;(function () {
   const handleFunction = (arg) => {
     const sliced = [].slice.call(arg)
@@ -40,7 +38,7 @@ import { setPersonalEvent } from './session/personal'
   }
 
   SDK.prototype.mapID = (id, provider, data = null) => {
-    mapIDEvent(id, provider, data)
+    mapID(id, provider, data)
   }
 
   let stubs = []

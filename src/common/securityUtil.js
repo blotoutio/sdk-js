@@ -3,16 +3,14 @@ import SHA1 from 'crypto-js/sha1'
 import base64 from 'crypto-js/enc-base64'
 import AES from 'crypto-js/aes'
 import PBKDF2 from 'crypto-js/pbkdf2'
-import utf8 from 'crypto-js/enc-utf8'
 import { error } from './logUtil'
-import { getLocal } from '../storage'
+import { getLocal, setLocal } from '../storage'
 import { dataEncryptionEnabled } from './config'
-import { getUUID } from './uuidUtil'
+import { convertTo64CharUUID, getUUID } from './uidUtil'
 import { getRootIndex } from '../storage/key'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
 
 const getUserIndex = () => {
-  // TODO we need to generate root index
   const sdkIndexData = getLocal(getRootIndex())
   if (!sdkIndexData) {
     return ''
@@ -29,40 +27,7 @@ const getUserIndex = () => {
   return SHA256Encode(realIndex)
 }
 
-const generate256Key = (key) => {
-  if (key === '' || key == null || key.length < 62) {
-    key = getUserIndex()
-  }
-
-  if (!key) {
-    return {
-      key256: '',
-      iv: '',
-    }
-  }
-
-  const keyStr = key.substr(5, 43) // "6Le0DgMTAAAAANokdEEial"; //length=22 (16 Bytes) 32 (24 bytes) and 43 (32 Bytes)
-  let salt = key.substr(20, 22) // "mHGFxENnZLbienLyANoi.e"; //length=22
-  let iv = key.substr(40, 22)
-
-  salt = base64.parse(salt)
-  iv = base64.parse(iv)
-
-  return {
-    key256: PBKDF2(keyStr, salt, { keySize: 256 / 32, iterations: 1000 }),
-    iv,
-  }
-}
-
-export const SHA256Encode = function (data) {
-  if (!data) {
-    return ''
-  }
-
-  return SHA256(data).toString()
-}
-
-export const SHA1Encode = function (data) {
+const SHA1Encode = function (data) {
   if (!data) {
     return ''
   }
@@ -70,7 +35,7 @@ export const SHA1Encode = function (data) {
   return SHA1(data).toString()
 }
 
-export const encryptAES = (data, passCode) => {
+const encryptAES = (data, passCode) => {
   let { key256, iv } = generate256Key(passCode)
 
   let encryptedString = ''
@@ -91,21 +56,63 @@ export const encryptAES = (data, passCode) => {
   }
 }
 
-export const decryptAES = (encryptedStr, passCode) => {
-  const { key256, iv } = generate256Key(passCode)
+const generate256Key = (key) => {
+  if (key === '' || key == null || key.length < 62) {
+    key = getUserIndex()
+  }
 
-  if (!key256 || !iv) {
+  if (!key) {
+    return {
+      key256: '',
+      iv: '',
+    }
+  }
+
+  const keyStr = key.substr(5, 43)
+  let salt = key.substr(20, 22)
+  let iv = key.substr(40, 22)
+
+  salt = base64.parse(salt)
+  iv = base64.parse(iv)
+
+  return {
+    key256: PBKDF2(keyStr, salt, { keySize: 256 / 32, iterations: 1000 }),
+    iv,
+  }
+}
+
+export const setUserIndex = (userID, isFirstIndex) => {
+  let sdkIndexData = getLocal(getRootIndex())
+  if (sdkIndexData) {
+    if (sdkIndexData.length >= 1056) {
+      userID = convertTo64CharUUID(SHA256Encode(userID))
+      sdkIndexData = userID
+      isFirstIndex = true
+    }
+  } else {
+    userID = convertTo64CharUUID(SHA256Encode(userID))
+    sdkIndexData = userID
+  }
+
+  let prePostUUID = getUUID()
+  if (!isFirstIndex) {
+    prePostUUID = SHA256Encode(prePostUUID)
+    prePostUUID = convertTo64CharUUID(prePostUUID)
+  }
+
+  const idLengthHalf = prePostUUID.length / 2
+  const preUUID = prePostUUID.substr(0, idLengthHalf)
+  const postUUID = prePostUUID.substr(idLengthHalf)
+  const indexStoreStr = preUUID + sdkIndexData + postUUID
+  setLocal(getRootIndex(), indexStoreStr)
+}
+
+export const SHA256Encode = function (data) {
+  if (!data) {
     return ''
   }
 
-  const bytes = AES.decrypt(encryptedStr, key256, { iv })
-  try {
-    return bytes.toString(utf8)
-  } catch (e) {
-    error(e)
-  }
-
-  return ''
+  return SHA256(data).toString()
 }
 
 export const encryptRSA = (publicKey, data) => {

@@ -1,6 +1,6 @@
 import { debounce } from '../../common/utils'
 import { constants } from '../../common/config'
-import { setEvent } from '../session'
+import { setEvent } from '../'
 
 export const pagehide = (window) => {
   const eventName = 'onpagehide' in self ? 'pagehide' : 'unload'

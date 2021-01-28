@@ -1,5 +1,6 @@
-import { createDevEventInfoObj } from './utils'
+import { createDevEvent } from './create'
 import * as utilsGeneral from '../common/utils'
+import { codeForDevEvent } from './utils'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
@@ -10,50 +11,33 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
-// TODO
-// describe('codeForCustomCodifiedEvent', () => {
-//   it('null', () => {
-//     expect(codeForCustomCodifiedEvent()).toBe(0)
-//   })
-//
-//   it('name has spaces', () => {
-//     expect(codeForCustomCodifiedEvent('some awesome event')).toBe(24016)
-//   })
-//
-//   it('name with underscore', () => {
-//     expect(codeForCustomCodifiedEvent('awesome_event')).toBe(24008)
-//   })
-//
-//   it('non ascii name', () => {
-//     expect(codeForCustomCodifiedEvent('目_awesome_event')).toBe(24049)
-//   })
-//
-//   it('long name', () => {
-//     expect(
-//       codeForCustomCodifiedEvent(
-//         'event event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_event'
-//       )
-//     ).toBe(23962)
-//   })
-//
-//   it('event already exists with the same name for different events', () => {
-//     jest.spyOn(storage, 'getNormalUseValue').mockImplementation(() => ({
-//       event1: 24008,
-//       event2: 21545,
-//     }))
-//     expect(codeForCustomCodifiedEvent('awesome_event')).toBe(24009)
-//   })
-//
-//   it('event already exists with the same name same event', () => {
-//     jest.spyOn(storage, 'getNormalUseValue').mockImplementation(() => ({
-//       awesome_event: 24008,
-//       event2: 21545,
-//     }))
-//     expect(codeForCustomCodifiedEvent('awesome_event')).toBe(24008)
-//   })
-// })
+describe('codeForDevEvent', () => {
+  it('null', () => {
+    expect(codeForDevEvent()).toBe(0)
+  })
 
-describe('createDevEventInfoObj', () => {
+  it('name has spaces', () => {
+    expect(codeForDevEvent('some awesome event')).toBe(24016)
+  })
+
+  it('name with underscore', () => {
+    expect(codeForDevEvent('awesome_event')).toBe(24008)
+  })
+
+  it('non ascii name', () => {
+    expect(codeForDevEvent('目_awesome_event')).toBe(24049)
+  })
+
+  it('long name', () => {
+    expect(
+      codeForDevEvent(
+        'event event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_event'
+      )
+    ).toBe(23962)
+  })
+})
+
+describe('createDevEvent', () => {
   let spyMid
 
   beforeEach(() => {
@@ -67,30 +51,23 @@ describe('createDevEventInfoObj', () => {
   })
 
   it('null', () => {
-    const result = createDevEventInfoObj()
-    expect(result).toStrictEqual({
-      evcs: 0,
-      mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
-      sentToServer: false,
-      tstmp: 1580775120000,
-      urlPath: 'http://localhost/',
-    })
+    const result = createDevEvent()
+    expect(result).toBeNull()
   })
 
   it('with just event', () => {
-    const result = createDevEventInfoObj('some_event')
+    const result = createDevEvent('some_event')
     expect(result).toStrictEqual({
       evcs: 24146,
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
       name: 'some_event',
-      sentToServer: false,
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     })
   })
 
   it('everything', () => {
-    const result = createDevEventInfoObj('some_event', 'objName', {
+    const result = createDevEvent('some_event', 'objName', {
       custom: true,
     })
     expect(result).toStrictEqual({
@@ -101,14 +78,13 @@ describe('createDevEventInfoObj', () => {
         custom: true,
       },
       objectName: 'objName',
-      sentToServer: false,
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     })
   })
 
   it('with custom code', () => {
-    const result = createDevEventInfoObj(
+    const result = createDevEvent(
       'some_event',
       'objName',
       { custom: true },
@@ -122,7 +98,6 @@ describe('createDevEventInfoObj', () => {
       objectName: 'objName',
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
       name: 'some_event',
-      sentToServer: false,
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     })

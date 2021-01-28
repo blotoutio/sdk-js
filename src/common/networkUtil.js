@@ -1,4 +1,4 @@
-import { getClientToken } from './uuidUtil'
+import { getClientToken } from './uidUtil'
 
 export async function getRequest(url) {
   if (!url) {

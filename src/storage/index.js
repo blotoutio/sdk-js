@@ -1,3 +1,5 @@
+import { constants } from '../common/config'
+
 export const setLocal = (name, data) => {
   if (!name) {
     return
@@ -26,6 +28,13 @@ export const getSession = (name) => {
   return window.sessionStorage.getItem(name)
 }
 
-export const removeSession = (key) => {
-  window.sessionStorage.removeItem(key)
+export const checkAndGetSessionId = () => {
+  let sessionId = getSession(constants.SESSION_ID)
+
+  if (!sessionId) {
+    sessionId = Date.now()
+    setSession(constants.SESSION_ID, sessionId)
+  }
+
+  return sessionId
 }

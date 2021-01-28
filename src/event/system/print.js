@@ -1,4 +1,4 @@
-import { setEvent } from '../session'
+import { setEvent } from '../'
 
 export const print = (window) => {
   const eventName = 'afterprint'

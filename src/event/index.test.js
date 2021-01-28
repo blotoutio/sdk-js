@@ -1,7 +1,6 @@
-import * as eventSession from './session'
 import * as eventUtils from './utils'
 import * as storage from '../storage'
-import { mapIDEvent, sendStartEvent } from '.'
+import { mapID, setStartEvent } from '.'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -21,10 +20,10 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
-describe('mapIDEvent', () => {
+describe('mapID', () => {
   let spySet
   beforeEach(() => {
-    spySet = jest.spyOn(eventSession, 'setDevEvent').mockImplementation()
+    spySet = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
   })
 
   afterEach(() => {
@@ -32,50 +31,50 @@ describe('mapIDEvent', () => {
   })
 
   it('null', () => {
-    mapIDEvent()
+    mapID()
     expect(spySet).toBeCalledTimes(0)
   })
 
   it('no data', () => {
-    mapIDEvent('sdfasfasdfds', 'service')
-    expect(spySet).toBeCalledWith(
-      'map_id',
-      {
-        map_id: 'sdfasfasdfds',
-        map_provider: 'service',
-      },
-      21001
-    )
+    mapID('sdfasfasdfds', 'service')
+    expect(spySet).toBeCalledWith({
+      evcs: 21001,
+      metaInfo: { map_id: 'sdfasfasdfds', map_provider: 'service' },
+      mid: 'localhost-null-1580775120000',
+      name: 'map_id',
+      tstmp: 1580775120000,
+      urlPath: 'http://localhost/',
+    })
   })
 
   it('with data', () => {
-    mapIDEvent('sdfasfasdfds', 'service', { custom: true })
-    expect(spySet).toBeCalledWith(
-      'map_id',
-      {
+    mapID('sdfasfasdfds', 'service', { custom: true })
+    expect(spySet).toBeCalledWith({
+      evcs: 21001,
+      metaInfo: {
+        custom: true,
         map_id: 'sdfasfasdfds',
         map_provider: 'service',
-        custom: true,
       },
-      21001
-    )
+      mid: 'localhost-null-1580775120000',
+      name: 'map_id',
+      tstmp: 1580775120000,
+      urlPath: 'http://localhost/',
+    })
   })
 })
 
-describe('sendStartEvent', () => {
+describe('setStartEvent', () => {
   it('ok', () => {
-    const spySend = jest.spyOn(eventUtils, 'sendEvents').mockImplementation()
-    sendStartEvent()
-    expect(spySend).toBeCalledWith([
-      {
-        evcs: 11130,
-        mid: 'localhost-null-1580775120000',
-        name: 'sdk_start',
-        sentToServer: false,
-        tstmp: 1580775120000,
-        urlPath: 'http://localhost/',
-      },
-    ])
+    const spySend = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
+    setStartEvent()
+    expect(spySend).toBeCalledWith({
+      evcs: 11130,
+      mid: 'localhost-null-1580775120000',
+      name: 'sdk_start',
+      tstmp: 1580775120000,
+      urlPath: 'http://localhost/',
+    })
     spySend.mockRestore()
   })
 })

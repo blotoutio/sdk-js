@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid'
-import { SHA256Encode } from './securityUtil'
+import { setUserIndex, SHA256Encode } from './securityUtil'
 import { getLocal, setLocal } from '../storage'
 import { getRootUID } from '../storage/key'
 
 let staticUserID = null
 let clientToken = null
 
-const userIDUUID = () => {
+const checkUID = () => {
   if (staticUserID) {
     return staticUserID
   }
@@ -52,11 +52,13 @@ export const convertTo64CharUUID = (stringToConvert) => {
 }
 
 export const setUID = () => {
-  userIDUUID()
+  const firstTime = !getLocal(getRootUID())
+  checkUID()
+  setUserIndex(staticUserID, firstTime)
 }
 
 export const getUID = () => {
-  return userIDUUID()
+  return checkUID()
 }
 
 export const getUUID = () => uuidv4()

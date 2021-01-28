@@ -1,4 +1,4 @@
-import { setEvent } from '../session'
+import { setEvent } from '../'
 
 export const hashChange = (window) => {
   const eventName = 'hashchange'

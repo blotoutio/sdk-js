@@ -1,4 +1,4 @@
-import { setEvent } from '../session'
+import { setEvent } from '../'
 
 export const touchEnd = (window) => {
   const eventName = 'touchend'

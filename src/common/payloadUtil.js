@@ -35,85 +35,83 @@ const getPLF = (deviceType, OS) => {
   return constants.WEB_PLATFORM_CODE
 }
 
-const createMetaObject = () => {
-  const parsedUA = parser(navigator.userAgent)
+const getMeta = () => {
+  const ua = navigator.userAgent
+  const parsedUA = parser(ua)
   const browser = navigator.brave ? 'Brave' : parsedUA.browser.name || 'unknown'
-
-  return {
-    plf: getPLF(parsedUA.device.type, parsedUA.os.name),
-    domain: getDomain(),
-    osv: parsedUA.os.version || '0',
-    hostOS: parsedUA.os.name || '',
-    browser,
-    version: parsedUA.browser.version || '0.0.0.0',
-    dplatform: parsedUA.device.type || 'unknown',
-    ua: navigator.userAgent,
-    sdkVersion: process.env.PACKAGE_VERSION,
-    timeZoneOffset: new Date().getTimezoneOffset(),
-  }
-}
-
-const getMetaPayload = () => {
-  // TODO this should be simplified in one function
-  const meta = createMetaObject()
+  const OS = parsedUA.os.name || ''
 
   let deviceGrain = getVariable(constants.EVENT_DEVICEINFO_GRAIN)
   if (deviceGrain == null) {
     deviceGrain = constants.DEFAULT_EVENT_DEVICEINFO_GRAIN
   }
-  let dmftStr = 'unknown'
-  if (meta.hostOS === 'Mac OS') {
-    dmftStr = 'Apple'
-  } else if (meta.hostOS === 'Windows') {
-    dmftStr = 'Microsoft'
-  } else if (meta.hostOS === 'Linux') {
-    dmftStr = 'Ubuntu'
-  } else if (meta.hostOS === 'UNIX') {
-    dmftStr = 'UNIX'
+
+  let manufacture
+  switch (OS) {
+    case 'Mac OS': {
+      manufacture = 'Apple'
+      break
+    }
+    case 'Windows': {
+      manufacture = 'Microsoft'
+      break
+    }
+    case 'Linux': {
+      manufacture = 'Ubuntu'
+      break
+    }
+    case 'UNIX': {
+      manufacture = 'UNIX'
+      break
+    }
+    default: {
+      manufacture = 'unknown'
+      break
+    }
   }
-  const isIntelBased =
-    meta.ua.includes('Intel') || meta.ua.indexOf('Intel') !== -1
+
+  const isIntelBased = ua.includes('Intel') || ua.indexOf('Intel') !== -1
   let deviceModel = 'Intel Based'
-  const dplatform = meta.dplatform
-  if (dplatform === 'mobile' || dplatform === 'tablet') {
+  const platform = parsedUA.device.type || 'unknown'
+  if (platform === 'mobile' || platform === 'tablet') {
     if (!isIntelBased) {
       deviceModel = 'ARM Based'
     }
-  } else if (dplatform === 'desktop') {
+  } else if (platform === 'desktop') {
     if (!isIntelBased) {
       deviceModel = 'AMD Based'
     }
   }
   const obj = {}
   if (deviceGrain >= 1) {
-    obj.plf = meta.plf
-    obj.appn = meta.domain
-    obj.osv = meta.osv
-    obj.appv = meta.version
-    obj.dmft = dmftStr
-    obj.dm = deviceModel // Should be laptop model but for now this is ok.
-    obj.bnme = meta.browser
-    obj.dplatform = dplatform
-    obj.sdkv = meta.sdkVersion
-    obj.tz_offset = meta.timeZoneOffset
+    obj.plf = getPLF(parsedUA.device.type, parsedUA.os.name)
+    obj.appn = getDomain()
+    obj.osv = parsedUA.os.version || '0'
+    obj.appv = parsedUA.browser.version || '0.0.0.0'
+    obj.dmft = manufacture
+    obj.dm = deviceModel
+    obj.bnme = browser
+    obj.dplatform = platform
+    obj.sdkv = process.env.PACKAGE_VERSION
+    obj.tz_offset = new Date().getTimezoneOffset()
   }
 
   if (deviceGrain >= 2) {
-    obj.osn = meta.hostOS
+    obj.osn = OS
   }
 
   return obj
 }
 
-export const getPayload = (events) => {
+export const getPayload = (event) => {
   const payload = {}
-  const meta = getMetaPayload()
+  const meta = getMeta()
   if (meta && Object.keys(meta).length !== 0) {
     payload.meta = meta
   }
 
-  if (events && events.length > 0) {
-    payload.events = events
+  if (event) {
+    payload.events = [event]
   }
 
   return payload

@@ -1,4 +1,4 @@
-import { setEvent } from '../session'
+import { setEvent } from '../'
 
 export const keyPressed = (window) => {
   const eventName = 'keypress'
