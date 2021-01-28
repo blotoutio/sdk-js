@@ -11,7 +11,6 @@ import { hashChange } from './hash'
 import {
   resize,
   pagehide,
-  beforeUnload,
   domActive,
   domSubTreeModified,
   scroll,
@@ -55,7 +54,6 @@ export const optionalEvents = (window) => {
   hashChange(window)
 
   resize(window)
-  beforeUnload(window)
   domActive(window)
   domSubTreeModified(window)
   scroll(window)

@@ -1,12 +1,8 @@
 import { debounce } from '../../common/utils'
 import { constants } from '../../common/config'
-import { getSession } from '../../storage'
-import { getSessionForDate, setEvent } from '../session'
+import { setEvent } from '../session'
 import { setViewPort } from '../../session/system'
 import { updateNavPath, updateNavTime } from '../../session/navigation'
-import { updateEndTime } from '../../session'
-import { sendBounceEvent } from '../.'
-import { getStringDate } from '../../common/timeUtil'
 
 export const resize = (window) => {
   const eventName = 'resize'
@@ -25,36 +21,6 @@ export const pagehide = (window) => {
     updateNavTime()
     updateNavPath()
     setEvent(eventName, e)
-  })
-}
-
-export const beforeUnload = (window) => {
-  window.addEventListener('beforeunload', function (event) {
-    updateEndTime()
-    const date = getStringDate()
-    const sessionId = getSession(constants.SESSION_ID)
-    const session = getSessionForDate(date, sessionId)
-    if (!session) {
-      return
-    }
-
-    const clkIndex = session.eventsData.eventsInfo
-    const bncIndex = session.eventsData.eventsInfo.findIndex(
-      (obj) => obj.name === constants.BOUNCE
-    )
-    if (bncIndex !== -1 || clkIndex !== -1) {
-      return
-    }
-
-    const startTime = session.startTime
-    const diffTime = Date.now() - startTime
-    const diffTimeInSecs = Math.floor(diffTime / 1000).findIndex(
-      (obj) => obj.name === 'click'
-    )
-    if (diffTimeInSecs <= 2) {
-      setEvent(constants.BOUNCE, event)
-      sendBounceEvent(date)
-    }
   })
 }
 

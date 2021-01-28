@@ -3,7 +3,6 @@ import {
   createEventInfoObj,
   getSessionForDate,
   setDevEvent,
-  setEvent,
   setSessionForDate,
 } from './session'
 import {
@@ -285,31 +284,6 @@ export const syncPreviousDateEvents = () => {
   syncEvents(sessionId, date)
 }
 
-const getBounceAndSessionEvents = (session) => {
-  return session.eventsData.eventsInfo.filter(
-    (evt) => evt.name === constants.BOUNCE || constants.SESSION
-  )
-}
-
-export const sendBounceEvent = (date) => {
-  const sessionId = getSession(constants.SESSION_ID)
-  const session = getSessionForDate(date, sessionId)
-  if (!session) {
-    return
-  }
-
-  const events = getBounceAndSessionEvents(session)
-  const eventsArr = getEventPayloadArr(events, date, sessionId)
-  const payload = getPayload(session, eventsArr)
-
-  const url = getManifestUrl()
-  postRequest(url, JSON.stringify(payload))
-    .then(() => {
-      setEventsSentToServer(events, date, sessionId)
-    })
-    .catch(error)
-}
-
 export const mapIDEvent = (id, provider, data) => {
   if (!id) {
     error('ID mapping is missing id')
@@ -337,18 +311,5 @@ export const sendStartEvent = () => {
     ) {
       setDNTEvent()
     }
-  }
-
-  const sessionId = getSession(constants.SESSION_ID)
-  const session = getSessionForDate(getStringDate(), sessionId)
-  if (!session) {
-    return
-  }
-
-  const sessionIndex = session.eventsData.eventsInfo.findIndex(
-    (obj) => obj.name === constants.SESSION
-  )
-  if (sessionIndex === -1) {
-    setEvent(constants.SESSION)
   }
 }
