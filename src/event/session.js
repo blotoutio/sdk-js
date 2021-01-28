@@ -6,7 +6,6 @@ import {
 } from '../common/config'
 import {
   getMid,
-  getNotSyncedDate,
   getObjectTitle,
   getSelector,
   setNewDateObject,
@@ -14,7 +13,7 @@ import {
 import { getSession } from '../storage'
 import { getEventsByDate, getStore, setEventsByDate } from './storage'
 import { updatePreviousDayEndTime } from '../session'
-import { getNotSynced, maybeSync } from '../session/utils'
+import { maybeSync } from '../session/utils'
 import { createDevEventInfoObj } from './utils'
 import { getStringDate } from '../common/timeUtil'
 
@@ -131,20 +130,6 @@ export const createEventInfoObj = (eventName, objectName, event) => {
   }
 
   return data
-}
-
-export const getPreviousDateData = () => {
-  const date = getNotSyncedDate()
-  const sdkData = getEventsByDate(date)
-  if (!sdkData || !sdkData.sessions) {
-    return null
-  }
-
-  const sessionId = getNotSynced(sdkData.sessions)
-  if (!sessionId) {
-    return null
-  }
-  return sdkData.sessions[sessionId].eventsData
 }
 
 export const getSessionForDate = (date, sessionId) => {

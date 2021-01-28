@@ -79,12 +79,6 @@ export interface Sessions {
     eventsInfo: {
       [index: number]: Info
     }
-    navigationPath: {
-      [index: number]: string
-    }
-    stayTimeBeforeNav: {
-      [index: number]: number
-    }
     devCodifiedEventsInfo: {
       [index: number]: DevEventInfo
     }

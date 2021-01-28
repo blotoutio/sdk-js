@@ -43,7 +43,6 @@ describe('checkAndGetSessionId', () => {
     const result = checkAndGetSessionId()
     expect(result).toBe(id)
     expect(spySet).toHaveBeenCalledWith('sessionId', id)
-    expect(spySet).toHaveBeenCalledWith('session_start_time', id)
     spySet.mockRestore()
   })
 
@@ -177,9 +176,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -220,9 +217,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -263,9 +258,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -307,9 +300,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -351,9 +342,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -395,9 +384,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -439,9 +426,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -483,9 +468,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -527,9 +510,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -571,9 +552,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {
@@ -610,9 +589,7 @@ describe('createSessionObject', () => {
       eventsData: {
         devCodifiedEventsInfo: [],
         eventsInfo: [],
-        navigationPath: ['http://localhost/'],
         sentToServer: false,
-        stayTimeBeforeNav: [],
       },
       lastServerSyncTime: 0,
       meta: {

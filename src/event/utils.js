@@ -217,31 +217,6 @@ export const getEventPayloadArr = (arr, date, sessionId) => {
   return result
 }
 
-export const getNavigationTime = (sessionId, date) => {
-  const session = getSessionForDate(date, sessionId)
-  if (!session || !session.eventsData) {
-    return
-  }
-  const eventsData = session.eventsData
-  const sessionStartTime = session.startTime
-  const navigationsTime = eventsData.stayTimeBeforeNav
-
-  if (!navigationsTime || navigationsTime.length === 0) {
-    return
-  }
-
-  if (navigationsTime[0] - sessionStartTime < 0) {
-    return navigationsTime
-  }
-
-  return navigationsTime.map((val, index) => {
-    if (index === 0) {
-      return Math.ceil((val - sessionStartTime) / 1000)
-    }
-    return Math.ceil((val - navigationsTime[index - 1]) / 1000)
-  })
-}
-
 export const sendEvents = (arr) => {
   const date = getStringDate()
   const sessionId = getSession(constants.SESSION_ID)

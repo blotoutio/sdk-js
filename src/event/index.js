@@ -1,4 +1,4 @@
-import { getMid, getNotSyncedDate, setNewDateObject } from '../common/utils'
+import { getNotSyncedDate, setNewDateObject } from '../common/utils'
 import {
   createEventInfoObj,
   getSessionForDate,
@@ -9,69 +9,23 @@ import {
   eventsChunkArr,
   eventSync,
   getEventPayloadArr,
-  getNavigationTime,
   sendEvents,
 } from './utils'
 import { getSession } from '../storage'
-import { callInterval, constants, systemEventCode } from '../common/config'
+import { callInterval, constants } from '../common/config'
 import { getEventsByDate, getStore } from './storage'
 import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
 import { getManifestVariable } from '../manifest'
 import { encryptRSA } from '../common/securityUtil'
-import { addSessionInfoEvent, updatePreviousDayEndTime } from '../session'
+import { updatePreviousDayEndTime } from '../session'
 import { getNotSynced } from '../session/utils'
 import { getStringDate } from '../common/timeUtil'
 import { getPayload } from '../common/payloadUtil'
 import { setDNTEvent } from '../session/system'
-import { getUID } from '../common/uuidUtil'
 
 let globalEventInterval = null
-
-const getNavigationPayloadArr = (navigations, navigationsTime) => {
-  return [
-    {
-      mid: getMid(),
-      userid: getUID(),
-      evn: constants.NAVIGATION,
-      evcs: systemEventCode[constants.NAVIGATION],
-      scrn: window.location.href,
-      evt: Date.now(),
-      nmo: 1,
-      nvg: navigations,
-      nvg_tm: navigationsTime,
-    },
-  ]
-}
-
-const sendNavigation = (date, sessionId) => {
-  const session = getSessionForDate(date, sessionId)
-  if (!session || !session.eventsData) {
-    return
-  }
-
-  const eventsData = session.eventsData
-  const navigations =
-    eventsData.navigationPath && eventsData.navigationPath.slice()
-  const navigationsTime = getNavigationTime(sessionId, date)
-
-  if (
-    !navigations ||
-    !navigationsTime ||
-    navigations.length === 0 ||
-    navigations.length !== navigationsTime.length
-  ) {
-    return
-  }
-
-  const navEventArr = getNavigationPayloadArr(navigations, navigationsTime)
-  const payload = getPayload(session, navEventArr)
-  const url = getManifestUrl()
-  postRequest(url, JSON.stringify(payload))
-    .then(() => {})
-    .catch(error)
-}
 
 export const sendPIIPHIEvent = (events, date, type) => {
   if (events && events.length === 0) {
@@ -187,14 +141,11 @@ export const syncEvents = (sessionId, date) => {
     date = getStringDate()
   }
 
-  let hasSession = true
   if (!sessionId) {
     sessionId = getSession(constants.SESSION_ID)
-    hasSession = false
   }
 
   let eventsArrayChunk = []
-  let regularEvents = []
   const session = getSessionForDate(date, sessionId)
   if (session && session.eventsData) {
     const { events, devEvents, piiEvents, phiEvents } = getNotSyncedEvents(
@@ -204,17 +155,6 @@ export const syncEvents = (sessionId, date) => {
     sendPIIPHIEvent(piiEvents, date, 'pii')
     sendPIIPHIEvent(phiEvents, date, 'phi')
     eventsArrayChunk = eventsChunkArr(events, devEvents)
-    regularEvents = events
-  }
-
-  if (hasSession) {
-    eventsArrayChunk = addSessionInfoEvent(
-      regularEvents,
-      eventsArrayChunk,
-      date,
-      sessionId
-    )
-    sendNavigation(date, sessionId)
   }
 
   eventsArrayChunk.forEach((arr) => {

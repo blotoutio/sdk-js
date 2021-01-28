@@ -2,7 +2,6 @@ import { debounce } from '../../common/utils'
 import { constants } from '../../common/config'
 import { setEvent } from '../session'
 import { setViewPort } from '../../session/system'
-import { updateNavPath, updateNavTime } from '../../session/navigation'
 
 export const resize = (window) => {
   const eventName = 'resize'
@@ -18,8 +17,6 @@ export const resize = (window) => {
 export const pagehide = (window) => {
   const eventName = 'onpagehide' in self ? 'pagehide' : 'unload'
   window.addEventListener(eventName, function (e) {
-    updateNavTime()
-    updateNavPath()
     setEvent(eventName, e)
   })
 }

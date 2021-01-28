@@ -7,8 +7,6 @@ import { syncPreviousDateEvents, setSyncEventsInterval } from '../event'
 import { checkManifest, getManifestVariable } from '../manifest'
 import { getDomain } from './domainUtil'
 import { getStringDate } from './timeUtil'
-import { getPreviousDateData } from '../event/session'
-import { resetPreviousDate } from '../session/navigation'
 import { getUID } from './uuidUtil'
 
 export const createDaySchema = (session) => {
@@ -40,8 +38,6 @@ export const debounce = (func, delay) => {
 }
 
 export const setNewDateObject = (date, eventStore) => {
-  const { navigationPath, stayTimeBeforeNav } = getPreviousDateData()
-  resetPreviousDate()
   if (checkManifest()) {
     // old date sync events
     syncPreviousDateEvents()
@@ -55,8 +51,6 @@ export const setNewDateObject = (date, eventStore) => {
   }
 
   const session = createSessionObject()
-  session.eventsData.navigationPath = navigationPath
-  session.eventsData.stayTimeBeforeNav = stayTimeBeforeNav
   const sdkObj = createDaySchema(session)
   eventStore[date] = {
     isSynced: false,

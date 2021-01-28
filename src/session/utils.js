@@ -82,8 +82,6 @@ export const checkAndGetSessionId = () => {
   if (!sessionId) {
     sessionId = Date.now()
     setSession(constants.SESSION_ID, sessionId)
-    // To calculate navigation time
-    setSession(constants.SESSION_START_TIME, sessionId)
   }
 
   return sessionId
@@ -122,8 +120,6 @@ export const createSessionObject = () => {
     viewPort: [createViewPortObject()],
     eventsData: {
       eventsInfo: [],
-      navigationPath: [window.location.href],
-      stayTimeBeforeNav: [],
       devCodifiedEventsInfo: [],
       sentToServer: false,
     },

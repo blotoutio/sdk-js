@@ -5,7 +5,6 @@ import * as timeUtil from '../common/timeUtil'
 import * as storageStore from '../storage/store'
 import {
   createEventInfoObj,
-  getPreviousDateData,
   getSessionForDate,
   setDevEvent,
   setEvent,
@@ -385,67 +384,6 @@ describe('setSessionForDate', () => {
           data: true,
         },
       },
-    })
-    spyEvents.mockRestore()
-  })
-})
-
-describe('getPreviousDateData', () => {
-  let spyDate
-  beforeEach(() => {
-    spyDate = jest.spyOn(utils, 'getNotSyncedDate').mockImplementation()
-  })
-
-  afterEach(() => {
-    spyDate.mockRestore()
-  })
-
-  it('null', () => {
-    const result = getPreviousDateData()
-    expect(result).toBeNull()
-  })
-
-  it('sessions is missing', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({}))
-    const result = getPreviousDateData()
-    expect(result).toBeNull()
-    spyEvents.mockRestore()
-  })
-
-  it('nothing to sync', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            eventsData: {
-              sentToServer: true,
-            },
-          },
-        },
-      }))
-    const result = getPreviousDateData()
-    expect(result).toBeNull()
-    spyEvents.mockRestore()
-  })
-
-  it('sync', () => {
-    const spyEvents = jest
-      .spyOn(eventStorage, 'getEventsByDate')
-      .mockImplementation(() => ({
-        sessions: {
-          124123423: {
-            eventsData: {
-              sentToServer: false,
-            },
-          },
-        },
-      }))
-    const result = getPreviousDateData()
-    expect(result).toStrictEqual({
-      sentToServer: false,
     })
     spyEvents.mockRestore()
   })
