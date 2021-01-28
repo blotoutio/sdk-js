@@ -50,7 +50,7 @@ export const systemEventCode = {
   paste: 11103,
   dragstart: 11104,
   dragend: 11105,
-  unload: 11106,
+  pagehide: 11106,
   load: 11107,
   error: 11108,
   abort: 11109,
