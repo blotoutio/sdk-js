@@ -1,7 +1,7 @@
-import { getUrl } from '../common/endPointUrlUtil'
-import { endpoints } from '../common/config'
-import { postRequest } from '../common/networkUtil'
-import { getDomain } from '../common/domainUtil'
+import { getUrl } from './endPointUrlUtil'
+import { endpoints } from './config'
+import { postRequest } from './networkUtil'
+import { getDomain } from './domainUtil'
 
 const removeEmptyValue = (array) => {
   return array.filter((el) => el != null && el !== '')

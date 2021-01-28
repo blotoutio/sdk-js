@@ -1,5 +1,5 @@
 import { constants } from './config'
-import { getVariable } from '../manifest'
+import { getVariable } from './manifest'
 
 const getMetaPayload = (meta) => {
   if (!meta) {

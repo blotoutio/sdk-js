@@ -1,5 +1,5 @@
 import { constants } from '../common/config'
-import { getVariable } from '../manifest'
+import { getVariable } from '../common/manifest'
 import { getMid, getSystemMergeCounter } from '../common/utils'
 import { stringToIntSum } from '../common/securityUtil'
 import {

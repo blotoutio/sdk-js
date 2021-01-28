@@ -1,7 +1,7 @@
 import { getStoreByDomain } from '../storage'
 import { error } from '../common/logUtil'
 import { updateRoot } from '../storage/store'
-import { getVariable } from '../manifest'
+import { getVariable } from '../common/manifest'
 import { constants } from '../common/config'
 
 export const getStore = () => {

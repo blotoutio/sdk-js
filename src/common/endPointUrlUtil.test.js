@@ -1,5 +1,5 @@
 import { setUrl, getUrl, getManifestUrl } from './endPointUrlUtil'
-import * as manifest from '../manifest'
+import * as manifest from './manifest'
 
 describe('get/setUrl', () => {
   it('null', () => {

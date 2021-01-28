@@ -1,7 +1,7 @@
 import { requiredEvents, optionalEvents } from '../event/system'
 import { setUrl } from './endPointUrlUtil'
 import * as log from './logUtil'
-import { pullManifest } from '../manifest'
+import { pullManifest } from './manifest'
 import { setReferrer } from './referrerUtil'
 import { sendStartEvent } from '../event'
 import { setClientToken, setUID } from './uuidUtil'

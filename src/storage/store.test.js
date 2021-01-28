@@ -1,7 +1,6 @@
 import { getRoot, updateRoot } from './store'
 import * as storage from '.'
 import * as init from '../common/init'
-import * as manifest from '../manifest'
 import * as key from './key'
 import * as security from '../common/securityUtil'
 
