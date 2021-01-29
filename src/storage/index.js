@@ -14,6 +14,13 @@ export const getLocal = (name) => {
   return window.localStorage.getItem(name)
 }
 
+export const removeLocal = (name) => {
+  if (!name) {
+    return null
+  }
+  window.localStorage.removeItem(name)
+}
+
 export const setSession = (name, data) => {
   if (!name) {
     return

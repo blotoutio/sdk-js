@@ -6,8 +6,8 @@ import { setReferrer } from './referrerUtil'
 import { setStartEvent } from '../event'
 import { setClientToken, setUID } from './uidUtil'
 import { setCustomDomain } from './domainUtil'
-import { setRootKey } from '../storage/key'
-import { checkAndGetSessionId } from '../storage'
+import { getRootKey, setRootKey } from '../storage/key'
+import { checkAndGetSessionId, removeLocal } from '../storage'
 
 import { DNT } from './utils'
 
@@ -45,4 +45,5 @@ export const init = (preferences) => {
       optionalEvents(window)
     })
     .catch(log.error)
+  removeLocal(getRootKey())
 }

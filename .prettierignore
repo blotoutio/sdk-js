@@ -2,3 +2,5 @@ coverage
 cypress
 dist
 *.md
+demo
+.vercel
