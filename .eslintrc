@@ -20,7 +20,8 @@
     "cy": "readonly",
     "Cypress": "readonly",
     "assert": "readonly",
-    "self": "readonly"
+    "self": "readonly",
+    "Blob": "readonly"
   },
   "ignorePatterns": [
     "/src/3rdParty/*",

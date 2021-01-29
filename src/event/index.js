@@ -17,14 +17,14 @@ export const mapID = (id, provider, data) => {
 
   data.map_id = id
   data.map_provider = provider
-  setDevEvent(constants.MAP_ID_EVENT, data, constants.MAP_ID_EVENT_CODE)
+  setDevEvent(constants.MAP_ID_EVENT, data, null, constants.MAP_ID_EVENT_CODE)
 }
 
 export const setStartEvent = () => {
   setEvent('sdk_start')
 }
 
-export const setEvent = function (eventName, event) {
+export const setEvent = function (eventName, event, options = null) {
   if (
     !eventName ||
     (isHighFreqEventOff && highFreqEvents.includes(eventName))
@@ -35,18 +35,23 @@ export const setEvent = function (eventName, event) {
   const objectName = event && getSelector(event.target)
 
   const info = createEvent(eventName, objectName, event)
-  sendEvent(info)
+  sendEvent(info, options)
 }
 
-export const setDevEvent = (eventName, data, eventCode = null) => {
+export const setDevEvent = (
+  eventName,
+  data,
+  options = null,
+  eventCode = null
+) => {
   if (!eventName) {
     return
   }
   const event = createDevEvent(eventName, null, data, eventCode)
-  sendEvent(event)
+  sendEvent(event, options)
 }
 
-export const setPersonalEvent = (eventName, data, isPII = false) => {
+export const setPersonalEvent = (eventName, data, options, isPII = false) => {
   if (!eventName) {
     return
   }
@@ -62,5 +67,5 @@ export const setPersonalEvent = (eventName, data, isPII = false) => {
   } else {
     extra.phi = obj
   }
-  sendEvent(event, extra)
+  sendEvent(event, options, extra)
 }

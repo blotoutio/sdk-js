@@ -74,11 +74,11 @@ export const getEventPayload = (event) => {
   }
 }
 
-export const sendEvent = (event, extra) => {
+export const sendEvent = (event, options, extra = {}) => {
   let eventPayload = getEventPayload(event)
   eventPayload = Object.assign(eventPayload, extra)
   const payload = getPayload(eventPayload)
-  postRequest(getManifestUrl(), JSON.stringify(payload))
+  postRequest(getManifestUrl(), JSON.stringify(payload), options)
     .then(() => {})
     .catch(error)
 }

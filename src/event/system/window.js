@@ -5,7 +5,9 @@ import { setEvent } from '../'
 export const pagehide = (window) => {
   const eventName = 'onpagehide' in self ? 'pagehide' : 'unload'
   window.addEventListener(eventName, function (e) {
-    setEvent(eventName, e)
+    setEvent(eventName, e, {
+      method: 'beacon',
+    })
   })
 }
 
