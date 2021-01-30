@@ -9,8 +9,6 @@ import { setCustomDomain } from './domainUtil'
 import { getRootKey, setRootKey } from '../storage/key'
 import { checkAndGetSessionId, removeLocal } from '../storage'
 
-import { DNT } from './utils'
-
 const setConfiguration = (preferences) => {
   if (!preferences) {
     return
@@ -29,7 +27,7 @@ const setConfiguration = (preferences) => {
 
 export const init = (preferences) => {
   // we shouldn't do anything if DNT is set
-  if (!preferences || DNT()) {
+  if (!preferences) {
     return
   }
 
