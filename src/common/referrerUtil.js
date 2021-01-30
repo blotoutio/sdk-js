@@ -6,7 +6,7 @@ export const setReferrer = () => {
   try {
     if (document.referrer) {
       const refererUrl = new URL(document.referrer)
-      if (refererUrl === window.location.host) {
+      if (refererUrl !== window.location.host) {
         referer = refererUrl.href
       }
     }
