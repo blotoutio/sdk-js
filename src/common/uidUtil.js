@@ -19,7 +19,7 @@ const checkUID = () => {
 
   const startTime = Date.now()
   if (!clientToken) {
-    return staticUserID
+    return null
   }
 
   const initialUUID = uuidv4()
@@ -51,10 +51,9 @@ export const convertTo64CharUUID = (stringToConvert) => {
   return parts.join('-')
 }
 
-export const setUID = () => {
-  const firstTime = !getLocal(getUIDKey())
+export const setUID = (newUser) => {
   checkUID()
-  setUserIndex(staticUserID, firstTime)
+  setUserIndex(staticUserID, newUser)
 }
 
 export const getUID = () => {

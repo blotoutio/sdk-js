@@ -76,16 +76,12 @@ export const manifestDefaults = {
 }
 
 export const getVariable = (key) => {
-  let variable = null
+  let variable
   if (manifest) {
     variable = manifest[key]
   }
 
-  if (!variable) {
-    return manifestDefaults[key]
-  }
-
-  return variable.value
+  return variable !== undefined ? variable : manifestDefaults[key]
 }
 
 export const checkManifest = (newSession) => {

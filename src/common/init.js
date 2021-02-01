@@ -6,6 +6,7 @@ import { setClientToken, setUID } from './uidUtil'
 import { setCustomDomain } from './domainUtil'
 import { setRootKey } from '../storage/key'
 import { checkSession, removeLocal } from '../storage'
+import { isNewUser, setCreateTimestamp } from './utils'
 
 const setConfiguration = (preferences) => {
   if (!preferences) {
@@ -31,7 +32,9 @@ export const init = (preferences) => {
 
   setConfiguration(preferences)
   const newSession = checkSession()
-  setUID()
+  const newUser = isNewUser()
+  setUID(newUser)
+  setCreateTimestamp(newUser)
   setStartEvent()
   requiredEvents(window)
   checkManifest(newSession).then(() => {

@@ -1,6 +1,8 @@
 import { getDomain } from './domainUtil'
 import { getUID } from './uidUtil'
 import { info } from './logUtil'
+import { getLocal, setLocal } from '../storage'
+import { getCreatedKey, getUIDKey } from '../storage/key'
 
 export const getMid = () => {
   return `${getDomain()}-${getUID()}-${Date.now()}`
@@ -45,4 +47,16 @@ export const getSearchParams = () => {
   }
 
   return result
+}
+
+export const isNewUser = () => {
+  return !getLocal(getUIDKey())
+}
+
+export const setCreateTimestamp = (newUser) => {
+  if (!newUser) {
+    return
+  }
+
+  setLocal(getCreatedKey(), Date.now())
 }

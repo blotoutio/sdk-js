@@ -29,6 +29,10 @@ export const getUIDKey = () => {
   return getKey('User')
 }
 
+export const getCreatedKey = () => {
+  return getKey('Created')
+}
+
 export const getSessionIDKey = () => {
   return getKey('Id')
 }

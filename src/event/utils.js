@@ -1,9 +1,5 @@
 import { constants } from '../common/config'
-import {
-  getVariable,
-  manifestDefaults,
-  manifestVariables,
-} from '../common/manifest'
+import { getVariable } from '../common/manifest'
 import { encryptRSA, stringToIntSum } from '../common/securityUtil'
 import { getSession } from '../storage'
 import { getPayload } from '../common/payloadUtil'

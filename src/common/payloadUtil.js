@@ -1,8 +1,8 @@
 import { constants } from './config'
-import { getVariable, manifestDefaults, manifestVariables } from './manifest'
+import { getVariable } from './manifest'
 import { getDomain } from './domainUtil'
-import { getSession } from '../storage'
-import { getSessionDataKey } from '../storage/key'
+import { getLocal, getSession } from '../storage'
+import { getCreatedKey, getSessionDataKey } from '../storage/key'
 import { info } from './logUtil'
 const parser = require('ua-parser-js')
 
@@ -93,6 +93,11 @@ const getMeta = () => {
   const obj = {
     sdkv: process.env.PACKAGE_VERSION,
     tz_offset: new Date().getTimezoneOffset(),
+  }
+
+  const created = parseInt(getLocal(getCreatedKey()))
+  if (!isNaN(created)) {
+    obj.user_id_created = created
   }
 
   if (sessionData) {
