@@ -1,9 +1,9 @@
 import { SHA256Encode, encryptRSA, shouldEncrypt } from './securityUtil'
 import { setLocal } from '../storage'
-import { getRootIndex } from '../storage/key'
+import { getUserIndexKey } from '../storage/key'
 
 beforeEach(() => {
-  setLocal(getRootIndex(), 'test_index')
+  setLocal(getUserIndexKey(), 'test_index')
 })
 
 describe('SHA256Encode', () => {

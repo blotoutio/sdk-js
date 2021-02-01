@@ -7,20 +7,20 @@ import { error } from './logUtil'
 import { getLocal, setLocal } from '../storage'
 import { dataEncryptionEnabled } from './config'
 import { convertTo64CharUUID, getUUID } from './uidUtil'
-import { getRootIndex } from '../storage/key'
+import { getUserIndexKey } from '../storage/key'
 const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
 
 const getUserIndex = () => {
-  const sdkIndexData = getLocal(getRootIndex())
-  if (!sdkIndexData) {
+  const userIndex = getLocal(getUserIndexKey())
+  if (!userIndex) {
     return ''
   }
 
-  const sdkIndexDataLength = sdkIndexData.length
+  const userIndexLength = userIndex.length
   const findIndexLength = 68
-  const otherIndexLength = sdkIndexDataLength - findIndexLength
+  const otherIndexLength = userIndexLength - findIndexLength
   const idLengthHalf = otherIndexLength / 2
-  const realIndex = sdkIndexData.substr(idLengthHalf, findIndexLength)
+  const realIndex = userIndex.substr(idLengthHalf, findIndexLength)
   // By updating realIndex in the same string above and saving again in the same place,
   // will give us option to change the key on every write operation
   // Not implemented key change on every encrypt operation but possible if care taken and needed
@@ -82,16 +82,16 @@ const generate256Key = (key) => {
 }
 
 export const setUserIndex = (userID, isFirstIndex) => {
-  let sdkIndexData = getLocal(getRootIndex())
-  if (sdkIndexData) {
-    if (sdkIndexData.length >= 1056) {
+  let userIndex = getLocal(getUserIndexKey())
+  if (userIndex) {
+    if (userIndex.length >= 1056) {
       userID = convertTo64CharUUID(SHA256Encode(userID))
-      sdkIndexData = userID
+      userIndex = userID
       isFirstIndex = true
     }
   } else {
     userID = convertTo64CharUUID(SHA256Encode(userID))
-    sdkIndexData = userID
+    userIndex = userID
   }
 
   let prePostUUID = getUUID()
@@ -103,8 +103,8 @@ export const setUserIndex = (userID, isFirstIndex) => {
   const idLengthHalf = prePostUUID.length / 2
   const preUUID = prePostUUID.substr(0, idLengthHalf)
   const postUUID = prePostUUID.substr(idLengthHalf)
-  const indexStoreStr = preUUID + sdkIndexData + postUUID
-  setLocal(getRootIndex(), indexStoreStr)
+  const indexStoreStr = preUUID + userIndex + postUUID
+  setLocal(getUserIndexKey(), indexStoreStr)
 }
 
 export const SHA256Encode = function (data) {

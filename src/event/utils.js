@@ -7,8 +7,8 @@ import { getManifestUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
 import { getUID } from '../common/uidUtil'
-import { getReferrer } from '../common/referrerUtil'
 import { createDevEvent } from './create'
+import { getSessionIDKey } from '../storage/key'
 
 export const shouldCollectSystemEvents = () => {
   let collect = getVariable(constants.PUSH_SYSTEM_EVENTS)
@@ -34,10 +34,9 @@ export const codeForDevEvent = (eventName) => {
 }
 
 export const getEventPayload = (event) => {
-  const sessionId = getSession(constants.SESSION_ID)
+  const sessionId = getSession(getSessionIDKey())
 
   const properties = {
-    referrer: getReferrer(),
     position: event.position,
     session_id: sessionId,
     screen: {

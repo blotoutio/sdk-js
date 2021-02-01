@@ -1,4 +1,5 @@
-import { constants } from '../common/config'
+import { getSessionDataKey, getSessionIDKey } from './key'
+import { getReferrer, getSearchParams } from '../common/utils'
 
 export const setLocal = (name, data) => {
   if (!name) {
@@ -35,13 +36,20 @@ export const getSession = (name) => {
   return window.sessionStorage.getItem(name)
 }
 
-export const checkAndGetSessionId = () => {
-  let sessionId = getSession(constants.SESSION_ID)
+export const checkSession = () => {
+  let sessionId = getSession(getSessionIDKey())
 
-  if (!sessionId) {
-    sessionId = Date.now()
-    setSession(constants.SESSION_ID, sessionId)
+  if (sessionId) {
+    return
   }
 
-  return sessionId
+  sessionId = Date.now()
+  setSession(getSessionIDKey(), sessionId)
+  setSession(
+    getSessionDataKey(),
+    JSON.stringify({
+      referrer: getReferrer(),
+      search: getSearchParams(),
+    })
+  )
 }

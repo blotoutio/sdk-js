@@ -2,12 +2,11 @@ import { requiredEvents, optionalEvents } from '../event/system'
 import { setUrl } from './endPointUrlUtil'
 import * as log from './logUtil'
 import { pullManifest } from './manifest'
-import { setReferrer } from './referrerUtil'
 import { setStartEvent } from '../event'
 import { setClientToken, setUID } from './uidUtil'
 import { setCustomDomain } from './domainUtil'
-import { getRootKey, setRootKey } from '../storage/key'
-import { checkAndGetSessionId, removeLocal } from '../storage'
+import { setRootKey } from '../storage/key'
+import { checkSession, removeLocal } from '../storage'
 
 const setConfiguration = (preferences) => {
   if (!preferences) {
@@ -32,9 +31,8 @@ export const init = (preferences) => {
   }
 
   setConfiguration(preferences)
-  checkAndGetSessionId()
+  checkSession()
   setUID()
-  setReferrer()
   setStartEvent()
   requiredEvents(window)
 
@@ -43,5 +41,9 @@ export const init = (preferences) => {
       optionalEvents(window)
     })
     .catch(log.error)
-  removeLocal(getRootKey())
+
+  // For versions lower of 0.5, to clean old data
+  removeLocal(`sdkRoot`)
+  removeLocal(`sdkRootIndex`)
+  removeLocal(`sdkRootUser`)
 }

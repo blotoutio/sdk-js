@@ -2,22 +2,16 @@ import { constants } from '../common/config'
 
 let rootKey = null
 
-export const getRootKey = () => {
-  let key = constants.ROOT_KEY
-  if (rootKey) {
-    key = rootKey
-  }
-
-  return `sdk${key}`
+const defaultKey = () => {
+  return `_${constants.DEFAULT_STORAGE_KEY}`
 }
 
-export const getRootIndex = () => {
-  let key = constants.ROOT_KEY
+const getKey = (name) => {
+  let key = defaultKey()
   if (rootKey) {
     key = rootKey
   }
-
-  return `sdk${key}Index`
+  return `${key}${name}`
 }
 
 export const setRootKey = (key) => {
@@ -27,11 +21,18 @@ export const setRootKey = (key) => {
   rootKey = key
 }
 
-export const getRootUID = () => {
-  let key = constants.ROOT_KEY
-  if (rootKey) {
-    key = rootKey
-  }
+export const getUserIndexKey = () => {
+  return getKey('Index')
+}
 
-  return `sdk${key}User`
+export const getUIDKey = () => {
+  return getKey('User')
+}
+
+export const getSessionIDKey = () => {
+  return getKey('Id')
+}
+
+export const getSessionDataKey = () => {
+  return getKey('Data')
 }

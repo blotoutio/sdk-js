@@ -1,6 +1,9 @@
 import { constants } from './config'
 import { getVariable } from './manifest'
 import { getDomain } from './domainUtil'
+import { getSession } from '../storage'
+import { getSessionDataKey } from '../storage/key'
+import { info } from './logUtil'
 const parser = require('ua-parser-js')
 
 const getPLF = (deviceType, OS) => {
@@ -82,7 +85,29 @@ const getMeta = () => {
       deviceModel = 'AMD Based'
     }
   }
-  const obj = {}
+
+  let sessionData
+  try {
+    sessionData = JSON.parse(getSession(getSessionDataKey()))
+  } catch (e) {
+    info(e)
+  }
+
+  const obj = {
+    sdkv: process.env.PACKAGE_VERSION,
+    tz_offset: new Date().getTimezoneOffset(),
+  }
+
+  if (sessionData) {
+    if (sessionData.referrer) {
+      obj.referrer = sessionData.referrer
+    }
+
+    if (sessionData.search) {
+      obj.search = sessionData.search
+    }
+  }
+
   if (deviceGrain >= 1) {
     obj.plf = getPLF(parsedUA.device.type, parsedUA.os.name)
     obj.appn = getDomain()
@@ -92,8 +117,6 @@ const getMeta = () => {
     obj.dm = deviceModel
     obj.bnme = browser
     obj.dplatform = platform
-    obj.sdkv = process.env.PACKAGE_VERSION
-    obj.tz_offset = new Date().getTimezoneOffset()
   }
 
   if (deviceGrain >= 2) {
