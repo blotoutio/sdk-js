@@ -1,7 +1,6 @@
-import { requiredEvents, optionalEvents } from '../event/system'
+import { optionalEvents, requiredEvents } from '../event/system'
 import { setUrl } from './endPointUrlUtil'
-import * as log from './logUtil'
-import { pullManifest } from './manifest'
+import { checkManifest } from './manifest'
 import { setStartEvent } from '../event'
 import { setClientToken, setUID } from './uidUtil'
 import { setCustomDomain } from './domainUtil'
@@ -31,16 +30,13 @@ export const init = (preferences) => {
   }
 
   setConfiguration(preferences)
-  checkSession()
+  const newSession = checkSession()
   setUID()
   setStartEvent()
   requiredEvents(window)
-
-  pullManifest()
-    .then(() => {
-      optionalEvents(window)
-    })
-    .catch(log.error)
+  checkManifest(newSession).then(() => {
+    optionalEvents(window)
+  })
 
   // For versions lower of 0.5, to clean old data
   removeLocal(`sdkRoot`)

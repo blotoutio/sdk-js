@@ -1,5 +1,6 @@
 import { getSessionDataKey, getSessionIDKey } from './key'
 import { getReferrer, getSearchParams } from '../common/utils'
+import { info } from '../common/logUtil'
 
 export const setLocal = (name, data) => {
   if (!name) {
@@ -40,7 +41,7 @@ export const checkSession = () => {
   let sessionId = getSession(getSessionIDKey())
 
   if (sessionId) {
-    return
+    return false
   }
 
   sessionId = Date.now()
@@ -52,4 +53,30 @@ export const checkSession = () => {
       search: getSearchParams(),
     })
   )
+  return true
+}
+
+export const getSessionDataValue = (key) => {
+  let parsed
+  try {
+    parsed = JSON.parse(getSession(getSessionDataKey()))
+  } catch (e) {
+    info(e)
+    return null
+  }
+
+  return parsed[key]
+}
+
+export const setSessionDataValue = (key, value) => {
+  let parsed
+  try {
+    parsed = JSON.parse(getSession(getSessionDataKey()))
+  } catch (e) {
+    info(e)
+    return null
+  }
+
+  parsed[key] = value
+  setSession(getSessionDataKey(), JSON.stringify(parsed))
 }

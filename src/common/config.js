@@ -1,23 +1,12 @@
 export const constants = {
   MOBILE_PLATFORM_CODE: 16,
   WEB_PLATFORM_CODE: 70,
-  EVENT_PATH: 'Event_Path',
-  API_ENDPOINT: 'Api_Endpoint',
   DEFAULT_STORAGE_KEY: 'trends',
-  EVENT_DEVICEINFO_GRAIN: 'Event_Deviceinfo_Grain',
-  DEFAULT_EVENT_DEVICEINFO_GRAIN: 1,
   DOM_SUB_TREE_MODIFIED_INTERVAL: 1800000,
-  PHI_PUBLIC_KEY: 'PHI_Public_Key',
-  PII_PUBLIC_KEY: 'PII_Public_Key',
   DEVELOPER_EVENT_CUSTOM: 21100,
   MAP_ID_EVENT: 'map_id',
   MAP_ID_EVENT_CODE: 21001,
-  PUSH_SYSTEM_EVENTS: 'SDK_Push_System_Events',
-  DEFAULT_PUSH_SYSTEM_EVENTS: false,
   SCROLL_INTERVAL: 2000,
-}
-export const endpoints = {
-  EVENT_PATH: 'v1/events/publish',
   MANIFEST_PATH: 'v1/manifest/pull',
 }
 export const systemEventCode = {

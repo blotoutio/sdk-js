@@ -1,5 +1,9 @@
 import { constants } from '../common/config'
-import { getVariable } from '../common/manifest'
+import {
+  getVariable,
+  manifestDefaults,
+  manifestVariables,
+} from '../common/manifest'
 import { encryptRSA, stringToIntSum } from '../common/securityUtil'
 import { getSession } from '../storage'
 import { getPayload } from '../common/payloadUtil'
@@ -11,12 +15,7 @@ import { createDevEvent } from './create'
 import { getSessionIDKey } from '../storage/key'
 
 export const shouldCollectSystemEvents = () => {
-  let collect = getVariable(constants.PUSH_SYSTEM_EVENTS)
-  if (collect == null || collect === '0') {
-    collect = constants.DEFAULT_PUSH_SYSTEM_EVENTS
-  }
-
-  return collect
+  return getVariable('pushSystemEvents') === 1
 }
 
 const generateSubCode = (eventSum) => {
@@ -132,9 +131,7 @@ export const createPersonalEvent = (event) => {
   }
 
   const devEvent = createDevEvent(event.name, event.data)
-  const key = event.options.PII
-    ? constants.PII_PUBLIC_KEY
-    : constants.PHI_PUBLIC_KEY
+  const key = event.options.PII ? 'piiPublicKey' : 'phiPublicKey'
   const eventPayload = getEventPayload(devEvent)
   const publicKey = getVariable(key)
   const obj = encryptRSA(publicKey, JSON.stringify([eventPayload]))

@@ -1,5 +1,5 @@
 import { constants } from './config'
-import { getVariable } from './manifest'
+import { getVariable, manifestDefaults, manifestVariables } from './manifest'
 import { getDomain } from './domainUtil'
 import { getSession } from '../storage'
 import { getSessionDataKey } from '../storage/key'
@@ -44,10 +44,7 @@ const getMeta = () => {
   const browser = navigator.brave ? 'Brave' : parsedUA.browser.name || 'unknown'
   const OS = parsedUA.os.name || ''
 
-  let deviceGrain = getVariable(constants.EVENT_DEVICEINFO_GRAIN)
-  if (deviceGrain == null) {
-    deviceGrain = constants.DEFAULT_EVENT_DEVICEINFO_GRAIN
-  }
+  const deviceGrain = getVariable('deviceInfoGrain')
 
   let manufacture
   switch (OS) {
