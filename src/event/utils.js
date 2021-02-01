@@ -32,7 +32,6 @@ export const getEventPayload = (event) => {
   const sessionId = getSession(getSessionIDKey())
 
   const properties = {
-    position: event.position,
     session_id: sessionId,
     screen: {
       width: document.documentElement.clientWidth,
@@ -40,6 +39,10 @@ export const getEventPayload = (event) => {
       docHeight: document.documentElement.scrollHeight,
       docWidth: document.documentElement.scrollWidth,
     },
+  }
+
+  if (event.position) {
+    properties.position = event.position
   }
 
   if (event.objectName) {
@@ -121,24 +124,28 @@ export const getSelector = (ele) => {
 
 export const createPersonalEvent = (event) => {
   if (!event.name) {
-    return
+    return null
   }
 
-  const devEvent = createDevEvent(event.name, event.data)
+  const data = createDevEvent(event)
+  if (!data) {
+    return null
+  }
   const key = event.options.PII ? 'piiPublicKey' : 'phiPublicKey'
-  const eventPayload = getEventPayload(devEvent)
+  const eventPayload = getEventPayload(data)
   const publicKey = getVariable(key)
   const obj = encryptRSA(publicKey, JSON.stringify([eventPayload]))
+  data.metaInfo = null
 
   const extra = {}
   if (event.options.PII) {
-    devEvent.pii = obj
+    extra.pii = obj
   } else {
-    devEvent.phi = obj
+    extra.phi = obj
   }
 
   return {
-    data: devEvent,
+    data,
     extra,
   }
 }

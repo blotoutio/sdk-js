@@ -57,15 +57,21 @@ export const setDevEvent = (events, options = null) => {
     let data
     if (event.options && (event.options.PII || event.options.PHI)) {
       data = createPersonalEvent(event)
+      if (!data) {
+        return
+      }
     } else {
-      data = createDevEvent(event)
+      const dev = createDevEvent(event)
+      if (!dev) {
+        return
+      }
+
+      data = {
+        data: dev,
+      }
     }
 
-    if (!data) {
-      return
-    }
-
-    devEvents.push({ data })
+    devEvents.push(data)
   })
 
   sendEvent(devEvents, options)
