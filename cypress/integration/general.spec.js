@@ -12,4 +12,32 @@ context('General', () => {
       assert.isNotNull(regex.exec(element.text()))
     })
   })
+
+  it('dev event do not trigger error', () => {
+    cy.get('#log-event').click()
+  })
+
+  it('dev event do not trigger error', () => {
+    cy.get('#log-event').click()
+  })
+
+  it('login event do not trigger error', () => {
+    cy.get('#log-in').click()
+  })
+
+  it('sign up event do not trigger error', () => {
+    cy.get('#sign-up').click()
+  })
+
+  it('map id event do not trigger error', () => {
+    cy.get('#map-id').click()
+  })
+
+  it('pii event do not trigger error', () => {
+    cy.get('#pii').click()
+  })
+
+  it('phi event do not trigger error', () => {
+    cy.get('#phi').click()
+  })
 })

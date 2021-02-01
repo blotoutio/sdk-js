@@ -24,10 +24,12 @@
           >
             Log Event
           </button>
-          <button id="sign-up" onclick="trends('capture', 'Sign up',{})">
+          <button id="sign-up" onclick="trends('capture', 'Sign up', {}, {
+            method: 'beacon'
+          })">
             Sign up
           </button>
-          <button id="log-in" onclick="trends('capture', 'Log in',{})">
+          <button id="log-in" onclick="trends('capture', 'Log in')">
             Log in
           </button>
           <button
@@ -35,6 +37,20 @@
             onclick="trends('mapID', '234234234', 'service', { lang: 'es' })"
           >
             Map id
+          </button>
+          <button id="pii" onclick="trends('capture', 'PII event', {
+            email: 'sales@blotout.io'
+          }, {
+            PII: true
+          })">
+            PII
+          </button>
+          <button id="phi" onclick="trends('capture', 'PHI event', {
+            type: 'A+'
+          }, {
+            PHI: true
+          })">
+            PHI
           </button>
           <button id="get-user-id" onclick="getUserId()">Get User Id</button>
         </div>
