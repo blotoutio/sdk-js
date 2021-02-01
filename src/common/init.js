@@ -1,5 +1,5 @@
 import { optionalEvents, requiredEvents } from '../event/system'
-import { setUrl } from './endPointUrlUtil'
+import { setUrl } from '../network/endPoint'
 import { checkManifest } from './manifest'
 import { setStartEvent } from '../event'
 import { setClientToken, setUID } from './uidUtil'
@@ -7,7 +7,7 @@ import { setCustomDomain } from './domainUtil'
 import { setRootKey } from '../storage/key'
 import { checkSession, removeLocal } from '../storage'
 import { isNewUser, setCreateTimestamp } from './utils'
-import { checkRetry } from './retry'
+import { checkRetry } from '../network/retries'
 
 const setConfiguration = (preferences) => {
   if (!preferences) {

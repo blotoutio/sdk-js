@@ -1,5 +1,5 @@
-import { getManifestUrl } from './endPointUrlUtil'
-import { postRequest } from './networkUtil'
+import { getManifestUrl } from '../network/endPoint'
+import { postRequest } from '../network'
 import { getDomain } from './domainUtil'
 import { getSessionDataValue, setSessionDataValue } from '../storage'
 import { info } from './logUtil'

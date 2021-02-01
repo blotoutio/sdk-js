@@ -1,4 +1,4 @@
-import { addItem } from './retry'
+import { addItem } from './retries'
 
 const beacon = (url, payload) => {
   const blob = new Blob([payload], { type: 'application/json' })

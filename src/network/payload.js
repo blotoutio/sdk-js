@@ -1,9 +1,9 @@
-import { constants } from './config'
-import { getVariable } from './manifest'
-import { getDomain } from './domainUtil'
+import { constants } from '../common/config'
+import { getVariable } from '../common/manifest'
+import { getDomain } from '../common/domainUtil'
 import { getLocal, getSession } from '../storage'
 import { getCreatedKey, getSessionDataKey } from '../storage/key'
-import { info } from './logUtil'
+import { info } from '../common/logUtil'
 const parser = require('ua-parser-js')
 
 const getPLF = (deviceType, OS) => {

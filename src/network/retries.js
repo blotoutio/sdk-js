@@ -1,8 +1,8 @@
 import { getLocal, removeLocal, setLocal } from '../storage'
 import { getRetryKey } from '../storage/key'
-import { info } from './logUtil'
-import { postRequest } from './networkUtil'
-import { constants } from './config'
+import { info } from '../common/logUtil'
+import { postRequest } from '.'
+import { constants } from '../common/config'
 
 let count = 1
 let timeout = null

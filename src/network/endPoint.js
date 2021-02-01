@@ -1,6 +1,6 @@
-import { getVariable } from './manifest'
-import { getClientToken } from './uidUtil'
-import { constants } from './config'
+import { getVariable } from '../common/manifest'
+import { getClientToken } from '../common/uidUtil'
+import { constants } from '../common/config'
 
 let endpointUrl = ''
 
