@@ -1,6 +1,4 @@
-import { mapID, setDevEvent } from './event'
-import { init } from './common/init'
-import { getUID } from './common/uidUtil'
+import api from './common/api'
 ;(function () {
   const handleFunction = (arg) => {
     const sliced = [].slice.call(arg)
@@ -15,30 +13,12 @@ import { getUID } from './common/uidUtil'
     }
   }
 
-  const SDK = function () {}
-
-  SDK.prototype.capture = (event, data = null, options = null) => {
-    setDevEvent([{ name: event, data, options }], options)
-  }
-
-  SDK.prototype.init = (preferences) => {
-    init(preferences)
-  }
-
-  SDK.prototype.getUserId = () => {
-    return getUID()
-  }
-
-  SDK.prototype.mapID = (id, provider, data = null) => {
-    mapID(id, provider, data)
-  }
-
+  const library = api
   let stubs = []
   if (window.trends) {
     stubs = window.trends.stubs || []
   }
 
-  const library = new SDK()
   // this needs to be regular function for arguments to work
   window.trends = function () {
     return handleFunction(arguments)
