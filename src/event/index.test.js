@@ -38,14 +38,18 @@ describe('mapID', () => {
   it('no data', () => {
     mapID('sdfasfasdfds', 'service')
     expect(spySet).toBeCalledWith(
-      {
-        evcs: 21001,
-        metaInfo: { map_id: 'sdfasfasdfds', map_provider: 'service' },
-        mid: 'localhost-null-1580775120000',
-        name: 'map_id',
-        tstmp: 1580775120000,
-        urlPath: 'http://localhost/',
-      },
+      [
+        {
+          data: {
+            evcs: 21001,
+            metaInfo: { map_id: 'sdfasfasdfds', map_provider: 'service' },
+            mid: 'localhost-null-1580775120000',
+            name: 'map_id',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+      ],
       null
     )
   })
@@ -53,18 +57,22 @@ describe('mapID', () => {
   it('with data', () => {
     mapID('sdfasfasdfds', 'service', { custom: true })
     expect(spySet).toBeCalledWith(
-      {
-        evcs: 21001,
-        metaInfo: {
-          custom: true,
-          map_id: 'sdfasfasdfds',
-          map_provider: 'service',
+      [
+        {
+          data: {
+            evcs: 21001,
+            metaInfo: {
+              custom: true,
+              map_id: 'sdfasfasdfds',
+              map_provider: 'service',
+            },
+            mid: 'localhost-null-1580775120000',
+            name: 'map_id',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
         },
-        mid: 'localhost-null-1580775120000',
-        name: 'map_id',
-        tstmp: 1580775120000,
-        urlPath: 'http://localhost/',
-      },
+      ],
       null
     )
   })
@@ -75,13 +83,17 @@ describe('setStartEvent', () => {
     const spySend = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
     setStartEvent()
     expect(spySend).toBeCalledWith(
-      {
-        evcs: 11130,
-        mid: 'localhost-null-1580775120000',
-        name: 'sdk_start',
-        tstmp: 1580775120000,
-        urlPath: 'http://localhost/',
-      },
+      [
+        {
+          data: {
+            evcs: 11130,
+            mid: 'localhost-null-1580775120000',
+            name: 'sdk_start',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+      ],
       null
     )
     spySend.mockRestore()

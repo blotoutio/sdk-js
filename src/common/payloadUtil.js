@@ -103,15 +103,15 @@ const getMeta = () => {
   return obj
 }
 
-export const getPayload = (event) => {
+export const getPayload = (events) => {
   const payload = {}
   const meta = getMeta()
   if (meta && Object.keys(meta).length !== 0) {
     payload.meta = meta
   }
 
-  if (event) {
-    payload.events = [event]
+  if (events) {
+    payload.events = events
   }
 
   return payload

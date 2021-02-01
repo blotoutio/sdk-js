@@ -1,4 +1,4 @@
-import { mapID, setDevEvent, setPersonalEvent } from './event'
+import { mapID, setDevEvent } from './event'
 import { init } from './common/init'
 import { getUID } from './common/uidUtil'
 ;(function () {
@@ -17,8 +17,8 @@ import { getUID } from './common/uidUtil'
 
   const SDK = function () {}
 
-  SDK.prototype.logEvent = (eventName, data = null, options = null) => {
-    setDevEvent(eventName, data, options)
+  SDK.prototype.capture = (event, data = null, options = null) => {
+    setDevEvent([{ name: event, data, options }], options)
   }
 
   SDK.prototype.init = (preferences) => {
@@ -27,14 +27,6 @@ import { getUID } from './common/uidUtil'
 
   SDK.prototype.getUserId = () => {
     return getUID()
-  }
-
-  SDK.prototype.logPIIEvent = (eventName, data = null, options = null) => {
-    setPersonalEvent(eventName, data, options, true)
-  }
-
-  SDK.prototype.logPHIEvent = (eventName, data = null, options = null) => {
-    setPersonalEvent(eventName, data, options)
   }
 
   SDK.prototype.mapID = (id, provider, data = null) => {

@@ -1,9 +1,7 @@
-import { getEventPayload, getSelector, sendEvent } from './utils'
+import { createPersonalEvent, getSelector, sendEvent } from './utils'
 import { constants, highFreqEvents, isHighFreqEventOff } from '../common/config'
 import { error } from '../common/logUtil'
 import { createDevEvent, createEvent } from './create'
-import { getVariable } from '../common/manifest'
-import { encryptRSA } from '../common/securityUtil'
 
 export const mapID = (id, provider, data) => {
   if (!id) {
@@ -11,61 +9,64 @@ export const mapID = (id, provider, data) => {
     return
   }
 
+  if (!provider) {
+    error('ID mapping is missing provider')
+    return
+  }
+
   if (!data) {
     data = {}
   }
 
-  data.map_id = id
-  data.map_provider = provider
-  setDevEvent(constants.MAP_ID_EVENT, data, null, constants.MAP_ID_EVENT_CODE)
+  setDevEvent([
+    {
+      name: constants.MAP_ID_EVENT,
+      code: constants.MAP_ID_EVENT_CODE,
+      data: {
+        ...data,
+        map_id: id,
+        map_provider: provider,
+      },
+    },
+  ])
 }
 
 export const setStartEvent = () => {
   setEvent('sdk_start')
 }
 
-export const setEvent = function (eventName, event, options = null) {
-  if (
-    !eventName ||
-    (isHighFreqEventOff && highFreqEvents.includes(eventName))
-  ) {
+export const setEvent = function (name, event, options = null) {
+  if (!name || (isHighFreqEventOff && highFreqEvents.includes(name))) {
     return
   }
 
   const objectName = event && getSelector(event.target)
-
-  const info = createEvent(eventName, objectName, event)
-  sendEvent(info, options)
+  sendEvent(
+    [
+      {
+        data: createEvent(name, objectName, event),
+      },
+    ],
+    options
+  )
 }
 
-export const setDevEvent = (
-  eventName,
-  data,
-  options = null,
-  eventCode = null
-) => {
-  if (!eventName) {
-    return
-  }
-  const event = createDevEvent(eventName, null, data, eventCode)
-  sendEvent(event, options)
-}
+export const setDevEvent = (events, options = null) => {
+  const devEvents = []
+  events.forEach((event) => {
+    let data
+    if (event.options && (event.options.PII || event.options.PHI)) {
+      data = createPersonalEvent(event)
+    } else {
+      data = createDevEvent(event)
+    }
 
-export const setPersonalEvent = (eventName, data, options, isPII = false) => {
-  if (!eventName) {
-    return
-  }
-  const event = createDevEvent(eventName, null, data)
-  const key = isPII ? constants.PII_PUBLIC_KEY : constants.PHI_PUBLIC_KEY
-  const eventPayload = getEventPayload(event)
-  const publicKey = getVariable(key)
-  const obj = encryptRSA(publicKey, JSON.stringify([eventPayload]))
+    if (!data) {
+      return
+    }
 
-  const extra = {}
-  if (isPII) {
-    extra.pii = obj
-  } else {
-    extra.phi = obj
-  }
-  sendEvent(event, options, extra)
+    devEvents.push({ data })
+  })
+
+  sendEvent(devEvents, options)
 }

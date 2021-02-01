@@ -2,7 +2,7 @@ import { getClientToken } from './uidUtil'
 
 const beacon = (url, payload) => {
   const blob = new Blob([payload], { type: 'application/json' })
-  window.navigator.sendBeacon(url, blob)
+  navigator.sendBeacon(url, blob)
 }
 
 const ajax = async (url, payload) => {
@@ -33,7 +33,7 @@ export async function postRequest(url, payload, options) {
   const token = getClientToken() || ''
   url = `${url}?token=${token}`
 
-  if (options && options.method === 'beacon' && window.navigator.sendBeacon) {
+  if (options && options.method === 'beacon' && navigator.sendBeacon) {
     beacon(url, payload)
     return
   }

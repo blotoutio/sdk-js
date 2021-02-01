@@ -56,7 +56,7 @@ describe('createDevEvent', () => {
   })
 
   it('with just event', () => {
-    const result = createDevEvent('some_event')
+    const result = createDevEvent({ name: 'some_event' })
     expect(result).toStrictEqual({
       evcs: 24146,
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
@@ -67,8 +67,11 @@ describe('createDevEvent', () => {
   })
 
   it('everything', () => {
-    const result = createDevEvent('some_event', 'objName', {
-      custom: true,
+    const result = createDevEvent({
+      name: 'some_event',
+      data: {
+        custom: true,
+      },
     })
     expect(result).toStrictEqual({
       evcs: 24146,
@@ -77,25 +80,22 @@ describe('createDevEvent', () => {
       metaInfo: {
         custom: true,
       },
-      objectName: 'objName',
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     })
   })
 
   it('with custom code', () => {
-    const result = createDevEvent(
-      'some_event',
-      'objName',
-      { custom: true },
-      123123
-    )
+    const result = createDevEvent({
+      name: 'some_event',
+      data: { custom: true },
+      code: 123123,
+    })
     expect(result).toStrictEqual({
       evcs: 123123,
       metaInfo: {
         custom: true,
       },
-      objectName: 'objName',
       mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
       name: 'some_event',
       tstmp: 1580775120000,

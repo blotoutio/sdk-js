@@ -96,36 +96,24 @@ export const createPosition = (event) => {
   return { x, y, width, height }
 }
 
-export const createDevEvent = (
-  eventName,
-  objectName,
-  data = null,
-  eventCode = null
-) => {
-  if (!eventName) {
+export const createDevEvent = (event) => {
+  if (!event || !event.name) {
     return null
   }
 
-  const event = {
+  const devEvent = {
     urlPath: window.location.href,
     tstmp: Date.now(),
     mid: getMid(),
-    evcs: eventCode || codeForDevEvent(eventName),
+    evcs: event.code || codeForDevEvent(event.name),
+    name: event.name,
   }
 
-  if (eventName) {
-    event.name = eventName
+  if (event.data) {
+    devEvent.metaInfo = event.data
   }
 
-  if (objectName) {
-    event.objectName = objectName
-  }
-
-  if (data) {
-    event.metaInfo = data
-  }
-
-  return event
+  return devEvent
 }
 
 export const createEvent = (eventName, objectName, event) => {

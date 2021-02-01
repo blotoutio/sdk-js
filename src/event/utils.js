@@ -1,6 +1,6 @@
 import { constants } from '../common/config'
 import { getVariable } from '../common/manifest'
-import { stringToIntSum } from '../common/securityUtil'
+import { encryptRSA, stringToIntSum } from '../common/securityUtil'
 import { getSession } from '../storage'
 import { getPayload } from '../common/payloadUtil'
 import { getManifestUrl } from '../common/endPointUrlUtil'
@@ -8,6 +8,7 @@ import { postRequest } from '../common/networkUtil'
 import { error } from '../common/logUtil'
 import { getUID } from '../common/uidUtil'
 import { getReferrer } from '../common/referrerUtil'
+import { createDevEvent } from './create'
 
 export const shouldCollectSystemEvents = () => {
   let collect = getVariable(constants.PUSH_SYSTEM_EVENTS)
@@ -74,11 +75,26 @@ export const getEventPayload = (event) => {
   }
 }
 
-export const sendEvent = (event, options, extra = {}) => {
-  let eventPayload = getEventPayload(event)
-  eventPayload = Object.assign(eventPayload, extra)
-  const payload = getPayload(eventPayload)
-  postRequest(getManifestUrl(), JSON.stringify(payload), options)
+export const sendEvent = (events, options) => {
+  if (!events) {
+    return
+  }
+
+  const eventsPayload = []
+  events.forEach((event) => {
+    const extra = event.extra || {}
+    eventsPayload.push(Object.assign(extra, getEventPayload(event.data)))
+  })
+
+  if (eventsPayload.length === 0) {
+    return
+  }
+
+  postRequest(
+    getManifestUrl(),
+    JSON.stringify(getPayload(eventsPayload)),
+    options
+  )
     .then(() => {})
     .catch(error)
 }
@@ -109,4 +125,30 @@ export const getSelector = (ele) => {
   }
 
   return 'Unknown'
+}
+
+export const createPersonalEvent = (event) => {
+  if (!event.name) {
+    return
+  }
+
+  const devEvent = createDevEvent(event.name, event.data)
+  const key = event.options.PII
+    ? constants.PII_PUBLIC_KEY
+    : constants.PHI_PUBLIC_KEY
+  const eventPayload = getEventPayload(devEvent)
+  const publicKey = getVariable(key)
+  const obj = encryptRSA(publicKey, JSON.stringify([eventPayload]))
+
+  const extra = {}
+  if (event.options.PII) {
+    devEvent.pii = obj
+  } else {
+    devEvent.phi = obj
+  }
+
+  return {
+    data: devEvent,
+    extra,
+  }
 }
