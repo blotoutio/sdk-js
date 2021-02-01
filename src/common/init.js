@@ -7,6 +7,7 @@ import { setCustomDomain } from './domainUtil'
 import { setRootKey } from '../storage/key'
 import { checkSession, removeLocal } from '../storage'
 import { isNewUser, setCreateTimestamp } from './utils'
+import { checkRetry } from './retry'
 
 const setConfiguration = (preferences) => {
   if (!preferences) {
@@ -39,6 +40,7 @@ export const init = (preferences) => {
   requiredEvents(window)
   checkManifest(newSession).then(() => {
     optionalEvents(window)
+    checkRetry()
   })
 
   // For versions lower of 0.5, to clean old data

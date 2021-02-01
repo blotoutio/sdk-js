@@ -3,9 +3,9 @@ import { getVariable } from '../common/manifest'
 import { encryptRSA, stringToIntSum } from '../common/securityUtil'
 import { getSession } from '../storage'
 import { getPayload } from '../common/payloadUtil'
-import { getManifestUrl } from '../common/endPointUrlUtil'
+import { getPublishUrl } from '../common/endPointUrlUtil'
 import { postRequest } from '../common/networkUtil'
-import { error } from '../common/logUtil'
+import { info } from '../common/logUtil'
 import { getUID } from '../common/uidUtil'
 import { createDevEvent } from './create'
 import { getSessionIDKey } from '../storage/key'
@@ -85,12 +85,10 @@ export const sendEvent = (events, options) => {
   }
 
   postRequest(
-    getManifestUrl(),
+    getPublishUrl(),
     JSON.stringify(getPayload(eventsPayload)),
     options
-  )
-    .then(() => {})
-    .catch(error)
+  ).catch(info)
 }
 
 export const getSelector = (ele) => {

@@ -1,4 +1,4 @@
-import { setUrl, getUrl, getManifestUrl } from './endPointUrlUtil'
+import { setUrl, getUrl, getPublishUrl } from './endPointUrlUtil'
 import * as manifest from './manifest'
 
 describe('get/setUrl', () => {
@@ -18,27 +18,27 @@ describe('get/setUrl', () => {
   })
 })
 
-describe('getManifestUrl', () => {
+describe('getPublishUrl', () => {
   beforeEach(() => {
     setUrl('')
   })
 
   it('endpoint not set', () => {
-    expect(getManifestUrl()).toBe('')
+    expect(getPublishUrl()).toBe('')
   })
 
   it('no manifest', () => {
     setUrl('http://blotout.io')
-    expect(getManifestUrl()).toBe('http://blotout.io/v1/events/publish')
+    expect(getPublishUrl()).toBe('http://blotout.io/v1/events/publish?token=')
   })
 
   it('ok', () => {
     jest
       .spyOn(manifest, 'getVariable')
-      .mockImplementationOnce(() => 'http://manifest.io')
       .mockImplementationOnce(() => 'v1/path')
+      .mockImplementationOnce(() => 'http://manifest.io')
 
     setUrl('http://blotout.io')
-    expect(getManifestUrl()).toBe('http://manifest.io/v1/path')
+    expect(getPublishUrl()).toBe('http://manifest.io/v1/path?token=')
   })
 })

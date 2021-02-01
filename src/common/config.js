@@ -8,6 +8,7 @@ export const constants = {
   MAP_ID_EVENT_CODE: 21001,
   SCROLL_INTERVAL: 2000,
   MANIFEST_PATH: 'v1/manifest/pull',
+  RETRY_INTERVAL: 2000,
 }
 export const systemEventCode = {
   cut: 11101,

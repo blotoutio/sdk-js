@@ -1,8 +1,8 @@
-import { getUrl } from './endPointUrlUtil'
-import { constants } from './config'
+import { getManifestUrl } from './endPointUrlUtil'
 import { postRequest } from './networkUtil'
 import { getDomain } from './domainUtil'
 import { getSessionDataValue, setSessionDataValue } from '../storage'
+import { info } from './logUtil'
 
 const processData = (manifest) => {
   const variables = {}
@@ -98,6 +98,7 @@ export const checkManifest = (newSession) => {
     pullManifest()
       .then(resolve)
       .catch((error) => {
+        info(error)
         reject(error)
       })
   })
@@ -105,12 +106,11 @@ export const checkManifest = (newSession) => {
 
 export const pullManifest = () => {
   return new Promise((resolve, reject) => {
-    const url = `${getUrl()}/${constants.MANIFEST_PATH}`
     const payload = JSON.stringify({
       lastUpdatedTime: 0,
       bundleId: getDomain(),
     })
-    postRequest(url, payload)
+    postRequest(getManifestUrl(), payload)
       .then((data) => {
         setData(data)
         resolve()

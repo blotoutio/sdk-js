@@ -21,7 +21,7 @@ describe('postRequest', () => {
 
     await expect(postRequest('https://blotout.io')).resolves.toBe(result)
     expect(window.fetch).toHaveBeenCalledWith(
-      'https://blotout.io?token=',
+      'https://blotout.io',
       expect.objectContaining({
         method: 'POST',
         headers: {
@@ -34,10 +34,6 @@ describe('postRequest', () => {
   })
 
   it('200', async () => {
-    jest
-      .spyOn(uuid, 'getClientToken')
-      .mockImplementation(() => 'aosdfkaosfkoaskfo23e23')
-
     const result = { success: true }
     window.fetch.mockResolvedValueOnce({
       status: 200,
@@ -48,7 +44,7 @@ describe('postRequest', () => {
       result
     )
     expect(window.fetch).toHaveBeenCalledWith(
-      'https://blotout.io?token=aosdfkaosfkoaskfo23e23',
+      'https://blotout.io',
       expect.objectContaining({
         method: 'POST',
         headers: {
@@ -70,7 +66,7 @@ describe('postRequest', () => {
       'Server error'
     )
     expect(window.fetch).toHaveBeenCalledWith(
-      'https://blotout.io?token=',
+      'https://blotout.io',
       expect.objectContaining({
         method: 'POST',
         headers: {

@@ -1,6 +1,20 @@
 import { getVariable } from './manifest'
+import { getClientToken } from './uidUtil'
+import { constants } from './config'
 
 let endpointUrl = ''
+
+const generateUrl = (path) => {
+  const endpoint = getVariable('apiEndpoint') || getUrl()
+  if (!endpoint) {
+    return ''
+  }
+
+  const token = getClientToken() || ''
+  return `${endpoint}/${path}?token=${token}`
+}
+
+export const getUrl = () => endpointUrl
 
 export const setUrl = (url) => {
   if (url == null) {
@@ -10,14 +24,11 @@ export const setUrl = (url) => {
   endpointUrl = url
 }
 
-export const getUrl = () => endpointUrl
+export const getPublishUrl = () => {
+  const path = getVariable('eventPath')
+  return generateUrl(path)
+}
 
 export const getManifestUrl = () => {
-  const apiEndPoint = getVariable('apiEndpoint') || getUrl()
-  if (!apiEndPoint) {
-    return ''
-  }
-
-  const urlPath = getVariable('eventPath')
-  return `${apiEndPoint}/${urlPath}`
+  return generateUrl(constants.MANIFEST_PATH)
 }

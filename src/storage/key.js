@@ -33,6 +33,10 @@ export const getCreatedKey = () => {
   return getKey('Created')
 }
 
+export const getRetryKey = () => {
+  return getKey('Retry')
+}
+
 export const getSessionIDKey = () => {
   return getKey('Id')
 }
