@@ -9,16 +9,16 @@ describe('info', () => {
     spy.mockRestore()
   })
 
-  it('development', () => {
+  it('development', async () => {
     jest.mock('./config', () => mockTrue)
-    const { info } = require('./logUtil')
+    const { info } = await import('./logUtil')
     info('data')
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  it('production', () => {
+  it('production', async () => {
     jest.mock('./config', () => mockFalse)
-    const { info } = require('./logUtil')
+    const { info } = await import('./logUtil')
     info('data')
     expect(spy).toHaveBeenCalledTimes(0)
   })
@@ -32,16 +32,16 @@ describe('log', () => {
     spy.mockRestore()
   })
 
-  it('development', () => {
+  it('development', async () => {
     jest.mock('./config', () => mockTrue)
-    const { log } = require('./logUtil')
+    const { log } = await import('./logUtil')
     log('data')
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  it('production', () => {
+  it('production', async () => {
     jest.mock('./config', () => mockFalse)
-    const { log } = require('./logUtil')
+    const { log } = await import('./logUtil')
     log('data')
     expect(spy).toHaveBeenCalledTimes(0)
   })
@@ -55,16 +55,16 @@ describe('error', () => {
     spy.mockRestore()
   })
 
-  it('development', () => {
+  it('development', async () => {
     jest.mock('./config', () => mockTrue)
-    const { error } = require('./logUtil')
+    const { error } = await import('./logUtil')
     error('data')
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  it('production', () => {
+  it('production', async () => {
     jest.mock('./config', () => mockFalse)
-    const { error } = require('./logUtil')
+    const { error } = await import('./logUtil')
     error('data')
     expect(spy).toHaveBeenCalledTimes(0)
   })

@@ -5,6 +5,9 @@ module.exports = {
   clearMocks: true,
   resetMocks: true,
   resetModules: true,
-  testMatch: ['<rootDir>/src/**/**/?(*.)(test).js'],
+  testMatch: ['**/?(*.)+(test).+(ts|tsx|js)'],
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+  },
   collectCoverage: true,
 }

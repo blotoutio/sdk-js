@@ -7,7 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const demo = () => {
   return {
     mode: 'development',
-    devtool: 'eval-source-map',
+    devtool: 'inline-source-map',
     output: {
       path: path.resolve(__dirname, 'demo'),
     },

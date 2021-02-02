@@ -8,7 +8,7 @@ const publish = () => {
   return {
     mode: 'production',
     output: {
-      filename: './index.min.js',
+      filename: './trends.min.js',
     },
     plugins: [
       new CopyWebpackPlugin({

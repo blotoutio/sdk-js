@@ -1,6 +1,11 @@
 {
-  "extends": ["prettier", "standard", "plugin:prettier/recommended"],
-  "plugins": ["prettier"],
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "extends": ["prettier", "standard", "plugin:prettier/recommended", "plugin:@typescript-eslint/recommended"],
   "rules": {
     "prettier/prettier": "error"
   },
@@ -28,6 +33,7 @@
     "/dist",
     "/demo",
     "/src/demo",
-    "jest.config.js"
+    "jest.config.js",
+    "webpack.*"
   ]
 }

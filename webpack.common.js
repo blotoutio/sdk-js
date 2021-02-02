@@ -1,6 +1,6 @@
 const Webpack = require('webpack')
-const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
@@ -11,19 +11,35 @@ module.exports = (env) => {
 
   const suffix = opts.FEATURES === 'full' ? '_full' : ''
 
+  const regularName = `trends${suffix}`
+  const minName = `trends${suffix}.min`
+
   return {
+    entry: {
+      [regularName]: './src/index.ts',
+      [minName]: './src/index.ts',
+    },
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: `./trends${suffix}.js`,
+      filename: `[name].js`,
+      libraryTarget: 'umd',
+      library: 'Trends',
+      umdNamedDefine: true,
     },
     module: {
       rules: [
         {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: [{ loader: 'ifdef-loader', options: opts }],
+          test: /\.tsx?$/,
+          exclude: [/node_modules/, /cypress/],
+          use: [
+            'awesome-typescript-loader',
+            { loader: 'ifdef-loader', options: opts },
+          ],
         },
       ],
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
     },
     plugins: [
       new CleanWebpackPlugin(),
