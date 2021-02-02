@@ -1,4 +1,4 @@
-import { mapID, setDevEvent } from '../event'
+import { mapID, pageView, setDevEvent } from '../event'
 import { init } from './init'
 import { getUID } from './uidUtil'
 
@@ -18,6 +18,10 @@ SDK.prototype.getUserId = () => {
 
 SDK.prototype.mapID = (id, provider, data = null) => {
   mapID(id, provider, data)
+}
+
+SDK.prototype.pageView = (options = null) => {
+  pageView(options)
 }
 
 export default new SDK()

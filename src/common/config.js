@@ -9,6 +9,8 @@ export const constants = {
   SCROLL_INTERVAL: 2000,
   MANIFEST_PATH: 'v1/manifest/pull',
   RETRY_INTERVAL: 2000,
+  SDK_START: 'sdk_start',
+  PAGE_HIDE: 'pagehide',
 }
 export const systemEventCode = {
   cut: 11101,

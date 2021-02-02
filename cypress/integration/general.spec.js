@@ -40,4 +40,8 @@ context('General', () => {
   it('phi event do not trigger error', () => {
     cy.get('#phi').click()
   })
+
+  it('pageView do not trigger error', () => {
+    cy.get('#navigation').click()
+  })
 })

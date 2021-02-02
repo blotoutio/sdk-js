@@ -35,7 +35,7 @@ export const mapID = (id, provider, data) => {
 }
 
 export const setStartEvent = () => {
-  setEvent('sdk_start')
+  setEvent(constants.SDK_START)
 }
 
 export const setEvent = function (name, event, options = null) {
@@ -81,4 +81,15 @@ export const setDevEvent = (events, options = null) => {
   })
 
   sendEvent(devEvents, options)
+}
+
+export const pageView = (options) => {
+  const sdkStart = {
+    data: createEvent(constants.SDK_START),
+  }
+  const pagehide = {
+    data: createEvent(constants.PAGE_HIDE),
+  }
+
+  sendEvent([pagehide, sdkStart], options)
 }
