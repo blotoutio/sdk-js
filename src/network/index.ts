@@ -1,11 +1,11 @@
 import { addItem } from './retries'
 
-const beacon = (url, payload) => {
+const beacon = (url: string, payload: string) => {
   const blob = new Blob([payload], { type: 'application/json' })
   navigator.sendBeacon(url, blob)
 }
 
-const ajax = async (url, payload) => {
+const ajax = async (url: string, payload: string) => {
   return await fetch(url, {
     method: 'POST',
     headers: {
@@ -36,7 +36,11 @@ const ajax = async (url, payload) => {
     })
 }
 
-export async function postRequest(url, payload, options) {
+export async function postRequest(
+  url: string,
+  payload: string,
+  options: EventOptions = null
+): Promise<unknown> {
   if (!url) {
     return Promise.reject(new Error('URL is empty'))
   }

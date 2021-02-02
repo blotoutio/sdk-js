@@ -4,7 +4,7 @@ import { getLocal, setLocal } from '../storage'
 import { convertTo64CharUUID, getUUID } from './uidUtil'
 import { getUserIndexKey } from '../storage/key'
 
-const SHA1Encode = function (data) {
+const SHA1Encode = function (data: string) {
   if (!data) {
     return ''
   }
@@ -12,7 +12,7 @@ const SHA1Encode = function (data) {
   return SHA1(data).toString()
 }
 
-export const setUserIndex = (userID, isFirstIndex) => {
+export const setUserIndex = (userID: string, isFirstIndex: boolean): void => {
   let userIndex = getLocal(getUserIndexKey())
   if (userIndex) {
     if (userIndex.length >= 1056) {
@@ -38,7 +38,7 @@ export const setUserIndex = (userID, isFirstIndex) => {
   setLocal(getUserIndexKey(), indexStoreStr)
 }
 
-export const SHA256Encode = function (data) {
+export const SHA256Encode = (data: string): string => {
   if (!data) {
     return ''
   }
@@ -46,7 +46,7 @@ export const SHA256Encode = function (data) {
   return SHA256(data).toString()
 }
 
-export const stringToIntSum = (eventName) => {
+export const stringToIntSum = (eventName: string): number => {
   const eventNameL = eventName.toString().toLowerCase()
   const encoded = SHA1Encode(eventNameL)
   let sum = 0

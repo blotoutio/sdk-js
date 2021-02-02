@@ -9,7 +9,7 @@ import { checkSession, removeLocal } from '../storage'
 import { isNewUser, setCreateTimestamp } from './utils'
 import { checkRetry } from '../network/retries'
 
-const setConfiguration = (preferences) => {
+const setConfiguration = (preferences: InitPreferences) => {
   if (!preferences) {
     return
   }
@@ -25,7 +25,7 @@ const setConfiguration = (preferences) => {
   setRootKey(preferences.storageRootKey)
 }
 
-export const init = (preferences) => {
+export const init = (preferences: InitPreferences): void => {
   // we shouldn't do anything if DNT is set
   if (!preferences) {
     return

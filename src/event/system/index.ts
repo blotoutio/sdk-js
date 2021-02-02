@@ -12,7 +12,7 @@ import { pagehide, domActive, domSubTreeModified, scroll } from './window'
 import { error } from './resource'
 import { shouldCollectSystemEvents } from '../utils'
 
-export const optionalEvents = (window) => {
+export const optionalEvents = (window: Window): void => {
   if (!shouldCollectSystemEvents()) {
     return
   }
@@ -54,6 +54,6 @@ export const optionalEvents = (window) => {
   error(window)
 }
 
-export const requiredEvents = (window) => {
+export const requiredEvents = (window: Window): void => {
   pagehide(window)
 }

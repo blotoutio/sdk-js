@@ -12,10 +12,6 @@ afterEach(() => {
 })
 
 describe('codeForDevEvent', () => {
-  it('null', () => {
-    expect(codeForDevEvent()).toBe(0)
-  })
-
   it('name has spaces', () => {
     expect(codeForDevEvent('some awesome event')).toBe(24016)
   })
@@ -38,7 +34,7 @@ describe('codeForDevEvent', () => {
 })
 
 describe('createDevEvent', () => {
-  let spyMid
+  let spyMid: jest.SpyInstance<string, []>
 
   beforeEach(() => {
     spyMid = jest
@@ -48,22 +44,6 @@ describe('createDevEvent', () => {
 
   afterEach(() => {
     spyMid.mockRestore()
-  })
-
-  it('null', () => {
-    const result = createDevEvent()
-    expect(result).toBeNull()
-  })
-
-  it('with just event', () => {
-    const result = createDevEvent({ name: 'some_event' })
-    expect(result).toStrictEqual({
-      evcs: 24146,
-      mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
-      name: 'some_event',
-      tstmp: 1580775120000,
-      urlPath: 'http://localhost/',
-    })
   })
 
   it('everything', () => {

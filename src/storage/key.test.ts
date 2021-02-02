@@ -1,9 +1,5 @@
 import { getUserIndexKey, setRootKey } from './key'
 
-beforeEach(() => {
-  setRootKey()
-})
-
 describe('getUserIndexKey', () => {
   it('use default', () => {
     const result = getUserIndexKey()

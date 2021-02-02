@@ -12,19 +12,14 @@ module.exports = (env) => {
   const suffix = opts.FEATURES === 'full' ? '_full' : ''
 
   const regularName = `trends${suffix}`
-  const minName = `trends${suffix}.min`
 
   return {
     entry: {
       [regularName]: './src/index.ts',
-      [minName]: './src/index.ts',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: `[name].js`,
-      libraryTarget: 'umd',
-      library: 'Trends',
-      umdNamedDefine: true,
     },
     module: {
       rules: [
@@ -32,7 +27,12 @@ module.exports = (env) => {
           test: /\.tsx?$/,
           exclude: [/node_modules/, /cypress/],
           use: [
-            'awesome-typescript-loader',
+            {
+              loader: require.resolve('awesome-typescript-loader'),
+              options: {
+                useBabel: true,
+              },
+            },
             { loader: 'ifdef-loader', options: opts },
           ],
         },

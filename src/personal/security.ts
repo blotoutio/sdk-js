@@ -6,7 +6,18 @@ import { getLocal } from '../storage'
 import { getUserIndexKey } from '../storage/key'
 import { SHA256Encode } from '../common/securityUtil'
 import { getUUID } from '../common/uidUtil'
-const encrypt = require('@blotoutio/jsencrypt-no-random-padding')
+import { JSEncrypt } from '@blotoutio/jsencrypt-no-random-padding'
+
+interface Key256 {
+  key256: CryptoJS.lib.WordArray
+  iv: CryptoJS.lib.WordArray
+}
+
+interface RSA {
+  data: string
+  key: string
+  iv: string
+}
 
 const getUserIndex = () => {
   const userIndex = getLocal(getUserIndexKey())
@@ -25,33 +36,32 @@ const getUserIndex = () => {
   return SHA256Encode(realIndex)
 }
 
-const generate256Key = (key) => {
+const generate256Key = (key: string): Key256 => {
   if (key === '' || key == null || key.length < 62) {
     key = getUserIndex()
   }
 
   if (!key) {
     return {
-      key256: '',
-      iv: '',
+      key256: base64.parse(''),
+      iv: base64.parse(''),
     }
   }
 
   const keyStr = key.substr(5, 43)
-  let salt = key.substr(20, 22)
-  let iv = key.substr(40, 22)
-
-  salt = base64.parse(salt)
-  iv = base64.parse(iv)
+  const salt = key.substr(20, 22)
+  const iv = key.substr(40, 22)
+  const saltArray = base64.parse(salt)
+  const ivArray = base64.parse(iv)
 
   return {
-    key256: PBKDF2(keyStr, salt, { keySize: 256 / 32, iterations: 1000 }),
-    iv,
+    key256: PBKDF2(keyStr, saltArray, { keySize: 256 / 32, iterations: 1000 }),
+    iv: ivArray,
   }
 }
 
-const encryptAES = (data, passCode) => {
-  let { key256, iv } = generate256Key(passCode)
+const encryptAES = (data: string, passCode: string) => {
+  const { key256, iv } = generate256Key(passCode)
 
   let encryptedString = ''
   try {
@@ -59,8 +69,6 @@ const encryptAES = (data, passCode) => {
       encryptedString = AES.encrypt(data, key256, { iv }).toString()
     }
   } catch (e) {
-    key256 = ''
-    iv = ''
     error(e)
   }
 
@@ -71,7 +79,7 @@ const encryptAES = (data, passCode) => {
   }
 }
 
-export const encryptRSA = (publicKey, data) => {
+export const encryptRSA = (publicKey: string, data: string): RSA => {
   if (!publicKey) {
     return {
       data: '',
@@ -81,7 +89,7 @@ export const encryptRSA = (publicKey, data) => {
   }
 
   const uuidKey = getUUID() + getUUID()
-  const encrypt2 = new encrypt.JSEncrypt()
+  const encrypt2 = new JSEncrypt()
   encrypt2.setPublicKey(publicKey)
 
   const { encryptedString, iv, key } = encryptAES(data, uuidKey)

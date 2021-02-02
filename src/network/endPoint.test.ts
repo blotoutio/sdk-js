@@ -6,12 +6,6 @@ describe('get/setUrl', () => {
     setUrl('')
     expect(getUrl()).toBe('')
   })
-
-  it('null', () => {
-    setUrl()
-    expect(getUrl()).toBe('')
-  })
-
   it('data', () => {
     setUrl('http://blotout.io')
     expect(getUrl()).toBe('http://blotout.io')

@@ -4,21 +4,22 @@ import { info } from './logUtil'
 import { getLocal, setLocal } from '../storage'
 import { getCreatedKey, getUIDKey } from '../storage/key'
 
-export const getMid = () => {
+export const getMid = (): string => {
   return `${getDomain()}-${getUID()}-${Date.now()}`
 }
 
-export const debounce = (func, delay) => {
-  let debounceTimer
-  return function () {
-    const context = this
-    const args = arguments
+export const debounce = (
+  func: (...args: unknown[]) => void,
+  delay: number
+): ((...args: unknown[]) => void) => {
+  let debounceTimer: ReturnType<typeof setTimeout>
+  return function (...args: unknown[]) {
     clearTimeout(debounceTimer)
-    debounceTimer = setTimeout(() => func.apply(context, args), delay)
+    debounceTimer = setTimeout(() => func(...args), delay)
   }
 }
 
-export const getReferrer = () => {
+export const getReferrer = (): null | string => {
   let referer = null
   try {
     if (document.referrer) {
@@ -34,29 +35,29 @@ export const getReferrer = () => {
   return referer
 }
 
-export const getSearchParams = () => {
+export const getSearchParams = (): Record<string, string> => {
   const search = window.location.search
   if (!search) {
     return null
   }
 
-  const result = {}
+  const result: Record<string, string> = {}
   const params = new URLSearchParams(window.location.search)
-  for (const [key, value] of params) {
+  params.forEach((value: string, key: string) => {
     result[key] = value
-  }
+  })
 
   return result
 }
 
-export const isNewUser = () => {
+export const isNewUser = (): boolean => {
   return !getLocal(getUIDKey())
 }
 
-export const setCreateTimestamp = (newUser) => {
+export const setCreateTimestamp = (newUser: boolean): void => {
   if (!newUser) {
     return
   }
 
-  setLocal(getCreatedKey(), Date.now())
+  setLocal(getCreatedKey(), Date.now().toString())
 }

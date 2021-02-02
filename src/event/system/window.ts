@@ -2,7 +2,7 @@ import { debounce } from '../../common/utils'
 import { constants } from '../../common/config'
 import { setEvent } from '../'
 
-export const pagehide = (window) => {
+export const pagehide = (window: Window): void => {
   const eventName = 'onpagehide' in self ? 'pagehide' : 'unload'
   window.addEventListener(eventName, function (e) {
     setEvent(constants.PAGE_HIDE, e, {
@@ -11,28 +11,28 @@ export const pagehide = (window) => {
   })
 }
 
-export const domSubTreeModified = (window) => {
+export const domSubTreeModified = (window: Window): void => {
   const eventName = 'DOMSubtreeModified'
   window.addEventListener(
     eventName,
-    debounce((event) => {
+    debounce((event: Event) => {
       setEvent(eventName, event)
     }, constants.DOM_SUB_TREE_MODIFIED_INTERVAL)
   )
 }
 
-export const domActive = (window) => {
+export const domActive = (window: Window): void => {
   const eventName = 'DOMActivate'
   window.addEventListener(eventName, function (event) {
     setEvent(eventName, event)
   })
 }
 
-export const scroll = (window) => {
+export const scroll = (window: Window): void => {
   const eventName = 'scroll'
   window.addEventListener(
     eventName,
-    debounce((event) => {
+    debounce((event: Event) => {
       setEvent(eventName, event)
     }, constants.SCROLL_INTERVAL)
   )

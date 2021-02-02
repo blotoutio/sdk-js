@@ -4,7 +4,7 @@ import { constants } from '../common/config'
 
 let endpointUrl = ''
 
-const generateUrl = (path) => {
+const generateUrl = (path: string) => {
   const endpoint = getVariable('apiEndpoint') || getUrl()
   if (!endpoint) {
     return ''
@@ -14,9 +14,9 @@ const generateUrl = (path) => {
   return `${endpoint}/${path}?token=${token}`
 }
 
-export const getUrl = () => endpointUrl
+export const getUrl = (): string => endpointUrl
 
-export const setUrl = (url) => {
+export const setUrl = (url: string): void => {
   if (url == null) {
     return
   }
@@ -24,11 +24,11 @@ export const setUrl = (url) => {
   endpointUrl = url
 }
 
-export const getPublishUrl = () => {
-  const path = getVariable('eventPath')
+export const getPublishUrl = (): string => {
+  const path = getVariable('eventPath') as string
   return generateUrl(path)
 }
 
-export const getManifestUrl = () => {
+export const getManifestUrl = (): string => {
   return generateUrl(constants.MANIFEST_PATH)
 }

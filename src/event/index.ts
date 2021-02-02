@@ -6,7 +6,12 @@ import { createDevEvent, createEvent } from './create'
 import { handlePersonalEvent } from '../personal'
 /// #endif
 
-export const mapID = (id, provider, data, options = null) => {
+export const mapID = (
+  id: string,
+  provider: string,
+  data: EventData,
+  options: EventOptions
+): void => {
   if (!id) {
     error('ID mapping is missing id')
     return
@@ -37,30 +42,37 @@ export const mapID = (id, provider, data, options = null) => {
   )
 }
 
-export const setStartEvent = () => {
+export const setStartEvent = (): void => {
   setEvent(constants.SDK_START)
 }
 
-export const setEvent = function (name, event, options = null) {
+export const setEvent = (
+  name: string,
+  event: Event = null,
+  options: EventOptions = null
+): void => {
   if (!name || (isHighFreqEventOff && highFreqEvents.includes(name))) {
     return
   }
 
-  const objectName = event && getSelector(event.target)
+  const objectName = event && getSelector(event.target as HTMLElement)
   sendEvent(
     [
       {
-        data: createEvent(name, objectName, event),
+        data: createEvent(name, objectName, event as MouseEvent),
       },
     ],
     options
   )
 }
 
-export const setDevEvent = (events, options = null) => {
-  const devEvents = []
+export const setDevEvent = (
+  events: IncomingEvent[],
+  options: EventOptions = null
+): void => {
+  const devEvents: SendEvent[] = []
   events.forEach((event) => {
-    let data
+    let data: SendEvent | null | false
 
     /// #if FEATURES == 'full'
     data = handlePersonalEvent(event)
@@ -86,7 +98,7 @@ export const setDevEvent = (events, options = null) => {
   sendEvent(devEvents, options)
 }
 
-export const pageView = () => {
+export const pageView = (): void => {
   const sdkStart = {
     data: createEvent(constants.SDK_START),
   }

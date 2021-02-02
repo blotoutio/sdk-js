@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "esnext",
     "esModuleInterop": true,
-    "target": "ES5",
-//    "noImplicitAny": true,
+    "noImplicitAny": true,
     "outDir": "dist",
-    "lib": [ "es2015", "dom" ],
     "sourceMap": true,
     "declaration": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declarationDir": "./dist",
+    "typeRoots": ["./node_modules/@types", "./src/typings"]
   },
-  "exclude": ["node_modules", "cypress"]
+  "include": ["./src/**/*.ts", "./src/**/*.d.ts"],
+  "exclude": ["node_modules"]
 }

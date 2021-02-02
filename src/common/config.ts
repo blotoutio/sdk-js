@@ -12,7 +12,7 @@ export const constants = {
   SDK_START: 'sdk_start',
   PAGE_HIDE: 'pagehide',
 }
-export const systemEventCode = {
+export const systemEventCode: Record<string, number> = {
   cut: 11101,
   copy: 11102,
   paste: 11103,

@@ -9,17 +9,17 @@ import { info } from '../common/logUtil'
 import { getUID } from '../common/uidUtil'
 import { getSessionIDKey } from '../storage/key'
 
-export const shouldCollectSystemEvents = () => {
+export const shouldCollectSystemEvents = (): boolean => {
   return getVariable('pushSystemEvents') === 1
 }
 
-const generateSubCode = (eventSum) => {
+const generateSubCode = (eventSum: number): number => {
   return constants.DEVELOPER_EVENT_CUSTOM + (eventSum % 8899)
 }
 
 // TODO this will be a problem as we will not know if event with the
 //  same code was already sent
-export const codeForDevEvent = (eventName) => {
+export const codeForDevEvent = (eventName: string): number => {
   if (!eventName) {
     return 0
   }
@@ -27,10 +27,18 @@ export const codeForDevEvent = (eventName) => {
   return generateSubCode(stringToIntSum(eventName))
 }
 
-export const getEventPayload = (event) => {
+export const getEventPayload = (
+  event: SystemEvent | DevEvent
+): EventPayload => {
   const sessionId = getSession(getSessionIDKey())
 
-  const properties = {
+  const properties: EventPayload = {
+    mid: event.mid,
+    userid: getUID(),
+    evn: event.name,
+    evcs: event.evcs,
+    scrn: event.urlPath,
+    evt: event.tstmp,
     session_id: sessionId,
     screen: {
       width: document.documentElement.clientWidth,
@@ -40,43 +48,38 @@ export const getEventPayload = (event) => {
     },
   }
 
-  if (event.position) {
+  if ('position' in event && event.position) {
     properties.position = event.position
   }
 
-  if (event.objectName) {
+  if ('objectName' in event && event.objectName) {
     properties.obj = event.objectName
   }
 
-  if (event.objectTitle) {
+  if ('objectTitle' in event && event.objectTitle) {
     properties.objT = event.objectTitle
   }
 
-  if (event.mouse) {
+  if ('mouse' in event && event.mouse) {
     properties.mouse = event.mouse
   }
 
-  if (event.metaInfo) {
+  if ('metaInfo' in event && event.metaInfo) {
     properties.codifiedInfo = event.metaInfo
   }
 
-  return {
-    mid: event.mid,
-    userid: getUID(),
-    evn: event.name,
-    evcs: event.evcs,
-    scrn: event.urlPath,
-    evt: event.tstmp,
-    properties,
-  }
+  return properties
 }
 
-export const sendEvent = (events, options) => {
+export const sendEvent = (
+  events: SendEvent[],
+  options?: EventOptions
+): void => {
   if (!events) {
     return
   }
 
-  const eventsPayload = []
+  const eventsPayload: EventPayload[] = []
   events.forEach((event) => {
     const extra = event.extra || {}
     eventsPayload.push(Object.assign(extra, getEventPayload(event.data)))
@@ -93,29 +96,25 @@ export const sendEvent = (events, options) => {
   ).catch(info)
 }
 
-export const getSelector = (ele) => {
-  if (!ele) {
+export const getSelector = (element: HTMLElement): string => {
+  if (!element) {
     return 'Unknown'
   }
 
-  if (ele.localName) {
+  if (element.localName) {
     return (
-      ele.localName +
-      (ele.id ? '#' + ele.id : '') +
-      (ele.className ? '.' + ele.className : '')
+      element.localName +
+      (element.id ? '#' + element.id : '') +
+      (element.className ? '.' + element.className : '')
     )
   }
 
-  if (ele.nodeName) {
+  if (element.nodeName) {
     return (
-      ele.nodeName +
-      (ele.id ? '#' + ele.id : '') +
-      (ele.className ? '.' + ele.className : '')
+      element.nodeName +
+      (element.id ? '#' + element.id : '') +
+      (element.className ? '.' + element.className : '')
     )
-  }
-
-  if (ele && ele.document && ele.location && ele.alert && ele.setInterval) {
-    return 'Window'
   }
 
   return 'Unknown'

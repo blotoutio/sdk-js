@@ -3,8 +3,8 @@ import { setUserIndex, SHA256Encode } from './securityUtil'
 import { getLocal, setLocal } from '../storage'
 import { getUIDKey } from '../storage/key'
 
-let staticUserID = null
-let clientToken = null
+let staticUserID: string = null
+let clientToken: string = null
 
 const checkUID = () => {
   if (staticUserID) {
@@ -39,7 +39,7 @@ const checkUID = () => {
   return staticUserID
 }
 
-export const convertTo64CharUUID = (stringToConvert) => {
+export const convertTo64CharUUID = (stringToConvert: string): string => {
   const lengths = [16, 8, 8, 8, 24]
   const parts = []
   let range = 0
@@ -51,21 +51,21 @@ export const convertTo64CharUUID = (stringToConvert) => {
   return parts.join('-')
 }
 
-export const setUID = (newUser) => {
+export const setUID = (newUser: boolean): void => {
   checkUID()
   setUserIndex(staticUserID, newUser)
 }
 
-export const getUID = () => {
+export const getUID = (): string => {
   return checkUID()
 }
 
-export const getUUID = () => uuidv4()
+export const getUUID = (): string => uuidv4()
 
-export const setClientToken = (token) => {
+export const setClientToken = (token: string): void => {
   clientToken = token
 }
 
-export const getClientToken = () => {
+export const getClientToken = (): string => {
   return clientToken
 }

@@ -5,14 +5,14 @@ import { postRequest } from '.'
 import { constants } from '../common/config'
 
 let count = 1
-let timeout = null
+let timeout: ReturnType<typeof setTimeout> = null
 
 const setInterval = () => {
   clearTimeout(timeout)
   timeout = setTimeout(checkRetry, count * constants.RETRY_INTERVAL)
 }
 
-export const addItem = (payload) => {
+export const addItem = (payload: RequestRetry): void => {
   let data = []
   try {
     data = JSON.parse(getLocal(getRetryKey())) || []
@@ -25,7 +25,7 @@ export const addItem = (payload) => {
   setInterval()
 }
 
-export const getItem = () => {
+export const getItem = (): RequestRetry => {
   let data
   try {
     data = JSON.parse(getLocal(getRetryKey()))
@@ -43,7 +43,7 @@ export const getItem = () => {
   return item
 }
 
-export const checkRetry = () => {
+export const checkRetry = (): void => {
   const item = getItem()
   if (!item) {
     count = 1
