@@ -56,4 +56,3 @@ export const highFreqEvents = [
   'keypress',
   'touchend',
 ]
-export const dataEncryptionEnabled = true

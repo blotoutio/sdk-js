@@ -1,7 +1,8 @@
-import { createPersonalEvent, getSelector, sendEvent } from './utils'
+import { getSelector, sendEvent } from './utils'
 import { constants, highFreqEvents, isHighFreqEventOff } from '../common/config'
 import { error } from '../common/logUtil'
 import { createDevEvent, createEvent } from './create'
+import { handlePersonalEvent } from '../personal'
 
 export const mapID = (id, provider, data) => {
   if (!id) {
@@ -55,12 +56,13 @@ export const setDevEvent = (events, options = null) => {
   const devEvents = []
   events.forEach((event) => {
     let data
-    if (event.options && (event.options.PII || event.options.PHI)) {
-      data = createPersonalEvent(event)
-      if (!data) {
-        return
-      }
-    } else {
+
+    data = handlePersonalEvent(event)
+    if (data === null) {
+      return
+    }
+
+    if (!data) {
       const dev = createDevEvent(event)
       if (!dev) {
         return

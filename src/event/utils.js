@@ -1,13 +1,12 @@
 import { constants } from '../common/config'
 import { getVariable } from '../common/manifest'
-import { encryptRSA, stringToIntSum } from '../common/securityUtil'
+import { stringToIntSum } from '../common/securityUtil'
 import { getSession } from '../storage'
 import { getPayload } from '../network/payload'
 import { getPublishUrl } from '../network/endPoint'
 import { postRequest } from '../network'
 import { info } from '../common/logUtil'
 import { getUID } from '../common/uidUtil'
-import { createDevEvent } from './create'
 import { getSessionIDKey } from '../storage/key'
 
 export const shouldCollectSystemEvents = () => {
@@ -120,32 +119,4 @@ export const getSelector = (ele) => {
   }
 
   return 'Unknown'
-}
-
-export const createPersonalEvent = (event) => {
-  if (!event.name) {
-    return null
-  }
-
-  const data = createDevEvent(event)
-  if (!data) {
-    return null
-  }
-  const key = event.options.PII ? 'piiPublicKey' : 'phiPublicKey'
-  const eventPayload = getEventPayload(data)
-  const publicKey = getVariable(key)
-  const obj = encryptRSA(publicKey, JSON.stringify([eventPayload]))
-  data.metaInfo = null
-
-  const extra = {}
-  if (event.options.PII) {
-    extra.pii = obj
-  } else {
-    extra.phi = obj
-  }
-
-  return {
-    data,
-    extra,
-  }
 }
