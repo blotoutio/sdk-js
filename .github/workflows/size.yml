@@ -40,7 +40,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
       - name: Build
-        run: npm run build
+        run: npm run build:full
 
       - name: Upload stats.json
         uses: actions/upload-artifact@v2
@@ -82,7 +82,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
       - name: Build
-        run: npm run build
+        run: npm run build:full
 
       - name: Upload head stats.json
         uses: actions/upload-artifact@v2

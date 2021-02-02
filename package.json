@@ -14,7 +14,8 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
+    "build": "webpack --config webpack.prod.js --env features=basic",
+    "build:full": "webpack --config webpack.prod.js",
     "build:dev": "webpack --config webpack.dev.js",
     "publish": "webpack --config webpack.publish.js",
     "demo": "webpack --config webpack.demo.js",
@@ -49,6 +50,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-promise": "^4.2.1",
+    "ifdef-loader": "^2.1.5",
     "jest": "^26.4.2",
     "node-fetch": "^2.6.1",
     "npm-run-all": "^4.1.5",
