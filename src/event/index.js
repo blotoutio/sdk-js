@@ -6,7 +6,7 @@ import { createDevEvent, createEvent } from './create'
 import { handlePersonalEvent } from '../personal'
 /// #endif
 
-export const mapID = (id, provider, data) => {
+export const mapID = (id, provider, data, options = null) => {
   if (!id) {
     error('ID mapping is missing id')
     return
@@ -21,17 +21,20 @@ export const mapID = (id, provider, data) => {
     data = {}
   }
 
-  setDevEvent([
-    {
-      name: constants.MAP_ID_EVENT,
-      code: constants.MAP_ID_EVENT_CODE,
-      data: {
-        ...data,
-        map_id: id,
-        map_provider: provider,
+  setDevEvent(
+    [
+      {
+        name: constants.MAP_ID_EVENT,
+        code: constants.MAP_ID_EVENT_CODE,
+        data: {
+          ...data,
+          map_id: id,
+          map_provider: provider,
+        },
       },
-    },
-  ])
+    ],
+    options
+  )
 }
 
 export const setStartEvent = () => {
@@ -83,7 +86,7 @@ export const setDevEvent = (events, options = null) => {
   sendEvent(devEvents, options)
 }
 
-export const pageView = (options) => {
+export const pageView = () => {
   const sdkStart = {
     data: createEvent(constants.SDK_START),
   }
@@ -91,5 +94,5 @@ export const pageView = (options) => {
     data: createEvent(constants.PAGE_HIDE),
   }
 
-  sendEvent([pagehide, sdkStart], options)
+  sendEvent([pagehide, sdkStart])
 }

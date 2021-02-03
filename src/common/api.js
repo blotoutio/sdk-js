@@ -16,12 +16,12 @@ SDK.prototype.getUserId = () => {
   return getUID()
 }
 
-SDK.prototype.mapID = (id, provider, data = null) => {
-  mapID(id, provider, data)
+SDK.prototype.mapID = (id, provider, data = null, options = null) => {
+  mapID(id, provider, data, options)
 }
 
-SDK.prototype.pageView = (options = null) => {
-  pageView(options)
+SDK.prototype.pageView = (l) => {
+  pageView()
 }
 
 export default new SDK()
