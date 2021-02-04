@@ -13,6 +13,14 @@ The `init` method is used for initializing SDK. This sets all required configura
 | `customDomain` | `String` | Optional | You can define the custom domain so that if you are developing for example on localhost things will be working correctly. |
 | `storageRootKey` | `String` | Optional | Custom storage key that is used as a prefix for all storage keys (session and local storage). Default value is: `_trends`. |
 
+#### Example
+```js
+trends('init', { 
+  token: '3WBQ5E48ND3VTPC',
+  endpointUrl: 'https://domain.com/sdk',
+})
+```
+
 ## capture
 The `init` method is used to record developer events. This allows you to send custom events to the server when a user is interacting with the website/app. For example, one custom event would be when a user adds an item to a cart.
 
@@ -58,6 +66,7 @@ The `mapID` method allows you to map external services to Blotout ID.
 
 #### Example
 ```js
+trends('mapID', '92j2jr230r-232j9j2342j3-jiji', 'hubspot')
 trends('mapID', '92j2jr230r-232j9j2342j3-jiji', 'hubspot', { language: 'es' })
 ```
 
