@@ -25,9 +25,9 @@ bojs.init({
 // New Code
 
 trends('init', {  
-  token: 'ZWBQ5E48ND3VTPB',
-  endpointUrl: 'https://sales.blotout.io/sdk',
-  customDomain: 'blotout.io'
+  token: '[TOKEN]',
+  endpointUrl: '[URL]',
+  customDomain: '[DOMAIN]'
 })
 ```
 
