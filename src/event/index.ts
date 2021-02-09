@@ -9,8 +9,8 @@ import { handlePersonalEvent } from '../personal'
 export const mapID = (
   id: string,
   provider: string,
-  data: EventData,
-  options: EventOptions
+  data?: EventData,
+  options?: EventOptions
 ): void => {
   if (!id) {
     error('ID mapping is missing id')
@@ -48,8 +48,8 @@ export const setStartEvent = (): void => {
 
 export const setEvent = (
   name: string,
-  event: Event = null,
-  options: EventOptions = null
+  event?: Event,
+  options?: EventOptions
 ): void => {
   if (!name || (isHighFreqEventOff && highFreqEvents.includes(name))) {
     return
@@ -68,7 +68,7 @@ export const setEvent = (
 
 export const setDevEvent = (
   events: IncomingEvent[],
-  options: EventOptions = null
+  options?: EventOptions
 ): void => {
   const devEvents: SendEvent[] = []
   events.forEach((event) => {

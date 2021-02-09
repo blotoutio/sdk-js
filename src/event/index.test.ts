@@ -34,7 +34,7 @@ describe('mapID', () => {
   })
 
   it('with data', () => {
-    mapID('sdfasfasdfds', 'service', { custom: true }, {})
+    mapID('sdfasfasdfds', 'service', { custom: true })
     expect(spySet).toBeCalledWith(
       [
         {
@@ -52,7 +52,7 @@ describe('mapID', () => {
           },
         },
       ],
-      {}
+      undefined
     )
   })
 })
@@ -73,7 +73,7 @@ describe('setStartEvent', () => {
           },
         },
       ],
-      null
+      undefined
     )
     spySend.mockRestore()
   })

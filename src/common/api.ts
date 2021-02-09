@@ -3,7 +3,7 @@ import { init } from './init'
 import { getUID } from './uidUtil'
 
 class API {
-  capture(event: string, data: EventData = null, options: EventOptions = null) {
+  capture(event: string, data?: EventData, options?: EventOptions) {
     setDevEvent([{ name: event, data, options }], options)
   }
 
@@ -18,8 +18,8 @@ class API {
   mapID(
     id: string,
     provider: string,
-    data: EventData = null,
-    options: EventOptions = null
+    data?: EventData,
+    options?: EventOptions
   ) {
     mapID(id, provider, data, options)
   }

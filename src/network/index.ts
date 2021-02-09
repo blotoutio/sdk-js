@@ -39,7 +39,7 @@ const ajax = async (url: string, payload: string) => {
 export async function postRequest(
   url: string,
   payload: string,
-  options: EventOptions = null
+  options?: EventOptions
 ): Promise<unknown> {
   if (!url) {
     return Promise.reject(new Error('URL is empty'))
