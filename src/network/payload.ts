@@ -6,36 +6,71 @@ import { getCreatedKey, getSessionDataKey } from '../storage/key'
 import { info } from '../common/logUtil'
 import { UAParser } from 'ua-parser-js'
 
-const getPLF = (deviceType: string, OS: string) => {
-  if (deviceType === 'tablet' && OS === 'iOS') {
-    return 15
+const getPlatform = (deviceType: string, OS: string) => {
+  if (OS === 'iOS') {
+    if (deviceType === 'tablet') {
+      return 15
+    }
+
+    if (deviceType === 'mobile') {
+      return 14
+    }
   }
 
-  if (deviceType === 'mobile' && OS === 'iOS') {
-    return 14
+  if (OS === 'Android') {
+    if (deviceType === 'tablet') {
+      return 12
+    }
+
+    if (deviceType === 'mobile') {
+      return 11
+    }
   }
 
-  if (deviceType === 'tablet' && OS === 'Android') {
-    return 12
-  }
-
-  if (deviceType === 'mobile' && OS === 'Android') {
-    return 11
-  }
   if (OS === 'Mac OS') {
     return 27
   }
+
   if (OS === 'Windows') {
     return 26
   }
+
   if (OS === 'Linux') {
     return 28
   }
+
   if (deviceType === 'tablet' || deviceType === 'mobile') {
     return constants.MOBILE_PLATFORM_CODE
   }
 
   return constants.WEB_PLATFORM_CODE
+}
+
+const getDevice = (type: string, OS: string) => {
+  const ua = navigator.userAgent
+  const isIntelBased = ua.includes('Intel') || ua.indexOf('Intel') !== -1
+  let model = 'Intel Based'
+  type = type || 'unknown'
+  if (type === 'unknown') {
+    if (OS === 'Mac OS' || OS === 'Windows' || OS === 'Linux') {
+      type = 'desktop'
+    }
+  }
+
+  if (type === 'mobile' || type === 'tablet') {
+    if (!isIntelBased) {
+      model = 'ARM Based'
+    }
+  } else if (type === 'desktop') {
+    if (!isIntelBased) {
+      model = 'AMD Based'
+    }
+  }
+
+  return {
+    model,
+    type,
+  }
 }
 
 const getMeta = () => {
@@ -72,19 +107,6 @@ const getMeta = () => {
     }
   }
 
-  const isIntelBased = ua.includes('Intel') || ua.indexOf('Intel') !== -1
-  let deviceModel = 'Intel Based'
-  const platform = parsedUA.getDevice().type || 'unknown'
-  if (platform === 'mobile' || platform === 'tablet') {
-    if (!isIntelBased) {
-      deviceModel = 'ARM Based'
-    }
-  } else if (platform === 'desktop') {
-    if (!isIntelBased) {
-      deviceModel = 'AMD Based'
-    }
-  }
-
   let sessionData
   try {
     sessionData = JSON.parse(getSession(getSessionDataKey()))
@@ -113,14 +135,18 @@ const getMeta = () => {
   }
 
   if (deviceGrain >= 1) {
-    meta.plf = getPLF(parsedUA.getDevice().type, parsedUA.getOS().name)
+    const { model, type } = getDevice(
+      parsedUA.getDevice().type,
+      parsedUA.getOS().name
+    )
+    meta.plf = getPlatform(parsedUA.getDevice().type, parsedUA.getOS().name)
     meta.appn = getDomain()
     meta.osv = parsedUA.getOS().version || '0'
     meta.appv = parsedUA.getBrowser().version || '0.0.0.0'
     meta.dmft = manufacture
-    meta.dm = deviceModel
+    meta.dm = model
     meta.bnme = browser
-    meta.dplatform = platform
+    meta.dplatform = type
   }
 
   if (deviceGrain >= 2) {
