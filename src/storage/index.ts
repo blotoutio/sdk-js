@@ -54,17 +54,16 @@ export const checkSession = (): boolean => {
 
   sessionId = Date.now().toString()
   setSession(getSessionIDKey(), sessionId)
-  setSession(
-    getSessionDataKey(),
-    JSON.stringify({
-      referrer: getReferrer(),
-      search: getSearchParams(),
-    })
-  )
+
+  const sessionData: Partial<SessionData> = {
+    referrer: getReferrer(),
+    search: getSearchParams(),
+  }
+  setSession(getSessionDataKey(), JSON.stringify(sessionData))
   return true
 }
 
-export const getSessionDataValue = (key: string): unknown => {
+export const getSessionDataValue = (key: keyof SessionData): unknown => {
   let parsed
   try {
     parsed = JSON.parse(getSession(getSessionDataKey()))
@@ -76,13 +75,16 @@ export const getSessionDataValue = (key: string): unknown => {
   return parsed[key]
 }
 
-export const setSessionDataValue = (key: string, value: unknown): void => {
+export const setSessionDataValue = (
+  key: keyof SessionData,
+  value: unknown
+): void => {
   let parsed
   try {
-    parsed = JSON.parse(getSession(getSessionDataKey()))
+    parsed = JSON.parse(getSession(getSessionDataKey())) || []
   } catch (e) {
     info(e)
-    return null
+    return
   }
 
   parsed[key] = value

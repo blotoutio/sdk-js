@@ -5,10 +5,6 @@ interface InitPreferences {
   storageRootKey: string
 }
 
-interface LocalManifest {
-  [key: string]: string | number | boolean
-}
-
 interface ServerVariable {
   value: string
   variableDataType: number
@@ -124,14 +120,29 @@ interface Meta {
   osn?: string
 }
 
-interface Payload {
-  meta: Meta
-  events?: EventPayload[]
-}
-
 interface RequestRetry {
   url: string
   payload: string
+}
+
+interface Manifest {
+  deviceInfoGrain: number
+  eventPath: string
+  phiPublicKey?: string
+  piiPublicKey?: string
+  pushSystemEvents: number
+}
+
+interface SessionData {
+  referrer: string
+  search: Record<string, string>
+  manifest?: Manifest
+  retries?: RequestRetry[]
+}
+
+interface Payload {
+  meta: Meta
+  events?: EventPayload[]
 }
 
 interface Navigator {

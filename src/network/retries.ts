@@ -1,56 +1,66 @@
-import { getLocal, removeLocal, setLocal } from '../storage'
-import { getRetryKey } from '../storage/key'
+import { getSessionDataValue, setSessionDataValue } from '../storage'
 import { info } from '../common/logUtil'
 import { postRequest } from '.'
-import { constants } from '../common/config'
 
-let count = 1
+let count = 0
+const retries = [500, 1000, 2000, 4000, 8000, 16000, 32000]
 let timeout: ReturnType<typeof setTimeout> = null
 
 const setInterval = () => {
   clearTimeout(timeout)
-  timeout = setTimeout(checkRetry, count * constants.RETRY_INTERVAL)
+  if (!retries[count]) {
+    count = 0
+    return
+  }
+  timeout = setTimeout(checkRetry, retries[count])
 }
 
 export const addItem = (payload: RequestRetry): void => {
   let data = []
   try {
-    data = JSON.parse(getLocal(getRetryKey())) || []
+    data = JSON.parse(getSessionDataValue('retries') as string) || []
   } catch (e) {
     info(e)
   }
 
   data.push(payload)
-  setLocal(getRetryKey(), JSON.stringify(data))
+  setSessionDataValue('retries', JSON.stringify(data))
   setInterval()
 }
 
 export const getItem = (): RequestRetry => {
   let data
   try {
-    data = JSON.parse(getLocal(getRetryKey()))
+    data = getSessionDataValue('retries') as string
+    if (!data) {
+      return null
+    }
+    data = JSON.parse(data)
   } catch (e) {
     info(e)
   }
 
   if (!Array.isArray(data) || data.length === 0) {
-    removeLocal(getRetryKey())
     return null
   }
 
   const item = data.pop()
-  setLocal(getRetryKey(), JSON.stringify(data))
+  setSessionDataValue('retries', JSON.stringify(data))
   return item
 }
 
 export const checkRetry = (): void => {
   const item = getItem()
   if (!item) {
-    count = 1
+    count = 0
     return
   }
   count++
 
-  postRequest(item.url, item.payload).catch(info)
-  setInterval()
+  postRequest(item.url, item.payload)
+    .then(() => {
+      count = 0
+    })
+    .catch(info)
+    .finally(() => setInterval)
 }

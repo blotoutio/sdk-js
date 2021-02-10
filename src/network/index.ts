@@ -25,7 +25,7 @@ const ajax = async (url: string, payload: string) => {
         })
         return Promise.reject(new Error(JSON.stringify(data.body)))
       }
-      return data.body
+      return Promise.resolve(data.body)
     })
     .catch((error) => {
       addItem({
@@ -47,7 +47,7 @@ export async function postRequest(
 
   if (options && options.method === 'beacon' && navigator.sendBeacon) {
     beacon(url, payload)
-    return
+    return Promise.resolve()
   }
 
   return await ajax(url, payload)

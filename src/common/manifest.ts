@@ -4,17 +4,25 @@ import { getDomain } from './domainUtil'
 import { getSessionDataValue, setSessionDataValue } from '../storage'
 import { info } from './logUtil'
 
-let manifest: LocalManifest = null
+let manifest: Manifest = null
 
-const processData = (manifest: ServerVariable[]): LocalManifest => {
-  const variables: LocalManifest = {}
+const manifestDefaults: Manifest = {
+  deviceInfoGrain: 1,
+  eventPath: 'v1/events/publish',
+  pushSystemEvents: 0,
+}
+
+const processData = (serverManifest: ServerVariable[]): Manifest => {
+  const localManifest: Manifest = manifestDefaults
   Object.entries(manifestVariables).forEach(([key, value]) => {
-    const manifestIndex = manifest.findIndex((obj) => obj.variableId === value)
+    const manifestIndex = serverManifest.findIndex(
+      (obj) => obj.variableId === value
+    )
     if (manifestIndex === -1) {
       return
     }
 
-    const variable = manifest[manifestIndex]
+    const variable = serverManifest[manifestIndex]
     if (!variable || variable.value === undefined) {
       return
     }
@@ -45,10 +53,12 @@ const processData = (manifest: ServerVariable[]): LocalManifest => {
       return
     }
 
-    variables[key] = variableValue
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    localManifest[key] = variableValue
   })
 
-  return variables
+  return localManifest
 }
 
 const setData = (data: ServerManifest) => {
@@ -60,7 +70,7 @@ const setData = (data: ServerManifest) => {
   setSessionDataValue('manifest', manifest)
 }
 
-export const manifestVariables = {
+export const manifestVariables: Record<keyof Manifest, number> = {
   deviceInfoGrain: 5004,
   eventPath: 5016,
   phiPublicKey: 5997,
@@ -68,13 +78,7 @@ export const manifestVariables = {
   pushSystemEvents: 5023,
 }
 
-export const manifestDefaults: Record<string, string | number | boolean> = {
-  deviceInfoGrain: 1,
-  eventPath: 'v1/events/publish',
-  pushSystemEvents: 0,
-}
-
-export const getVariable = (key: string): string | number | boolean => {
+export const getVariable = (key: keyof Manifest): string | number | boolean => {
   let variable
   if (manifest) {
     variable = manifest[key]
@@ -86,7 +90,7 @@ export const getVariable = (key: string): string | number | boolean => {
 export const checkManifest = (newSession: boolean): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (!newSession) {
-      const value = getSessionDataValue('manifest') as LocalManifest
+      const value = getSessionDataValue('manifest') as Manifest
       if (value) {
         manifest = value
         resolve()

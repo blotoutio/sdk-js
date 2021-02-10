@@ -107,7 +107,7 @@ const getMeta = () => {
     }
   }
 
-  let sessionData
+  let sessionData: SessionData
   try {
     sessionData = JSON.parse(getSession(getSessionDataKey()))
   } catch (e) {
