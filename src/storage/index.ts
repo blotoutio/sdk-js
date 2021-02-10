@@ -41,7 +41,15 @@ export const checkSession = (): boolean => {
   let sessionId = getSession(getSessionIDKey())
 
   if (sessionId) {
-    return false
+    const newReferrer = getReferrer()
+    if (newReferrer) {
+      const oldReferrer = getSessionDataValue('referrer')
+      if (oldReferrer === newReferrer) {
+        return false
+      }
+    } else {
+      return false
+    }
   }
 
   sessionId = Date.now().toString()
