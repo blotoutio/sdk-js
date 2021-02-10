@@ -5,8 +5,9 @@ import { constants } from '../common/config'
 let endpointUrl = ''
 
 const generateUrl = (path: string) => {
-  const endpoint = getVariable('apiEndpoint') || getUrl()
+  const endpoint = getUrl()
   if (!endpoint) {
+    console.log('URL is not valid')
     return ''
   }
 

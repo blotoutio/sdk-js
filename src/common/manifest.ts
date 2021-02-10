@@ -61,7 +61,6 @@ const setData = (data: ServerManifest) => {
 }
 
 export const manifestVariables = {
-  apiEndpoint: 5009,
   deviceInfoGrain: 5004,
   eventPath: 5016,
   phiPublicKey: 5997,
