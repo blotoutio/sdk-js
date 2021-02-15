@@ -1,5 +1,5 @@
 import { getVariable } from '../common/manifest'
-import { getClientToken } from '../common/uidUtil'
+import { getClientToken } from '../common/clientToken'
 import { constants } from '../common/config'
 
 let endpointUrl = ''

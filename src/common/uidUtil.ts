@@ -1,10 +1,13 @@
 import { v4 as uuidv4 } from 'uuid'
-import { setUserIndex, SHA256Encode } from './securityUtil'
+import { SHA256Encode } from './securityUtil'
 import { getLocal, setLocal } from '../storage'
 import { getUIDKey } from '../storage/key'
+import { getClientToken } from './clientToken'
+/// #if FEATURES == 'full'
+import { setUserIndex } from '../personal/security'
+/// #endif
 
 let staticUserID: string = null
-let clientToken: string = null
 
 const checkUID = () => {
   if (staticUserID) {
@@ -18,6 +21,7 @@ const checkUID = () => {
   }
 
   const startTime = Date.now()
+  const clientToken = getClientToken()
   if (!clientToken) {
     return null
   }
@@ -53,7 +57,9 @@ export const convertTo64CharUUID = (stringToConvert: string): string => {
 
 export const setUID = (newUser: boolean): void => {
   checkUID()
+  /// #if FEATURES == 'full'
   setUserIndex(staticUserID, newUser)
+  /// #endif
 }
 
 export const getUID = (): string => {
@@ -61,11 +67,3 @@ export const getUID = (): string => {
 }
 
 export const getUUID = (): string => uuidv4()
-
-export const setClientToken = (token: string): void => {
-  clientToken = token
-}
-
-export const getClientToken = (): string => {
-  return clientToken
-}
