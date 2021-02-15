@@ -39,14 +39,30 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
-      - name: Build
-        run: npm run build:full
+      - name: Build - Basic
+        run: npm run build
 
-      - name: Upload stats.json
+      - name: Rename stats.json
+        run: mv ./dist/stats.json ./dist/stats-basic.json
+
+      - name: Upload head stats-basic.json
         uses: actions/upload-artifact@v2
         with:
           name: base
-          path: ./dist/stats.json
+          path: ./dist/stats-basic.json
+          retention-days: 1
+
+      - name: Build - Full
+        run: npm run build:full
+
+      - name: Rename stats.json
+        run: mv ./dist/stats.json ./dist/stats-full.json
+
+      - name: Upload head stats-full.json
+        uses: actions/upload-artifact@v2
+        with:
+          name: base
+          path: ./dist/stats-full.json
           retention-days: 1
 
   build-pr:
@@ -81,14 +97,30 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
-      - name: Build
-        run: npm run build:full
+      - name: Build - Basic
+        run: npm run build
 
-      - name: Upload head stats.json
+      - name: Rename stats.json
+        run: mv ./dist/stats.json ./dist/stats-basic.json
+
+      - name: Upload head stats-basic.json
         uses: actions/upload-artifact@v2
         with:
           name: pr
-          path: ./dist/stats.json
+          path: ./dist/stats-basic.json
+          retention-days: 1
+
+      - name: Build - Full
+        run: npm run build:full
+
+      - name: Rename stats.json
+        run: mv ./dist/stats.json ./dist/stats-full.json
+
+      - name: Upload head stats-full.json
+        uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: ./dist/stats-full.json
           retention-days: 1
 
   compare:
@@ -114,12 +146,20 @@ jobs:
           name: pr
           path: pr
 
-      - name: Get diff
-        id: get-diff
+      - name: Get diff basic
+        id: get-diff-basic
         uses: NejcZdovc/bundle-size-diff@v1
         with:
-          base_path: './base/stats.json'
-          pr_path: './pr/stats.json'
+          base_path: './base/stats-basic.json'
+          pr_path: './pr/stats-basic.json'
+          excluded_assets: '.ts$'
+
+      - name: Get diff full
+        id: get-diff-full
+        uses: NejcZdovc/bundle-size-diff@v1
+        with:
+          base_path: './base/stats-full.json'
+          pr_path: './pr/stats-full.json'
           excluded_assets: '.ts$'
 
       - name: Comment
@@ -129,7 +169,11 @@ jobs:
           identifier: 'GITHUB_ACTION_COMMENT_SIZE'
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          OLD: ${{steps.get-diff.outputs.base_file_string}}
-          NEW: ${{steps.get-diff.outputs.pr_file_string}}
-          DIFF: ${{steps.get-diff.outputs.diff_file_string}}
-          DIFF_PERCENT: ${{steps.get-diff.outputs.percent}}
+          OLD_BASIC: ${{steps.get-diff-basic.outputs.base_file_string}}
+          NEW_BASIC: ${{steps.get-diff-basic.outputs.pr_file_string}}
+          DIFF_BASIC: ${{steps.get-diff-basic.outputs.diff_file_string}}
+          DIFF_PERCENT_BASIC: ${{steps.get-diff-basic.outputs.percent}}
+          OLD_FULL: ${{steps.get-diff-full.outputs.base_file_string}}
+          NEW_FULL: ${{steps.get-diff-full.outputs.pr_file_string}}
+          DIFF_FULL: ${{steps.get-diff-full.outputs.diff_file_string}}
+          DIFF_PERCENT_FULL: ${{steps.get-diff-full.outputs.percent}}
