@@ -18,7 +18,7 @@
     "build": "webpack --config webpack.prod.js --env features=basic",
     "build:full": "webpack --config webpack.prod.js",
     "build:dev": "webpack --config webpack.dev.js",
-    "publish": "tsc --outDir dist && tsc -m es6 --outDir dist/lib-esm && webpack --config webpack.publish.js",
+    "publish": "webpack --config webpack.publish.js",
     "demo": "webpack --config webpack.demo.js",
     "start": "webpack serve --config webpack.dev.js",
     "lint": "npm-run-all lint:*",

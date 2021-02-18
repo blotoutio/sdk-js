@@ -7,9 +7,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const publish = () => {
   return {
     mode: 'production',
-    output: {
-      filename: './trends.min.js',
-    },
     plugins: [
       new CopyWebpackPlugin({
         patterns: [
