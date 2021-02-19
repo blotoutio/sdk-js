@@ -116,7 +116,7 @@ const getMeta = () => {
 
   const meta: Meta = {
     sdkv: process.env.PACKAGE_VERSION,
-    tz_offset: new Date().getTimezoneOffset(),
+    tz_offset: new Date().getTimezoneOffset() * -1,
   }
 
   const created = parseInt(getLocal(getCreatedKey()))
