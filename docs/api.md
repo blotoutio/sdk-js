@@ -22,7 +22,7 @@ trends('init', {
 ```
 
 ## capture
-The `init` method is used to record developer events. This allows you to send custom events to the server when a user is interacting with the website/app. For example, one custom event would be when a user adds an item to a cart.
+The `capture` method is used to record developer events. This allows you to send custom events to the server when a user is interacting with the website/app. For example, one custom event would be when a user adds an item to a cart.
 
 If you are capturing an event when page navigation is triggered, you should add the method `beacon` in options so that you will not lose data.
 
