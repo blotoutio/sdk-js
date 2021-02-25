@@ -79,13 +79,7 @@ interface SendEvent {
   extra?: SendEventExtra
 }
 
-interface EventPayload {
-  mid: string
-  userid: string
-  evn: string
-  evcs: number
-  scrn: string
-  evt: number
+interface EventPayloadProperties {
   // eslint-disable-next-line camelcase
   session_id: string
   screen: {
@@ -99,6 +93,16 @@ interface EventPayload {
   objT?: string
   mouse?: MouseData
   codifiedInfo?: EventData
+}
+
+interface EventPayload {
+  mid: string
+  userid: string
+  evn: string
+  evcs: number
+  scrn: string
+  evt: number
+  properties: EventPayloadProperties
 }
 
 interface Meta {

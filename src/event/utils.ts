@@ -32,13 +32,7 @@ export const getEventPayload = (
 ): EventPayload => {
   const sessionId = getSession(getSessionIDKey())
 
-  const properties: EventPayload = {
-    mid: event.mid,
-    userid: getUID(),
-    evn: event.name,
-    evcs: event.evcs,
-    scrn: event.urlPath,
-    evt: event.tstmp,
+  const properties: EventPayloadProperties = {
     session_id: sessionId,
     screen: {
       width: document.documentElement.clientWidth,
@@ -68,7 +62,15 @@ export const getEventPayload = (
     properties.codifiedInfo = event.metaInfo
   }
 
-  return properties
+  return {
+    mid: event.mid,
+    userid: getUID(),
+    evn: event.name,
+    evcs: event.evcs,
+    scrn: event.urlPath,
+    evt: event.tstmp,
+    properties,
+  }
 }
 
 export const sendEvent = (
