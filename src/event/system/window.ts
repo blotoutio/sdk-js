@@ -3,7 +3,7 @@ import { constants } from '../../common/config'
 import { setEvent } from '../'
 
 export const pagehide = (window: Window): void => {
-  const eventName = 'onpagehide' in self ? 'pagehide' : 'unload'
+  const eventName = 'onpagehide' in window ? 'pagehide' : 'unload'
   window.addEventListener(eventName, function (e) {
     setEvent(constants.PAGE_HIDE, e, {
       method: 'beacon',

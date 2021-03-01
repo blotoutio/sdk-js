@@ -2,70 +2,17 @@ import { codeForDevEvent } from './utils'
 import { getMid } from '../common/utils'
 import { systemEventCode } from '../common/config'
 
-const getObjectTitle = (target: HTMLElement, eventName: string) => {
-  if (!target) {
+const getObjectTitle = (target: HTMLElement) => {
+  if (!target || !target.localName) {
     return null
   }
 
-  if (
-    eventName !== 'click' &&
-    eventName !== 'mouseover' &&
-    eventName !== 'hover' &&
-    eventName !== 'dblclick'
-  ) {
-    return null
-  }
+  const elmArr = ['a', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 
-  const elmArr = [
-    'a',
-    'A',
-    'button',
-    'BUTTON',
-    'h1',
-    'h2',
-    'h3',
-    'h4',
-    'h5',
-    'h6',
-  ]
-
-  if (target.localName) {
-    const elmIndex = elmArr.findIndex((el) => el === target.localName)
-    if (elmIndex !== -1) {
-      return target.innerText
-    }
-  }
-
-  if (target.querySelector) {
-    const h1 = target.querySelector('h1')
-    if (h1 && h1.innerText) {
-      return h1.innerText
-    }
-
-    const h2 = target.querySelector('h2')
-    if (h2 && h2.innerText) {
-      return h2.innerText
-    }
-
-    const h3 = target.querySelector('h3')
-    if (h3 && h3.innerText) {
-      return h3.innerText
-    }
-
-    const h4 = target.querySelector('h4')
-    if (h4 && h4.innerText) {
-      return h4.innerText
-    }
-
-    const h5 = target.querySelector('h5')
-    if (h5 && h5.innerText) {
-      return h5.innerText
-    }
-
-    const h6 = target.querySelector('h6')
-    if (h6 && h6.innerText) {
-      return h6.innerText
-    }
+  const name = target.localName.toLocaleLowerCase()
+  const elmIndex = elmArr.findIndex((el) => el === name)
+  if (elmIndex !== -1) {
+    return target.innerText
   }
 
   return null
@@ -141,18 +88,14 @@ export const createEvent = (
 
   if (event) {
     data.position = createPosition(event as MouseEvent)
-    data.objectTitle = getObjectTitle(event.target as HTMLElement, eventName)
+    const title = getObjectTitle(event.target as HTMLElement)
+    if (title) {
+      data.objectTitle = title
+    }
 
-    if (
-      event.name === 'click' ||
-      event.name === 'mouseover' ||
-      event.name === 'hover' ||
-      event.name === 'dblclick'
-    ) {
-      data.mouse = {
-        x: event.clientX || -1,
-        y: event.clientY || -1,
-      }
+    data.mouse = {
+      x: event.clientX || -1,
+      y: event.clientY || -1,
     }
   }
 

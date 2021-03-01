@@ -7,7 +7,6 @@ const retries = [500, 1000, 2000, 4000, 8000, 16000, 32000]
 let timeout: ReturnType<typeof setTimeout> = null
 
 const setInterval = () => {
-  console.log('setInterval', count)
   clearTimeout(timeout)
   if (!retries[count]) {
     count = 0
@@ -58,11 +57,8 @@ export const checkRetry = (): void => {
   }
   count++
 
-  console.log(count)
-
   postRequest(item.url, item.payload)
     .then(() => {
-      console.log('reset')
       count = 0
     })
     .catch(info)

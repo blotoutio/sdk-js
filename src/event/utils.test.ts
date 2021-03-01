@@ -1,7 +1,16 @@
 import { createDevEvent } from './create'
 import * as utilsGeneral from '../common/utils'
-import { codeForDevEvent, getEventPayload } from './utils'
+import {
+  codeForDevEvent,
+  getEventPayload,
+  getSelector,
+  sendEvent,
+  shouldCollectSystemEvents,
+} from './utils'
 import * as storage from '../storage'
+import * as network from '../network'
+import * as endPoint from '../network/endPoint'
+import * as manifest from '../common/manifest'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
@@ -12,7 +21,22 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
+describe('shouldCollectSystemEvents', () => {
+  it('null', () => {
+    expect(shouldCollectSystemEvents()).toBe(false)
+  })
+
+  it('variable', () => {
+    const spy = jest.spyOn(manifest, 'getVariable').mockImplementation(() => 1)
+    expect(shouldCollectSystemEvents()).toBe(true)
+    spy.mockRestore()
+  })
+})
+
 describe('codeForDevEvent', () => {
+  it('empty', () => {
+    expect(codeForDevEvent('')).toBe(0)
+  })
   it('name has spaces', () => {
     expect(codeForDevEvent('some awesome event')).toBe(24016)
   })
@@ -195,5 +219,143 @@ describe('getEventPayload', () => {
       scrn: 'https://blotout.io',
       userid: null,
     })
+  })
+})
+
+describe('sendEvent', () => {
+  let spy: jest.SpyInstance<Promise<unknown>, [string, string, EventOptions?]>
+  let spyUrl: jest.SpyInstance<string, []>
+
+  beforeEach(() => {
+    spy = jest
+      .spyOn(network, 'postRequest')
+      .mockImplementation(() => Promise.resolve())
+
+    spyUrl = jest
+      .spyOn(endPoint, 'getPublishUrl')
+      .mockImplementation(() => 'https://domain.com/v1/publish')
+  })
+
+  afterEach(() => {
+    spy.mockReset()
+    spyUrl.mockReset()
+  })
+
+  afterAll(() => {
+    spy.mockRestore()
+    spyUrl.mockRestore()
+  })
+
+  it('empty events', () => {
+    sendEvent([])
+    expect(spy).toBeCalledTimes(0)
+  })
+
+  it('with events', () => {
+    sendEvent(
+      [
+        {
+          data: {
+            mid:
+              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            name: 'sdk_start',
+            evcs: 11130,
+            urlPath: 'https://blotout.io/',
+            tstmp: 1614584413700,
+          },
+        },
+        {
+          data: {
+            mid:
+              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            name: 'pagehide',
+            evcs: 11110,
+            urlPath: 'https://blotout.io/',
+            tstmp: 1614584313700,
+          },
+          extra: {
+            pii: {
+              data: 'dfsdfsdfds',
+              iv: 'sdfsdfdsfsd',
+              key: 'dfsfdsf',
+            },
+          },
+        },
+      ],
+      {
+        method: 'beacon',
+      }
+    )
+    expect(spy).toBeCalledWith(
+      'https://domain.com/v1/publish',
+      JSON.stringify({
+        meta: {
+          tz_offset: 0,
+          plf: 70,
+          appn: 'localhost',
+          osv: '0',
+          appv: '537.36',
+          dmft: 'unknown',
+          dm: 'Intel Based',
+          bnme: 'WebKit',
+          dplatform: 'unknown',
+        },
+        events: [
+          {
+            mid:
+              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            userid: null,
+            evn: 'sdk_start',
+            evcs: 11130,
+            scrn: 'https://blotout.io/',
+            evt: 1614584413700,
+            properties: {
+              session_id: null,
+              screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
+            },
+          },
+          {
+            pii: { data: 'dfsdfsdfds', iv: 'sdfsdfdsfsd', key: 'dfsfdsf' },
+            mid:
+              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            userid: null,
+            evn: 'pagehide',
+            evcs: 11110,
+            scrn: 'https://blotout.io/',
+            evt: 1614584313700,
+            properties: {
+              session_id: null,
+              screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
+            },
+          },
+        ],
+      }),
+      {
+        method: 'beacon',
+      }
+    )
+  })
+})
+
+describe('getSelector', () => {
+  it('null', () => {
+    expect(getSelector()).toBe('Unknown')
+  })
+
+  it('no identifiers', () => {
+    const event = document.createElement('div')
+    expect(getSelector(event)).toBe('DIV')
+  })
+
+  it('with id', () => {
+    const event = document.createElement('p')
+    event.setAttribute('id', 'test')
+    expect(getSelector(event)).toBe('P#test')
+  })
+
+  it('with classname', () => {
+    const event = document.createElement('p')
+    event.setAttribute('class', 'test')
+    expect(getSelector(event)).toBe('P.test')
   })
 })

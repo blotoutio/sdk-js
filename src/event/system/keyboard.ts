@@ -10,7 +10,7 @@ export const keyPressed = (window: Window): void => {
 export const keyDown = (window: Window): void => {
   const eventName = 'help'
   window.addEventListener('keydown', function (event) {
-    if (event.keyCode !== 112 /* KeyboardEvent.DOM_VK_F1 */) {
+    if (event.key !== 'F1') {
       return
     }
 

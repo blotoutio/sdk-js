@@ -77,10 +77,6 @@ export const sendEvent = (
   events: SendEvent[],
   options?: EventOptions
 ): void => {
-  if (!events) {
-    return
-  }
-
   const eventsPayload: EventPayload[] = []
   events.forEach((event) => {
     const extra = event.extra || {}
@@ -98,26 +94,14 @@ export const sendEvent = (
   ).catch(info)
 }
 
-export const getSelector = (element: HTMLElement): string => {
+export const getSelector = (element?: HTMLElement): string => {
   if (!element) {
     return 'Unknown'
   }
 
-  if (element.localName) {
-    return (
-      element.localName +
-      (element.id ? '#' + element.id : '') +
-      (element.className ? '.' + element.className : '')
-    )
-  }
-
-  if (element.nodeName) {
-    return (
-      element.nodeName +
-      (element.id ? '#' + element.id : '') +
-      (element.className ? '.' + element.className : '')
-    )
-  }
-
-  return 'Unknown'
+  return (
+    element.nodeName +
+    (element.id ? '#' + element.id : '') +
+    (element.className ? '.' + element.className : '')
+  )
 }

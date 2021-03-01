@@ -1,6 +1,6 @@
 import * as eventUtils from './utils'
 import * as storage from '../storage'
-import { mapID, setStartEvent } from '.'
+import { mapID, pageView, setDevEvent, setEvent, setStartEvent } from '.'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -31,6 +31,35 @@ describe('mapID', () => {
 
   afterEach(() => {
     spySet.mockRestore()
+  })
+
+  it('id is empty', () => {
+    mapID('', '')
+    expect(spySet).toBeCalledTimes(0)
+  })
+
+  it('provider is empty', () => {
+    mapID('sdfasfasdfds', '')
+    expect(spySet).toBeCalledTimes(0)
+  })
+
+  it('data is not set', () => {
+    mapID('sdfasfasdfds', 'service')
+    expect(spySet).toBeCalledWith(
+      [
+        {
+          data: {
+            evcs: 21001,
+            metaInfo: { map_id: 'sdfasfasdfds', map_provider: 'service' },
+            mid: 'localhost-null-1580775120000',
+            name: 'map_id',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+      ],
+      undefined
+    )
   })
 
   it('with data', () => {
@@ -75,6 +104,190 @@ describe('setStartEvent', () => {
       ],
       undefined
     )
+    spySend.mockRestore()
+  })
+})
+
+describe('setEvent', () => {
+  let spySend: jest.SpyInstance<void, [SendEvent[], EventOptions?]>
+
+  beforeEach(() => {
+    spySend = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
+  })
+
+  afterEach(() => {
+    spySend.mockReset()
+  })
+
+  afterAll(() => {
+    spySend.mockRestore()
+  })
+
+  it('empty name', () => {
+    setEvent('')
+    expect(spySend).toBeCalledTimes(0)
+  })
+
+  it('high frequency event', () => {
+    setEvent('focus')
+    expect(spySend).toBeCalledTimes(0)
+  })
+
+  it('ok', () => {
+    const target = document.createElement('h1')
+    target.innerText = 'hi'
+
+    const event = new MouseEvent('click')
+    Object.defineProperty(event, 'target', {
+      value: target,
+    })
+    setEvent('click', event, { method: 'beacon' })
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          data: {
+            evcs: 11119,
+            mid: 'localhost-null-1580775120000',
+            mouse: { x: -1, y: -1 },
+            name: 'click',
+            objectName: 'H1',
+            objectTitle: 'hi',
+            position: { height: -1, width: -1, x: -1, y: -1 },
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+      ],
+      { method: 'beacon' }
+    )
+  })
+})
+
+describe('setDevEvent', () => {
+  let spySend: jest.SpyInstance<void, [SendEvent[], EventOptions?]>
+
+  beforeEach(() => {
+    spySend = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
+  })
+
+  afterEach(() => {
+    spySend.mockReset()
+  })
+
+  afterAll(() => {
+    spySend.mockRestore()
+  })
+
+  it('null', () => {
+    setDevEvent(null)
+    expect(spySend).toBeCalledTimes(0)
+  })
+
+  it('empty events', () => {
+    setDevEvent([])
+    expect(spySend).toBeCalledTimes(0)
+  })
+
+  it('ok', () => {
+    setDevEvent([
+      {
+        name: 'custom-event',
+        data: {
+          foo: true,
+        },
+      },
+      {
+        name: '',
+        data: {
+          foo: true,
+        },
+      },
+      {
+        name: 'new-event',
+        data: null,
+        options: {
+          method: 'beacon',
+        },
+      },
+      {
+        name: '',
+        data: null,
+        options: {
+          PII: true,
+        },
+      },
+      {
+        name: 'event',
+        data: {
+          foo: 'test',
+        },
+        options: {
+          PII: true,
+        },
+      },
+    ])
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          data: {
+            evcs: 23872,
+            metaInfo: { foo: true },
+            mid: 'localhost-null-1580775120000',
+            name: 'custom-event',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+        {
+          data: {
+            evcs: 24004,
+            mid: 'localhost-null-1580775120000',
+            name: 'new-event',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+        {
+          data: {
+            evcs: 23560,
+            metaInfo: null,
+            mid: 'localhost-null-1580775120000',
+            name: 'event',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: { pii: { data: '', iv: '', key: '' } },
+        },
+      ],
+      undefined
+    )
+  })
+})
+
+describe('pageView', () => {
+  it('ok', () => {
+    const spySend = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
+    pageView()
+    expect(spySend).toBeCalledWith([
+      {
+        data: {
+          evcs: 11106,
+          mid: 'localhost-null-1580775120000',
+          name: 'pagehide',
+          tstmp: 1580775120000,
+          urlPath: 'http://localhost/',
+        },
+      },
+      {
+        data: {
+          evcs: 11130,
+          mid: 'localhost-null-1580775120000',
+          name: 'sdk_start',
+          tstmp: 1580775120000,
+          urlPath: 'http://localhost/',
+        },
+      },
+    ])
     spySend.mockRestore()
   })
 })

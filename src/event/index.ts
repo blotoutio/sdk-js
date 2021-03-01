@@ -70,6 +70,10 @@ export const setDevEvent = (
   events: IncomingEvent[],
   options?: EventOptions
 ): void => {
+  if (!events) {
+    return
+  }
+
   const devEvents: SendEvent[] = []
   events.forEach((event) => {
     let data: SendEvent | null | false
@@ -94,6 +98,10 @@ export const setDevEvent = (
 
     devEvents.push(data)
   })
+
+  if (devEvents.length === 0) {
+    return
+  }
 
   sendEvent(devEvents, options)
 }
