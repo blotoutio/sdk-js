@@ -18,7 +18,7 @@ export const getLocal = (name: string): string => {
 
 export const removeLocal = (name: string): void => {
   if (!name) {
-    return null
+    return
   }
   window.localStorage.removeItem(name)
 }
@@ -81,7 +81,7 @@ export const setSessionDataValue = (
 ): void => {
   let parsed
   try {
-    parsed = JSON.parse(getSession(getSessionDataKey())) || []
+    parsed = JSON.parse(getSession(getSessionDataKey())) || {}
   } catch (e) {
     info(e)
     return

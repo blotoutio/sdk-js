@@ -14,7 +14,7 @@ const getKey = (name: string) => {
   return `${key}${name}`
 }
 
-export const setRootKey = (key: string): void => {
+export const setRootKey = (key?: string): void => {
   if (!key) {
     rootKey = null
   }
