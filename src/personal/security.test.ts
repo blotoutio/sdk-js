@@ -5,6 +5,7 @@ import { getUserIndexKey } from '../storage/key'
 beforeEach(() => {
   setLocal(getUserIndexKey(), 'test_index')
 })
+
 describe('encryptRSA', () => {
   it('success', () => {
     const result = encryptRSA(

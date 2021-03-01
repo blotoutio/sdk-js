@@ -7,17 +7,10 @@ import { getClientToken } from './clientToken'
 import { setUserIndex } from '../personal/security'
 /// #endif
 
-let staticUserID: string = null
-
 const checkUID = () => {
-  if (staticUserID) {
-    return staticUserID
-  }
-
-  const userUUID = getLocal(getUIDKey())
+  let userUUID = getLocal(getUIDKey())
   if (userUUID) {
-    staticUserID = userUUID
-    return staticUserID
+    return userUUID
   }
 
   const startTime = Date.now()
@@ -38,12 +31,16 @@ const checkUID = () => {
     Date.now()
 
   const sha64Char = SHA256Encode(finalString)
-  staticUserID = convertTo64CharUUID(sha64Char)
-  setLocal(getUIDKey(), staticUserID)
-  return staticUserID
+  userUUID = convertTo64CharUUID(sha64Char)
+  setLocal(getUIDKey(), userUUID)
+  return userUUID
 }
 
 export const convertTo64CharUUID = (stringToConvert: string): string => {
+  if (!stringToConvert) {
+    return ''
+  }
+
   const lengths = [16, 8, 8, 8, 24]
   const parts = []
   let range = 0
@@ -56,9 +53,9 @@ export const convertTo64CharUUID = (stringToConvert: string): string => {
 }
 
 export const setUID = (newUser: boolean): void => {
-  checkUID()
+  const id = checkUID()
   /// #if FEATURES == 'full'
-  setUserIndex(staticUserID, newUser)
+  setUserIndex(id, newUser)
   /// #endif
 }
 

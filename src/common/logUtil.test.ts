@@ -5,7 +5,12 @@ describe('info', () => {
   const spy = jest.spyOn(global.console, 'info')
 
   beforeEach(() => jest.resetModules())
+
   afterEach(() => {
+    spy.mockReset()
+  })
+
+  afterAll(() => {
     spy.mockRestore()
   })
 
@@ -28,7 +33,12 @@ describe('log', () => {
   const spy = jest.spyOn(global.console, 'log')
 
   beforeEach(() => jest.resetModules())
+
   afterEach(() => {
+    spy.mockReset()
+  })
+
+  afterAll(() => {
     spy.mockRestore()
   })
 
@@ -51,7 +61,12 @@ describe('error', () => {
   const spy = jest.spyOn(global.console, 'error')
 
   beforeEach(() => jest.resetModules())
+
   afterEach(() => {
+    spy.mockReset()
+  })
+
+  afterAll(() => {
     spy.mockRestore()
   })
 

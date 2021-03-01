@@ -11,24 +11,19 @@ import { checkRetry } from '../network/retries'
 import { setClientToken } from './clientToken'
 
 const setConfiguration = (preferences: InitPreferences) => {
-  if (!preferences) {
-    return
-  }
-
-  if (!preferences.token || preferences.token.length !== 15) {
-    console.error('SDK token is not valid')
-    throw Error('SDK token is not valid')
-  }
-
   setUrl(preferences.endpointUrl)
   setClientToken(preferences.token)
   setCustomDomain(preferences.customDomain)
   setRootKey(preferences.storageRootKey)
 }
 
-export const init = (preferences: InitPreferences): void => {
-  // we shouldn't do anything if DNT is set
+export const init = (preferences?: InitPreferences): void => {
   if (!preferences) {
+    return
+  }
+
+  if (!preferences.token || preferences.token.length !== 15) {
+    console.info('SDK token is not valid')
     return
   }
 

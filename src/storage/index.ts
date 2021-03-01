@@ -72,6 +72,10 @@ export const getSessionDataValue = (key: keyof SessionData): unknown => {
     return null
   }
 
+  if (!parsed) {
+    return null
+  }
+
   return parsed[key]
 }
 

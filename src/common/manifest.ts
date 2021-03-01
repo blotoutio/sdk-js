@@ -87,19 +87,23 @@ export const getVariable = (key: keyof Manifest): string | number | boolean => {
   return variable !== undefined ? variable : manifestDefaults[key]
 }
 
-export const checkManifest = (newSession: boolean): Promise<void> => {
+export const checkManifest = (
+  newSession: boolean
+): Promise<boolean | string> => {
   return new Promise((resolve, reject) => {
     if (!newSession) {
       const value = getSessionDataValue('manifest') as Manifest
       if (value) {
         manifest = value
-        resolve()
+        resolve(true)
         return
       }
     }
 
     pullManifest()
-      .then(resolve)
+      .then(() => {
+        resolve(true)
+      })
       .catch((error) => {
         info(error)
         reject(error)
@@ -107,7 +111,7 @@ export const checkManifest = (newSession: boolean): Promise<void> => {
   })
 }
 
-export const pullManifest = (): Promise<void> => {
+export const pullManifest = (): Promise<boolean | string> => {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify({
       lastUpdatedTime: 0,
@@ -116,7 +120,7 @@ export const pullManifest = (): Promise<void> => {
     postRequest(getManifestUrl(), payload)
       .then((data) => {
         setData(data as ServerManifest)
-        resolve()
+        resolve(true)
       })
       .catch((error) => {
         reject(error)

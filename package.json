@@ -25,7 +25,7 @@
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check .",
     "test": "npm-run-all test:*",
-    "test:unit": "jest --runInBand",
+    "test:unit": "jest --runInBand --logHeapUsage",
     "test:integration": "start-server-and-test start http://localhost:9000 'cypress run'"
   },
   "engines": {

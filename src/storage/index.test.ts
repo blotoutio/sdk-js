@@ -65,6 +65,10 @@ describe('removeLocal', () => {
 describe('checkSession', () => {
   let spyReferrer: jest.SpyInstance<string, []>
 
+  afterAll(() => {
+    spyReferrer.mockRestore()
+  })
+
   it('session exists and referrer is not set', () => {
     setSession('_trendsId', 'asdf0234kr23rk23rk2')
     const result = checkSession()
@@ -79,7 +83,7 @@ describe('checkSession', () => {
     setSessionDataValue('referrer', 'page.com')
     const result = checkSession()
     expect(result).toBeFalsy()
-    spyReferrer.mockRestore()
+    spyReferrer.mockReset()
   })
 
   it('session exists and referrer is set and is different', () => {
@@ -90,7 +94,7 @@ describe('checkSession', () => {
     setSessionDataValue('referrer', 'page.com')
     const result = checkSession()
     expect(result).toBeTruthy()
-    spyReferrer.mockRestore()
+    spyReferrer.mockReset()
   })
 
   it('new session', () => {
@@ -106,7 +110,7 @@ describe('checkSession', () => {
         search: null,
       })
     )
-    spyReferrer.mockRestore()
+    spyReferrer.mockReset()
   })
 })
 
