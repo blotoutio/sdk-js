@@ -2,7 +2,7 @@ import { addItem } from './retries'
 
 const beacon = (url: string, payload: string) => {
   const blob = new Blob([payload], { type: 'application/json' })
-  navigator.sendBeacon(url, blob)
+  return navigator.sendBeacon(url, blob)
 }
 
 const ajax = async (url: string, payload: string) => {
@@ -12,7 +12,7 @@ const ajax = async (url: string, payload: string) => {
       'Content-type': 'application/json; charset=utf-8',
       Accept: 'application/json; charset=utf-8',
     },
-    body: payload || '',
+    body: payload,
   })
     .then((response) =>
       response.json().then((data) => ({ status: response.status, body: data }))
@@ -46,8 +46,7 @@ export async function postRequest(
   }
 
   if (options && options.method === 'beacon' && navigator.sendBeacon) {
-    beacon(url, payload)
-    return Promise.resolve()
+    return Promise.resolve(beacon(url, payload))
   }
 
   return await ajax(url, payload)

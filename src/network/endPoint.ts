@@ -17,7 +17,7 @@ const generateUrl = (path: string) => {
 
 export const getUrl = (): string => endpointUrl
 
-export const setUrl = (url: string): void => {
+export const setUrl = (url?: string): void => {
   if (url == null) {
     return
   }

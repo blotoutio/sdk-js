@@ -10,10 +10,8 @@ const getPlatform = (deviceType: string, OS: string) => {
   if (OS === 'iOS') {
     if (deviceType === 'tablet') {
       return 15
-    }
-
-    if (deviceType === 'mobile') {
-      return 14
+    } else {
+      return 14 // mobile
     }
   }
 
@@ -48,7 +46,8 @@ const getPlatform = (deviceType: string, OS: string) => {
 
 const getDevice = (type: string, OS: string) => {
   const ua = navigator.userAgent
-  const isIntelBased = ua.includes('Intel') || ua.indexOf('Intel') !== -1
+  const isIntelBased =
+    ua && (ua.includes('Intel') || ua.indexOf('Intel') !== -1)
   let model = 'Intel Based'
   type = type || 'unknown'
   if (type === 'unknown') {
@@ -57,12 +56,10 @@ const getDevice = (type: string, OS: string) => {
     }
   }
 
-  if (type === 'mobile' || type === 'tablet') {
-    if (!isIntelBased) {
+  if (!isIntelBased) {
+    if (type === 'mobile' || type === 'tablet') {
       model = 'ARM Based'
-    }
-  } else if (type === 'desktop') {
-    if (!isIntelBased) {
+    } else if (type === 'desktop') {
       model = 'AMD Based'
     }
   }
@@ -97,8 +94,8 @@ const getMeta = () => {
       manufacture = 'Ubuntu'
       break
     }
-    case 'UNIX': {
-      manufacture = 'UNIX'
+    case 'Unix': {
+      manufacture = 'Unix'
       break
     }
     default: {
@@ -156,7 +153,7 @@ const getMeta = () => {
   return meta
 }
 
-export const getPayload = (events: EventPayload[]): Payload => {
+export const getPayload = (events?: EventPayload[]): Payload => {
   const payload: Payload = {
     meta: getMeta(),
   }
