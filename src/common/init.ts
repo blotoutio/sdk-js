@@ -30,7 +30,7 @@ export const init = (preferences?: InitPreferences): void => {
   setConfiguration(preferences)
   const newSession = checkSession()
   const newUser = isNewUser()
-  setUID(newUser)
+  setUID()
   setCreateTimestamp(newUser)
   setStartEvent()
   requiredEvents(window)

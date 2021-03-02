@@ -4,10 +4,6 @@ import { getVariable } from '../common/manifest'
 import { encryptRSA } from './security'
 
 const createPersonalEvent = (event: IncomingEvent): SendEvent => {
-  if (!event.name) {
-    return null
-  }
-
   const data = createDevEvent(event)
   if (!data) {
     return null
@@ -34,6 +30,10 @@ const createPersonalEvent = (event: IncomingEvent): SendEvent => {
 export const handlePersonalEvent = (
   event: IncomingEvent
 ): false | null | SendEvent => {
+  if (!event) {
+    return null
+  }
+
   if (!event.options || (!event.options.PII && !event.options.PHI)) {
     return false
   }

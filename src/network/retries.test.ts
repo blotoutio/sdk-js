@@ -131,7 +131,7 @@ describe('checkRetry', () => {
     jest.spyOn(storage, 'getSessionDataValue').mockImplementation(() =>
       JSON.stringify([
         {
-          payload: 'd1ata',
+          payload: 'data',
           url: 'https://domain.com',
         },
       ])
@@ -145,6 +145,14 @@ describe('checkRetry', () => {
     jest.runAllTimers()
     checkRetry()
     jest.runAllTimers()
-    // expect(spy).toBeCalledTimes(1)
+    checkRetry()
+    jest.runAllTimers()
+    checkRetry()
+    jest.runAllTimers()
+    checkRetry()
+    jest.runAllTimers()
+    checkRetry()
+    jest.runAllTimers()
+    expect(spy).toBeCalledTimes(8)
   })
 })

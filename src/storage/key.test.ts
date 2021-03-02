@@ -3,7 +3,6 @@ import {
   getSessionDataKey,
   getSessionIDKey,
   getUIDKey,
-  getUserIndexKey,
   setRootKey,
 } from './key'
 
@@ -11,30 +10,17 @@ beforeEach(() => {
   setRootKey()
 })
 
-describe('getUserIndexKey', () => {
-  it('use default', () => {
-    const result = getUserIndexKey()
-    expect(result).toBe('_trendsIndex')
-  })
-
-  it('custom root key', () => {
-    setRootKey('Test')
-    const result = getUserIndexKey()
-    expect(result).toBe('TestIndex')
-  })
-})
-
 describe('setRootKey', () => {
   it('null', () => {
     setRootKey()
-    const result = getUserIndexKey()
-    expect(result).toBe('_trendsIndex')
+    const result = getUIDKey()
+    expect(result).toBe('_trendsUser')
   })
 
   it('ok', () => {
     setRootKey('Test')
-    const result = getUserIndexKey()
-    expect(result).toBe('TestIndex')
+    const result = getUIDKey()
+    expect(result).toBe('TestUser')
   })
 })
 

@@ -28,19 +28,19 @@ describe('getUUID', () => {
 
 describe('setUID', () => {
   it('new user, no client token', () => {
-    setUID(true)
+    setUID()
     expect(getLocal(getUIDKey())).toBeNull()
   })
 
   it('new user, client token', () => {
     setClientToken('token set')
-    setUID(true)
+    setUID()
     expect(getLocal(getUIDKey()).length).toEqual(68)
   })
 
   it('from storage', () => {
     setLocal(getUIDKey(), 'key')
-    setUID(true)
+    setUID()
   })
 })
 
@@ -50,7 +50,7 @@ describe('getUID', () => {
       getUIDKey(),
       '64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84'
     )
-    setUID(true)
+    setUID()
     const result = getUID()
     expect(result.length).toEqual(68)
   })

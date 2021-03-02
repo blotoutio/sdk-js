@@ -21,10 +21,6 @@ export const setRootKey = (key?: string): void => {
   rootKey = key
 }
 
-export const getUserIndexKey = (): string => {
-  return getKey('Index')
-}
-
 export const getUIDKey = (): string => {
   return getKey('User')
 }

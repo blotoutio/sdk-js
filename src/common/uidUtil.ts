@@ -3,9 +3,6 @@ import { SHA256Encode } from './securityUtil'
 import { getLocal, setLocal } from '../storage'
 import { getUIDKey } from '../storage/key'
 import { getClientToken } from './clientToken'
-/// #if FEATURES == 'full'
-import { setUserIndex } from '../personal/security'
-/// #endif
 
 const checkUID = () => {
   let userUUID = getLocal(getUIDKey())
@@ -52,11 +49,8 @@ export const convertTo64CharUUID = (stringToConvert: string): string => {
   return parts.join('-')
 }
 
-export const setUID = (newUser: boolean): void => {
-  const id = checkUID()
-  /// #if FEATURES == 'full'
-  setUserIndex(id, newUser)
-  /// #endif
+export const setUID = (): void => {
+  checkUID()
 }
 
 export const getUID = (): string => {

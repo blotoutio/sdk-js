@@ -62,5 +62,7 @@ export const checkRetry = (): void => {
       count = 0
     })
     .catch(info)
-    .finally(() => setInterval)
+    .finally(() => {
+      setInterval()
+    })
 }

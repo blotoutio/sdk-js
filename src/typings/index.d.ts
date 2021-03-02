@@ -34,8 +34,8 @@ interface Position {
 
 interface IncomingEvent {
   name: string
-  code?: number
   data: EventData
+  code?: number
   options?: EventOptions
 }
 
