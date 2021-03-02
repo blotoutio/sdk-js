@@ -3,6 +3,7 @@ import { SHA256Encode } from './securityUtil'
 import { getLocal, setLocal } from '../storage'
 import { getUIDKey } from '../storage/key'
 import { getClientToken } from './clientToken'
+import { setCreateTimestamp } from './utils'
 
 const checkUID = () => {
   let userUUID = getLocal(getUIDKey())
@@ -30,6 +31,7 @@ const checkUID = () => {
   const sha64Char = SHA256Encode(finalString)
   userUUID = convertTo64CharUUID(sha64Char)
   setLocal(getUIDKey(), userUUID)
+  setCreateTimestamp()
   return userUUID
 }
 

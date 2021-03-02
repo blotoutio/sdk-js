@@ -1,5 +1,4 @@
 coverage
-cypress
 dist
 *.md
 demo

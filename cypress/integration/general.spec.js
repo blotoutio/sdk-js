@@ -17,16 +17,12 @@ context('General', () => {
     cy.get('#log-event').click()
   })
 
-  it('dev event do not trigger error', () => {
-    cy.get('#log-event').click()
+  it('sign up event do not trigger error', () => {
+    cy.get('#sign-up').click()
   })
 
   it('login event do not trigger error', () => {
     cy.get('#log-in').click()
-  })
-
-  it('sign up event do not trigger error', () => {
-    cy.get('#sign-up').click()
   })
 
   it('map id event do not trigger error', () => {

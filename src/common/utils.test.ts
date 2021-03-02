@@ -111,13 +111,8 @@ describe('setCreateTimestamp', () => {
     removeLocal(getCreatedKey())
   })
 
-  it('old user', () => {
-    setCreateTimestamp(false)
-    expect(getLocal(getCreatedKey())).toBeNull()
-  })
-
-  it('new user', () => {
-    setCreateTimestamp(true)
+  it('ok', () => {
+    setCreateTimestamp()
     expect(getLocal(getCreatedKey())).toEqual('1580775120000')
   })
 })

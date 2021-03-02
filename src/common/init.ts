@@ -6,7 +6,6 @@ import { setUID } from './uidUtil'
 import { setCustomDomain } from './domainUtil'
 import { setRootKey } from '../storage/key'
 import { checkSession, removeLocal } from '../storage'
-import { isNewUser, setCreateTimestamp } from './utils'
 import { checkRetry } from '../network/retries'
 import { setClientToken } from './clientToken'
 
@@ -29,9 +28,7 @@ export const init = (preferences?: InitPreferences): void => {
 
   setConfiguration(preferences)
   const newSession = checkSession()
-  const newUser = isNewUser()
   setUID()
-  setCreateTimestamp(newUser)
   setStartEvent()
   requiredEvents(window)
   checkManifest(newSession).then(() => {

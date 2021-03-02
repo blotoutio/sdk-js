@@ -1,8 +1,8 @@
 import { getDomain } from './domainUtil'
 import { getUID } from './uidUtil'
 import { info } from './logUtil'
-import { getLocal, setLocal } from '../storage'
-import { getCreatedKey, getUIDKey } from '../storage/key'
+import { setLocal } from '../storage'
+import { getCreatedKey } from '../storage/key'
 
 export const getMid = (): string => {
   return `${getDomain()}-${getUID()}-${Date.now()}`
@@ -50,14 +50,6 @@ export const getSearchParams = (): Record<string, string> => {
   return result
 }
 
-export const isNewUser = (): boolean => {
-  return !getLocal(getUIDKey())
-}
-
-export const setCreateTimestamp = (newUser: boolean): void => {
-  if (!newUser) {
-    return
-  }
-
+export const setCreateTimestamp = (): void => {
   setLocal(getCreatedKey(), Date.now().toString())
 }

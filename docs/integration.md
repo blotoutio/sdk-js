@@ -1,8 +1,8 @@
 # Integration
 
 Choose between two packages that you can put on your website/app:
-- **basic**: (system events + codified api + ID mapping) (~33kb / ~13kb gzip) - [Download](https://assets.blotout.io/latest/sdk/index.js)
-- **full**: (basic + PII and PHI support) (~96kb / ~32kb gzip) - [Download](https://assets.blotout.io/latest/sdk/index-full.js)
+- **basic**: (system events + codified api + ID mapping) (~32kb / ~13kb gzip) - [Download](https://assets.blotout.io/latest/sdk/index.js)
+- **full**: (basic + PII and PHI support) (~95kb / ~32kb gzip) - [Download](https://assets.blotout.io/latest/sdk/index-full.js)
 
 ## Snippet
 

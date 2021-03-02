@@ -26,7 +26,8 @@
     "lint:prettier": "prettier --check .",
     "test": "npm-run-all test:*",
     "test:unit": "jest --runInBand --logHeapUsage",
-    "test:integration": "start-server-and-test start http://localhost:9000 'cypress run'"
+    "test:integration": "start-server-and-test start http://localhost:9000 'TZ=America/Los_Angeles cypress run'",
+    "cypress": "start-server-and-test start http://localhost:9000 'TZ=America/Los_Angeles cypress open'"
   },
   "engines": {
     "node": ">=12.0.0"
