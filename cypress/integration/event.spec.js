@@ -76,9 +76,9 @@ context('Events', () => {
       expect(interceptions.request.body.events).to.have.lengthOf(1)
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(100)
+      expect(event.mid).to.have.lengthOf(119)
       expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(68)
+      expect(event.userid).to.have.lengthOf(87)
       expect(event.properties).to.have.ownProperty('session_id')
       expect(event.properties.session_id).to.have.lengthOf(13)
 
@@ -114,9 +114,9 @@ context('Events', () => {
 
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(100)
+      expect(event.mid).to.have.lengthOf(119)
       expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(68)
+      expect(event.userid).to.have.lengthOf(87)
       expect(event.properties).to.have.ownProperty('session_id')
       expect(event.properties.session_id).to.have.lengthOf(13)
 
@@ -151,9 +151,9 @@ context('Events', () => {
 
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(100)
+      expect(event.mid).to.have.lengthOf(119)
       expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(68)
+      expect(event.userid).to.have.lengthOf(87)
       expect(event.properties).to.have.ownProperty('session_id')
       expect(event.properties.session_id).to.have.lengthOf(13)
 
@@ -193,11 +193,11 @@ context('Events', () => {
 
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(100)
+      expect(event.mid).to.have.lengthOf(119)
       delete event.mid
 
       expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(68)
+      expect(event.userid).to.have.lengthOf(87)
       delete event.userid
 
       expect(event.properties).to.have.ownProperty('session_id')
@@ -205,7 +205,7 @@ context('Events', () => {
       delete event.properties.session_id
 
       expect(event.pii).to.have.ownProperty('data')
-      expect(event.pii.data).to.have.lengthOf(600)
+      expect(event.pii.data).to.have.lengthOf(640)
       expect(event.pii).to.have.ownProperty('key')
       expect(event.pii.key).to.have.lengthOf(172)
       expect(event.pii).to.have.ownProperty('iv')
@@ -239,11 +239,11 @@ context('Events', () => {
 
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(100)
+      expect(event.mid).to.have.lengthOf(119)
       delete event.mid
 
       expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(68)
+      expect(event.userid).to.have.lengthOf(87)
       delete event.userid
 
       expect(event.properties).to.have.ownProperty('session_id')
@@ -251,7 +251,7 @@ context('Events', () => {
       delete event.properties.session_id
 
       expect(event.phi).to.have.ownProperty('data')
-      expect(event.phi.data).to.have.lengthOf(576)
+      expect(event.phi.data).to.have.lengthOf(620)
       expect(event.phi).to.have.ownProperty('key')
       expect(event.phi.key).to.have.lengthOf(172)
       expect(event.phi).to.have.ownProperty('iv')

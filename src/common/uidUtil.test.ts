@@ -1,23 +1,18 @@
-import { convertTo64CharUUID, getUID, getUUID, setUID } from './uidUtil'
+import { generateUUID, getUID, getUUID, setUID } from './uidUtil'
 import { getLocal, setLocal } from '../storage'
 import { getUIDKey } from '../storage/key'
 import { setClientToken } from './clientToken'
 
-describe('convertTo64CharUUID', () => {
-  it('empty', () => {
-    const result = convertTo64CharUUID('')
-    expect(result).toEqual('')
-  })
+const testUUID = (number: number) => {
+  return new Promise((resolve) => {
+    const array = []
+    for (let i = 0; i < number; i++) {
+      array.push(generateUUID())
+    }
 
-  it('data', () => {
-    const result = convertTo64CharUUID(
-      '73a682db-a292-4e56ee53ddd38a0d9c20-36f386ba-7a6f0029-191f0c86-0d6622296d1470f0d25a246f-b2ac-dc1566a7f49b'
-    )
-    expect(result).toEqual(
-      '73a682db-a292-4e-56ee53dd-d38a0d9c-20-36f38-6ba-7a6f0029-191f0c86-0d'
-    )
+    resolve(array)
   })
-})
+}
 
 describe('getUUID', () => {
   it('ok', () => {
@@ -35,7 +30,7 @@ describe('setUID', () => {
   it('new user, client token', () => {
     setClientToken('token set')
     setUID()
-    expect(getLocal(getUIDKey()).length).toEqual(68)
+    expect(getLocal(getUIDKey()).length).toEqual(87)
   })
 
   it('from storage', () => {
@@ -48,10 +43,34 @@ describe('getUID', () => {
   it('ok', () => {
     setLocal(
       getUIDKey(),
-      '64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84'
+      'd2e74649-18b7-4504-80af-e844232a98cc-1614847234503-131067e3-a2ad-471b-859c-ca9bf796bb01'
     )
     setUID()
     const result = getUID()
-    expect(result.length).toEqual(68)
+    expect(result.length).toEqual(87)
+  })
+})
+
+describe('generateUUID', () => {
+  it('collision test', () => {
+    const iterations = 100
+    const nodes = 10000
+
+    const promises = []
+    for (let i = 0; i < nodes; i++) {
+      promises.push(testUUID(iterations))
+    }
+
+    Promise.all(promises).then((values) => {
+      const result = values.flat()
+      expect(new Set(result).size === result.length).toBeTruthy()
+    })
+  })
+
+  it('performance is not available', () => {
+    Object.defineProperty(performance, 'now', {
+      value: undefined,
+    })
+    expect(generateUUID().length).toBe(87)
   })
 })

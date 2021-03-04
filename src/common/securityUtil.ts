@@ -1,4 +1,3 @@
-import SHA256 from 'crypto-js/sha256'
 import SHA1 from 'crypto-js/sha1'
 
 const SHA1Encode = function (data: string) {
@@ -7,14 +6,6 @@ const SHA1Encode = function (data: string) {
   }
 
   return SHA1(data).toString()
-}
-
-export const SHA256Encode = (data: string): string => {
-  if (!data) {
-    return ''
-  }
-
-  return SHA256(data).toString()
 }
 
 export const stringToIntSum = (eventName: string): number => {
