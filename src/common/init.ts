@@ -1,6 +1,6 @@
 import { optionalEvents, requiredEvents } from '../event/system'
 import { setUrl } from '../network/endPoint'
-import { checkManifest } from './manifest'
+import { checkManifest, loadManifest } from './manifest'
 import { setStartEvent } from '../event'
 import { setUID } from './uidUtil'
 import { setCustomDomain } from './domainUtil'
@@ -28,13 +28,22 @@ export const init = (preferences?: InitPreferences): void => {
 
   setConfiguration(preferences)
   const newSession = checkSession()
+  let manifestLoaded = false
+  if (!newSession) {
+    manifestLoaded = loadManifest()
+  }
   setUID()
   setStartEvent()
   requiredEvents(window)
-  checkManifest(newSession).then(() => {
+  if (!manifestLoaded) {
+    checkManifest().then(() => {
+      optionalEvents(window)
+      checkRetry()
+    })
+  } else {
     optionalEvents(window)
     checkRetry()
-  })
+  }
 
   // For versions lower of 0.5, to clean old data
   removeLocal(`sdkRoot`)

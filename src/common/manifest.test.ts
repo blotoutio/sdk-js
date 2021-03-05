@@ -1,5 +1,10 @@
 import * as network from '../network'
-import { checkManifest, getVariable, pullManifest } from './manifest'
+import {
+  checkManifest,
+  getVariable,
+  loadManifest,
+  pullManifest,
+} from './manifest'
 import { getSessionDataKey } from '../storage/key'
 import { setSessionDataValue } from '../storage'
 
@@ -223,38 +228,30 @@ describe('checkManifest', () => {
     spyPost.mockRestore()
   })
 
-  it('old session, no manifest', async () => {
+  it('ok', async () => {
     spyPost = jest
       .spyOn(network, 'postRequest')
       .mockImplementation(() => Promise.resolve())
-    await expect(checkManifest(false)).resolves.toEqual(true)
+    await expect(checkManifest()).resolves.toEqual(true)
     expect(spyPost).toBeCalledTimes(1)
   })
 
-  it('old session, manifest is set', async () => {
-    spyPost = jest
-      .spyOn(network, 'postRequest')
-      .mockImplementation(() => Promise.resolve())
-    setSessionDataValue('manifest', {})
-    await expect(checkManifest(false)).resolves.toEqual(true)
-    expect(spyPost).toBeCalledTimes(0)
-  })
-
-  it('new session', async () => {
-    spyPost = jest
-      .spyOn(network, 'postRequest')
-      .mockImplementation(() => Promise.resolve())
-    await expect(checkManifest(true)).resolves.toEqual(true)
-    expect(spyPost).toBeCalledTimes(1)
-  })
-
-  it('new session, error on pull', async () => {
+  it('error on pull', async () => {
     spyPost = jest
       .spyOn(network, 'postRequest')
       .mockImplementation(() => Promise.reject(new Error('Server problem')))
-    await expect(checkManifest(true)).rejects.toEqual(
-      new Error('Server problem')
-    )
+    await expect(checkManifest()).rejects.toEqual(new Error('Server problem'))
     expect(spyPost).toBeCalledTimes(1)
+  })
+})
+
+describe('loadManifest', () => {
+  it('session not set yet', () => {
+    expect(loadManifest()).toBeFalsy()
+  })
+
+  it('session set', () => {
+    setSessionDataValue('manifest', {})
+    expect(loadManifest()).toBeTruthy()
   })
 })

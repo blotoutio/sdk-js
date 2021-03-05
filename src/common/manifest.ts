@@ -87,19 +87,18 @@ export const getVariable = (key: keyof Manifest): string | number | boolean => {
   return variable !== undefined ? variable : manifestDefaults[key]
 }
 
-export const checkManifest = (
-  newSession: boolean
-): Promise<boolean | string> => {
-  return new Promise((resolve, reject) => {
-    if (!newSession) {
-      const value = getSessionDataValue('manifest') as Manifest
-      if (value) {
-        manifest = value
-        resolve(true)
-        return
-      }
-    }
+export const loadManifest = (): boolean => {
+  const value = getSessionDataValue('manifest') as Manifest
+  if (!value) {
+    return false
+  }
 
+  manifest = value
+  return true
+}
+
+export const checkManifest = (): Promise<boolean | string> => {
+  return new Promise((resolve, reject) => {
     pullManifest()
       .then(() => {
         resolve(true)

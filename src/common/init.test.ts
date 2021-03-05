@@ -1,11 +1,13 @@
 import { init } from './init'
 import * as endPoint from '../network/endPoint'
+import * as storage from '../storage'
 import * as key from '../storage/key'
 import * as eventSystem from '../event/system'
 import * as event from '../event'
 import * as clientToken from './clientToken'
 import * as domainUtil from './domainUtil'
 import * as manifest from './manifest'
+import { setSessionDataValue } from '../storage'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -54,5 +56,28 @@ describe('init', () => {
     spySetStartEvent.mockRestore()
     spyRequiredEvents.mockRestore()
     spyCheckManifest.mockRestore()
+  })
+
+  it('old session', () => {
+    const spyStorage = jest
+      .spyOn(storage, 'checkSession')
+      .mockImplementation(() => false)
+    const spyLoad = jest
+      .spyOn(manifest, 'loadManifest')
+      .mockImplementation(() => true)
+    const spyCheckManifest = jest
+      .spyOn(manifest, 'checkManifest')
+      .mockImplementation()
+
+    setSessionDataValue('manifest', {})
+    init({
+      token: '3WBQ5E48ND3VTPC',
+      endpointUrl: 'https://domain.com/sdk',
+    })
+    expect(spyCheckManifest).toBeCalledTimes(0)
+
+    spyStorage.mockRestore()
+    spyCheckManifest.mockRestore()
+    spyLoad.mockRestore()
   })
 })
