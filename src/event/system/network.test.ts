@@ -1,34 +1,69 @@
 import * as event from '../'
 import { offline, online } from './network'
+import * as utils from '../utils'
 
-let spy: jest.SpyInstance<void, [string, Event?, EventOptions?]>
+let spySet: jest.SpyInstance<void, [string, Event?, EventOptions?]>
 
 beforeEach(() => {
-  spy = jest.spyOn(event, 'setEvent').mockImplementation()
+  spySet = jest.spyOn(event, 'setEvent').mockImplementation()
 })
 
 afterEach(() => {
-  spy.mockReset()
+  spySet.mockReset()
 })
 
 afterAll(() => {
-  spy.mockRestore()
+  spySet.mockRestore()
 })
 
 describe('offline', () => {
-  it('ok', () => {
+  it('system disabled', () => {
+    const spySystem = jest
+      .spyOn(utils, 'shouldCollectSystemEvents')
+      .mockImplementation(() => false)
+
     offline(window)
     const event = new Event('offline')
     window.dispatchEvent(event)
-    expect(spy).toBeCalledWith('offline', event)
+    expect(spySet).toBeCalledTimes(0)
+    spySystem.mockRestore()
+  })
+
+  it('system enabled', () => {
+    const spySystem = jest
+      .spyOn(utils, 'shouldCollectSystemEvents')
+      .mockImplementation(() => true)
+
+    offline(window)
+    const event = new Event('offline')
+    window.dispatchEvent(event)
+    expect(spySet).toBeCalledWith('offline', event)
+    spySystem.mockRestore()
   })
 })
 
 describe('online', () => {
-  it('ok', () => {
+  it('system disabled', () => {
+    const spySystem = jest
+      .spyOn(utils, 'shouldCollectSystemEvents')
+      .mockImplementation(() => false)
+
     online(window)
     const event = new Event('online')
     window.dispatchEvent(event)
-    expect(spy).toBeCalledWith('online', event)
+    expect(spySet).toBeCalledTimes(0)
+    spySystem.mockRestore()
+  })
+
+  it('system enabled', () => {
+    const spySystem = jest
+      .spyOn(utils, 'shouldCollectSystemEvents')
+      .mockImplementation(() => true)
+
+    online(window)
+    const event = new Event('online')
+    window.dispatchEvent(event)
+    expect(spySet).toBeCalledWith('online', event)
+    spySystem.mockRestore()
   })
 })

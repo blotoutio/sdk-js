@@ -1,6 +1,7 @@
 import { getSessionDataValue, setSessionDataValue } from '../storage'
 import { info } from '../common/logUtil'
 import { postRequest } from '.'
+import { getIsOnline } from '../event/system/network'
 
 let count = 0
 const retries = [500, 1000, 2000, 4000, 8000, 16000, 32000]
@@ -50,6 +51,10 @@ export const getItem = (): RequestRetry => {
 }
 
 export const checkRetry = (): void => {
+  if (!getIsOnline()) {
+    return
+  }
+
   const item = getItem()
   if (!item) {
     count = 0
