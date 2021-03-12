@@ -33,14 +33,33 @@ If you are capturing an event when page navigation is triggered, you should add 
 |---|---|---|---|
 | `eventName` | `String` |  | Name of the event that you are sending |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
-| `options` | `Object` | Optional | Look at options table for more info |
+| `options` | `Object` | Optional | Look at capture options table for more info |
 
 #### Example
 ```js
 trends('capture', 'add-to-cart')
 trends('capture', 'add-to-cart', { SKU: '123123', itemName: 'phone'})
 trends('capture', 'button-clicked', null, { method: 'beacon'})
-trends('capture', 'form-submited', { email: 'user@domain.com' }, { PII: true})
+```
+
+## capturePersonal
+Same as method above (`capture`) this one is used to record developer events. Main difference is that this one should be used when you are sending personal information to the server. This payload will be encrypted on client side so that no personal data can be seen while going to the server or even on the server without appropriate permissions.
+
+By default, if no options is provided, payload will be marked as `PII`. 
+
+#### Input
+`trends('capturePersonal', eventName, [additionalData], [options])`
+
+|||||
+|---|---|---|---|
+| `eventName` | `String` |  | Name of the event that you are sending |
+| `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
+| `options` | `Object` | Optional | Look at capturePersonal options table for more info |
+
+#### Example
+```js
+trends('capturePersonal', 'button-clicked', { bloodType: 'A+' }, { PHI: true })
+trends('capturePersonal', 'form-submited', { email: 'user@domain.com' }, { PII: true })
 ```
 
 ## pageView
@@ -86,7 +105,13 @@ console.log(userId)
 
 
 ## Appendix
-**Options**
+**Capture Options**
+
+|||||
+|---|---|---|---|
+| `method` | `String` | Optional | Allow options: `beacon` |
+
+**CapturePersonal Options**
 
 |||||
 |---|---|---|---|

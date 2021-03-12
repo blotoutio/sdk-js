@@ -17,6 +17,9 @@ interface ServerManifest {
 
 interface EventOptions {
   method?: 'beacon'
+}
+
+interface PersonalOptions extends EventOptions {
   PII?: boolean
   PHI?: boolean
 }
@@ -37,6 +40,10 @@ interface IncomingEvent {
   data: EventData
   code?: number
   options?: EventOptions
+}
+
+interface IncomingPersonal extends IncomingEvent {
+  options?: PersonalOptions
 }
 
 interface BasicEvent {
@@ -160,10 +167,16 @@ interface MouseEvent {
 interface Window {
   trends: {
     (event: 'init', preferences: InitPreferences)
-    (event: 'capture', data?: EventData, options?: EventOptions)
-    (event: 'getUserId'): string
-    (event: 'mapID', id: string, provider: string, data?: EventData)
+    (event: 'capture', name: string, data?: EventData, options?: EventOptions)
+    (
+      event: 'capturePersonal',
+      name: string,
+      data?: EventData,
+      options?: PersonalOptions
+    )
     (event: 'pageView', options?: EventOptions)
+    (event: 'mapID', id: string, provider: string, data?: EventData)
+    (event: 'getUserId'): string
   }
   fetch: {
     mockResolvedValueOnce

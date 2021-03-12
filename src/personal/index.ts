@@ -1,24 +1,25 @@
 import { createDevEvent } from '../event/create'
-import { getEventPayload } from '../event/utils'
+import { getEventPayload, sendEvent } from '../event/utils'
 import { getVariable } from '../common/manifest'
 import { encryptRSA } from './security'
 
-const createPersonalEvent = (event: IncomingEvent): SendEvent => {
+const createPersonalEvent = (event: IncomingPersonal): SendEvent => {
   const data = createDevEvent(event)
   if (!data) {
     return null
   }
-  const key = event.options.PII ? 'piiPublicKey' : 'phiPublicKey'
+  const isPHI = event.options && event.options.PHI
+  const key = isPHI ? 'phiPublicKey' : 'piiPublicKey'
   const eventPayload = getEventPayload(data)
   const publicKey = (getVariable(key) || '').toString()
   const obj = encryptRSA(publicKey, JSON.stringify([eventPayload]))
   data.metaInfo = null
 
   const extra: SendEventExtra = {}
-  if (event.options.PII) {
-    extra.pii = obj
-  } else {
+  if (isPHI) {
     extra.phi = obj
+  } else {
+    extra.pii = obj
   }
 
   return {
@@ -27,21 +28,18 @@ const createPersonalEvent = (event: IncomingEvent): SendEvent => {
   }
 }
 
-export const handlePersonalEvent = (
-  event: IncomingEvent
+export const capturePersonal = (
+  event: IncomingPersonal,
+  options?: PersonalOptions
 ): false | null | SendEvent => {
   if (!event) {
-    return null
-  }
-
-  if (!event.options || (!event.options.PII && !event.options.PHI)) {
-    return false
+    return
   }
 
   const data = createPersonalEvent(event)
   if (!data) {
-    return null
+    return
   }
 
-  return data
+  sendEvent([data], options)
 }

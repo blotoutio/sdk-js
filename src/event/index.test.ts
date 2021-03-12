@@ -209,22 +209,6 @@ describe('setDevEvent', () => {
           method: 'beacon',
         },
       },
-      {
-        name: '',
-        data: null,
-        options: {
-          PII: true,
-        },
-      },
-      {
-        name: 'event',
-        data: {
-          foo: 'test',
-        },
-        options: {
-          PII: true,
-        },
-      },
     ])
     expect(spySend).toBeCalledWith(
       [
@@ -246,17 +230,6 @@ describe('setDevEvent', () => {
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
-        },
-        {
-          data: {
-            evcs: 23560,
-            metaInfo: null,
-            mid: 'localhost-null-1580775120000',
-            name: 'event',
-            tstmp: 1580775120000,
-            urlPath: 'http://localhost/',
-          },
-          extra: { pii: { data: '', iv: '', key: '' } },
         },
       ],
       undefined

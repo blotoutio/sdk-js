@@ -38,14 +38,12 @@
           >
             Map id
           </button>
-          <button id="pii" onclick="trends('capture', 'PII event', {
+          <button id="pii" onclick="trends('capturePersonal', 'PII event', {
             email: 'sales@blotout.io'
-          }, {
-            PII: true
           })">
             PII
           </button>
-          <button id="phi" onclick="trends('capture', 'PHI event', {
+          <button id="phi" onclick="trends('capturePersonal', 'PHI event', {
             type: 'A+'
           }, {
             PHI: true

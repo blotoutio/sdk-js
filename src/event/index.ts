@@ -2,9 +2,6 @@ import { getSelector, sendEvent } from './utils'
 import { constants, highFreqEvents, isHighFreqEventOff } from '../common/config'
 import { error } from '../common/logUtil'
 import { createDevEvent, createEvent } from './create'
-/// #if FEATURES == 'full'
-import { handlePersonalEvent } from '../personal'
-/// #endif
 
 export const mapID = (
   id: string,
@@ -76,27 +73,14 @@ export const setDevEvent = (
 
   const devEvents: SendEvent[] = []
   events.forEach((event) => {
-    let data: SendEvent | null | false
-
-    /// #if FEATURES == 'full'
-    data = handlePersonalEvent(event)
-    if (data === null) {
+    const dev = createDevEvent(event)
+    if (!dev) {
       return
     }
-    /// #endif
 
-    if (!data) {
-      const dev = createDevEvent(event)
-      if (!dev) {
-        return
-      }
-
-      data = {
-        data: dev,
-      }
-    }
-
-    devEvents.push(data)
+    devEvents.push({
+      data: dev,
+    })
   })
 
   if (devEvents.length === 0) {

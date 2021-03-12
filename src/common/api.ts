@@ -1,18 +1,27 @@
 import { mapID, pageView, setDevEvent } from '../event'
 import { init } from './init'
 import { getUID } from './uidUtil'
+/// #if FEATURES == 'full'
+import { capturePersonal as personal } from '../personal'
+/// #endif
 
 class API {
-  capture(event: string, data?: EventData, options?: EventOptions) {
-    setDevEvent([{ name: event, data, options }], options)
-  }
-
   init(preferences: InitPreferences) {
     init(preferences)
   }
 
-  getUserId() {
-    return getUID()
+  capture(event: string, data?: EventData, options?: EventOptions) {
+    setDevEvent([{ name: event, data, options }], options)
+  }
+
+  /// #if FEATURES == 'full'
+  capturePersonal(event: string, data?: EventData, options?: PersonalOptions) {
+    personal({ name: event, data, options }, options)
+  }
+  /// #endif
+
+  pageView() {
+    pageView()
   }
 
   mapID(
@@ -24,8 +33,8 @@ class API {
     mapID(id, provider, data, options)
   }
 
-  pageView() {
-    pageView()
+  getUserId() {
+    return getUID()
   }
 }
 

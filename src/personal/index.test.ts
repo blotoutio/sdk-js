@@ -1,58 +1,66 @@
-import { handlePersonalEvent } from './index'
+import { capturePersonal } from './index'
+import * as eventUtils from '../event/utils'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
 })
 
-describe('handlePersonalEvent', () => {
+describe('capturePersonal', () => {
+  let spySend: jest.SpyInstance<void, [SendEvent[], EventOptions?]>
+
+  beforeEach(() => {
+    spySend = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
+  })
+
+  afterEach(() => {
+    spySend.mockReset()
+  })
+
+  afterAll(() => {
+    spySend.mockRestore()
+  })
+
   it('null', () => {
-    expect(handlePersonalEvent(null)).toBeNull()
-  })
-
-  it('no options', () => {
-    const event = {
-      name: 'custom event',
-      data: {},
-    }
-    expect(handlePersonalEvent(event)).toBeFalsy()
-  })
-
-  it('no PII/PHI', () => {
-    const event: IncomingEvent = {
-      name: 'custom event',
-      data: {},
-      options: {
-        method: 'beacon',
-      },
-    }
-    expect(handlePersonalEvent(event)).toBeFalsy()
+    capturePersonal(null)
+    expect(spySend).toBeCalledTimes(0)
   })
 
   it('name empty', () => {
-    const event: IncomingEvent = {
+    const event: IncomingPersonal = {
       name: '',
       data: {},
-      options: {
-        PII: true,
-      },
     }
-    expect(handlePersonalEvent(event)).toBeNull()
+    capturePersonal(event)
+    expect(spySend).toBeCalledTimes(0)
   })
 
-  it('name empty', () => {
-    const event: IncomingEvent = {
-      name: '',
+  it('options not defined, default to PII', () => {
+    const event: IncomingPersonal = {
+      name: 'custom event',
       data: {},
-      options: {
-        PII: true,
-      },
     }
-    expect(handlePersonalEvent(event)).toBeNull()
+    capturePersonal(event)
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          data: {
+            evcs: 23814,
+            metaInfo: null,
+            mid: 'localhost-null-1580775120000',
+            name: 'custom event',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: { pii: { data: '', iv: '', key: '' } },
+        },
+      ],
+      undefined
+    )
   })
 
   it('PII', () => {
-    const event: IncomingEvent = {
+    const event: IncomingPersonal = {
       name: 'custom event',
       data: {
         foo: true,
@@ -61,21 +69,27 @@ describe('handlePersonalEvent', () => {
         PII: true,
       },
     }
-    expect(handlePersonalEvent(event)).toStrictEqual({
-      data: {
-        evcs: 23814,
-        metaInfo: null,
-        mid: 'localhost-null-1580775120000',
-        name: 'custom event',
-        tstmp: 1580775120000,
-        urlPath: 'http://localhost/',
-      },
-      extra: { pii: { data: '', iv: '', key: '' } },
-    })
+    capturePersonal(event)
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          data: {
+            evcs: 23814,
+            metaInfo: null,
+            mid: 'localhost-null-1580775120000',
+            name: 'custom event',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: { pii: { data: '', iv: '', key: '' } },
+        },
+      ],
+      undefined
+    )
   })
 
   it('PHI', () => {
-    const event: IncomingEvent = {
+    const event: IncomingPersonal = {
       name: 'custom event',
       data: {
         foo: true,
@@ -84,16 +98,23 @@ describe('handlePersonalEvent', () => {
         PHI: true,
       },
     }
-    expect(handlePersonalEvent(event)).toStrictEqual({
-      data: {
-        evcs: 23814,
-        metaInfo: null,
-        mid: 'localhost-null-1580775120000',
-        name: 'custom event',
-        tstmp: 1580775120000,
-        urlPath: 'http://localhost/',
-      },
-      extra: { phi: { data: '', iv: '', key: '' } },
-    })
+
+    capturePersonal(event)
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          data: {
+            evcs: 23814,
+            metaInfo: null,
+            mid: 'localhost-null-1580775120000',
+            name: 'custom event',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: { phi: { data: '', iv: '', key: '' } },
+        },
+      ],
+      undefined
+    )
   })
 })
