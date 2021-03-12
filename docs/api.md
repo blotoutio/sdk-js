@@ -43,9 +43,9 @@ trends('capture', 'button-clicked', null, { method: 'beacon'})
 ```
 
 ## capturePersonal
-Same as method above (`capture`) this one is used to record developer events. Main difference is that this one should be used when you are sending personal information to the server. This payload will be encrypted on client side so that no personal data can be seen while going to the server or even on the server without appropriate permissions.
+Same as the method above (`capture`) `capturePersonal` is used to record developer events. The main difference is that `capturePersonal` should be used when you are sending personal information to the server. This payload will be encrypted on the client-side so that no personal data can be seen while going to the server or even on the server without appropriate permissions.
 
-By default, if no options is provided, payload will be marked as `PII`. 
+By default, if no options are provided, the payload will be marked as `PII`. 
 
 #### Input
 `trends('capturePersonal', eventName, [additionalData], [options])`
