@@ -33,7 +33,7 @@ If you are capturing an event when page navigation is triggered, you should add 
 |---|---|---|---|
 | `eventName` | `String` |  | Name of the event that you are sending |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
-| `options` | `Object` | Optional | Look at capture options table for more info |
+| `options` | `Object` | Optional | Look at options table for more info |
 
 #### Example
 ```js
@@ -45,21 +45,20 @@ trends('capture', 'button-clicked', null, { method: 'beacon'})
 ## capturePersonal
 Same as the method above (`capture`) `capturePersonal` is used to record developer events. The main difference is that `capturePersonal` should be used when you are sending personal information to the server. This payload will be encrypted on the client-side so that no personal data can be seen while going to the server or even on the server without appropriate permissions.
 
-By default, if no options are provided, the payload will be marked as `PII`. 
-
 #### Input
-`trends('capturePersonal', eventName, [additionalData], [options])`
+`trends('capturePersonal', eventName, [additionalData], [isPHI], [options])`
 
 |||||
 |---|---|---|---|
 | `eventName` | `String` |  | Name of the event that you are sending |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
-| `options` | `Object` | Optional | Look at capturePersonal options table for more info |
+| `isPHI` | `Boolean` | Optional | Define if data that you are sending is protected health information (PHI). If this is not defined or is set to `false`, data is treated as personally identifiable information (PII).  |
+| `options` | `Object` | Optional | Look at options table for more info |
 
 #### Example
 ```js
-trends('capturePersonal', 'button-clicked', { bloodType: 'A+' }, { PHI: true })
-trends('capturePersonal', 'form-submited', { email: 'user@domain.com' }, { PII: true })
+trends('capturePersonal', 'form-submited', { email: 'user@domain.com' })
+trends('capturePersonal', 'button-clicked', { bloodType: 'A+' }, true)
 ```
 
 ## pageView
@@ -105,16 +104,8 @@ console.log(userId)
 
 
 ## Appendix
-**Capture Options**
+**Options**
 
 |||||
 |---|---|---|---|
 | `method` | `String` | Optional | Allow options: `beacon` |
-
-**CapturePersonal Options**
-
-|||||
-|---|---|---|---|
-| `method` | `String` | Optional | Allow options: `beacon` |
-| `PII` | `Boolean` | Optional | If your `additionalData` contains personally identifiable information (PII) you should mark this as `true`.  |
-| `PHI` | `Boolean` | Optional | If your `additionalData` contains protected health information (PII) you should mark this as `true`.|

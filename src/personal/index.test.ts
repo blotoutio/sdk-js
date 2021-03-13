@@ -27,7 +27,7 @@ describe('capturePersonal', () => {
   })
 
   it('name empty', () => {
-    const event: IncomingPersonal = {
+    const event: IncomingEvent = {
       name: '',
       data: {},
     }
@@ -36,7 +36,7 @@ describe('capturePersonal', () => {
   })
 
   it('options not defined, default to PII', () => {
-    const event: IncomingPersonal = {
+    const event: IncomingEvent = {
       name: 'custom event',
       data: {},
     }
@@ -60,16 +60,13 @@ describe('capturePersonal', () => {
   })
 
   it('PII', () => {
-    const event: IncomingPersonal = {
+    const event: IncomingEvent = {
       name: 'custom event',
       data: {
         foo: true,
       },
-      options: {
-        PII: true,
-      },
     }
-    capturePersonal(event)
+    capturePersonal(event, false)
     expect(spySend).toBeCalledWith(
       [
         {
@@ -89,17 +86,14 @@ describe('capturePersonal', () => {
   })
 
   it('PHI', () => {
-    const event: IncomingPersonal = {
+    const event: IncomingEvent = {
       name: 'custom event',
       data: {
         foo: true,
       },
-      options: {
-        PHI: true,
-      },
     }
 
-    capturePersonal(event)
+    capturePersonal(event, true)
     expect(spySend).toBeCalledWith(
       [
         {

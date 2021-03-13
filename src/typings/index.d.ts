@@ -19,11 +19,6 @@ interface EventOptions {
   method?: 'beacon'
 }
 
-interface PersonalOptions extends EventOptions {
-  PII?: boolean
-  PHI?: boolean
-}
-
 interface EventData {
   [key: string]: unknown
 }
@@ -40,10 +35,6 @@ interface IncomingEvent {
   data: EventData
   code?: number
   options?: EventOptions
-}
-
-interface IncomingPersonal extends IncomingEvent {
-  options?: PersonalOptions
 }
 
 interface BasicEvent {
@@ -172,7 +163,8 @@ interface Window {
       event: 'capturePersonal',
       name: string,
       data?: EventData,
-      options?: PersonalOptions
+      isPHI?: boolean,
+      options?: EventOptions
     )
     (event: 'pageView', options?: EventOptions)
     (event: 'mapID', id: string, provider: string, data?: EventData)

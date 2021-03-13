@@ -3,12 +3,14 @@ import { getEventPayload, sendEvent } from '../event/utils'
 import { getVariable } from '../common/manifest'
 import { encryptRSA } from './security'
 
-const createPersonalEvent = (event: IncomingPersonal): SendEvent => {
+const createPersonalEvent = (
+  event: IncomingEvent,
+  isPHI: boolean
+): SendEvent => {
   const data = createDevEvent(event)
   if (!data) {
     return null
   }
-  const isPHI = event.options && event.options.PHI
   const key = isPHI ? 'phiPublicKey' : 'piiPublicKey'
   const eventPayload = getEventPayload(data)
   const publicKey = (getVariable(key) || '').toString()
@@ -29,14 +31,15 @@ const createPersonalEvent = (event: IncomingPersonal): SendEvent => {
 }
 
 export const capturePersonal = (
-  event: IncomingPersonal,
-  options?: PersonalOptions
+  event: IncomingEvent,
+  isPHI?: boolean,
+  options?: EventOptions
 ): false | null | SendEvent => {
   if (!event) {
     return
   }
 
-  const data = createPersonalEvent(event)
+  const data = createPersonalEvent(event, isPHI)
   if (!data) {
     return
   }

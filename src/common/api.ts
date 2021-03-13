@@ -15,8 +15,13 @@ class API {
   }
 
   /// #if FEATURES == 'full'
-  capturePersonal(event: string, data?: EventData, options?: PersonalOptions) {
-    personal({ name: event, data, options }, options)
+  capturePersonal(
+    event: string,
+    data?: EventData,
+    isPHI?: boolean,
+    options?: EventOptions
+  ) {
+    personal({ name: event, data, options }, isPHI, options)
   }
   /// #endif
 
