@@ -3,7 +3,7 @@
   "version": "0.6.0",
   "description": "Blotout JS SDK",
   "author": "Blotout",
-  "license": "MPL-2.0",
+  "license": "MIT",
   "homepage": "https://github.com/blotoutio/sdk-js",
   "repository": {
     "type": "git",
