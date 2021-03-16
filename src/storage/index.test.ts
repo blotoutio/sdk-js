@@ -3,6 +3,7 @@ import {
   getLocal,
   getSession,
   getSessionDataValue,
+  getSessionID,
   removeLocal,
   setLocal,
   setSession,
@@ -142,5 +143,18 @@ describe('setSessionDataValue', () => {
     )
     setSessionDataValue('referrer', 'page.com')
     expect(getSessionDataValue('referrer')).toMatch('page.com')
+  })
+})
+
+describe('getSessionID', () => {
+  it('existing session', () => {
+    const sessionId = 'asdf0234kr23rk23rk2'
+    setSession('_trendsId', sessionId)
+    expect(getSessionID()).toBe(sessionId)
+  })
+
+  it('new session', () => {
+    window.sessionStorage.clear()
+    expect(getSessionID()).toBe('1580775120000')
   })
 })

@@ -1,13 +1,12 @@
 import { constants } from '../common/config'
 import { getVariable } from '../common/manifest'
 import { stringToIntSum } from '../common/securityUtil'
-import { getSession } from '../storage'
+import { getSessionID } from '../storage'
 import { getPayload } from '../network/payload'
 import { getPublishUrl } from '../network/endPoint'
 import { postRequest } from '../network'
 import { info } from '../common/logUtil'
 import { getUID } from '../common/uidUtil'
-import { getSessionIDKey } from '../storage/key'
 
 export const shouldCollectSystemEvents = (): boolean => {
   return getVariable('pushSystemEvents') === 1
@@ -30,7 +29,7 @@ export const codeForDevEvent = (eventName: string): number => {
 export const getEventPayload = (
   event: SystemEvent | DevEvent
 ): EventPayload => {
-  const sessionId = getSession(getSessionIDKey())
+  const sessionId = getSessionID()
 
   const properties: EventPayloadProperties = {
     session_id: sessionId,

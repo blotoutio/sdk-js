@@ -310,7 +310,7 @@ describe('sendEvent', () => {
             scrn: 'https://blotout.io/',
             evt: 1614584413700,
             properties: {
-              session_id: null,
+              session_id: '1580775120000',
               screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
             },
           },
@@ -324,7 +324,7 @@ describe('sendEvent', () => {
             scrn: 'https://blotout.io/',
             evt: 1614584313700,
             properties: {
-              session_id: null,
+              session_id: '1580775120000',
               screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
             },
           },
