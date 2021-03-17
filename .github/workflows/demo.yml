@@ -39,7 +39,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
       - name: Build
-        run: npm run demo
+        run: npm run build:dev
 
       - name: Deploy to Staging
         id: deploy-staging

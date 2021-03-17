@@ -1,9 +1,11 @@
 import { mapID, pageView, setDevEvent } from '../event'
 import { init } from './init'
 import { getUID } from './uidUtil'
-/// #if FEATURES == 'full'
+
+/* #if _FEATURES !== 'full'
+// #else */
 import { capturePersonal as personal } from '../personal'
-/// #endif
+// #endif
 
 class API {
   init(preferences: InitPreferences) {
@@ -14,7 +16,8 @@ class API {
     setDevEvent([{ name: event, data, options }], options)
   }
 
-  /// #if FEATURES == 'full'
+  /* #if _FEATURES !== 'full'
+  // #else */
   capturePersonal(
     event: string,
     data?: EventData,
@@ -23,7 +26,7 @@ class API {
   ) {
     personal({ name: event, data, options }, isPHI, options)
   }
-  /// #endif
+  // #endif
 
   pageView() {
     pageView()
