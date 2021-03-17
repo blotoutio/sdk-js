@@ -12,9 +12,9 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "types": "src/index.d.ts",
-  "main": "src/index.ts",
-  "module": "esm/index.development.js",
+  "types": "index.d.ts",
+  "main": "index.js",
+  "module": "esm/index.development.full.js",
   "scripts": {
     "build": "rollup --config",
     "start": "rollup --config -w --configDev",
@@ -36,6 +36,7 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.13.10",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
@@ -47,6 +48,10 @@
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
     "awesome-typescript-loader": "^5.2.1",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "cypress": "^6.6.0",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^7.2.0",

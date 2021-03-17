@@ -26,6 +26,24 @@ module.exports = (commandLineArgs) => {
   delete data.devDependencies
   delete data.scripts
 
+  const prepare = {
+    input: './src/index.js',
+    plugins: [
+      generatePackageJson({
+        outputFolder: './dist/',
+        baseContents: data,
+      }),
+      copy({
+        targets: [
+          { src: './src/index.js', dest: './dist/' },
+          { src: './src/typings/*', dest: './dist/' },
+          { src: './README.md', dest: './dist/' },
+          { src: './LICENSE', dest: './dist/' },
+        ],
+      }),
+    ],
+  }
+
   const plugins = [
     resolve(),
     commonjs(),
@@ -43,10 +61,6 @@ module.exports = (commandLineArgs) => {
 
   const cjsPlugins = [
     ...plugins,
-    visualizer({
-      filename: 'dist/cjs/stats.json',
-      json: true,
-    }),
     ...(commandLineArgs.configDev
       ? [
           copy({
@@ -61,438 +75,376 @@ module.exports = (commandLineArgs) => {
       : []),
   ]
 
-  const cjsConfig = [
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/cjs/${regularName}.development.js`,
-        format: 'cjs',
-        sourcemap: true,
-      },
-      plugins: [
-        ...cjsPlugins,
-        jscc({
-          values: { _FEATURES: 'basic' },
-        }),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('development'),
-          },
-        }),
-      ],
+  const cjsDevBasic = {
+    input: './src/index.ts',
+    output: {
+      file: `dist/cjs/${regularName}.development.js`,
+      format: 'cjs',
+      sourcemap: true,
     },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/cjs/${regularName}.full.development.js`,
-        format: 'cjs',
-        sourcemap: true,
-      },
-      plugins: [
-        ...cjsPlugins,
-        jscc({
-          values: { _FEATURES: 'full' },
-        }),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('development'),
-          },
-        }),
-      ],
-    },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/cjs/${regularName}.production.min.js`,
-        format: 'cjs',
-        sourcemap: true,
-      },
-      plugins: [
-        ...cjsPlugins,
-        jscc({
-          values: { _FEATURES: 'basic' },
-        }),
-        terser(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-      ],
-    },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/cjs/${regularName}.full.production.min.js`,
-        format: 'cjs',
-        sourcemap: true,
-      },
-      plugins: [
-        ...cjsPlugins,
-        jscc({
-          values: { _FEATURES: 'full' },
-        }),
-        terser(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-      ],
-    },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/cjs/${regularName}.production.min.g.js`,
-        format: 'cjs',
-        sourcemap: true,
-      },
-      plugins: [
-        ...cjsPlugins,
-        jscc({
-          values: { _FEATURES: 'basic' },
-        }),
-        terser(),
-        gzipPlugin(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-      ],
-    },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/cjs/${regularName}.full.production.min.g.js`,
-        format: 'cjs',
-        sourcemap: true,
-      },
-      plugins: [
-        ...cjsPlugins,
-        jscc({
-          values: { _FEATURES: 'full' },
-        }),
-        terser(),
-        gzipPlugin(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-      ],
-    },
-  ]
+    plugins: [
+      ...cjsPlugins,
+      jscc({
+        values: { _FEATURES: 'basic' },
+      }),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('development'),
+        },
+      }),
+    ],
+  }
 
-  const esmConfig = [
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/esm/${regularName}.development.js`,
-        format: 'esm',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        visualizer({
-          filename: 'dist/esm/stats.json',
-          json: true,
-        }),
-        jscc({
-          values: { _FEATURES: 'basic' },
-        }),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('development'),
-          },
-        }),
-      ],
+  const cjsDevFull = {
+    input: './src/index.ts',
+    output: {
+      file: `dist/cjs/${regularName}.full.development.js`,
+      format: 'cjs',
+      sourcemap: true,
     },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/esm/${regularName}.full.development.js`,
-        format: 'esm',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        visualizer({
-          filename: 'dist/esm/stats.json',
-          json: true,
-        }),
-        jscc({
-          values: { _FEATURES: 'full' },
-        }),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('development'),
-          },
-        }),
-      ],
+    plugins: [
+      ...cjsPlugins,
+      jscc({
+        values: { _FEATURES: 'full' },
+      }),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('development'),
+        },
+      }),
+    ],
+  }
+
+  const cjsProdBasic = {
+    input: './src/index.ts',
+    output: {
+      file: `dist/cjs/${regularName}.production.min.js`,
+      format: 'cjs',
+      sourcemap: true,
     },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/esm/${regularName}.production.min.js`,
-        format: 'esm',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        visualizer({
-          filename: 'dist/esm/stats.json',
-          json: true,
-        }),
-        jscc({
-          values: { _FEATURES: 'basic' },
-        }),
-        terser(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-      ],
+    plugins: [
+      ...cjsPlugins,
+      jscc({
+        values: { _FEATURES: 'basic' },
+      }),
+      terser(),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+    ],
+  }
+
+  const cjsProdFull = {
+    input: './src/index.ts',
+    output: {
+      file: `dist/cjs/${regularName}.full.production.min.js`,
+      format: 'cjs',
+      sourcemap: true,
     },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/esm/${regularName}.full.production.min.js`,
-        format: 'esm',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        visualizer({
-          filename: 'dist/esm/stats.json',
-          json: true,
-        }),
-        jscc({
-          values: { _FEATURES: 'full' },
-        }),
-        terser(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-      ],
+    plugins: [
+      ...cjsPlugins,
+      jscc({
+        values: { _FEATURES: 'full' },
+      }),
+      terser(),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+    ],
+  }
+
+  const cjsConfig = [cjsDevBasic, cjsDevFull, cjsProdBasic, cjsProdFull]
+
+  const esmDevBasic = {
+    input: './src/index.ts',
+    output: {
+      file: `dist/esm/${regularName}.development.js`,
+      format: 'esm',
+      sourcemap: true,
     },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/esm/${regularName}.production.min.g.js`,
-        format: 'esm',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        visualizer({
-          filename: 'dist/esm/stats.json',
-          json: true,
-        }),
-        jscc({
-          values: { _FEATURES: 'basic' },
-        }),
-        terser(),
-        gzipPlugin(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-      ],
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'basic' },
+      }),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('development'),
+        },
+      }),
+    ],
+  }
+
+  const esmDevFull = {
+    input: './src/index.ts',
+    output: {
+      file: `dist/esm/${regularName}.full.development.js`,
+      format: 'esm',
+      sourcemap: true,
     },
-    {
-      input: './src/index.ts',
-      output: {
-        file: `dist/esm/${regularName}.full.production.min.g.js`,
-        format: 'esm',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        visualizer({
-          filename: 'dist/esm/stats.json',
-          json: true,
-        }),
-        jscc({
-          values: { _FEATURES: 'full' },
-        }),
-        terser(),
-        gzipPlugin(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-      ],
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'full' },
+      }),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('development'),
+        },
+      }),
+    ],
+  }
+
+  const esmProdBasic = {
+    input: './src/index.ts',
+    output: {
+      file: `dist/esm/${regularName}.production.min.js`,
+      format: 'esm',
+      sourcemap: true,
     },
-  ]
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'basic' },
+      }),
+      terser(),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+    ],
+  }
+
+  const esmProdFull = {
+    input: './src/index.ts',
+    output: {
+      file: `dist/esm/${regularName}.full.production.min.js`,
+      format: 'esm',
+      sourcemap: true,
+    },
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'full' },
+      }),
+      terser(),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+    ],
+  }
+
+  const esmConfig = [esmDevBasic, esmDevFull, esmProdBasic, esmProdFull]
+
+  const umdDevBasic = {
+    input: './src/common/api.module.ts',
+    output: {
+      name: 'jsPackage',
+      file: `dist/umd/${regularName}.development.js`,
+      format: 'umd',
+      sourcemap: true,
+    },
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'basic' },
+      }),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+    ],
+  }
+
+  const umdDevFull = {
+    input: './src/common/api.module.ts',
+    output: {
+      name: 'jsPackage',
+      file: `dist/umd/${regularName}.full.development.js`,
+      format: 'umd',
+      sourcemap: true,
+    },
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'full' },
+      }),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+    ],
+  }
+
+  const umdProdBasic = {
+    input: './src/common/api.module.ts',
+    output: {
+      name: 'jsPackage',
+      file: `dist/umd/${regularName}.production.min.js`,
+      format: 'umd',
+      sourcemap: true,
+    },
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'basic' },
+      }),
+      terser(),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+      visualizer({
+        filename: 'dist/umd/stats-basic.json',
+        json: true,
+      }),
+    ],
+  }
+
+  const umdProdFull = {
+    input: './src/common/api.module.ts',
+    output: {
+      name: 'jsPackage',
+      file: `dist/umd/${regularName}.full.production.min.js`,
+      format: 'umd',
+      sourcemap: true,
+    },
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'full' },
+      }),
+      terser(),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+      visualizer({
+        filename: 'dist/umd/stats-full.json',
+        json: true,
+      }),
+    ],
+  }
+
+  const umdProdBasicGzip = {
+    input: './src/common/api.module.ts',
+    output: {
+      name: 'jsPackage',
+      file: `dist/umd/${regularName}.production.min.js`,
+      format: 'umd',
+      sourcemap: true,
+    },
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'basic' },
+      }),
+      terser(),
+      gzipPlugin(),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+      visualizer({
+        filename: 'dist/umd/stats-basic-gzip.json',
+        json: true,
+      }),
+    ],
+  }
+
+  const umdProdFullGzip = {
+    input: './src/common/api.module.ts',
+    output: {
+      name: 'jsPackage',
+      file: `dist/umd/${regularName}.full.production.min.js`,
+      format: 'umd',
+      sourcemap: true,
+    },
+    plugins: [
+      ...plugins,
+      jscc({
+        values: { _FEATURES: 'full' },
+      }),
+      terser(),
+      gzipPlugin(),
+      define({
+        replacements: {
+          'process.env.PACKAGE_VERSION': JSON.stringify(
+            process.env.npm_package_version
+          ),
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        },
+      }),
+      visualizer({
+        filename: 'dist/umd/stats-full-gzip.json',
+        json: true,
+      }),
+    ],
+  }
 
   const umdConfig = [
-    {
-      input: './src/common/api.module.ts',
-      output: {
-        name: 'jsPackage',
-        file: `dist/umd/${regularName}.development.js`,
-        format: 'umd',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        jscc({
-          values: { _FEATURES: 'basic' },
-        }),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-        visualizer({
-          filename: 'dist/umd/stats.json',
-          json: true,
-        }),
-      ],
-    },
-    {
-      input: './src/common/api.module.ts',
-      output: {
-        name: 'jsPackage',
-        file: `dist/umd/${regularName}.full.development.js`,
-        format: 'umd',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        jscc({
-          values: { _FEATURES: 'full' },
-        }),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-        visualizer({
-          filename: 'dist/umd/stats.json',
-          json: true,
-        }),
-      ],
-    },
-    {
-      input: './src/common/api.module.ts',
-      output: {
-        name: 'jsPackage',
-        file: `dist/umd/${regularName}.production.min.js`,
-        format: 'umd',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        jscc({
-          values: { _FEATURES: 'basic' },
-        }),
-        terser(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-        visualizer({
-          filename: 'dist/umd/stats.json',
-          json: true,
-        }),
-      ],
-    },
-    {
-      input: './src/common/api.module.ts',
-      output: {
-        name: 'jsPackage',
-        file: `dist/umd/${regularName}.full.production.min.js`,
-        format: 'umd',
-        sourcemap: true,
-      },
-      plugins: [
-        ...plugins,
-        jscc({
-          values: { _FEATURES: 'full' },
-        }),
-        terser(),
-        define({
-          replacements: {
-            'process.env.PACKAGE_VERSION': JSON.stringify(
-              process.env.npm_package_version
-            ),
-            'process.env.NODE_ENV': JSON.stringify('production'),
-          },
-        }),
-        visualizer({
-          filename: 'dist/umd/stats.json',
-          json: true,
-        }),
-        generatePackageJson({
-          outputFolder: './dist/',
-          baseContents: data,
-        }),
-        copy({
-          targets: [
-            { src: './src/index.js', dest: './dist/' },
-            { src: './src/typings/*', dest: './dist/' },
-            { src: './README.md', dest: './dist/' },
-            { src: './LICENSE', dest: './dist/' },
-          ],
-        }),
-      ],
-    },
+    umdDevBasic,
+    umdDevFull,
+    umdProdBasic,
+    umdProdFull,
+    umdProdBasicGzip,
+    umdProdFullGzip,
   ]
 
-  const config = cjsConfig.concat(esmConfig).concat(umdConfig)
+  if (commandLineArgs.configDev) {
+    return [cjsDevFull]
+  }
 
-  return config
+  return [prepare, ...cjsConfig, ...esmConfig, ...umdConfig]
 }
