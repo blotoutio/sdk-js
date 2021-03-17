@@ -17,6 +17,7 @@
   "module": "esm/index.development.full.js",
   "scripts": {
     "build": "rollup --config",
+    "build:dev": "rollup --config --configDev",
     "start": "rollup --config -w --configDev",
     "lint": "npm-run-all lint:*",
     "lint:eslint": "eslint .",

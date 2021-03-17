@@ -29,6 +29,9 @@ module.exports = (commandLineArgs) => {
   const prepare = {
     input: './src/index.js',
     plugins: [
+      cleaner({
+        targets: ['./dist/'],
+      }),
       generatePackageJson({
         outputFolder: './dist/',
         baseContents: data,
@@ -50,30 +53,29 @@ module.exports = (commandLineArgs) => {
     typescript({
       useTsconfigDeclarationDir: false,
     }),
-    ...(!commandLineArgs.configDev
-      ? [
-          cleaner({
-            targets: ['./dist/*'],
-          }),
-        ]
-      : []),
   ]
 
-  const cjsPlugins = [
-    ...plugins,
-    ...(commandLineArgs.configDev
-      ? [
-          copy({
-            targets: [{ src: './src/demo/*', dest: './dist' }],
-          }),
-          serve({
-            port: 9000,
-            contentBase: path.join(__dirname, './dist'),
-          }),
-          livereload(),
-        ]
-      : []),
-  ]
+  let demo = [...plugins]
+
+  if (commandLineArgs.configDev) {
+    demo = [
+      ...demo,
+      copy({
+        targets: [{ src: './src/demo/*', dest: './dist' }],
+      }),
+    ]
+  }
+
+  if (commandLineArgs.watch) {
+    demo = [
+      ...demo,
+      serve({
+        port: 9000,
+        contentBase: path.join(__dirname, './dist'),
+      }),
+      livereload(),
+    ]
+  }
 
   const cjsDevBasic = {
     input: './src/index.ts',
@@ -83,7 +85,7 @@ module.exports = (commandLineArgs) => {
       sourcemap: true,
     },
     plugins: [
-      ...cjsPlugins,
+      ...plugins,
       jscc({
         values: { _FEATURES: 'basic' },
       }),
@@ -106,7 +108,7 @@ module.exports = (commandLineArgs) => {
       sourcemap: true,
     },
     plugins: [
-      ...cjsPlugins,
+      ...demo,
       jscc({
         values: { _FEATURES: 'full' },
       }),
@@ -129,7 +131,7 @@ module.exports = (commandLineArgs) => {
       sourcemap: true,
     },
     plugins: [
-      ...cjsPlugins,
+      ...plugins,
       jscc({
         values: { _FEATURES: 'basic' },
       }),
@@ -153,7 +155,7 @@ module.exports = (commandLineArgs) => {
       sourcemap: true,
     },
     plugins: [
-      ...cjsPlugins,
+      ...plugins,
       jscc({
         values: { _FEATURES: 'full' },
       }),
@@ -443,7 +445,7 @@ module.exports = (commandLineArgs) => {
   ]
 
   if (commandLineArgs.configDev) {
-    return [cjsDevFull]
+    return [prepare, cjsDevFull]
   }
 
   return [prepare, ...cjsConfig, ...esmConfig, ...umdConfig]
