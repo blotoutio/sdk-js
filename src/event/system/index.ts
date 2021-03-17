@@ -38,9 +38,6 @@ export const optionalEvents = (window: Window): void => {
   contextMenu(window)
   hover(window)
 
-  online(window)
-  offline(window)
-
   print(window)
 
   touchEnd(window)
@@ -56,4 +53,7 @@ export const optionalEvents = (window: Window): void => {
 
 export const requiredEvents = (window: Window): void => {
   pagehide(window)
+
+  online(window)
+  offline(window)
 }

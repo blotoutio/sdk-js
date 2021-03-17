@@ -1,5 +1,6 @@
 import * as storage from '../storage'
 import * as network from '.'
+import * as system from '../event/system/network'
 import { addItem, checkRetry, getItem } from './retries'
 
 describe('addItem', () => {
@@ -97,16 +98,37 @@ describe('checkRetry', () => {
     spy.mockRestore()
   })
 
-  it('no entry', () => {
+  it('system offline', () => {
+    const spyOnline = jest
+      .spyOn(system, 'getIsOnline')
+      .mockImplementation(() => false)
+
     spy = jest
       .spyOn(network, 'postRequest')
       .mockImplementation(() => Promise.resolve())
     storage.setSessionDataValue('retries', '')
     checkRetry()
     expect(spy).toBeCalledTimes(0)
+    spyOnline.mockRestore()
+  })
+
+  it('no entry', () => {
+    const spyOnline = jest
+      .spyOn(system, 'getIsOnline')
+      .mockImplementation(() => true)
+    spy = jest
+      .spyOn(network, 'postRequest')
+      .mockImplementation(() => Promise.resolve())
+    storage.setSessionDataValue('retries', '')
+    checkRetry()
+    expect(spy).toBeCalledTimes(0)
+    spyOnline.mockRestore()
   })
 
   it('with data', () => {
+    const spyOnline = jest
+      .spyOn(system, 'getIsOnline')
+      .mockImplementation(() => true)
     spy = jest
       .spyOn(network, 'postRequest')
       .mockImplementation(() => Promise.resolve())
@@ -121,9 +143,13 @@ describe('checkRetry', () => {
     )
     checkRetry()
     expect(spy).toBeCalledTimes(1)
+    spyOnline.mockRestore()
   })
 
   it('with a lot of retries', () => {
+    const spyOnline = jest
+      .spyOn(system, 'getIsOnline')
+      .mockImplementation(() => true)
     spy = jest
       .spyOn(network, 'postRequest')
       .mockImplementation(() => Promise.reject(new Error('Server Error')))
@@ -154,5 +180,6 @@ describe('checkRetry', () => {
     checkRetry()
     jest.runAllTimers()
     expect(spy).toBeCalledTimes(8)
+    spyOnline.mockRestore()
   })
 })
