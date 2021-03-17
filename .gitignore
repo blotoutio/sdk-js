@@ -3,8 +3,7 @@ node_modules
 /dist
 .DS_Store
 .vscode
-/demo
 /coverage
 .vercel
-cypress/screenshots/*
-cypress/videos/*
+tools/cypress/screenshots/*
+tools/cypress/videos/*

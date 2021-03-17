@@ -5,8 +5,8 @@ Cypress.on('window:before:load', (win) => {
 
 beforeEach(() => {
   // make sure that every test start with clean storage so that there is no leakage
-  cy.window().then((win) => {
-    win.sessionStorage.clear()
+  cy.window().then(() => {
+    window.sessionStorage.clear()
     cy.clearCookies()
     cy.clearLocalStorage()
   })

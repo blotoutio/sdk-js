@@ -1,6 +1,7 @@
 coverage
 dist
 *.md
-demo
+tools/demo
 .vercel
 docs
+.eslintrc

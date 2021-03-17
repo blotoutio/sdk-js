@@ -61,7 +61,7 @@ module.exports = (commandLineArgs) => {
     demo = [
       ...demo,
       copy({
-        targets: [{ src: './src/demo/*', dest: './dist' }],
+        targets: [{ src: './tools/demo/*', dest: './dist' }],
       }),
     ]
   }

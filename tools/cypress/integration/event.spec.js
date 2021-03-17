@@ -44,6 +44,7 @@ const compareBasic = (statusCode, url) => {
 
 context('Events', () => {
   beforeEach(() => {
+    window.sessionStorage.clear()
     cy.clock(1614677171392)
     cy.intercept('sdk/v1/events/*').as('publish')
     cy.intercept('sdk/v1/manifest/*').as('pull')

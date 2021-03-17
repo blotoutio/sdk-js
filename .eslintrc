@@ -33,10 +33,7 @@
   "ignorePatterns": [
     "/src/3rdParty/*",
     "/dist",
-    "/demo",
-    "/src/demo",
-    "jest.config.js",
-    "webpack.*",
-    "cypress"
+    "/tools",
+    "jest.config.js"
   ]
 }
