@@ -1,6 +1,6 @@
 {
   "name": "@blotoutio/sdk-js",
-  "version": "0.6.0",
+  "private": true,
   "description": "Blotout JS SDK",
   "author": "Blotout",
   "license": "MIT",
@@ -8,78 +8,5 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/blotoutio/sdk-js.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
-  "types": "index.d.ts",
-  "main": "index.js",
-  "module": "esm/index.development.full.js",
-  "scripts": {
-    "build": "rollup --config",
-    "build:dev": "rollup --config --configDev",
-    "start": "rollup --config -w --configDev",
-    "lint": "npm-run-all lint:*",
-    "lint:eslint": "eslint .",
-    "lint:prettier": "prettier --check .",
-    "test": "npm-run-all test:*",
-    "test:unit": "jest --runInBand --logHeapUsage",
-    "test:integration": "start-server-and-test start http://localhost:9000 'TZ=America/Los_Angeles cypress run --project tools'",
-    "cypress": "start-server-and-test start http://localhost:9000 'TZ=America/Los_Angeles cypress open --project tools'"
-  },
-  "engines": {
-    "node": ">=12.0.0"
-  },
-  "dependencies": {
-    "@blotoutio/jsencrypt-no-random-padding": "^2.3.4",
-    "crypto-js": "^3.1.9-1",
-    "ua-parser-js": "^0.7.23",
-    "uuid": "^8.3.0"
-  },
-  "devDependencies": {
-    "@babel/preset-env": "^7.13.10",
-    "@rollup/plugin-commonjs": "^17.1.0",
-    "@rollup/plugin-node-resolve": "^11.2.0",
-    "@rollup/plugin-typescript": "^8.2.0",
-    "@types/crypto-js": "^4.0.1",
-    "@types/jest": "^26.0.20",
-    "@types/node-fetch": "^2.5.8",
-    "@types/ua-parser-js": "^0.7.35",
-    "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.14.2",
-    "@typescript-eslint/parser": "^4.14.2",
-    "awesome-typescript-loader": "^5.2.1",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "cypress": "^6.6.0",
-    "eslint": "^7.19.0",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-promise": "^4.2.1",
-    "ifdef-loader": "^2.1.5",
-    "jest": "^26.4.2",
-    "node-fetch": "^2.6.1",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.2.1",
-    "rollup": "^2.41.0",
-    "rollup-plugin-cleaner": "^1.0.0",
-    "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-define": "^1.0.1",
-    "rollup-plugin-generate-package-json": "^3.2.0",
-    "rollup-plugin-gzip": "^2.5.0",
-    "rollup-plugin-jscc": "^2.0.0",
-    "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-serve": "^1.1.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "rollup-plugin-visualizer": "^4.2.0",
-    "start-server-and-test": "^1.11.7",
-    "ts-jest": "^26.5.0",
-    "typescript": "^4.1.3"
   }
 }

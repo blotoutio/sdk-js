@@ -1,9 +1,4 @@
 .idea
-node_modules
-/dist
 .DS_Store
 .vscode
-/coverage
 .vercel
-tools/cypress/screenshots/*
-tools/cypress/videos/*

@@ -1,7 +1,0 @@
-coverage
-dist
-*.md
-tools/demo
-.vercel
-docs
-.eslintrc
