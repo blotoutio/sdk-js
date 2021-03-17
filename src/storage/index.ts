@@ -2,6 +2,18 @@ import { getSessionDataKey, getSessionIDKey } from './key'
 import { getReferrer, getSearchParams } from '../common/utils'
 import { info } from '../common/logUtil'
 
+const creteSession = () => {
+  const sessionId = Date.now().toString()
+  setSession(getSessionIDKey(), sessionId)
+
+  const sessionData: Partial<SessionData> = {
+    referrer: getReferrer(),
+    search: getSearchParams(),
+  }
+  setSession(getSessionDataKey(), JSON.stringify(sessionData))
+  return sessionId
+}
+
 export const setLocal = (name: string, data: string): void => {
   if (!name) {
     return
@@ -38,7 +50,7 @@ export const getSession = (name: string): string => {
 }
 
 export const checkSession = (): boolean => {
-  let sessionId = getSession(getSessionIDKey())
+  const sessionId = getSession(getSessionIDKey())
 
   if (sessionId) {
     const newReferrer = getReferrer()
@@ -52,14 +64,7 @@ export const checkSession = (): boolean => {
     }
   }
 
-  sessionId = Date.now().toString()
-  setSession(getSessionIDKey(), sessionId)
-
-  const sessionData: Partial<SessionData> = {
-    referrer: getReferrer(),
-    search: getSearchParams(),
-  }
-  setSession(getSessionDataKey(), JSON.stringify(sessionData))
+  creteSession()
   return true
 }
 
@@ -93,4 +98,14 @@ export const setSessionDataValue = (
 
   parsed[key] = value
   setSession(getSessionDataKey(), JSON.stringify(parsed))
+}
+
+export const getSessionID = (): string => {
+  let sessionId = getSession(getSessionIDKey())
+
+  if (!sessionId) {
+    sessionId = creteSession()
+  }
+
+  return sessionId
 }
