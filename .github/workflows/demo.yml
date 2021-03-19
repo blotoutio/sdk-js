@@ -10,16 +10,19 @@ jobs:
   deloy:
     if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !github.event.pull_request.draft) }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/sdk-browser
     timeout-minutes: 2
 
     steps:
       - name: Checkout PR
         uses: actions/checkout@v2
 
-      - name: Use Node.js 12
+      - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
           registry-url: https://npm.pkg.github.com
           scope: blotoutio
 
@@ -27,10 +30,8 @@ jobs:
         id: cache-modules
         uses: actions/cache@v2
         with:
-          path: |
-            ~/.cache/Cypress
-            node_modules
-          key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
+          path: packages/sdk-browser/node_modules
+          key: sdk-browser-node14-${{ hashFiles('packages/sdk-browser/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-modules.outputs.cache-hit != 'true'
@@ -39,7 +40,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
       - name: Build
-        run: npm run build:dev
+        run: npm run build
 
       - name: Deploy to Staging
         id: deploy-staging
@@ -51,6 +52,7 @@ jobs:
           github-comment: false
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          working-directory: packages/sdk-browser
 
       - name: Comment
         if: github.event_name == 'pull_request'
@@ -72,3 +74,4 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           vercel-args: '--prod'
+          working-directory: packages/sdk-browser

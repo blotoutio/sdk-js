@@ -11,15 +11,24 @@ jobs:
     if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !github.event.pull_request.draft) }}
     runs-on: ubuntu-latest
     timeout-minutes: 3
+    defaults:
+      run:
+        working-directory: packages/${{matrix.PKG}}
+    strategy:
+      matrix:
+        include:
+          - PKG: sdk-core
+          - PKG: sdk-personal
+          - PKG: sdk-browser
 
     steps:
       - name: Checkout PR
         uses: actions/checkout@v2
 
-      - name: Use Node.js 12
+      - name: Use Node.js 14
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
           registry-url: https://npm.pkg.github.com
           scope: blotoutio
 
@@ -29,8 +38,8 @@ jobs:
         with:
           path: |
             ~/.cache/Cypress
-            node_modules
-          key: ${{ runner.os }}-node12-${{ hashFiles('package-lock.json') }}
+            packages/${{matrix.PKG}}/node_modules
+          key: ${{ matrix.PKG }}-node14-${{ hashFiles(format('packages/{0}/package-lock.json', matrix.PKG)) }}
 
       - name: Install dependencies
         if: steps.cache-modules.outputs.cache-hit != 'true'
@@ -38,15 +47,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
 
-      - name: Run integration tests
-        run: npm run test:integration
-
-      - name: Run unit tests
-        run: npm run test:unit
+      - name: Run tests
+        run: npm run test
 
       - name: Coverage
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/coverage-final.json
-          flags: unittests
+          file: packages/${{matrix.PKG}}/coverage/coverage-final.json
+          flags: ${{matrix.PKG}}

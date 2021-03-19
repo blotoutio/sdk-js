@@ -4,8 +4,21 @@ codecov:
   notify:
     wait_for_ci: true
 
-ignore:
-  - 'src/demo'
+status:
+  project:
+    default: off
+    sdk-core:
+      flags: sdk-core
+    sdk-personal:
+      flags: sdk-personal
+
+flags:
+  sdk-core:
+    paths:
+      - packages/sdk-core
+  sdk-personal:
+    paths:
+      - packages/sdk-personal
 
 parsers:
   javascript:
