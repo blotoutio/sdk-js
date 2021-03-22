@@ -63,7 +63,7 @@ const createConfig = ({ prod, stats, gzip, feature }) => {
   return config
 }
 
-const getWatch = () => {
+const getDev = (watch) => {
   return {
     input: './index.js',
     output: {
@@ -92,10 +92,14 @@ const getWatch = () => {
       copy({
         targets: [{ src: './demo/*', dest: './dist' }],
       }),
-      serve({
-        port: 9000,
-        contentBase: path.join(__dirname, './dist'),
-      }),
+      ...(watch
+        ? [
+            serve({
+              port: 9000,
+              contentBase: path.join(__dirname, './dist'),
+            }),
+          ]
+        : []),
     ],
   }
 }
@@ -104,8 +108,8 @@ module.exports = (commandLineArgs) => {
   delete pkg.devDependencies
   delete pkg.scripts
 
-  if (commandLineArgs.watch) {
-    return getWatch()
+  if (commandLineArgs.watch || commandLineArgs.configDev) {
+    return getDev(commandLineArgs.watch)
   }
 
   const prepare = {

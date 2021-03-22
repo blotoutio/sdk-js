@@ -17,6 +17,7 @@
   "unpkg": "index.min.js",
   "scripts": {
     "build": "rollup --config",
+    "build:web": "rollup --config --configDev",
     "start": "rollup --config -w",
     "test": "start-server-and-test start http://localhost:9000 'TZ=America/Los_Angeles cypress run'",
     "cypress": "start-server-and-test start http://localhost:9000 TZ=America/Los_Angeles cypress open'"
