@@ -9,9 +9,6 @@
     "type": "git",
     "url": "git://github.com/blotoutio/sdk-js.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "types": "index.d.ts",
   "main": "index.cjs.js",
   "module": "index.esm.js",

@@ -9,9 +9,6 @@
     "type": "git",
     "url": "git://github.com/blotoutio/sdk-js.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "main": "index.min.js",
   "browser": "index.min.js",
   "unpkg": "index.min.js",
