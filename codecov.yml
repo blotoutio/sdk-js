@@ -8,8 +8,10 @@ status:
   project:
     default: off
     sdk-core:
+      target: 100%
       flags: sdk-core
     sdk-personal:
+      target: 100%
       flags: sdk-personal
 
 flags:
