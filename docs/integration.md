@@ -1,8 +1,15 @@
 # Integration
 
-Choose between two packages that you can put on your website/app:
-- **basic**: (system events + codified api + ID mapping) (~32kb / ~13kb gzip) - [Download](https://assets.blotout.io/latest/sdk/index.js)
-- **full**: (basic + PII and PHI support) (~95kb / ~32kb gzip) - [Download](https://assets.blotout.io/latest/sdk/index-full.js)
+We provide two options of implementing our SDK:
+- **Browser**: including a snippet in your website directly
+- **Node**: if you are working with Node and NPM you can include it with installing our packages
+
+
+{% tabs basic %}
+{% tab basic browser %}
+**Basic** (system events + codified api + ID mapping): (~32kb / ~13kb gzip) - [Download](https://assets.blotout.io/latest/sdk/index.js)
+
+**Full** (basic + PII and PHI support): (~95kb / ~32kb gzip) - [Download](https://assets.blotout.io/latest/sdk/index-full.js)
 
 ## Snippet
 
@@ -17,15 +24,14 @@ When you select which snippet you prefer, the only thing you need to do is repla
 The snippet should be put in before the closing head tag `</head>`. This way snippet can work at its best. We are using asynchronous through our SDK, as well for loading, so your website/app will not have any performance impacts. 
 
 ### Option 1:
+Minified version:
 ```html
 <script>
 !function(u){window.trends=window.trends||function(){(trends.stubs=trends.stubs||[]).push(arguments)};const t=document.createElement("script");t.type="text/javascript",t.src=u,t.async=!0;const e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}("[SDK_URL]");
 </script>
 ```
 
-<details>
-<summary>Click to show non-minified version</summary>
-
+Non-minified version
 ```html
 <script>
 (function (url) {
@@ -44,9 +50,8 @@ The snippet should be put in before the closing head tag `</head>`. This way sni
 </script>
 ```
 
-</details>
-
 ### Option 2:
+Minified version:
 ```html
 <script>
 window.trends=window.trends||function(){(trends.stubs=trends.stubs||[]).push(arguments)};
@@ -54,9 +59,7 @@ window.trends=window.trends||function(){(trends.stubs=trends.stubs||[]).push(arg
 <script async src='[SDK_URL]'></script>
 ```
 
-<details>
-<summary>Click to show non-minified version</summary>
-
+Non-minified version
 ```html
 <script>
 (function () {
@@ -67,16 +70,36 @@ window.trends=window.trends||function(){(trends.stubs=trends.stubs||[]).push(arg
 </script>
 <script async src='[SDK_URL]'></script>
 ```
+{% endtab %}
+{% tab basic node %}
+**Basic** (system events + codified api + ID mapping): `npm i @blotoutio/sdk-core`
 
-</details>
+**Full** (basic + PII and PHI support): `npm i @blotoutio/sdk-core @blotoutio/sdk-personal`
+{% endtab %}
+{% endtabs %}
+
 
 ## Initialization
-After you include the snippet you just need to call init function, and you are good to go.
+After completing step above you just need to call init function, and you are good to go.
+{% tabs basic %}
+{% tab basic browser %}
 ```js
 trends('init', {
   token: '[TOKEN]',
   endpointUrl: '[SDK_ENDPOINT]'
 })
 ```
+{% endtab %}
+{% tab basic node %}
+```js
+import { init } from '@blotoutio/sdk-core'
+
+init({
+  token: '[TOKEN]',
+  endpointUrl: '[SDK_ENDPOINT]'
+})
+```
+{% endtab %}
+{% endtabs %}
 
 You can read more about `init` API in [API docs](api.md#init)

@@ -1,1 +1,1 @@
-🚀 Deployed to {URL}
+🚀 Deployed Demo to {URL}
