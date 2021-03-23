@@ -6,5 +6,8 @@ header_pages:
   - system_events.md
   - migration.md
 
+plugins:
+  - jekyll-tabs
+
 minima:
   skin: dark

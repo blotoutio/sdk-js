@@ -12,7 +12,6 @@ To make our API more performant and make it compatible with a new snippet we cha
 #### Init
 ```js
 // Old code
-
 bojs.init({
   token: '[TOKEN]',
   endpointUrl: '[URL]',
@@ -22,8 +21,7 @@ bojs.init({
 
 
 ```js
-// New Code
-
+// New code
 trends('init', {  
   token: '[TOKEN]',
   endpointUrl: '[URL]',
@@ -41,7 +39,7 @@ bojs.PII('user-submited', { email: 'user@domain.com' })
 ```
 
 ```js
-// New Code
+// New code
 trends('capture', 'click-logo', { language: 'en' })
 trends('capture', 'user-submited', { email: 'user@domain.com' }, { PII: true })
 ```

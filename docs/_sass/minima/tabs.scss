@@ -1,0 +1,48 @@
+.tab {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -20px;
+  padding: 0;
+  list-style: none;
+  position: relative;
+
+  & > * {
+    flex: none;
+    padding-left: 20px;
+    position: relative;
+
+    & > a {
+      display: block;
+      text-align: center;
+      padding: 9px 20px;
+      color: #999;
+      border-bottom: 2px solid transparent;
+      font-size: 12px;
+      text-transform: uppercase;
+      transition: color 0.1s ease-in-out;
+      line-height: 20px;
+    }
+  }
+
+  .active > a {
+    border-color: #1e87f0;
+  }
+
+  li a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+.tab-content {
+  padding: 0;
+  margin-left: 0;
+
+  li {
+    display: none;
+
+    &.active {
+      display: initial;
+    }
+  }
+}

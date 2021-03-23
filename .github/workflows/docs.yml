@@ -1,4 +1,4 @@
-name: Vercel - Demo
+name: Vercel - Docs
 
 on:
   push:
@@ -12,33 +12,34 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: packages/sdk-browser
-    timeout-minutes: 2
+        working-directory: docs
+    timeout-minutes: 4
 
     steps:
       - name: Checkout PR
         uses: actions/checkout@v2
 
-      - name: Use Node.js 14
-        uses: actions/setup-node@v1
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
         with:
-          node-version: 14
+          ruby-version: 2.6
 
-      - name: Cache node_modules
-        id: cache-modules
+      - name: Set bundle path
+        run: bundle config set --local path 'vendor/bundle'
+
+      - name: Cache vendor
+        id: cache
         uses: actions/cache@v2
         with:
-          path: packages/sdk-browser/node_modules
-          key: sdk-browser-node14-${{ hashFiles('packages/sdk-browser/package-lock.json') }}
+          path: docs/vendor
+          key: docs-ruby2.6-${{ hashFiles('docs/Gemfile.lock') }}
 
       - name: Install dependencies
-        if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.TOKEN_REPO}}
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: bundle install
 
       - name: Build
-        run: npm run build:web
+        run: bundle exec jekyll build
 
       - name: Deploy to Staging
         id: deploy-staging
@@ -49,15 +50,15 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-comment: false
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
-          working-directory: packages/sdk-browser
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_DOCS}}
+          working-directory: docs/_site
 
       - name: Comment
         if: github.event_name == 'pull_request'
         uses: NejcZdovc/comment-pr@v1
         with:
-          file: 'comment_demo.md'
-          identifier: 'GITHUB_ACTION_COMMENT_DEMO'
+          file: 'comment_docs.md'
+          identifier: 'GITHUB_ACTION_COMMENT_DOCS'
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           URL: ${{steps.deploy-staging.outputs.preview-url}}
@@ -70,6 +71,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-comment: false
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_DOCS}}
           vercel-args: '--prod'
-          working-directory: packages/sdk-browser
+          working-directory: docs/_site
