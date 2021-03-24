@@ -1,16 +1,11 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "moduleResolution": "node",
-    "module": "esnext",
-    "target": "esnext",
-    "esModuleInterop": true,
-    "noImplicitAny": true,
-    "outDir": "dist",
-    "sourceMap": true,
-    "declaration": false,
-    "skipLibCheck": true,
-    "typeRoots": ["./node_modules/@types", "./src/typings"]
+    "baseUrl": ".",
+    "paths": {
+      "@blotoutio/sdk-core": ["../sdk-core/dist"]
+    },
+    "typeRoots": ["node_modules/@types", "src/typings"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.test.ts"]
 }

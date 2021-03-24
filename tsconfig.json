@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "esnext",
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": false,
+    "skipLibCheck": true,
+    "types": ["node", "jest"],
+  },
+  "exclude": ["node_modules", "**/*.test.ts"]
+}

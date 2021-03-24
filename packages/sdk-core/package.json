@@ -20,7 +20,7 @@
     "test": "jest --runInBand --logHeapUsage"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=15.0.0"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
@@ -28,9 +28,9 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.2.0",
     "@types/crypto-js": "^4.0.1",
     "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.35",
     "@types/node-fetch": "^2.5.8",
     "@types/ua-parser-js": "^0.7.35",
     "@types/uuid": "^8.3.0",

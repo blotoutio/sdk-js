@@ -10,4 +10,7 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   collectCoverage: true,
+  moduleNameMapper: {
+    '@blotoutio/sdk-core': '<rootDir>/../sdk-core/dist',
+  },
 }
