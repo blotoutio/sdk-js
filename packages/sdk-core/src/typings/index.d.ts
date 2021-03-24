@@ -20,13 +20,7 @@ interface BasicEvent {
   tstmp: number
   mid: string
   evcs: number
-}
-
-interface DevEvent extends BasicEvent {
   metaInfo?: EventData
-}
-
-interface SystemEvent extends BasicEvent {
   position?: Position | null
   objectTitle?: string | null
   mouse?: MouseData
@@ -71,7 +65,7 @@ interface EventPayload {
 }
 
 interface SendEvent {
-  data: DevEvent
+  data: BasicEvent
   extra?: unknown
 }
 
@@ -86,9 +80,12 @@ interface Manifest {
 
 interface IncomingEvent {
   name: string
-  data: EventData
+  data?: EventData
   code?: number
   options?: EventOptions
+  objectName?: string
+  event?: MouseEvent
+  url?: string
 }
 
 export declare const capture: (
@@ -104,10 +101,10 @@ export declare const mapID: (
   data?: EventData,
   options?: EventOptions
 ) => void
-export declare const pageView: () => void
+export declare const pageView: (previousUrl: string) => void
 export declare const internalUtils: {
-  getEventPayload: (event: SystemEvent | DevEvent) => EventPayload
+  getEventPayload: (event: BasicEvent) => EventPayload
   sendEvent: (events: SendEvent[], options?: EventOptions) => void
   getVariable: (key: keyof Manifest) => string | number | boolean
-  createDevEvent: (event: IncomingEvent) => DevEvent
+  createEvent: (event: IncomingEvent) => BasicEvent
 }

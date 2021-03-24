@@ -1,5 +1,5 @@
 import type { IncomingEvent } from '../typings'
-import { createDevEvent, createEvent, createPosition } from './create'
+import { createEvent, createPosition } from './create'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
@@ -68,59 +68,34 @@ describe('createPosition', () => {
   })
 })
 
-describe('createDevEvent', () => {
-  it('null', () => {
-    expect(createDevEvent(null)).toBeNull()
-  })
-
-  it('no additional data', () => {
-    const event: IncomingEvent = {
-      name: 'custom-event',
-      data: null,
-    }
-
-    expect(createDevEvent(event)).toStrictEqual({
-      evcs: 23872,
-      mid: 'localhost-null-1580775120000',
-      name: 'custom-event',
-      tstmp: 1580775120000,
-      urlPath: 'http://localhost/',
-    })
-  })
-
-  it('no additional data', () => {
-    const event: IncomingEvent = {
-      name: 'custom-event',
-      data: {
-        foo: true,
-      },
-    }
-
-    expect(createDevEvent(event)).toStrictEqual({
-      evcs: 23872,
-      mid: 'localhost-null-1580775120000',
-      name: 'custom-event',
-      tstmp: 1580775120000,
-      urlPath: 'http://localhost/',
-      metaInfo: {
-        foo: true,
-      },
-    })
-  })
-})
-
 describe('createEvent', () => {
+  it('null', () => {
+    expect(createEvent(null)).toBeNull()
+  })
+
   it('empty string', () => {
-    expect(createEvent('')).toBeNull()
+    expect(createEvent({ name: '' })).toBeNull()
   })
 
   it('basic', () => {
-    expect(createEvent('click')).toStrictEqual({
+    expect(createEvent({ name: 'click', code: 11119 })).toStrictEqual({
       evcs: 11119,
       mid: 'localhost-null-1580775120000',
       name: 'click',
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
+    })
+  })
+
+  it('basic with custom url', () => {
+    expect(
+      createEvent({ name: 'click', url: 'https://blotout.io/', code: 11119 })
+    ).toStrictEqual({
+      evcs: 11119,
+      mid: 'localhost-null-1580775120000',
+      name: 'click',
+      tstmp: 1580775120000,
+      urlPath: 'https://blotout.io/',
     })
   })
 
@@ -136,7 +111,14 @@ describe('createEvent', () => {
       value: target,
     })
 
-    expect(createEvent('click', 'someObject', event)).toStrictEqual({
+    expect(
+      createEvent({
+        name: 'click',
+        code: 11119,
+        objectName: 'someObject',
+        event,
+      })
+    ).toStrictEqual({
       evcs: 11119,
       mid: 'localhost-null-1580775120000',
       name: 'click',
@@ -161,7 +143,14 @@ describe('createEvent', () => {
       value: target,
     })
 
-    expect(createEvent('click', 'someObject', event)).toStrictEqual({
+    expect(
+      createEvent({
+        name: 'click',
+        code: 11119,
+        objectName: 'someObject',
+        event,
+      })
+    ).toStrictEqual({
       evcs: 11119,
       mid: 'localhost-null-1580775120000',
       name: 'click',
@@ -186,7 +175,14 @@ describe('createEvent', () => {
       value: null,
     })
 
-    expect(createEvent('hover', 'someObject', event)).toStrictEqual({
+    expect(
+      createEvent({
+        name: 'hover',
+        code: 11508,
+        objectName: 'someObject',
+        event,
+      })
+    ).toStrictEqual({
       evcs: 11508,
       mid: 'localhost-null-1580775120000',
       mouse: { x: -1, y: -1 },
@@ -211,7 +207,14 @@ describe('createEvent', () => {
       value: target,
     })
 
-    expect(createEvent('click', 'someObject', event)).toStrictEqual({
+    expect(
+      createEvent({
+        name: 'click',
+        code: 11119,
+        objectName: 'someObject',
+        event,
+      })
+    ).toStrictEqual({
       evcs: 11119,
       mid: 'localhost-null-1580775120000',
       mouse: { x: -1, y: -1 },
@@ -220,6 +223,40 @@ describe('createEvent', () => {
       position: { height: -1, width: -1, x: -1, y: -1 },
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
+    })
+  })
+
+  it('no additional data', () => {
+    const event: IncomingEvent = {
+      name: 'custom-event',
+    }
+
+    expect(createEvent(event)).toStrictEqual({
+      evcs: 23872,
+      mid: 'localhost-null-1580775120000',
+      name: 'custom-event',
+      tstmp: 1580775120000,
+      urlPath: 'http://localhost/',
+    })
+  })
+
+  it('with additional data', () => {
+    const event: IncomingEvent = {
+      name: 'custom-event',
+      data: {
+        foo: true,
+      },
+    }
+
+    expect(createEvent(event)).toStrictEqual({
+      evcs: 23872,
+      mid: 'localhost-null-1580775120000',
+      name: 'custom-event',
+      tstmp: 1580775120000,
+      urlPath: 'http://localhost/',
+      metaInfo: {
+        foo: true,
+      },
     })
   })
 })

@@ -241,7 +241,7 @@ describe('setDevEvent', () => {
 describe('pageView', () => {
   it('ok', () => {
     const spySend = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
-    pageView()
+    pageView('https://blotout.io/')
     expect(spySend).toBeCalledWith([
       {
         data: {
@@ -249,7 +249,7 @@ describe('pageView', () => {
           mid: 'localhost-null-1580775120000',
           name: 'pagehide',
           tstmp: 1580775120000,
-          urlPath: 'http://localhost/',
+          urlPath: 'https://blotout.io/',
         },
       },
       {

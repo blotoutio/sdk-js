@@ -1,7 +1,12 @@
 import { getSelector, sendEvent } from './utils'
-import { constants, highFreqEvents, isHighFreqEventOff } from '../common/config'
+import {
+  constants,
+  highFreqEvents,
+  isHighFreqEventOff,
+  systemEventCode,
+} from '../common/config'
 import { error } from '../common/logUtil'
-import { createDevEvent, createEvent } from './create'
+import { createEvent } from './create'
 import type {
   EventData,
   EventOptions,
@@ -62,7 +67,12 @@ export const setEvent = (
   sendEvent(
     [
       {
-        data: createEvent(name, objectName, event as MouseEvent),
+        data: createEvent({
+          name,
+          objectName,
+          code: systemEventCode[name],
+          event: event as MouseEvent,
+        }),
       },
     ],
     options
@@ -79,7 +89,7 @@ export const setDevEvent = (
 
   const devEvents: SendEvent[] = []
   events.forEach((event) => {
-    const dev = createDevEvent(event)
+    const dev = createEvent(event)
     if (!dev) {
       return
     }
@@ -96,12 +106,20 @@ export const setDevEvent = (
   sendEvent(devEvents, options)
 }
 
-export const pageView = (): void => {
-  const sdkStart = {
-    data: createEvent(constants.SDK_START),
-  }
+export const pageView = (previousUrl: string): void => {
   const pagehide = {
-    data: createEvent(constants.PAGE_HIDE),
+    data: createEvent({
+      name: constants.PAGE_HIDE,
+      url: previousUrl,
+      code: systemEventCode.pagehide,
+    }),
+  }
+
+  const sdkStart = {
+    data: createEvent({
+      name: constants.SDK_START,
+      code: systemEventCode.sdk_start,
+    }),
   }
 
   sendEvent([pagehide, sdkStart])

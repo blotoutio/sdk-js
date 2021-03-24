@@ -1,19 +1,18 @@
 import { codeForDevEvent } from './utils'
 import { getMid } from '../common/utils'
-import { systemEventCode } from '../common/config'
-import type { DevEvent, IncomingEvent, Position, SystemEvent } from '../typings'
+import type { BasicEvent, IncomingEvent, Position } from '../typings'
 
-const getObjectTitle = (target: HTMLElement) => {
-  if (!target || !target.localName) {
+const getObjectTitle = (element: HTMLElement) => {
+  if (!element || !element.localName) {
     return null
   }
 
   const elmArr = ['a', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 
-  const name = target.localName.toLocaleLowerCase()
+  const name = element.localName.toLocaleLowerCase()
   const elmIndex = elmArr.findIndex((el) => el === name)
   if (elmIndex !== -1) {
-    return target.innerText
+    return element.innerText
   }
 
   return null
@@ -50,58 +49,38 @@ export const createPosition = (event: MouseEvent): null | Position => {
   return { x, y, width, height }
 }
 
-export const createDevEvent = (event: IncomingEvent): DevEvent => {
+export const createEvent = (event: IncomingEvent): BasicEvent => {
   if (!event || !event.name) {
     return null
   }
 
-  const devEvent: DevEvent = {
+  const data: BasicEvent = {
     name: event.name,
-    urlPath: window.location.href,
+    urlPath: event.url || window.location.href,
     mid: getMid(),
     tstmp: Date.now(),
     evcs: event.code || codeForDevEvent(event.name),
   }
 
   if (event.data) {
-    devEvent.metaInfo = event.data
+    data.metaInfo = event.data
   }
 
-  return devEvent
-}
-
-export const createEvent = (
-  eventName: string,
-  objectName?: string,
-  event?: MouseEvent
-): SystemEvent => {
-  if (!eventName) {
-    return null
-  }
-
-  const data: SystemEvent = {
-    name: eventName,
-    urlPath: window.location.href,
-    mid: getMid(),
-    tstmp: Date.now(),
-    evcs: systemEventCode[eventName],
-  }
-
-  if (event) {
-    data.position = createPosition(event as MouseEvent)
-    const title = getObjectTitle(event.target as HTMLElement)
+  if (event.event) {
+    data.position = createPosition(event.event as MouseEvent)
+    const title = getObjectTitle(event.event.target as HTMLElement)
     if (title) {
       data.objectTitle = title
     }
 
     data.mouse = {
-      x: event.clientX || -1,
-      y: event.clientY || -1,
+      x: event.event.clientX || -1,
+      y: event.event.clientY || -1,
     }
   }
 
-  if (objectName) {
-    data.objectName = objectName
+  if (event.objectName) {
+    data.objectName = event.objectName
   }
 
   return data
