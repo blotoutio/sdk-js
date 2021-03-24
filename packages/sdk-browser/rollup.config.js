@@ -1,6 +1,5 @@
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import alias from '@rollup/plugin-alias'
 import visualizer from 'rollup-plugin-visualizer'
 import define from 'rollup-plugin-define'
 import copy from 'rollup-plugin-copy'
@@ -15,12 +14,6 @@ import pkg from './package.json'
 
 const defaultPlugins = (feature, env) => {
   return [
-    alias({
-      entries: {
-        '@blotoutio/sdk-core': '../../sdk-core/dist',
-        '@blotoutio/sdk-personal': '../../sdk-personal/dist',
-      },
-    }),
     resolve(),
     commonjs(),
     jscc({

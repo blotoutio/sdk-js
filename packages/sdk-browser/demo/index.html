@@ -2,7 +2,7 @@
   <head>
     <title>Blotout - JS SDK</title>
     <link rel="icon" href="/favicon.png" />
-    <script type="text/javascript" src='/index.full.js'></script>
+    <script type="text/javascript" src="/index.full.js"></script>
     <script type="text/javascript" src="/app.js"></script>
     <link rel="stylesheet" href="/style.css" />
   </head>
@@ -24,9 +24,12 @@
           >
             Log Event
           </button>
-          <button id="sign-up" onclick="trends('capture', 'Sign up', {}, {
+          <button
+            id="sign-up"
+            onclick="trends('capture', 'Sign up', {}, {
             method: 'beacon'
-          })">
+          })"
+          >
             Sign up
           </button>
           <button id="log-in" onclick="trends('capture', 'Log in')">
@@ -38,14 +41,20 @@
           >
             Map id
           </button>
-          <button id="pii" onclick="trends('capturePersonal', 'PII event', {
+          <button
+            id="pii"
+            onclick="trends('capturePersonal', 'PII event', {
             email: 'sales@blotout.io'
-          })">
+          })"
+          >
             PII
           </button>
-          <button id="phi" onclick="trends('capturePersonal', 'PHI event', {
+          <button
+            id="phi"
+            onclick="trends('capturePersonal', 'PHI event', {
             type: 'A+'
-          }, true)">
+          }, true)"
+          >
             PHI
           </button>
           <button id="navigation" onclick="trends('pageView')">

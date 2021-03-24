@@ -8,5 +8,13 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/blotoutio/sdk-js.git"
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "lint": "lerna run lint",
+    "test": "lerna run test"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
   }
 }

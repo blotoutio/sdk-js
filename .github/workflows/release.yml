@@ -65,7 +65,7 @@ jobs:
   publish-core:
     runs-on: ubuntu-latest
     needs: [create-release]
-    timeout-minutes: 2
+    timeout-minutes: 3
     defaults:
       run:
         working-directory: packages/sdk-core
@@ -98,7 +98,7 @@ jobs:
   publish-personal:
     runs-on: ubuntu-latest
     needs: [publish-core]
-    timeout-minutes: 2
+    timeout-minutes: 3
     defaults:
       run:
         working-directory: packages/sdk-personal
@@ -131,7 +131,7 @@ jobs:
   publish-browser:
     runs-on: ubuntu-latest
     needs: [publish-personal]
-    timeout-minutes: 2
+    timeout-minutes: 3
     defaults:
       run:
         working-directory: packages/sdk-browser

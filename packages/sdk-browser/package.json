@@ -13,6 +13,7 @@
   "browser": "index.min.js",
   "unpkg": "index.min.js",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "rollup --config",
     "build:web": "rollup --config --configDev",
     "start": "rollup --config -w",
@@ -27,7 +28,6 @@
     "@babel/preset-env": "^7.13.10",
     "@blotoutio/sdk-core": "^0.6.0",
     "@blotoutio/sdk-personal": "^0.6.0",
-    "@rollup/plugin-alias": "^3.1.2",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
