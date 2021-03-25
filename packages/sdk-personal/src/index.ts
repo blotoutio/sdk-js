@@ -10,7 +10,7 @@ const createPersonalEvent = (
   event: IncomingEvent,
   isPHI: boolean
 ): SendEvent => {
-  const data = internalUtils.createDevEvent(event)
+  const data = internalUtils.createEvent(event)
   if (!data) {
     return null
   }

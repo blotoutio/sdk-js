@@ -105,18 +105,22 @@ The `pageView` method should be used when you are doing navigation via History A
 
 When you call this API we will send a request to the server that will contain two events in the payload. First in the array will be `pagehide` event and then `sdk_start`. This mimics how regular navigation works.
 
+|||||
+|---|---|---|---|
+| `previousUrl` | `String` |  | Previous page url that will be send as part of pageHide event |
+
 #### Example
 {% tabs basic %}
 {% tab basic browser %}
 ```js
-trends('pageView')
+trends('pageView', 'https://blotout.io')
 ```
 {% endtab %}
 {% tab basic node %}
 ```js
 import { pageView } from '@blotoutio/sdk-core'
 
-pageView()
+pageView('https://blotout.io')
 ```
 {% endtab %}
 {% endtabs %}

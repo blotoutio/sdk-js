@@ -12,10 +12,29 @@ import serve from 'rollup-plugin-serve'
 import path from 'path'
 import pkg from './package.json'
 
+const defaultPlugins = (feature, env) => {
+  return [
+    resolve(),
+    commonjs(),
+    jscc({
+      values: { _FEATURES: feature },
+    }),
+    define({
+      replacements: {
+        'process.env.PACKAGE_VERSION': JSON.stringify(
+          process.env.npm_package_version
+        ),
+        'process.env.NODE_ENV': JSON.stringify(env),
+      },
+    }),
+  ]
+}
+
 const createConfig = ({ prod, stats, gzip, feature }) => {
   const name = `index${feature === 'full' ? '.full' : ''}${
     prod ? '.min' : ''
   }.js`
+
   const config = {
     input: './index.js',
     output: {
@@ -24,23 +43,7 @@ const createConfig = ({ prod, stats, gzip, feature }) => {
       format: 'umd',
       sourcemap: true,
     },
-    plugins: [
-      resolve(),
-      commonjs(),
-      jscc({
-        values: { _FEATURES: feature },
-      }),
-      define({
-        replacements: {
-          'process.env.PACKAGE_VERSION': JSON.stringify(
-            process.env.npm_package_version
-          ),
-          'process.env.NODE_ENV': JSON.stringify(
-            prod ? 'production' : 'development'
-          ),
-        },
-      }),
-    ],
+    plugins: defaultPlugins(feature, prod ? 'production' : 'development'),
   }
 
   if (gzip) {
@@ -76,19 +79,7 @@ const getDev = (watch) => {
       cleaner({
         targets: ['./dist/'],
       }),
-      resolve(),
-      commonjs(),
-      jscc({
-        values: { _FEATURES: 'full' },
-      }),
-      define({
-        replacements: {
-          'process.env.PACKAGE_VERSION': JSON.stringify(
-            process.env.npm_package_version
-          ),
-          'process.env.NODE_ENV': JSON.stringify('development'),
-        },
-      }),
+      ...defaultPlugins('full', 'development'),
       copy({
         targets: [{ src: './demo/*', dest: './dist' }],
       }),

@@ -8,12 +8,11 @@ import { postRequest } from '../network'
 import { info } from '../common/logUtil'
 import { getUID } from '../common/uidUtil'
 import type {
-  DevEvent,
+  BasicEvent,
   EventOptions,
   EventPayload,
   EventPayloadProperties,
   SendEvent,
-  SystemEvent,
 } from '../typings'
 
 export const shouldCollectSystemEvents = (): boolean => {
@@ -34,9 +33,7 @@ export const codeForDevEvent = (eventName: string): number => {
   return generateSubCode(stringToIntSum(eventName))
 }
 
-export const getEventPayload = (
-  event: SystemEvent | DevEvent
-): EventPayload => {
+export const getEventPayload = (event: BasicEvent): EventPayload => {
   const sessionId = getSessionID()
 
   const properties: EventPayloadProperties = {
