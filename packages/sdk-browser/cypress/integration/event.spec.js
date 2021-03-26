@@ -77,7 +77,7 @@ context('Events', () => {
       expect(interceptions.request.body.events).to.have.lengthOf(1)
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(119)
+      expect(event.mid).to.have.lengthOf(63)
       expect(event).to.have.ownProperty('userid')
       expect(event.userid).to.have.lengthOf(87)
       expect(event.properties).to.have.ownProperty('session_id')
@@ -95,8 +95,8 @@ context('Events', () => {
         properties: {
           screen: {
             width: 1000,
-            height: 660,
-            docHeight: 660,
+            height: 700,
+            docHeight: 700,
             docWidth: 1000,
           },
           codifiedInfo: { data: 'foo' },
@@ -116,7 +116,7 @@ context('Events', () => {
 
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(119)
+      expect(event.mid).to.have.lengthOf(71)
       delete event.mid
 
       expect(event).to.have.ownProperty('userid')
@@ -128,7 +128,7 @@ context('Events', () => {
       delete event.properties.session_id
 
       expect(event.pii).to.have.ownProperty('data')
-      expect(event.pii.data).to.have.lengthOf(620)
+      expect(event.pii.data).to.have.lengthOf(556)
       expect(event.pii).to.have.ownProperty('key')
       expect(event.pii.key).to.have.lengthOf(172)
       expect(event.pii).to.have.ownProperty('iv')
@@ -142,10 +142,10 @@ context('Events', () => {
         evt: 1614677171392,
         properties: {
           screen: {
-            width: 985,
-            height: 675,
-            docHeight: 675,
-            docWidth: 985,
+            width: 1000,
+            height: 700,
+            docHeight: 700,
+            docWidth: 1000,
           },
         },
       })
@@ -164,7 +164,7 @@ context('Events', () => {
 
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(119)
+      expect(event.mid).to.have.lengthOf(71)
       delete event.mid
 
       expect(event).to.have.ownProperty('userid')
@@ -176,7 +176,7 @@ context('Events', () => {
       delete event.properties.session_id
 
       expect(event.phi).to.have.ownProperty('data')
-      expect(event.phi.data).to.have.lengthOf(620)
+      expect(event.phi.data).to.have.lengthOf(556)
       expect(event.phi).to.have.ownProperty('key')
       expect(event.phi.key).to.have.lengthOf(172)
       expect(event.phi).to.have.ownProperty('iv')
@@ -190,10 +190,10 @@ context('Events', () => {
         evt: 1614677171392,
         properties: {
           screen: {
-            width: 985,
-            height: 675,
-            docHeight: 675,
-            docWidth: 985,
+            width: 1000,
+            height: 700,
+            docHeight: 700,
+            docWidth: 1000,
           },
         },
       })
@@ -212,7 +212,7 @@ context('Events', () => {
       // Page hide
       let event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(119)
+      expect(event.mid).to.have.lengthOf(63)
       expect(event).to.have.ownProperty('userid')
       expect(event.userid).to.have.lengthOf(87)
       expect(event.properties).to.have.ownProperty('session_id')
@@ -230,8 +230,8 @@ context('Events', () => {
         properties: {
           screen: {
             width: 1000,
-            height: 660,
-            docHeight: 660,
+            height: 700,
+            docHeight: 700,
             docWidth: 1000,
           },
         },
@@ -240,7 +240,7 @@ context('Events', () => {
       // SDK start
       event = interceptions.request.body.events[1]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(119)
+      expect(event.mid).to.have.lengthOf(63)
       expect(event).to.have.ownProperty('userid')
       expect(event.userid).to.have.lengthOf(87)
       expect(event.properties).to.have.ownProperty('session_id')
@@ -258,8 +258,8 @@ context('Events', () => {
         properties: {
           screen: {
             width: 1000,
-            height: 660,
-            docHeight: 660,
+            height: 700,
+            docHeight: 700,
             docWidth: 1000,
           },
         },
@@ -278,7 +278,7 @@ context('Events', () => {
 
       const event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(119)
+      expect(event.mid).to.have.lengthOf(59)
       expect(event).to.have.ownProperty('userid')
       expect(event.userid).to.have.lengthOf(87)
       expect(event.properties).to.have.ownProperty('session_id')
@@ -296,8 +296,8 @@ context('Events', () => {
         properties: {
           screen: {
             width: 1000,
-            height: 660,
-            docHeight: 660,
+            height: 700,
+            docHeight: 700,
             docWidth: 1000,
           },
           codifiedInfo: {

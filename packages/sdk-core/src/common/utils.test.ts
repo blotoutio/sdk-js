@@ -8,6 +8,8 @@ import {
 import * as uidUtil from './uidUtil'
 import { getLocal, removeLocal } from '../storage'
 import { getCreatedKey } from '../storage/key'
+import * as uuid from 'uuid'
+jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
@@ -15,12 +17,33 @@ beforeEach(() => {
 })
 
 describe('getMid', () => {
+  let spyUID: jest.SpyInstance<string>
+
+  beforeEach(() => {
+    spyUID = jest.spyOn(uidUtil, 'getUID').mockReturnValue('er2r23r2r23r')
+  })
+
+  afterEach(() => {
+    spyUID.mockRestore()
+  })
+
   it('ok', () => {
-    const spy = jest
-      .spyOn(uidUtil, 'getUID')
-      .mockImplementation(() => 'er2r23r2r23r')
-    expect(getMid()).toEqual('localhost-er2r23r2r23r-1580775120000')
-    spy.mockRestore()
+    Object.defineProperty(performance, 'now', {
+      value: () => 1231231.023424234,
+    })
+    expect(getMid('sdk_start')).toEqual(
+      'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1231231.0234'
+    )
+  })
+
+  it('performance is not available', () => {
+    Object.defineProperty(performance, 'now', {
+      value: undefined,
+    })
+
+    expect(getMid('page_hide')).toEqual(
+      'cGFnZV9oaWRl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000'
+    )
   })
 })
 

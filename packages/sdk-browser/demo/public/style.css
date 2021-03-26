@@ -67,6 +67,7 @@ nav a:hover {
 
 #root {
   display: flex;
+  height: 500px;
 }
 
 .events-content {

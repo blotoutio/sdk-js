@@ -1,11 +1,20 @@
-import { getDomain } from './domainUtil'
-import { getUID } from './uidUtil'
+import { v4 as uuidv4 } from 'uuid'
 import { info } from './logUtil'
 import { setLocal } from '../storage'
 import { getCreatedKey } from '../storage/key'
 
-export const getMid = (): string => {
-  return `${getDomain()}-${getUID()}-${Date.now()}`
+export const getMid = (eventName: string): string => {
+  let time = Date.now().toString()
+  if (
+    typeof performance !== 'undefined' &&
+    typeof performance.now === 'function'
+  ) {
+    const perf = performance.now()
+    if (perf) {
+      time = perf.toFixed(4)
+    }
+  }
+  return `${btoa(eventName)}-${uuidv4()}-${time}`
 }
 
 export const debounce = (

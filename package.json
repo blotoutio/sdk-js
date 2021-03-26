@@ -12,7 +12,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "lint": "lerna run lint",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "start": "lerna run start"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
