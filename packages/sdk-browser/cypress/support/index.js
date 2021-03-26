@@ -4,6 +4,7 @@ Cypress.on('window:before:load', (win) => {
 })
 
 beforeEach(() => {
+  cy.viewport(1000, 700)
   // make sure that every test start with clean storage so that there is no leakage
   cy.window().then(() => {
     window.sessionStorage.clear()

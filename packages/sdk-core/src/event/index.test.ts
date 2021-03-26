@@ -2,6 +2,8 @@ import * as eventUtils from './utils'
 import * as storage from '../storage'
 import { mapID, pageView, setDevEvent, setEvent, setStartEvent } from './index'
 import type { EventOptions, SendEvent } from '../typings'
+import * as uuid from 'uuid'
+jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -52,7 +54,7 @@ describe('mapID', () => {
           data: {
             evcs: 21001,
             metaInfo: { map_id: 'sdfasfasdfds', map_provider: 'service' },
-            mid: 'localhost-null-1580775120000',
+            mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'map_id',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -75,7 +77,7 @@ describe('mapID', () => {
               map_id: 'sdfasfasdfds',
               map_provider: 'service',
             },
-            mid: 'localhost-null-1580775120000',
+            mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'map_id',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -96,7 +98,8 @@ describe('setStartEvent', () => {
         {
           data: {
             evcs: 11130,
-            mid: 'localhost-null-1580775120000',
+            mid:
+              'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'sdk_start',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -148,7 +151,7 @@ describe('setEvent', () => {
         {
           data: {
             evcs: 11119,
-            mid: 'localhost-null-1580775120000',
+            mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             mouse: { x: -1, y: -1 },
             name: 'click',
             objectName: 'H1',
@@ -217,7 +220,8 @@ describe('setDevEvent', () => {
           data: {
             evcs: 23872,
             metaInfo: { foo: true },
-            mid: 'localhost-null-1580775120000',
+            mid:
+              'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'custom-event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -226,7 +230,8 @@ describe('setDevEvent', () => {
         {
           data: {
             evcs: 24004,
-            mid: 'localhost-null-1580775120000',
+            mid:
+              'bmV3LWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'new-event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -246,7 +251,8 @@ describe('pageView', () => {
       {
         data: {
           evcs: 11106,
-          mid: 'localhost-null-1580775120000',
+          mid:
+            'cGFnZWhpZGU=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
           name: 'pagehide',
           tstmp: 1580775120000,
           urlPath: 'https://blotout.io/',
@@ -255,7 +261,8 @@ describe('pageView', () => {
       {
         data: {
           evcs: 11130,
-          mid: 'localhost-null-1580775120000',
+          mid:
+            'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
           name: 'sdk_start',
           tstmp: 1580775120000,
           urlPath: 'http://localhost/',

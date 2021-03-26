@@ -1,5 +1,7 @@
 import type { IncomingEvent } from '../typings'
 import { createEvent, createPosition } from './create'
+import * as uuid from 'uuid'
+jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
@@ -80,7 +82,7 @@ describe('createEvent', () => {
   it('basic', () => {
     expect(createEvent({ name: 'click', code: 11119 })).toStrictEqual({
       evcs: 11119,
-      mid: 'localhost-null-1580775120000',
+      mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: 'click',
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
@@ -92,7 +94,7 @@ describe('createEvent', () => {
       createEvent({ name: 'click', url: 'https://blotout.io/', code: 11119 })
     ).toStrictEqual({
       evcs: 11119,
-      mid: 'localhost-null-1580775120000',
+      mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: 'click',
       tstmp: 1580775120000,
       urlPath: 'https://blotout.io/',
@@ -120,7 +122,7 @@ describe('createEvent', () => {
       })
     ).toStrictEqual({
       evcs: 11119,
-      mid: 'localhost-null-1580775120000',
+      mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: 'click',
       objectName: 'someObject',
       objectTitle: 'hi',
@@ -152,7 +154,7 @@ describe('createEvent', () => {
       })
     ).toStrictEqual({
       evcs: 11119,
-      mid: 'localhost-null-1580775120000',
+      mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: 'click',
       objectName: 'someObject',
       position: { height: -1, width: -1, x: -1, y: -1 },
@@ -184,7 +186,7 @@ describe('createEvent', () => {
       })
     ).toStrictEqual({
       evcs: 11508,
-      mid: 'localhost-null-1580775120000',
+      mid: 'aG92ZXI=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       mouse: { x: -1, y: -1 },
       name: 'hover',
       objectName: 'someObject',
@@ -216,7 +218,7 @@ describe('createEvent', () => {
       })
     ).toStrictEqual({
       evcs: 11119,
-      mid: 'localhost-null-1580775120000',
+      mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       mouse: { x: -1, y: -1 },
       name: 'click',
       objectName: 'someObject',
@@ -233,7 +235,8 @@ describe('createEvent', () => {
 
     expect(createEvent(event)).toStrictEqual({
       evcs: 23872,
-      mid: 'localhost-null-1580775120000',
+      mid:
+        'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: 'custom-event',
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
@@ -250,7 +253,8 @@ describe('createEvent', () => {
 
     expect(createEvent(event)).toStrictEqual({
       evcs: 23872,
-      mid: 'localhost-null-1580775120000',
+      mid:
+        'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: 'custom-event',
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',

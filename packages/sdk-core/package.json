@@ -18,7 +18,8 @@
     "lint": "npm-run-all lint:*",
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check .",
-    "test": "jest --runInBand --logHeapUsage"
+    "test": "jest --runInBand --logHeapUsage",
+    "start": "rollup --config --w"
   },
   "engines": {
     "node": ">=15.0.0"

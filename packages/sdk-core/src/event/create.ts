@@ -57,7 +57,7 @@ export const createEvent = (event: IncomingEvent): BasicEvent => {
   const data: BasicEvent = {
     name: event.name,
     urlPath: event.url || window.location.href,
-    mid: getMid(),
+    mid: getMid(event.name),
     tstmp: Date.now(),
     evcs: event.code || codeForDevEvent(event.name),
   }
