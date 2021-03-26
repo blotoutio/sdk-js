@@ -1,0 +1,111 @@
+body {
+  font-size: 15px;
+  font-family: Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+nav {
+  margin: 0 0 30px;
+  background: darkgray;
+}
+
+.wrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+nav a {
+  margin: 20px;
+  display: inline-block;
+  color: #efeaea;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.anchor {
+  margin-bottom: 3000px;
+  display: block;
+}
+
+.content {
+  padding: 10px;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.events {
+  display: flex;
+}
+
+.events-actions {
+  width: 300px;
+}
+
+.events-actions button {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  background: none;
+  border: 2px solid darkgray;
+  height: 35px;
+  cursor: pointer;
+}
+
+.events-actions .active {
+  border-color: #f25c2b;
+}
+
+#root {
+  display: flex;
+}
+
+.events-content {
+  padding: 0 40px;
+  width: 100%;
+}
+
+.form-line {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.form-line span {
+  width: 140px;
+  display: block;
+}
+
+.form-line input[type='text'] {
+  height: 30px;
+  padding: 0 10px;
+  width: 300px;
+}
+
+.form-line textarea {
+  width: 300px;
+  height: 300px;
+}
+
+.form-line label {
+  margin: 0 30px 0 5px;
+}
+
+.form-line input[type='submit'] {
+  border: none;
+  background: #f25c2b;
+  color: #fff;
+  width: 100px;
+  height: 30px;
+  margin-top: 20px;
+  border-radius: 3px;
+  cursor: pointer;
+}

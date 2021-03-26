@@ -3,8 +3,3 @@ trends('init', {
   endpointUrl: 'https://stage.blotout.io/sdk',
   customDomain: 'www.localhost.com',
 })
-
-const getUserId = () => {
-  const id = trends('getUserId')
-  document.getElementById('eventData').innerHTML = `${id}`
-}

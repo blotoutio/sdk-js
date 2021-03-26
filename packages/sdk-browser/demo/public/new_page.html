@@ -1,14 +1,15 @@
 <html lang="en">
   <head>
     <title>New page</title>
-    <script type="text/javascript" src="/trends_full.js"></script>
-    <script type="text/javascript" src="/app.js"></script>
+    <link rel="icon" href="/favicon.png" />
+    <script type="text/javascript" src="/index.full.js"></script>
+    <script type="text/javascript" src="/global.js"></script>
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <h1>Blotout JS SDK</h1>
+    <h1 id="top">Blotout JS SDK</h1>
     <nav>
-      <div class="navWrapper">
+      <div class="wrapper">
         <a href="/index.html">Events</a>
         <a href="/new_page.html">New page</a>
         <a href="mailto:sales@blotout.io">Mail</a>
@@ -16,7 +17,7 @@
     </nav>
     <div class="content">
       <a href="#about" class="anchor">Go to anchor</a>
-      <div id="about">Anchor link</div>
+      <a href="#top" id="about">Go to top</a>
     </div>
   </body>
 </html>

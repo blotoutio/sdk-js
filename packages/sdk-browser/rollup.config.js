@@ -9,8 +9,10 @@ import cleaner from 'rollup-plugin-cleaner'
 import generatePackageJson from 'rollup-plugin-generate-package-json'
 import jscc from 'rollup-plugin-jscc'
 import serve from 'rollup-plugin-serve'
-import path from 'path'
+import babel from '@rollup/plugin-babel'
 import pkg from './package.json'
+import replace from '@rollup/plugin-replace'
+import livereload from 'rollup-plugin-livereload'
 
 const defaultPlugins = (feature, env) => {
   return [
@@ -66,7 +68,7 @@ const createConfig = ({ prod, stats, gzip, feature }) => {
   return config
 }
 
-const getDev = (watch) => {
+const getDev = () => {
   return {
     input: './index.js',
     output: {
@@ -80,17 +82,47 @@ const getDev = (watch) => {
         targets: ['./dist/'],
       }),
       ...defaultPlugins('full', 'development'),
-      copy({
-        targets: [{ src: './demo/*', dest: './dist' }],
+    ],
+  }
+}
+
+const getDemo = (watch) => {
+  return {
+    input: 'demo/src/index.jsx',
+    output: {
+      file: 'dist/events.js',
+      format: 'iife',
+      sourcemap: true,
+    },
+    plugins: [
+      resolve({
+        browser: true,
+        jsnext: true,
+        extensions: ['.js', '.jsx'],
       }),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('development'),
+        preventAssignment: true,
+      }),
+      babel({
+        presets: ['@babel/preset-react'],
+        babelHelpers: 'bundled',
+      }),
+      commonjs(),
       ...(watch
         ? [
             serve({
+              verbose: true,
+              contentBase: ['dist', 'demo/public'],
               port: 9000,
-              contentBase: path.join(__dirname, './dist'),
             }),
+            livereload({ watch: 'dist' }),
           ]
-        : []),
+        : [
+            copy({
+              targets: [{ src: 'demo/public/*', dest: './dist/' }],
+            }),
+          ]),
     ],
   }
 }
@@ -100,7 +132,7 @@ module.exports = (commandLineArgs) => {
   delete pkg.scripts
 
   if (commandLineArgs.watch || commandLineArgs.configDev) {
-    return getDev(commandLineArgs.watch)
+    return [getDev(commandLineArgs.watch), getDemo(commandLineArgs.watch)]
   }
 
   const prepare = {
