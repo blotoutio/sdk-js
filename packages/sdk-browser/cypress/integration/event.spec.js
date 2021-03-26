@@ -69,7 +69,7 @@ context('Events', () => {
   })
 
   it('Log event', () => {
-    cy.get('#log-event').click()
+    cy.get('#send').click()
     cy.wait('@publish').then((interceptions) => {
       compareBasic(interceptions.response.statusCode, interceptions.request.url)
       compareMeta(interceptions.request.body.meta)
@@ -88,8 +88,8 @@ context('Events', () => {
       delete event.properties.session_id
 
       assert.deepEqual(event, {
-        evn: 'Dev Click',
-        evcs: 23801,
+        evn: 'dev-event',
+        evcs: 24000,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
         properties: {
@@ -105,8 +105,9 @@ context('Events', () => {
     })
   })
 
-  it('Log in event', () => {
-    cy.get('#log-in').click()
+  it('PII event', () => {
+    cy.get('#personal').click()
+    cy.get('#send').click()
     cy.wait('@publish').then((interceptions) => {
       compareBasic(interceptions.response.statusCode, interceptions.request.url)
       compareMeta(interceptions.request.body.meta)
@@ -114,6 +115,102 @@ context('Events', () => {
       expect(interceptions.request.body.events).to.have.lengthOf(1)
 
       const event = interceptions.request.body.events[0]
+      expect(event).to.have.ownProperty('mid')
+      expect(event.mid).to.have.lengthOf(119)
+      delete event.mid
+
+      expect(event).to.have.ownProperty('userid')
+      expect(event.userid).to.have.lengthOf(87)
+      delete event.userid
+
+      expect(event.properties).to.have.ownProperty('session_id')
+      expect(event.properties.session_id).to.have.lengthOf(13)
+      delete event.properties.session_id
+
+      expect(event.pii).to.have.ownProperty('data')
+      expect(event.pii.data).to.have.lengthOf(620)
+      expect(event.pii).to.have.ownProperty('key')
+      expect(event.pii.key).to.have.lengthOf(172)
+      expect(event.pii).to.have.ownProperty('iv')
+      expect(event.pii.iv).to.have.lengthOf(32)
+      delete event.pii
+
+      assert.deepEqual(event, {
+        evn: 'personal-event',
+        evcs: 24050,
+        scrn: 'http://localhost:9000/',
+        evt: 1614677171392,
+        properties: {
+          screen: {
+            width: 985,
+            height: 675,
+            docHeight: 675,
+            docWidth: 985,
+          },
+        },
+      })
+    })
+  })
+
+  it('PHI event', () => {
+    cy.get('#personal').click()
+    cy.get('label[for="phi"]').click()
+    cy.get('#send').click()
+    cy.wait('@publish').then((interceptions) => {
+      compareBasic(interceptions.response.statusCode, interceptions.request.url)
+      compareMeta(interceptions.request.body.meta)
+
+      expect(interceptions.request.body.events).to.have.lengthOf(1)
+
+      const event = interceptions.request.body.events[0]
+      expect(event).to.have.ownProperty('mid')
+      expect(event.mid).to.have.lengthOf(119)
+      delete event.mid
+
+      expect(event).to.have.ownProperty('userid')
+      expect(event.userid).to.have.lengthOf(87)
+      delete event.userid
+
+      expect(event.properties).to.have.ownProperty('session_id')
+      expect(event.properties.session_id).to.have.lengthOf(13)
+      delete event.properties.session_id
+
+      expect(event.phi).to.have.ownProperty('data')
+      expect(event.phi.data).to.have.lengthOf(620)
+      expect(event.phi).to.have.ownProperty('key')
+      expect(event.phi.key).to.have.lengthOf(172)
+      expect(event.phi).to.have.ownProperty('iv')
+      expect(event.phi.iv).to.have.lengthOf(32)
+      delete event.phi
+
+      assert.deepEqual(event, {
+        evn: 'personal-event',
+        evcs: 24050,
+        scrn: 'http://localhost:9000/',
+        evt: 1614677171392,
+        properties: {
+          screen: {
+            width: 985,
+            height: 675,
+            docHeight: 675,
+            docWidth: 985,
+          },
+        },
+      })
+    })
+  })
+
+  it('Page View event', () => {
+    cy.get('#page-view').click()
+    cy.get('#send').click()
+    cy.wait('@publish').then((interceptions) => {
+      compareBasic(interceptions.response.statusCode, interceptions.request.url)
+      compareMeta(interceptions.request.body.meta)
+
+      expect(interceptions.request.body.events).to.have.lengthOf(2)
+
+      // Page hide
+      let event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
       expect(event.mid).to.have.lengthOf(119)
       expect(event).to.have.ownProperty('userid')
@@ -126,8 +223,36 @@ context('Events', () => {
       delete event.properties.session_id
 
       assert.deepEqual(event, {
-        evn: 'Log in',
-        evcs: 23862,
+        evn: 'pagehide',
+        evcs: 11106,
+        scrn: 'https://jsdemo.blotout.io/new_page.html',
+        evt: 1614677171392,
+        properties: {
+          screen: {
+            width: 1000,
+            height: 660,
+            docHeight: 660,
+            docWidth: 1000,
+          },
+        },
+      })
+
+      // SDK start
+      event = interceptions.request.body.events[1]
+      expect(event).to.have.ownProperty('mid')
+      expect(event.mid).to.have.lengthOf(119)
+      expect(event).to.have.ownProperty('userid')
+      expect(event.userid).to.have.lengthOf(87)
+      expect(event.properties).to.have.ownProperty('session_id')
+      expect(event.properties.session_id).to.have.lengthOf(13)
+
+      delete event.mid
+      delete event.userid
+      delete event.properties.session_id
+
+      assert.deepEqual(event, {
+        evn: 'sdk_start',
+        evcs: 11130,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
         properties: {
@@ -144,6 +269,7 @@ context('Events', () => {
 
   it('Map ID event', () => {
     cy.get('#map-id').click()
+    cy.get('#send').click()
     cy.wait('@publish').then((interceptions) => {
       compareBasic(interceptions.response.statusCode, interceptions.request.url)
       compareMeta(interceptions.request.body.meta)
@@ -175,101 +301,9 @@ context('Events', () => {
             docWidth: 1000,
           },
           codifiedInfo: {
-            lang: 'es',
+            data: 'foo',
             map_id: '234234234',
             map_provider: 'service',
-          },
-        },
-      })
-    })
-  })
-
-  it('PII event', () => {
-    cy.get('#pii').click()
-    cy.wait('@publish').then((interceptions) => {
-      compareBasic(interceptions.response.statusCode, interceptions.request.url)
-      compareMeta(interceptions.request.body.meta)
-
-      expect(interceptions.request.body.events).to.have.lengthOf(1)
-
-      const event = interceptions.request.body.events[0]
-      expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(119)
-      delete event.mid
-
-      expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(87)
-      delete event.userid
-
-      expect(event.properties).to.have.ownProperty('session_id')
-      expect(event.properties.session_id).to.have.lengthOf(13)
-      delete event.properties.session_id
-
-      expect(event.pii).to.have.ownProperty('data')
-      expect(event.pii.data).to.have.lengthOf(640)
-      expect(event.pii).to.have.ownProperty('key')
-      expect(event.pii.key).to.have.lengthOf(172)
-      expect(event.pii).to.have.ownProperty('iv')
-      expect(event.pii.iv).to.have.lengthOf(32)
-      delete event.pii
-
-      assert.deepEqual(event, {
-        evn: 'PII event',
-        evcs: 24102,
-        scrn: 'http://localhost:9000/',
-        evt: 1614677171392,
-        properties: {
-          screen: {
-            width: 1000,
-            height: 660,
-            docHeight: 660,
-            docWidth: 1000,
-          },
-        },
-      })
-    })
-  })
-
-  it('PHI event', () => {
-    cy.get('#phi').click()
-    cy.wait('@publish').then((interceptions) => {
-      compareBasic(interceptions.response.statusCode, interceptions.request.url)
-      compareMeta(interceptions.request.body.meta)
-
-      expect(interceptions.request.body.events).to.have.lengthOf(1)
-
-      const event = interceptions.request.body.events[0]
-      expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(119)
-      delete event.mid
-
-      expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(87)
-      delete event.userid
-
-      expect(event.properties).to.have.ownProperty('session_id')
-      expect(event.properties.session_id).to.have.lengthOf(13)
-      delete event.properties.session_id
-
-      expect(event.phi).to.have.ownProperty('data')
-      expect(event.phi.data).to.have.lengthOf(620)
-      expect(event.phi).to.have.ownProperty('key')
-      expect(event.phi.key).to.have.lengthOf(172)
-      expect(event.phi).to.have.ownProperty('iv')
-      expect(event.phi.iv).to.have.lengthOf(32)
-      delete event.phi
-
-      assert.deepEqual(event, {
-        evn: 'PHI event',
-        evcs: 23916,
-        scrn: 'http://localhost:9000/',
-        evt: 1614677171392,
-        properties: {
-          screen: {
-            width: 1000,
-            height: 660,
-            docHeight: 660,
-            docWidth: 1000,
           },
         },
       })
