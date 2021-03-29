@@ -239,6 +239,7 @@ describe('sendEvent', () => {
       JSON.stringify({
         meta: {
           tz_offset: 0,
+          user_id_created: 1580775120000,
           plf: 70,
           appn: 'localhost',
           osv: '0',

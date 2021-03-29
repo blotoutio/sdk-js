@@ -2,7 +2,6 @@ import * as eventUtils from './utils'
 import * as storage from '../storage'
 import { mapID, pageView, setDevEvent, setEvent, setStartEvent } from './index'
 import type { EventOptions, SendEvent } from '../typings'
-import * as uuid from 'uuid'
 jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
 window.fetch = require('node-fetch')

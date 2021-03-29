@@ -16,7 +16,7 @@
     "prepublish": "npm run build",
     "build": "rollup --config",
     "lint": "npm-run-all lint:*",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint --max-warnings 0 .",
     "lint:prettier": "prettier --check .",
     "test": "jest --runInBand --logHeapUsage",
     "start": "rollup --config --w"
