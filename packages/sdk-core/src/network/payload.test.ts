@@ -2,6 +2,11 @@ import { getPayload } from './payload'
 import * as manifest from '../common/manifest'
 import * as storage from '../storage'
 
+beforeEach(() => {
+  jest.useFakeTimers('modern')
+  jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
+})
+
 describe('getPayload', () => {
   beforeEach(() => {
     Object.defineProperty(navigator, 'userAgent', {
@@ -69,6 +74,7 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -92,6 +98,7 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -117,6 +124,7 @@ describe('getPayload', () => {
         plf: 11,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -142,6 +150,7 @@ describe('getPayload', () => {
         plf: 15,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -167,6 +176,7 @@ describe('getPayload', () => {
         plf: 27,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -192,6 +202,7 @@ describe('getPayload', () => {
         plf: 26,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -217,6 +228,7 @@ describe('getPayload', () => {
         plf: 28,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -242,6 +254,7 @@ describe('getPayload', () => {
         plf: 16,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -267,6 +280,7 @@ describe('getPayload', () => {
         plf: 12,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -292,6 +306,7 @@ describe('getPayload', () => {
         plf: 14,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -317,6 +332,7 @@ describe('getPayload', () => {
         plf: 14,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -341,6 +357,7 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -365,6 +382,7 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -390,6 +408,7 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
   })
@@ -418,6 +437,7 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
 
@@ -429,7 +449,7 @@ describe('getPayload', () => {
     const result = getPayload([])
     expect(result).toStrictEqual({
       events: [],
-      meta: { sdkv: undefined, tz_offset: -0 },
+      meta: { sdkv: undefined, tz_offset: -0, user_id_created: 1580775120000 },
     })
     spy.mockRestore()
   })
@@ -452,6 +472,7 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
     spy.mockRestore()
@@ -468,9 +489,6 @@ describe('getPayload', () => {
           },
         })
       )
-    const spyLocal = jest
-      .spyOn(storage, 'getLocal')
-      .mockImplementation(() => '2342323423')
     const result = getPayload([])
     expect(result).toStrictEqual({
       events: [],
@@ -487,11 +505,10 @@ describe('getPayload', () => {
         sdkv: undefined,
         search: { key: true },
         tz_offset: -0,
-        user_id_created: 2342323423,
+        user_id_created: 1580775120000,
       },
     })
     spySession.mockRestore()
-    spyLocal.mockRestore()
   })
 
   it('session data empty', () => {
@@ -516,6 +533,7 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
+        user_id_created: 1580775120000,
       },
     })
     spySession.mockRestore()

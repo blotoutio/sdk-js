@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { info } from './logUtil'
-import { setLocal } from '../storage'
+import { getLocal, setLocal } from '../storage'
 import { getCreatedKey } from '../storage/key'
 
 export const getMid = (eventName: string): string => {
@@ -59,6 +59,17 @@ export const getSearchParams = (): Record<string, string> => {
   return result
 }
 
-export const setCreateTimestamp = (): void => {
-  setLocal(getCreatedKey(), Date.now().toString())
+export const setCreateTimestamp = (): number => {
+  const time = Date.now()
+  setLocal(getCreatedKey(), time.toString())
+  return time
+}
+
+export const getCreateTimestamp = (): number => {
+  const created = parseInt(getLocal(getCreatedKey()))
+  if (!isNaN(created)) {
+    return created
+  }
+
+  return setCreateTimestamp()
 }

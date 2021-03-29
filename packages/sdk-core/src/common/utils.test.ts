@@ -1,14 +1,14 @@
 import {
   debounce,
+  getCreateTimestamp,
   getMid,
   getReferrer,
   getSearchParams,
   setCreateTimestamp,
 } from './utils'
 import * as uidUtil from './uidUtil'
-import { getLocal, removeLocal } from '../storage'
+import { getLocal, removeLocal, setLocal } from '../storage'
 import { getCreatedKey } from '../storage/key'
-import * as uuid from 'uuid'
 jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
 beforeEach(() => {
@@ -39,6 +39,16 @@ describe('getMid', () => {
   it('performance is not available', () => {
     Object.defineProperty(performance, 'now', {
       value: undefined,
+    })
+
+    expect(getMid('page_hide')).toEqual(
+      'cGFnZV9oaWRl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000'
+    )
+  })
+
+  it('performance is empty', () => {
+    Object.defineProperty(performance, 'now', {
+      value: () => 0,
     })
 
     expect(getMid('page_hide')).toEqual(
@@ -135,7 +145,27 @@ describe('setCreateTimestamp', () => {
   })
 
   it('ok', () => {
-    setCreateTimestamp()
+    const result = setCreateTimestamp()
+    expect(result).toBe(1580775120000)
     expect(getLocal(getCreatedKey())).toEqual('1580775120000')
+  })
+})
+
+describe('getCreateTimestamp', () => {
+  beforeEach(() => {
+    removeLocal(getCreatedKey())
+  })
+
+  it('not set', () => {
+    expect(getLocal(getCreatedKey())).toBe(null)
+    const result = getCreateTimestamp()
+    expect(result).toBe(1580775120000)
+    expect(getLocal(getCreatedKey())).toEqual('1580775120000')
+  })
+
+  it('set', () => {
+    setLocal(getCreatedKey(), '1580775120000')
+    const result = getCreateTimestamp()
+    expect(result).toBe(1580775120000)
   })
 })

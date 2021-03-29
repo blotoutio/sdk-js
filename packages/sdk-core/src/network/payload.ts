@@ -1,11 +1,12 @@
 import { constants } from '../common/config'
 import { getVariable } from '../common/manifest'
 import { getDomain } from '../common/domainUtil'
-import { getLocal, getSession } from '../storage'
-import { getCreatedKey, getSessionDataKey } from '../storage/key'
+import { getSession } from '../storage'
+import { getSessionDataKey } from '../storage/key'
 import { info } from '../common/logUtil'
 import { UAParser } from 'ua-parser-js'
 import type { EventPayload } from '../typings'
+import { getCreateTimestamp } from '../common/utils'
 
 const getPlatform = (deviceType: string, OS: string) => {
   if (OS === 'iOS') {
@@ -115,11 +116,7 @@ const getMeta = () => {
   const meta: Meta = {
     sdkv: process.env.PACKAGE_VERSION,
     tz_offset: new Date().getTimezoneOffset() * -1,
-  }
-
-  const created = parseInt(getLocal(getCreatedKey()))
-  if (!isNaN(created)) {
-    meta.user_id_created = created
+    user_id_created: getCreateTimestamp(),
   }
 
   if (sessionData) {
