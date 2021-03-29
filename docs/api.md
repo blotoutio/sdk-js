@@ -103,11 +103,11 @@ capturePersonal('button-clicked', { bloodType: 'A+' }, true)
 ## pageView
 The `pageView` method should be used when you are doing navigation via History API or some other JS navigation mechanism. This way you are not losing events like `sdk_start` as is only triggered when SDK is initialized. This should not be used on regular websites/apps that use page reloads for navigation. 
 
-When you call this API we will send a request to the server that will contain two events in the payload. First in the array will be `pagehide` event and then `sdk_start`. This mimics how regular navigation works.
+When you call this API we will send a request to the server that will contain two events in the payload. First in the array will be `visibility_hidden` event and then `sdk_start`. This mimics how regular navigation works.
 
 |||||
 |---|---|---|---|
-| `previousUrl` | `String` |  | Previous page url that will be send as part of pageHide event |
+| `previousUrl` | `String` |  | Previous page url that will be send as part of `visibility_hidden` event |
 
 #### Example
 {% tabs basic %}

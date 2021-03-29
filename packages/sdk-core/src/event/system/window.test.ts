@@ -1,5 +1,11 @@
 import * as event from '../index'
-import { domActive, domSubTreeModified, pagehide, scroll } from './window'
+import {
+  domActive,
+  domSubTreeModified,
+  pagehide,
+  scroll,
+  visibilityChange,
+} from './window'
 import type { EventOptions } from '../../typings'
 
 let spy: jest.SpyInstance<void, [string, Event?, EventOptions?]>
@@ -17,21 +23,52 @@ afterAll(() => {
 })
 
 describe('pagehide', () => {
-  it('ok', () => {
+  it('visibility is visible, sent it', () => {
     pagehide(window)
     const event = new Event('pagehide')
     window.dispatchEvent(event)
-    expect(spy).toBeCalledWith('pagehide', event, {
+    expect(spy).toBeCalledWith('visibility_hidden', event, {
       method: 'beacon',
     })
   })
 
-  it('fallback unload', () => {
+  it('visibility is hidden, do not sent', () => {
+    visibilityChange(window)
+
+    // set visibility visible first
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'visible',
+      configurable: true,
+    })
+    window.dispatchEvent(new Event('visibilitychange'))
+    expect(spy).toBeCalledTimes(1)
+    spy.mockReset()
+
+    // set visibility hidden
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'hidden',
+      configurable: true,
+    })
+    window.dispatchEvent(new Event('visibilitychange'))
+    expect(spy).toBeCalledTimes(1)
+    spy.mockReset()
+    pagehide(window)
+    window.dispatchEvent(new Event('pagehide'))
+    expect(spy).toBeCalledTimes(0)
+  })
+
+  it('unload fallback', () => {
+    visibilityChange(window)
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'visible',
+      configurable: true,
+    })
+    window.dispatchEvent(new Event('visibilitychange'))
     delete window.onpagehide
     pagehide(window)
     const event = new Event('unload')
     window.dispatchEvent(event)
-    expect(spy).toBeCalledWith('pagehide', event, {
+    expect(spy).toBeCalledWith('visibility_hidden', event, {
       method: 'beacon',
     })
   })
@@ -79,5 +116,43 @@ describe('scroll', () => {
     window.dispatchEvent(event)
     jest.runAllTimers()
     expect(spy).toBeCalledWith('scroll', event)
+  })
+})
+
+describe('visibilitychange', () => {
+  it('visible', () => {
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'visible',
+      configurable: true,
+    })
+    console.log(document.visibilityState)
+    visibilityChange(window)
+    const event = new Event('visibilitychange')
+    window.dispatchEvent(event)
+    expect(spy).toBeCalledWith('visibility_visible', event)
+  })
+
+  it('hidden', () => {
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'hidden',
+      configurable: true,
+    })
+    console.log(document.visibilityState)
+    visibilityChange(window)
+    const event = new Event('visibilitychange')
+    window.dispatchEvent(event)
+    expect(spy).toBeCalledWith('visibility_hidden', event, { method: 'beacon' })
+  })
+
+  it('prerender', () => {
+    Object.defineProperty(document, 'visibilityState', {
+      value: 'prerender',
+      configurable: true,
+    })
+    console.log(document.visibilityState)
+    visibilityChange(window)
+    const event = new Event('visibilitychange')
+    window.dispatchEvent(event)
+    expect(spy).toBeCalledTimes(0)
   })
 })

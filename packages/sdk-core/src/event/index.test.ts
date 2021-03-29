@@ -249,10 +249,10 @@ describe('pageView', () => {
     expect(spySend).toBeCalledWith([
       {
         data: {
-          evcs: 11106,
+          evcs: 11132,
           mid:
-            'cGFnZWhpZGU=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-          name: 'pagehide',
+            'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+          name: 'visibility_hidden',
           tstmp: 1580775120000,
           urlPath: 'https://blotout.io/',
         },

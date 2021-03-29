@@ -107,11 +107,11 @@ export const setDevEvent = (
 }
 
 export const pageView = (previousUrl: string): void => {
-  const pagehide = {
+  const visibilityHidden = {
     data: createEvent({
-      name: constants.PAGE_HIDE,
+      name: constants.VISIBILITY_HIDDEN,
       url: previousUrl,
-      code: systemEventCode.pagehide,
+      code: systemEventCode.visibilityHidden,
     }),
   }
 
@@ -122,5 +122,5 @@ export const pageView = (previousUrl: string): void => {
     }),
   }
 
-  sendEvent([pagehide, sdkStart])
+  sendEvent([visibilityHidden, sdkStart])
 }
