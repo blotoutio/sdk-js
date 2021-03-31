@@ -9,7 +9,8 @@ export const constants = {
   SCROLL_INTERVAL: 2000,
   MANIFEST_PATH: 'v1/manifest/pull',
   SDK_START: 'sdk_start',
-  PAGE_HIDE: 'pagehide',
+  VISIBILITY_VISIBLE: 'visibility_visible',
+  VISIBILITY_HIDDEN: 'visibility_hidden',
 }
 export const systemEventCode: Record<string, number> = {
   cut: 11101,
@@ -17,7 +18,6 @@ export const systemEventCode: Record<string, number> = {
   paste: 11103,
   dragstart: 11104,
   dragend: 11105,
-  pagehide: 11106,
   load: 11107,
   error: 11108,
   abort: 11109,
@@ -46,6 +46,8 @@ export const systemEventCode: Record<string, number> = {
   scroll: 11129,
   sessionInfo: 11024,
   sdk_start: 11130,
+  visibilityVisible: 11131,
+  visibilityHidden: 11132,
 }
 export const isDevMode = process.env.NODE_ENV === 'development'
 export const isHighFreqEventOff = true

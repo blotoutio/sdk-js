@@ -46,16 +46,13 @@ context('Events', () => {
   beforeEach(() => {
     window.sessionStorage.clear()
     cy.clock(1614677171392)
-    cy.intercept('sdk/v1/events/*').as('publish')
     cy.intercept('sdk/v1/manifest/*').as('pull')
+    cy.intercept('sdk/v1/events/*').as('publish')
     cy.visit(serveUrl)
 
-    cy.wait('@pull').then((interceptions) => {
-      assert.equal(interceptions.response.statusCode, 200)
-    })
-
+    cy.wait('@pull').its('response.statusCode').should('eq', 200)
     cy.wait('@publish').then((interceptions) => {
-      if (interceptions.request.body.events[0].evn === 'pagehide') {
+      if (interceptions.request.body.events[0].evn === 'visibility_hidden') {
         assert.equal(interceptions.response.statusCode, 200)
 
         cy.wait('@publish').then((interceptions) => {
@@ -209,10 +206,10 @@ context('Events', () => {
 
       expect(interceptions.request.body.events).to.have.lengthOf(2)
 
-      // Page hide
+      // Visibility hidden
       let event = interceptions.request.body.events[0]
       expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(63)
+      expect(event.mid).to.have.lengthOf(75)
       expect(event).to.have.ownProperty('userid')
       expect(event.userid).to.have.lengthOf(87)
       expect(event.properties).to.have.ownProperty('session_id')
@@ -223,8 +220,8 @@ context('Events', () => {
       delete event.properties.session_id
 
       assert.deepEqual(event, {
-        evn: 'pagehide',
-        evcs: 11106,
+        evn: 'visibility_hidden',
+        evcs: 11132,
         scrn: 'https://jsdemo.blotout.io/new_page.html',
         evt: 1614677171392,
         properties: {

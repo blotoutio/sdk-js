@@ -216,8 +216,8 @@ describe('sendEvent', () => {
           data: {
             mid:
               'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
-            name: 'pagehide',
-            evcs: 11110,
+            name: 'visibility_hidden',
+            evcs: 11132,
             urlPath: 'https://blotout.io/',
             tstmp: 1614584313700,
           },
@@ -268,8 +268,8 @@ describe('sendEvent', () => {
             mid:
               'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             userid: null,
-            evn: 'pagehide',
-            evcs: 11110,
+            evn: 'visibility_hidden',
+            evcs: 11132,
             scrn: 'https://blotout.io/',
             evt: 1614584313700,
             properties: {

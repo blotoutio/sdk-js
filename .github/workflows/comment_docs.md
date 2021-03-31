@@ -1,1 +1,1 @@
-🚀 Deployed Docs to {URL}
+📚 Deployed Docs to {URL}

@@ -41,8 +41,8 @@ describe('getMid', () => {
       value: undefined,
     })
 
-    expect(getMid('page_hide')).toEqual(
-      'cGFnZV9oaWRl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000'
+    expect(getMid('sdk_start')).toEqual(
+      'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000'
     )
   })
 
@@ -51,8 +51,8 @@ describe('getMid', () => {
       value: () => 0,
     })
 
-    expect(getMid('page_hide')).toEqual(
-      'cGFnZV9oaWRl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000'
+    expect(getMid('sdk_start')).toEqual(
+      'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000'
     )
   })
 })

@@ -109,12 +109,17 @@ describe('optionalEvents', () => {
 describe('requiredEvents', () => {
   it('ok', () => {
     const spyPagehide = jest.spyOn(windowImport, 'pagehide')
+    const spyVisibilityChange = jest.spyOn(windowImport, 'visibilityChange')
     const spyOnline = jest.spyOn(network, 'online')
     const spyOffline = jest.spyOn(network, 'offline')
     requiredEvents(window)
     expect(spyPagehide).toBeCalledTimes(1)
+    expect(spyVisibilityChange).toBeCalledTimes(1)
     expect(spyOnline).toBeCalledTimes(1)
     expect(spyOffline).toBeCalledTimes(1)
     spyPagehide.mockRestore()
+    spyVisibilityChange.mockRestore()
+    spyOnline.mockRestore()
+    spyOffline.mockRestore()
   })
 })
