@@ -72,31 +72,28 @@ context('Events', () => {
 
       expect(interceptions.request.body.events).to.have.lengthOf(1)
       const event = interceptions.request.body.events[0]
-      expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(63)
-      expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(87)
-      expect(event.properties).to.have.ownProperty('session_id')
-      expect(event.properties.session_id).to.have.lengthOf(13)
 
+      expect(event.mid).to.have.lengthOf(63)
       delete event.mid
+
+      expect(event.userid).to.have.lengthOf(87)
       delete event.userid
-      delete event.properties.session_id
+
+      expect(event.session_id).to.have.lengthOf(13)
+      delete event.session_id
 
       assert.deepEqual(event, {
         evn: 'dev-event',
         evcs: 24000,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
-        properties: {
-          screen: {
-            width: 1000,
-            height: 700,
-            docHeight: 700,
-            docWidth: 1000,
-          },
-          codifiedInfo: { data: 'foo' },
+        screen: {
+          width: 1000,
+          height: 700,
+          docHeight: 700,
+          docWidth: 1000,
         },
+        additionalData: { data: 'foo' },
       })
     })
   })
@@ -109,40 +106,32 @@ context('Events', () => {
       compareMeta(interceptions.request.body.meta)
 
       expect(interceptions.request.body.events).to.have.lengthOf(1)
-
       const event = interceptions.request.body.events[0]
-      expect(event).to.have.ownProperty('mid')
+
       expect(event.mid).to.have.lengthOf(71)
       delete event.mid
 
-      expect(event).to.have.ownProperty('userid')
       expect(event.userid).to.have.lengthOf(87)
       delete event.userid
 
-      expect(event.properties).to.have.ownProperty('session_id')
-      expect(event.properties.session_id).to.have.lengthOf(13)
-      delete event.properties.session_id
+      expect(event.session_id).to.have.lengthOf(13)
+      delete event.session_id
 
-      expect(event.pii).to.have.ownProperty('data')
-      expect(event.pii.data).to.have.lengthOf(556)
-      expect(event.pii).to.have.ownProperty('key')
-      expect(event.pii.key).to.have.lengthOf(172)
-      expect(event.pii).to.have.ownProperty('iv')
-      expect(event.pii.iv).to.have.lengthOf(32)
-      delete event.pii
+      expect(event.additionalData.data).to.have.lengthOf(44)
+      expect(event.additionalData.key).to.have.lengthOf(172)
+      expect(event.additionalData.iv).to.have.lengthOf(32)
+      delete event.additionalData
 
       assert.deepEqual(event, {
         evn: 'personal-event',
         evcs: 24050,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
-        properties: {
-          screen: {
-            width: 1000,
-            height: 700,
-            docHeight: 700,
-            docWidth: 1000,
-          },
+        screen: {
+          width: 1000,
+          height: 700,
+          docHeight: 700,
+          docWidth: 1000,
         },
       })
     })
@@ -157,40 +146,32 @@ context('Events', () => {
       compareMeta(interceptions.request.body.meta)
 
       expect(interceptions.request.body.events).to.have.lengthOf(1)
-
       const event = interceptions.request.body.events[0]
-      expect(event).to.have.ownProperty('mid')
+
       expect(event.mid).to.have.lengthOf(71)
       delete event.mid
 
-      expect(event).to.have.ownProperty('userid')
       expect(event.userid).to.have.lengthOf(87)
       delete event.userid
 
-      expect(event.properties).to.have.ownProperty('session_id')
-      expect(event.properties.session_id).to.have.lengthOf(13)
-      delete event.properties.session_id
+      expect(event.session_id).to.have.lengthOf(13)
+      delete event.session_id
 
-      expect(event.phi).to.have.ownProperty('data')
-      expect(event.phi.data).to.have.lengthOf(556)
-      expect(event.phi).to.have.ownProperty('key')
-      expect(event.phi.key).to.have.lengthOf(172)
-      expect(event.phi).to.have.ownProperty('iv')
-      expect(event.phi.iv).to.have.lengthOf(32)
-      delete event.phi
+      expect(event.additionalData.data).to.have.lengthOf(44)
+      expect(event.additionalData.key).to.have.lengthOf(172)
+      expect(event.additionalData.iv).to.have.lengthOf(32)
+      delete event.additionalData
 
       assert.deepEqual(event, {
         evn: 'personal-event',
         evcs: 24050,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
-        properties: {
-          screen: {
-            width: 1000,
-            height: 700,
-            docHeight: 700,
-            docWidth: 1000,
-          },
+        screen: {
+          width: 1000,
+          height: 700,
+          docHeight: 700,
+          docWidth: 1000,
         },
       })
     })
@@ -207,57 +188,49 @@ context('Events', () => {
 
       // Visibility hidden
       let event = interceptions.request.body.events[0]
-      expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(75)
-      expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(87)
-      expect(event.properties).to.have.ownProperty('session_id')
-      expect(event.properties.session_id).to.have.lengthOf(13)
 
+      expect(event.mid).to.have.lengthOf(75)
       delete event.mid
+
+      expect(event.userid).to.have.lengthOf(87)
       delete event.userid
-      delete event.properties.session_id
+
+      expect(event.session_id).to.have.lengthOf(13)
+      delete event.session_id
 
       assert.deepEqual(event, {
         evn: 'visibility_hidden',
         evcs: 11132,
         scrn: 'https://jsdemo.blotout.io/new_page.html',
         evt: 1614677171392,
-        properties: {
-          screen: {
-            width: 1000,
-            height: 700,
-            docHeight: 700,
-            docWidth: 1000,
-          },
+        screen: {
+          width: 1000,
+          height: 700,
+          docHeight: 700,
+          docWidth: 1000,
         },
       })
 
       // SDK start
       event = interceptions.request.body.events[1]
-      expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(63)
-      expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(87)
-      expect(event.properties).to.have.ownProperty('session_id')
-      expect(event.properties.session_id).to.have.lengthOf(13)
 
+      expect(event.mid).to.have.lengthOf(63)
       delete event.mid
+      expect(event.userid).to.have.lengthOf(87)
       delete event.userid
-      delete event.properties.session_id
+      expect(event.session_id).to.have.lengthOf(13)
+      delete event.session_id
 
       assert.deepEqual(event, {
         evn: 'sdk_start',
         evcs: 11130,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
-        properties: {
-          screen: {
-            width: 1000,
-            height: 700,
-            docHeight: 700,
-            docWidth: 1000,
-          },
+        screen: {
+          width: 1000,
+          height: 700,
+          docHeight: 700,
+          docWidth: 1000,
         },
       })
     })
@@ -271,36 +244,32 @@ context('Events', () => {
       compareMeta(interceptions.request.body.meta)
 
       expect(interceptions.request.body.events).to.have.lengthOf(1)
-
       const event = interceptions.request.body.events[0]
-      expect(event).to.have.ownProperty('mid')
-      expect(event.mid).to.have.lengthOf(59)
-      expect(event).to.have.ownProperty('userid')
-      expect(event.userid).to.have.lengthOf(87)
-      expect(event.properties).to.have.ownProperty('session_id')
-      expect(event.properties.session_id).to.have.lengthOf(13)
 
+      expect(event.mid).to.have.lengthOf(59)
       delete event.mid
+
+      expect(event.userid).to.have.lengthOf(87)
       delete event.userid
-      delete event.properties.session_id
+
+      expect(event.session_id).to.have.lengthOf(13)
+      delete event.session_id
 
       assert.deepEqual(event, {
         evn: 'map_id',
         evcs: 21001,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
-        properties: {
-          screen: {
-            width: 1000,
-            height: 700,
-            docHeight: 700,
-            docWidth: 1000,
-          },
-          codifiedInfo: {
-            data: 'foo',
-            map_id: '234234234',
-            map_provider: 'service',
-          },
+        screen: {
+          width: 1000,
+          height: 700,
+          docHeight: 700,
+          docWidth: 1000,
+        },
+        additionalData: {
+          data: 'foo',
+          map_id: '234234234',
+          map_provider: 'service',
         },
       })
     })

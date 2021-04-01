@@ -1,13 +1,13 @@
 import {
   mapID as mapIDMethod,
   pageView as pageViewMethod,
-  setDevEvent,
+  sendDevEvent,
 } from './event'
 import { init as initMethod } from './common/init'
 import { getUID } from './common/uidUtil'
-import { getEventPayload, sendEvent } from './event/utils'
+import { sendEvent } from './event/utils'
 import { getVariable } from './common/manifest'
-import { createEvent } from './event/create'
+import { createBasicEvent } from './event/create'
 import type { EventData, EventOptions, InitPreferences } from './typings'
 
 export const capture = (
@@ -15,7 +15,7 @@ export const capture = (
   data?: EventData,
   options?: EventOptions
 ): void => {
-  setDevEvent([{ name: event, data, options }], options)
+  sendDevEvent([{ name: event, data, options }], options)
 }
 
 export const init = (preferences: InitPreferences): void => {
@@ -40,8 +40,7 @@ export const pageView = (previousUrl: string): void => {
 }
 
 export const internalUtils = {
-  getEventPayload,
   sendEvent,
   getVariable,
-  createEvent,
+  createBasicEvent,
 }

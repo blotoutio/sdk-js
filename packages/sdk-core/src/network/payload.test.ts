@@ -30,14 +30,12 @@ describe('getPayload', () => {
         evcs: 11130,
         scrn: 'https://blotout.io/',
         evt: 1614584413700,
-        properties: {
-          session_id: '1614584413698',
-          screen: {
-            width: 1497,
-            height: 1560,
-            docHeight: 2730,
-            docWidth: 1497,
-          },
+        session_id: '1614584413698',
+        screen: {
+          width: 1497,
+          height: 1560,
+          docHeight: 2730,
+          docWidth: 1497,
         },
       },
     ])
@@ -52,14 +50,12 @@ describe('getPayload', () => {
           evcs: 11130,
           scrn: 'https://blotout.io/',
           evt: 1614584413700,
-          properties: {
-            session_id: '1614584413698',
-            screen: {
-              width: 1497,
-              height: 1560,
-              docHeight: 2730,
-              docWidth: 1497,
-            },
+          session_id: '1614584413698',
+          screen: {
+            width: 1497,
+            height: 1560,
+            docHeight: 2730,
+            docWidth: 1497,
           },
         },
       ],

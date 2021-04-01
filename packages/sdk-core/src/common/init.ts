@@ -1,7 +1,7 @@
 import { optionalEvents, requiredEvents } from '../event/system'
 import { setUrl } from '../network/endPoint'
 import { checkManifest, loadManifest } from './manifest'
-import { setStartEvent } from '../event'
+import { sendSystemEvent } from '../event'
 import { setUID } from './uidUtil'
 import { setCustomDomain } from './domainUtil'
 import { setRootKey } from '../storage/key'
@@ -9,6 +9,7 @@ import { checkSession, removeLocal } from '../storage'
 import { checkRetry } from '../network/retries'
 import { setClientToken } from './clientToken'
 import type { InitPreferences } from '../typings'
+import { constants } from './config'
 
 const setConfiguration = (preferences: InitPreferences) => {
   setUrl(preferences.endpointUrl)
@@ -34,7 +35,7 @@ export const init = (preferences?: InitPreferences): void => {
     manifestLoaded = loadManifest()
   }
   setUID()
-  setStartEvent()
+  sendSystemEvent(constants.SDK_START)
   requiredEvents(window)
   if (!manifestLoaded) {
     checkManifest().then(() => {

@@ -6,7 +6,7 @@ import type { EventOptions } from '../../typings'
 let spySet: jest.SpyInstance<void, [string, Event?, EventOptions?]>
 
 beforeEach(() => {
-  spySet = jest.spyOn(event, 'setEvent').mockImplementation()
+  spySet = jest.spyOn(event, 'sendSystemEvent').mockImplementation()
 })
 
 afterEach(() => {

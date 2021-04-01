@@ -11,9 +11,26 @@ import type {
   BasicEvent,
   EventOptions,
   EventPayload,
-  EventPayloadProperties,
   SendEvent,
 } from '../typings'
+
+const getEventPayload = (event: BasicEvent): EventPayload => {
+  return {
+    mid: event.mid,
+    userid: getUID(),
+    evn: event.name,
+    evcs: event.evcs,
+    scrn: event.urlPath,
+    evt: event.tstmp,
+    session_id: getSessionID(),
+    screen: {
+      width: document.documentElement.clientWidth,
+      height: document.documentElement.clientHeight,
+      docHeight: document.documentElement.scrollHeight,
+      docWidth: document.documentElement.scrollWidth,
+    },
+  }
+}
 
 export const shouldCollectSystemEvents = (): boolean => {
   return getVariable('pushSystemEvents') === 1
@@ -33,58 +50,19 @@ export const codeForDevEvent = (eventName: string): number => {
   return generateSubCode(stringToIntSum(eventName))
 }
 
-export const getEventPayload = (event: BasicEvent): EventPayload => {
-  const sessionId = getSessionID()
-
-  const properties: EventPayloadProperties = {
-    session_id: sessionId,
-    screen: {
-      width: document.documentElement.clientWidth,
-      height: document.documentElement.clientHeight,
-      docHeight: document.documentElement.scrollHeight,
-      docWidth: document.documentElement.scrollWidth,
-    },
-  }
-
-  if ('position' in event && event.position) {
-    properties.position = event.position
-  }
-
-  if ('objectName' in event && event.objectName) {
-    properties.obj = event.objectName
-  }
-
-  if ('objectTitle' in event && event.objectTitle) {
-    properties.objT = event.objectTitle
-  }
-
-  if ('mouse' in event && event.mouse) {
-    properties.mouse = event.mouse
-  }
-
-  if ('metaInfo' in event && event.metaInfo) {
-    properties.codifiedInfo = event.metaInfo
-  }
-
-  return {
-    mid: event.mid,
-    userid: getUID(),
-    evn: event.name,
-    evcs: event.evcs,
-    scrn: event.urlPath,
-    evt: event.tstmp,
-    properties,
-  }
-}
-
 export const sendEvent = (
   events: SendEvent[],
   options?: EventOptions
 ): void => {
   const eventsPayload: EventPayload[] = []
   events.forEach((event) => {
-    const extra = event.extra || {}
-    eventsPayload.push(Object.assign(extra, getEventPayload(event.data)))
+    const payload = getEventPayload(event.data)
+
+    if (event.extra) {
+      payload.additionalData = event.extra
+    }
+
+    eventsPayload.push(payload)
   })
 
   if (eventsPayload.length === 0) {
@@ -108,4 +86,20 @@ export const getSelector = (element?: HTMLElement): string => {
     (element.id ? '#' + element.id : '') +
     (element.className ? '.' + element.className : '')
   )
+}
+
+export const getObjectTitle = (element: HTMLElement): null | string => {
+  if (!element || !element.localName) {
+    return null
+  }
+
+  const elmArr = ['a', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+
+  const name = element.localName.toLocaleLowerCase()
+  const elmIndex = elmArr.findIndex((el) => el === name)
+  if (elmIndex !== -1) {
+    return element.innerText
+  }
+
+  return null
 }

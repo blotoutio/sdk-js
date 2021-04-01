@@ -1,4 +1,4 @@
-import { getSelector, sendEvent } from './utils'
+import { getObjectTitle, getSelector, sendEvent } from './utils'
 import {
   constants,
   highFreqEvents,
@@ -6,13 +6,75 @@ import {
   systemEventCode,
 } from '../common/config'
 import { error } from '../common/logUtil'
-import { createEvent } from './create'
+import { createBasicEvent, createPosition } from './create'
 import type {
   EventData,
   EventOptions,
   IncomingEvent,
   SendEvent,
 } from '../typings'
+
+export const sendSystemEvent = (
+  name: string,
+  event?: Event,
+  options?: EventOptions
+): void => {
+  if (!name || (isHighFreqEventOff && highFreqEvents.includes(name))) {
+    return
+  }
+
+  const eventObject: SendEvent = {
+    data: createBasicEvent({ name, code: systemEventCode[name] }),
+  }
+
+  if (event) {
+    const mouseEvent = event as MouseEvent
+    eventObject.extra = {
+      position: createPosition(mouseEvent),
+      mouse: {
+        x: mouseEvent.clientX || -1,
+        y: mouseEvent.clientY || -1,
+      },
+    }
+
+    const title = getObjectTitle(event.target as HTMLElement)
+    if (title) {
+      eventObject.extra.objectTitle = title
+    }
+
+    eventObject.extra.objectName = getSelector(event.target as HTMLElement)
+  }
+
+  sendEvent([eventObject], options)
+}
+
+export const sendDevEvent = (
+  events: IncomingEvent[],
+  options?: EventOptions
+): void => {
+  if (!events) {
+    return
+  }
+
+  const devEvents: SendEvent[] = []
+  events.forEach((event) => {
+    const dev = createBasicEvent(event)
+    if (!dev) {
+      return
+    }
+
+    devEvents.push({
+      data: dev,
+      extra: event.data,
+    })
+  })
+
+  if (devEvents.length === 0) {
+    return
+  }
+
+  sendEvent(devEvents, options)
+}
 
 export const mapID = (
   id: string,
@@ -34,7 +96,7 @@ export const mapID = (
     data = {}
   }
 
-  setDevEvent(
+  sendDevEvent(
     [
       {
         name: constants.MAP_ID_EVENT,
@@ -50,65 +112,9 @@ export const mapID = (
   )
 }
 
-export const setStartEvent = (): void => {
-  setEvent(constants.SDK_START)
-}
-
-export const setEvent = (
-  name: string,
-  event?: Event,
-  options?: EventOptions
-): void => {
-  if (!name || (isHighFreqEventOff && highFreqEvents.includes(name))) {
-    return
-  }
-
-  const objectName = event && getSelector(event.target as HTMLElement)
-  sendEvent(
-    [
-      {
-        data: createEvent({
-          name,
-          objectName,
-          code: systemEventCode[name],
-          event: event as MouseEvent,
-        }),
-      },
-    ],
-    options
-  )
-}
-
-export const setDevEvent = (
-  events: IncomingEvent[],
-  options?: EventOptions
-): void => {
-  if (!events) {
-    return
-  }
-
-  const devEvents: SendEvent[] = []
-  events.forEach((event) => {
-    const dev = createEvent(event)
-    if (!dev) {
-      return
-    }
-
-    devEvents.push({
-      data: dev,
-    })
-  })
-
-  if (devEvents.length === 0) {
-    return
-  }
-
-  sendEvent(devEvents, options)
-}
-
 export const pageView = (previousUrl: string): void => {
   const visibilityHidden = {
-    data: createEvent({
+    data: createBasicEvent({
       name: constants.VISIBILITY_HIDDEN,
       url: previousUrl,
       code: systemEventCode.visibilityHidden,
@@ -116,7 +122,7 @@ export const pageView = (previousUrl: string): void => {
   }
 
   const sdkStart = {
-    data: createEvent({
+    data: createBasicEvent({
       name: constants.SDK_START,
       code: systemEventCode.sdk_start,
     }),

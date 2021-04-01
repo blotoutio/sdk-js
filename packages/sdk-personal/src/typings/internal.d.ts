@@ -5,14 +5,3 @@ declare module '@blotoutio/jsencrypt-no-random-padding' {
     encrypt(key: string): string
   }
 }
-
-interface PersonalData {
-  data: string
-  iv: string
-  key: string
-}
-
-interface SendEventExtra {
-  pii?: PersonalData
-  phi?: PersonalData
-}

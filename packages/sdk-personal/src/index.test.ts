@@ -38,9 +38,8 @@ describe('capturePersonal', () => {
   })
 
   it('options not defined, default to PII', () => {
-    spyCreate = jest.spyOn(internalUtils, 'createEvent').mockReturnValue({
+    spyCreate = jest.spyOn(internalUtils, 'createBasicEvent').mockReturnValue({
       evcs: 23814,
-      metaInfo: null,
       mid:
         'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
       name: 'custom event',
@@ -57,14 +56,13 @@ describe('capturePersonal', () => {
         {
           data: {
             evcs: 23814,
-            metaInfo: null,
             mid:
               'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
             name: 'custom event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
-          extra: { pii: { data: '', iv: '', key: '' } },
+          extra: { data: '', iv: '', key: '' },
         },
       ],
       undefined
@@ -73,9 +71,8 @@ describe('capturePersonal', () => {
   })
 
   it('PII', () => {
-    spyCreate = jest.spyOn(internalUtils, 'createEvent').mockReturnValue({
+    spyCreate = jest.spyOn(internalUtils, 'createBasicEvent').mockReturnValue({
       evcs: 23814,
-      metaInfo: null,
       mid:
         'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
       name: 'custom event',
@@ -94,14 +91,13 @@ describe('capturePersonal', () => {
         {
           data: {
             evcs: 23814,
-            metaInfo: null,
             mid:
               'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
             name: 'custom event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
-          extra: { pii: { data: '', iv: '', key: '' } },
+          extra: { data: '', iv: '', key: '' },
         },
       ],
       undefined
@@ -110,9 +106,8 @@ describe('capturePersonal', () => {
   })
 
   it('PHI', () => {
-    spyCreate = jest.spyOn(internalUtils, 'createEvent').mockReturnValue({
+    spyCreate = jest.spyOn(internalUtils, 'createBasicEvent').mockReturnValue({
       evcs: 23814,
-      metaInfo: null,
       mid:
         'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
       name: 'custom event',
@@ -132,14 +127,13 @@ describe('capturePersonal', () => {
         {
           data: {
             evcs: 23814,
-            metaInfo: null,
             mid:
               'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
             name: 'custom event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
-          extra: { phi: { data: '', iv: '', key: '' } },
+          extra: { data: '', iv: '', key: '' },
         },
       ],
       undefined

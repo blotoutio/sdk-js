@@ -1,8 +1,8 @@
-import { setEvent } from '../index'
+import { sendSystemEvent } from '../index'
 
 export const touchEnd = (window: Window): void => {
   const eventName = 'touchend'
   window.addEventListener(eventName, function (event) {
-    setEvent(eventName, event)
+    sendSystemEvent(eventName, event)
   })
 }
