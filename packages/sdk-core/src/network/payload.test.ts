@@ -31,6 +31,7 @@ describe('getPayload', () => {
         scrn: 'https://blotout.io/',
         evt: 1614584413700,
         session_id: '1614584413698',
+        type: 'system',
         screen: {
           width: 1497,
           height: 1560,
@@ -51,6 +52,7 @@ describe('getPayload', () => {
           scrn: 'https://blotout.io/',
           evt: 1614584413700,
           session_id: '1614584413698',
+          type: 'system',
           screen: {
             width: 1497,
             height: 1560,

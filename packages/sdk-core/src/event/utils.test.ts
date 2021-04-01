@@ -89,6 +89,7 @@ describe('sendEvent', () => {
     sendEvent(
       [
         {
+          type: 'system',
           data: {
             mid:
               'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
@@ -99,6 +100,7 @@ describe('sendEvent', () => {
           },
         },
         {
+          type: 'codified',
           data: {
             mid:
               'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
@@ -140,6 +142,7 @@ describe('sendEvent', () => {
             scrn: 'https://blotout.io/',
             evt: 1614584413700,
             session_id: '1580775120000',
+            type: 'system',
             screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
           },
           {
@@ -151,6 +154,7 @@ describe('sendEvent', () => {
             scrn: 'https://blotout.io/',
             evt: 1614584313700,
             session_id: '1580775120000',
+            type: 'codified',
             screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
             additionalData: {
               foo: true,

@@ -87,6 +87,7 @@ context('Events', () => {
         evcs: 24000,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
+        type: 'codified',
         screen: {
           width: 1000,
           height: 700,
@@ -127,6 +128,7 @@ context('Events', () => {
         evcs: 24050,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
+        type: 'pii',
         screen: {
           width: 1000,
           height: 700,
@@ -167,6 +169,7 @@ context('Events', () => {
         evcs: 24050,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
+        type: 'phi',
         screen: {
           width: 1000,
           height: 700,
@@ -203,6 +206,7 @@ context('Events', () => {
         evcs: 11132,
         scrn: 'https://jsdemo.blotout.io/new_page.html',
         evt: 1614677171392,
+        type: 'system',
         screen: {
           width: 1000,
           height: 700,
@@ -226,6 +230,7 @@ context('Events', () => {
         evcs: 11130,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
+        type: 'system',
         screen: {
           width: 1000,
           height: 700,
@@ -260,6 +265,7 @@ context('Events', () => {
         evcs: 21001,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
+        type: 'codified',
         screen: {
           width: 1000,
           height: 700,

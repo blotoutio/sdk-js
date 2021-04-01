@@ -41,6 +41,8 @@ interface AdditionalData {
   [key: string]: unknown
 }
 
+type EventType = 'system' | 'codified' | 'pii' | 'phi'
+
 interface EventPayload {
   mid: string
   userid: string
@@ -56,10 +58,12 @@ interface EventPayload {
     docHeight: number
     docWidth: number
   }
+  type: EventType
   additionalData?: AdditionalData
 }
 
 interface SendEvent {
+  type: EventType
   data: BasicEvent
   extra?: AdditionalData
 }

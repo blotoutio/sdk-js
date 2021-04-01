@@ -50,6 +50,7 @@ describe('mapID', () => {
     expect(spySet).toBeCalledWith(
       [
         {
+          type: 'codified',
           data: {
             evcs: 21001,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
@@ -69,6 +70,7 @@ describe('mapID', () => {
     expect(spySet).toBeCalledWith(
       [
         {
+          type: 'codified',
           data: {
             evcs: 21001,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
@@ -118,6 +120,7 @@ describe('sendSystemEvent', () => {
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'system',
           data: {
             evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
@@ -143,6 +146,7 @@ describe('sendSystemEvent', () => {
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'system',
           data: {
             evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
@@ -178,6 +182,7 @@ describe('sendSystemEvent', () => {
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'system',
           data: {
             evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
@@ -213,6 +218,7 @@ describe('sendSystemEvent', () => {
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'system',
           data: {
             evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
@@ -248,6 +254,7 @@ describe('sendSystemEvent', () => {
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'system',
           data: {
             evcs: 11508,
             mid: 'aG92ZXI=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
@@ -326,6 +333,7 @@ describe('sendDevEvent', () => {
             urlPath: 'http://localhost/',
           },
           extra: { foo: true },
+          type: 'codified',
         },
         {
           data: {
@@ -337,6 +345,7 @@ describe('sendDevEvent', () => {
             urlPath: 'http://localhost/',
           },
           extra: null,
+          type: 'codified',
         },
       ],
       undefined
@@ -350,6 +359,7 @@ describe('pageView', () => {
     pageView('https://blotout.io/')
     expect(spySend).toBeCalledWith([
       {
+        type: 'system',
         data: {
           evcs: 11132,
           mid:
@@ -360,6 +370,7 @@ describe('pageView', () => {
         },
       },
       {
+        type: 'system',
         data: {
           evcs: 11130,
           mid:

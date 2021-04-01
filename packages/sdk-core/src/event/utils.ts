@@ -11,10 +11,11 @@ import type {
   BasicEvent,
   EventOptions,
   EventPayload,
+  EventType,
   SendEvent,
 } from '../typings'
 
-const getEventPayload = (event: BasicEvent): EventPayload => {
+const getEventPayload = (event: BasicEvent, type: EventType): EventPayload => {
   return {
     mid: event.mid,
     userid: getUID(),
@@ -23,6 +24,7 @@ const getEventPayload = (event: BasicEvent): EventPayload => {
     scrn: event.urlPath,
     evt: event.tstmp,
     session_id: getSessionID(),
+    type,
     screen: {
       width: document.documentElement.clientWidth,
       height: document.documentElement.clientHeight,
@@ -56,7 +58,7 @@ export const sendEvent = (
 ): void => {
   const eventsPayload: EventPayload[] = []
   events.forEach((event) => {
-    const payload = getEventPayload(event.data)
+    const payload = getEventPayload(event.data, event.type)
 
     if (event.extra) {
       payload.additionalData = event.extra

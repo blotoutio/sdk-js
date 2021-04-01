@@ -54,6 +54,7 @@ describe('capturePersonal', () => {
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'pii',
           data: {
             evcs: 23814,
             mid:
@@ -89,6 +90,7 @@ describe('capturePersonal', () => {
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'pii',
           data: {
             evcs: 23814,
             mid:
@@ -125,6 +127,7 @@ describe('capturePersonal', () => {
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'phi',
           data: {
             evcs: 23814,
             mid:

@@ -24,6 +24,7 @@ export const sendSystemEvent = (
   }
 
   const eventObject: SendEvent = {
+    type: 'system',
     data: createBasicEvent({ name, code: systemEventCode[name] }),
   }
 
@@ -64,6 +65,7 @@ export const sendDevEvent = (
     }
 
     devEvents.push({
+      type: 'codified',
       data: dev,
       extra: event.data,
     })
@@ -113,7 +115,8 @@ export const mapID = (
 }
 
 export const pageView = (previousUrl: string): void => {
-  const visibilityHidden = {
+  const visibilityHidden: SendEvent = {
+    type: 'system',
     data: createBasicEvent({
       name: constants.VISIBILITY_HIDDEN,
       url: previousUrl,
@@ -121,7 +124,8 @@ export const pageView = (previousUrl: string): void => {
     }),
   }
 
-  const sdkStart = {
+  const sdkStart: SendEvent = {
+    type: 'system',
     data: createBasicEvent({
       name: constants.SDK_START,
       code: systemEventCode.sdk_start,
