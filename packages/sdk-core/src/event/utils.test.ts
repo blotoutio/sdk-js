@@ -245,9 +245,8 @@ describe('sendEvent', () => {
           osv: '0',
           appv: '537.36',
           dmft: 'unknown',
-          dm: 'Intel Based',
+          dm: 'AMD Based',
           bnme: 'WebKit',
-          dplatform: 'unknown',
         },
         events: [
           {

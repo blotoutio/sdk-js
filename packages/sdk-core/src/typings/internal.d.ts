@@ -23,7 +23,6 @@ interface Meta {
   dmft?: string
   dm?: string
   bnme?: string
-  dplatform?: string
   osn?: string
 }
 
