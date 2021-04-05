@@ -18,23 +18,6 @@ export const pagehide = (window: Window): void => {
   })
 }
 
-export const domSubTreeModified = (window: Window): void => {
-  const eventName = 'DOMSubtreeModified'
-  window.addEventListener(
-    eventName,
-    debounce((event: Event) => {
-      sendSystemEvent(eventName, event)
-    }, constants.DOM_SUB_TREE_MODIFIED_INTERVAL)
-  )
-}
-
-export const domActive = (window: Window): void => {
-  const eventName = 'DOMActivate'
-  window.addEventListener(eventName, function (event) {
-    sendSystemEvent(eventName, event)
-  })
-}
-
 export const scroll = (window: Window): void => {
   const eventName = 'scroll'
   window.addEventListener(

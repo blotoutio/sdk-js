@@ -240,8 +240,8 @@ describe('sendSystemEvent', () => {
     )
   })
 
-  it('hover', () => {
-    const event = new MouseEvent('hover', {
+  it('copy', () => {
+    const event = new MouseEvent('copy', {
       screenX: 10,
       screenY: 20,
     })
@@ -250,15 +250,15 @@ describe('sendSystemEvent', () => {
       value: null,
     })
 
-    sendSystemEvent('hover', event)
+    sendSystemEvent('copy', event)
     expect(spySend).toBeCalledWith(
       [
         {
           type: 'system',
           data: {
-            evcs: 11508,
-            mid: 'aG92ZXI=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-            name: 'hover',
+            evcs: 11102,
+            mid: 'Y29weQ==-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'copy',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
