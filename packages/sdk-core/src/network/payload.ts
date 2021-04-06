@@ -46,30 +46,19 @@ const getPlatform = (deviceType: string, OS: string) => {
   return constants.WEB_PLATFORM_CODE
 }
 
-const getDevice = (type: string, OS: string) => {
+const getDeviceModel = (type: string) => {
   const ua = navigator.userAgent
   const isIntelBased =
     ua && (ua.includes('Intel') || ua.indexOf('Intel') !== -1)
-  let model = 'Intel Based'
-  type = type || 'unknown'
-  if (type === 'unknown') {
-    if (OS === 'Mac OS' || OS === 'Windows' || OS === 'Linux') {
-      type = 'desktop'
-    }
+  if (isIntelBased) {
+    return 'Intel Based'
   }
 
-  if (!isIntelBased) {
-    if (type === 'mobile' || type === 'tablet') {
-      model = 'ARM Based'
-    } else if (type === 'desktop') {
-      model = 'AMD Based'
-    }
+  if (type === 'mobile' || type === 'tablet') {
+    return 'ARM Based'
   }
 
-  return {
-    model,
-    type,
-  }
+  return 'AMD Based'
 }
 
 const getMeta = () => {
@@ -130,18 +119,13 @@ const getMeta = () => {
   }
 
   if (deviceGrain >= 1) {
-    const { model, type } = getDevice(
-      parsedUA.getDevice().type,
-      parsedUA.getOS().name
-    )
     meta.plf = getPlatform(parsedUA.getDevice().type, parsedUA.getOS().name)
     meta.appn = getDomain()
     meta.osv = parsedUA.getOS().version || '0'
     meta.appv = parsedUA.getBrowser().version || '0.0.0.0'
     meta.dmft = manufacture
-    meta.dm = model
+    meta.dm = getDeviceModel(parsedUA.getDevice().type)
     meta.bnme = browser
-    meta.dplatform = type
   }
 
   if (deviceGrain >= 2) {

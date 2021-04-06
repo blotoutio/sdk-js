@@ -8,9 +8,15 @@ import * as clientToken from './clientToken'
 import * as domainUtil from './domainUtil'
 import * as manifest from './manifest'
 import { setSessionDataValue } from '../storage'
+import { constants } from './config'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
+
+beforeEach(() => {
+  jest.useFakeTimers('modern')
+  jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
+})
 
 describe('init', () => {
   it('empty', () => {
@@ -29,7 +35,7 @@ describe('init', () => {
     const spySetClientToken = jest.spyOn(clientToken, 'setClientToken')
     const spySetCustomDomain = jest.spyOn(domainUtil, 'setCustomDomain')
     const spySetRootKey = jest.spyOn(key, 'setRootKey')
-    const spySetStartEvent = jest.spyOn(event, 'setStartEvent')
+    const spySendSystemEvent = jest.spyOn(event, 'sendSystemEvent')
     const spyRequiredEvents = jest.spyOn(eventSystem, 'requiredEvents')
     const spyCheckManifest = jest
       .spyOn(manifest, 'checkManifest')
@@ -46,14 +52,14 @@ describe('init', () => {
     expect(spySetClientToken).toBeCalledWith('3WBQ5E48ND3VTPC')
     expect(spySetCustomDomain).toBeCalledWith('domain.com')
     expect(spySetRootKey).toBeCalledWith('foo')
-    expect(spySetStartEvent).toBeCalledTimes(1)
+    expect(spySendSystemEvent).toBeCalledWith(constants.SDK_START)
     expect(spyRequiredEvents).toBeCalledTimes(1)
 
     spySetUrl.mockRestore()
     spySetClientToken.mockRestore()
     spySetCustomDomain.mockRestore()
     spySetRootKey.mockRestore()
-    spySetStartEvent.mockRestore()
+    spySendSystemEvent.mockRestore()
     spyRequiredEvents.mockRestore()
     spyCheckManifest.mockRestore()
   })

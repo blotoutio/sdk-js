@@ -1,11 +1,10 @@
 import {
   codeForDevEvent,
-  getEventPayload,
+  getObjectTitle,
   getSelector,
   sendEvent,
   shouldCollectSystemEvents,
 } from './utils'
-import * as storage from '../storage'
 import * as network from '../network'
 import * as endPoint from '../network/endPoint'
 import * as manifest from '../common/manifest'
@@ -57,119 +56,6 @@ describe('codeForDevEvent', () => {
   })
 })
 
-describe('getEventPayload', () => {
-  let spySession: jest.SpyInstance<string, [string]>
-
-  beforeEach(() => {
-    spySession = jest
-      .spyOn(storage, 'getSession')
-      .mockImplementation(() => 'aosdfkaosfkoaskfo23e23-23423423423')
-  })
-
-  afterEach(() => {
-    spySession.mockRestore()
-  })
-
-  it('system event', () => {
-    const result = getEventPayload({
-      name: 'click',
-      urlPath: 'https://blotout.io',
-      tstmp: 1580775120000,
-      mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
-      evcs: 123123,
-    })
-
-    expect(result).toStrictEqual({
-      evcs: 123123,
-      evn: 'click',
-      evt: 1580775120000,
-      mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
-      properties: {
-        screen: { docHeight: 0, docWidth: 0, height: 0, width: 0 },
-        session_id: 'aosdfkaosfkoaskfo23e23-23423423423',
-      },
-      scrn: 'https://blotout.io',
-      userid: null,
-    })
-  })
-
-  it('system event with data', () => {
-    const result = getEventPayload({
-      name: 'click',
-      urlPath: 'https://blotout.io',
-      tstmp: 1580775120000,
-      mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
-      evcs: 123123,
-      objectName: 'name',
-      objectTitle: 'a.link',
-      position: {
-        x: 10,
-        y: 20,
-        width: 30,
-        height: 40,
-      },
-      mouse: {
-        x: 400,
-        y: 500,
-      },
-    })
-
-    expect(result).toStrictEqual({
-      evcs: 123123,
-      evn: 'click',
-      evt: 1580775120000,
-      mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
-      properties: {
-        screen: { docHeight: 0, docWidth: 0, height: 0, width: 0 },
-        session_id: 'aosdfkaosfkoaskfo23e23-23423423423',
-        obj: 'name',
-        objT: 'a.link',
-        position: {
-          x: 10,
-          y: 20,
-          width: 30,
-          height: 40,
-        },
-        mouse: {
-          x: 400,
-          y: 500,
-        },
-      },
-      scrn: 'https://blotout.io',
-      userid: null,
-    })
-  })
-
-  it('dev event', () => {
-    const result = getEventPayload({
-      name: 'click',
-      urlPath: 'https://blotout.io',
-      tstmp: 1580775120000,
-      mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
-      evcs: 123123,
-      metaInfo: {
-        data: false,
-      },
-    })
-
-    expect(result).toStrictEqual({
-      evcs: 123123,
-      evn: 'click',
-      evt: 1580775120000,
-      mid: 'blotout.io-aosdfkaosfkoaskfo23e23-23423423423',
-      properties: {
-        screen: { docHeight: 0, docWidth: 0, height: 0, width: 0 },
-        session_id: 'aosdfkaosfkoaskfo23e23-23423423423',
-        codifiedInfo: {
-          data: false,
-        },
-      },
-      scrn: 'https://blotout.io',
-      userid: null,
-    })
-  })
-})
-
 describe('sendEvent', () => {
   let spy: jest.SpyInstance<Promise<unknown>, [string, string, EventOptions?]>
   let spyUrl: jest.SpyInstance<string, []>
@@ -203,6 +89,7 @@ describe('sendEvent', () => {
     sendEvent(
       [
         {
+          type: 'system',
           data: {
             mid:
               'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
@@ -213,6 +100,7 @@ describe('sendEvent', () => {
           },
         },
         {
+          type: 'codified',
           data: {
             mid:
               'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
@@ -222,11 +110,7 @@ describe('sendEvent', () => {
             tstmp: 1614584313700,
           },
           extra: {
-            pii: {
-              data: 'dfsdfsdfds',
-              iv: 'sdfsdfdsfsd',
-              key: 'dfsfdsf',
-            },
+            foo: true,
           },
         },
       ],
@@ -245,9 +129,8 @@ describe('sendEvent', () => {
           osv: '0',
           appv: '537.36',
           dmft: 'unknown',
-          dm: 'Intel Based',
+          dm: 'AMD Based',
           bnme: 'WebKit',
-          dplatform: 'unknown',
         },
         events: [
           {
@@ -258,13 +141,11 @@ describe('sendEvent', () => {
             evcs: 11130,
             scrn: 'https://blotout.io/',
             evt: 1614584413700,
-            properties: {
-              session_id: '1580775120000',
-              screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
-            },
+            session_id: '1580775120000',
+            type: 'system',
+            screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
           },
           {
-            pii: { data: 'dfsdfsdfds', iv: 'sdfsdfdsfsd', key: 'dfsfdsf' },
             mid:
               'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             userid: null,
@@ -272,9 +153,11 @@ describe('sendEvent', () => {
             evcs: 11132,
             scrn: 'https://blotout.io/',
             evt: 1614584313700,
-            properties: {
-              session_id: '1580775120000',
-              screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
+            session_id: '1580775120000',
+            type: 'codified',
+            screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
+            additionalData: {
+              foo: true,
             },
           },
         ],
@@ -306,5 +189,38 @@ describe('getSelector', () => {
     const event = document.createElement('p')
     event.setAttribute('class', 'test')
     expect(getSelector(event)).toBe('P.test')
+  })
+})
+
+describe('getObjectTitle', () => {
+  it('null', () => {
+    expect(getObjectTitle(null)).toBeNull()
+  })
+
+  it('null', () => {
+    expect(getObjectTitle(null)).toBeNull()
+  })
+
+  it('local name is missing', () => {
+    const element = document.createElement('div')
+    element.innerText = 'no'
+
+    Object.defineProperty(element, 'localName', {
+      value: null,
+    })
+
+    expect(getObjectTitle(element)).toBeNull()
+  })
+
+  it('h1', () => {
+    const element = document.createElement('h1')
+    element.innerText = 'hi'
+    expect(getObjectTitle(element)).toBe('hi')
+  })
+
+  it('h1', () => {
+    const element = document.createElement('div')
+    element.innerText = 'hi'
+    expect(getObjectTitle(element)).toBeNull()
   })
 })

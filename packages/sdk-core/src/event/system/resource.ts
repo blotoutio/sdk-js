@@ -1,8 +1,8 @@
-import { setEvent } from '../index'
+import { sendSystemEvent } from '../index'
 
 export const error = (window: Window): void => {
   const eventName = 'error'
   window.addEventListener(eventName, function (event) {
-    setEvent(eventName, event)
+    sendSystemEvent(eventName, event)
   })
 }

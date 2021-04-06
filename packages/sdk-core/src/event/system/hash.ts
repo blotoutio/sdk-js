@@ -1,8 +1,8 @@
-import { setEvent } from '../index'
+import { sendSystemEvent } from '../index'
 
 export const hashChange = (window: Window): void => {
   const eventName = 'hashchange'
   window.addEventListener(eventName, function (event) {
-    setEvent(eventName, event)
+    sendSystemEvent(eventName, event)
   })
 }

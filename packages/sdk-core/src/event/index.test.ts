@@ -1,6 +1,6 @@
 import * as eventUtils from './utils'
 import * as storage from '../storage'
-import { mapID, pageView, setDevEvent, setEvent, setStartEvent } from './index'
+import { mapID, pageView, sendDevEvent, sendSystemEvent } from './index'
 import type { EventOptions, SendEvent } from '../typings'
 jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
@@ -50,14 +50,15 @@ describe('mapID', () => {
     expect(spySet).toBeCalledWith(
       [
         {
+          type: 'codified',
           data: {
             evcs: 21001,
-            metaInfo: { map_id: 'sdfasfasdfds', map_provider: 'service' },
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'map_id',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
+          extra: { map_id: 'sdfasfasdfds', map_provider: 'service' },
         },
       ],
       undefined
@@ -69,49 +70,27 @@ describe('mapID', () => {
     expect(spySet).toBeCalledWith(
       [
         {
+          type: 'codified',
           data: {
             evcs: 21001,
-            metaInfo: {
-              custom: true,
-              map_id: 'sdfasfasdfds',
-              map_provider: 'service',
-            },
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'map_id',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
-        },
-      ],
-      undefined
-    )
-  })
-})
-
-describe('setStartEvent', () => {
-  it('ok', () => {
-    const spySend = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
-    setStartEvent()
-    expect(spySend).toBeCalledWith(
-      [
-        {
-          data: {
-            evcs: 11130,
-            mid:
-              'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-            name: 'sdk_start',
-            tstmp: 1580775120000,
-            urlPath: 'http://localhost/',
+          extra: {
+            custom: true,
+            map_id: 'sdfasfasdfds',
+            map_provider: 'service',
           },
         },
       ],
       undefined
     )
-    spySend.mockRestore()
   })
 })
 
-describe('setEvent', () => {
+describe('sendSystemEvent', () => {
   let spySend: jest.SpyInstance<void, [SendEvent[], EventOptions?]>
 
   beforeEach(() => {
@@ -127,13 +106,32 @@ describe('setEvent', () => {
   })
 
   it('empty name', () => {
-    setEvent('')
+    sendSystemEvent('')
     expect(spySend).toBeCalledTimes(0)
   })
 
   it('high frequency event', () => {
-    setEvent('focus')
+    sendSystemEvent('focus')
     expect(spySend).toBeCalledTimes(0)
+  })
+
+  it('no event', () => {
+    sendSystemEvent('click')
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          type: 'system',
+          data: {
+            evcs: 11119,
+            mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'click',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+      ],
+      undefined
+    )
   })
 
   it('ok', () => {
@@ -144,29 +142,139 @@ describe('setEvent', () => {
     Object.defineProperty(event, 'target', {
       value: target,
     })
-    setEvent('click', event, { method: 'beacon' })
+    sendSystemEvent('click', event, { method: 'beacon' })
     expect(spySend).toBeCalledWith(
       [
         {
+          type: 'system',
           data: {
             evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-            mouse: { x: -1, y: -1 },
             name: 'click',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: {
+            mouse: { x: -1, y: -1 },
             objectName: 'H1',
             objectTitle: 'hi',
             position: { height: -1, width: -1, x: -1, y: -1 },
-            tstmp: 1580775120000,
-            urlPath: 'http://localhost/',
           },
         },
       ],
       { method: 'beacon' }
     )
   })
+
+  it('click with h1', () => {
+    const target = document.createElement('h1')
+    target.innerText = 'hi'
+
+    const event = new MouseEvent('click', {
+      screenX: 10,
+      screenY: 20,
+    })
+    Object.defineProperty(event, 'target', {
+      value: target,
+    })
+
+    sendSystemEvent('click', event)
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          type: 'system',
+          data: {
+            evcs: 11119,
+            mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'click',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: {
+            mouse: {
+              x: -1,
+              y: -1,
+            },
+            objectName: 'H1',
+            objectTitle: 'hi',
+            position: { height: -1, width: -1, x: -1, y: -1 },
+          },
+        },
+      ],
+      undefined
+    )
+  })
+
+  it('click with div', () => {
+    const target = document.createElement('div')
+    target.innerText = 'no'
+
+    const event = new MouseEvent('click')
+    Object.defineProperty(event, 'target', {
+      value: target,
+    })
+
+    sendSystemEvent('click', event)
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          type: 'system',
+          data: {
+            evcs: 11119,
+            mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'click',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: {
+            mouse: {
+              x: -1,
+              y: -1,
+            },
+            objectName: 'DIV',
+            position: { height: -1, width: -1, x: -1, y: -1 },
+          },
+        },
+      ],
+      undefined
+    )
+  })
+
+  it('copy', () => {
+    const event = new MouseEvent('copy', {
+      screenX: 10,
+      screenY: 20,
+    })
+
+    Object.defineProperty(event, 'target', {
+      value: null,
+    })
+
+    sendSystemEvent('copy', event)
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          type: 'system',
+          data: {
+            evcs: 11102,
+            mid: 'Y29weQ==-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'copy',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: {
+            mouse: { x: -1, y: -1 },
+            objectName: 'Unknown',
+            position: { height: -1, width: -1, x: -1, y: -1 },
+          },
+        },
+      ],
+      undefined
+    )
+  })
 })
 
-describe('setDevEvent', () => {
+describe('sendDevEvent', () => {
   let spySend: jest.SpyInstance<void, [SendEvent[], EventOptions?]>
 
   beforeEach(() => {
@@ -182,17 +290,17 @@ describe('setDevEvent', () => {
   })
 
   it('null', () => {
-    setDevEvent(null)
+    sendDevEvent(null)
     expect(spySend).toBeCalledTimes(0)
   })
 
   it('empty events', () => {
-    setDevEvent([])
+    sendDevEvent([])
     expect(spySend).toBeCalledTimes(0)
   })
 
   it('ok', () => {
-    setDevEvent([
+    sendDevEvent([
       {
         name: 'custom-event',
         data: {
@@ -218,13 +326,14 @@ describe('setDevEvent', () => {
         {
           data: {
             evcs: 23872,
-            metaInfo: { foo: true },
             mid:
               'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'custom-event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
+          extra: { foo: true },
+          type: 'codified',
         },
         {
           data: {
@@ -235,6 +344,8 @@ describe('setDevEvent', () => {
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
+          extra: null,
+          type: 'codified',
         },
       ],
       undefined
@@ -248,6 +359,7 @@ describe('pageView', () => {
     pageView('https://blotout.io/')
     expect(spySend).toBeCalledWith([
       {
+        type: 'system',
         data: {
           evcs: 11132,
           mid:
@@ -258,6 +370,7 @@ describe('pageView', () => {
         },
       },
       {
+        type: 'system',
         data: {
           evcs: 11130,
           mid:

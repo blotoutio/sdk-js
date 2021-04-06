@@ -20,27 +20,6 @@ interface BasicEvent {
   tstmp: number
   mid: string
   evcs: number
-  metaInfo?: EventData
-  position?: Position | null
-  objectTitle?: string | null
-  mouse?: MouseData
-  objectName?: string
-}
-
-interface EventPayloadProperties {
-  // eslint-disable-next-line camelcase
-  session_id: string
-  screen: {
-    width: number
-    height: number
-    docHeight: number
-    docWidth: number
-  }
-  position?: Position
-  obj?: string
-  objT?: string
-  mouse?: MouseData
-  codifiedInfo?: EventData
 }
 
 interface EventOptions {
@@ -54,6 +33,16 @@ interface InitPreferences {
   storageRootKey?: string
 }
 
+interface AdditionalData {
+  position?: Position
+  obj?: string
+  objT?: string
+  mouse?: MouseData
+  [key: string]: unknown
+}
+
+type EventType = 'system' | 'codified' | 'pii' | 'phi'
+
 interface EventPayload {
   mid: string
   userid: string
@@ -61,12 +50,22 @@ interface EventPayload {
   evcs: number
   scrn: string
   evt: number
-  properties: EventPayloadProperties
+  // eslint-disable-next-line camelcase
+  session_id: string
+  screen: {
+    width: number
+    height: number
+    docHeight: number
+    docWidth: number
+  }
+  type: EventType
+  additionalData?: AdditionalData
 }
 
 interface SendEvent {
+  type: EventType
   data: BasicEvent
-  extra?: unknown
+  extra?: AdditionalData
 }
 
 interface Manifest {
@@ -83,8 +82,6 @@ interface IncomingEvent {
   data?: EventData
   code?: number
   options?: EventOptions
-  objectName?: string
-  event?: MouseEvent
   url?: string
 }
 
@@ -103,8 +100,7 @@ export declare const mapID: (
 ) => void
 export declare const pageView: (previousUrl: string) => void
 export declare const internalUtils: {
-  getEventPayload: (event: BasicEvent) => EventPayload
   sendEvent: (events: SendEvent[], options?: EventOptions) => void
   getVariable: (key: keyof Manifest) => string | number | boolean
-  createEvent: (event: IncomingEvent) => BasicEvent
+  createBasicEvent: (event: IncomingEvent) => BasicEvent
 }

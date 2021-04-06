@@ -1,4 +1,4 @@
-import { setEvent } from '../index'
+import { sendSystemEvent } from '../index'
 import { checkRetry } from '../../network/retries'
 import { shouldCollectSystemEvents } from '../utils'
 
@@ -9,7 +9,7 @@ export const offline = (window: Window): void => {
   window.addEventListener(eventName, function (event) {
     isOnline = false
     if (shouldCollectSystemEvents()) {
-      setEvent(eventName, event)
+      sendSystemEvent(eventName, event)
     }
   })
 }
@@ -20,7 +20,7 @@ export const online = (window: Window): void => {
     isOnline = true
     checkRetry()
     if (shouldCollectSystemEvents()) {
-      setEvent(eventName, event)
+      sendSystemEvent(eventName, event)
     }
   })
 }

@@ -1,9 +1,9 @@
-import { setEvent } from '../index'
+import { sendSystemEvent } from '../index'
 
 export const keyPressed = (window: Window): void => {
   const eventName = 'keypress'
   window.addEventListener(eventName, function (event) {
-    setEvent(eventName, event)
+    sendSystemEvent(eventName, event)
   })
 }
 
@@ -14,6 +14,6 @@ export const keyDown = (window: Window): void => {
       return
     }
 
-    setEvent(eventName, event)
+    sendSystemEvent(eventName, event)
   })
 }

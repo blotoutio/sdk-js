@@ -10,26 +10,19 @@ const createPersonalEvent = (
   event: IncomingEvent,
   isPHI: boolean
 ): SendEvent => {
-  const data = internalUtils.createEvent(event)
-  if (!data) {
+  const basicEvent = internalUtils.createBasicEvent(event)
+  if (!basicEvent) {
     return null
   }
-  const key = isPHI ? 'phiPublicKey' : 'piiPublicKey'
-  const eventPayload = internalUtils.getEventPayload(data)
-  const publicKey = (internalUtils.getVariable(key) || '').toString()
-  const obj = encryptRSA(publicKey, JSON.stringify([eventPayload]))
-  data.metaInfo = null
 
-  const extra: SendEventExtra = {}
-  if (isPHI) {
-    extra.phi = obj
-  } else {
-    extra.pii = obj
-  }
+  const key = isPHI ? 'phiPublicKey' : 'piiPublicKey'
+  const publicKey = (internalUtils.getVariable(key) || '').toString()
+  const obj = encryptRSA(publicKey, JSON.stringify([event.data]))
 
   return {
-    data,
-    extra,
+    type: isPHI ? 'phi' : 'pii',
+    data: basicEvent,
+    extra: { ...obj },
   }
 }
 

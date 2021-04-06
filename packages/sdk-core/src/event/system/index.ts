@@ -8,13 +8,7 @@ import { online, offline } from './network'
 import { print } from './print'
 import { touchEnd } from './touch'
 import { hashChange } from './hash'
-import {
-  domActive,
-  domSubTreeModified,
-  pagehide,
-  scroll,
-  visibilityChange,
-} from './window'
+import { pagehide, scroll, visibilityChange } from './window'
 import { error } from './resource'
 import { shouldCollectSystemEvents } from '../utils'
 
@@ -50,8 +44,6 @@ export const optionalEvents = (window: Window): void => {
 
   hashChange(window)
 
-  domActive(window)
-  domSubTreeModified(window)
   scroll(window)
 
   error(window)

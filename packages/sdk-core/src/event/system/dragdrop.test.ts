@@ -5,7 +5,7 @@ import { dragEnd, dragStart } from './dragdrop'
 let spy: jest.SpyInstance<void, [string, Event?, EventOptions?]>
 
 beforeEach(() => {
-  spy = jest.spyOn(event, 'setEvent').mockImplementation()
+  spy = jest.spyOn(event, 'sendSystemEvent').mockImplementation()
 })
 
 afterEach(() => {
