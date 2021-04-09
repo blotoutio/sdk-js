@@ -39,13 +39,9 @@ const encryptAES = (data: string) => {
   }
 }
 
-export const encryptRSA = (publicKey: string, data: string): RSA => {
+export const encryptRSA = (publicKey: string, data: string): RSA | null => {
   if (!publicKey) {
-    return {
-      data: '',
-      key: '',
-      iv: '',
-    }
+    return null
   }
 
   const encrypt2 = new JSEncrypt()

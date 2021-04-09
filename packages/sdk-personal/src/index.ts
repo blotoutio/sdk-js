@@ -19,6 +19,10 @@ const createPersonalEvent = (
   const publicKey = (internalUtils.getVariable(key) || '').toString()
   const obj = encryptRSA(publicKey, JSON.stringify([event.data]))
 
+  if (!obj) {
+    return null
+  }
+
   return {
     type: isPHI ? 'phi' : 'pii',
     data: basicEvent,
