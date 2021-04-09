@@ -280,4 +280,27 @@ context('Events', () => {
       })
     })
   })
+
+  it('Enable / Disable', () => {
+    let currentPublish = ''
+    cy.get('@publish').then((interceptor) => {
+      currentPublish = interceptor.id
+    })
+    // Disabled
+    cy.get('#enable').click()
+    cy.get('#enable-false').click()
+    cy.get('#event').click()
+    cy.get('#send').click()
+    cy.wait(1000)
+    cy.get('@publish').then((interceptor) => {
+      expect(interceptor.id).to.eq(currentPublish)
+    })
+
+    // Enabled
+    cy.get('#enable').click()
+    cy.get('#enable-true').click()
+    cy.get('#event').click()
+    cy.get('#send').click()
+    cy.wait('@publish').its('response.statusCode').should('eq', 200)
+  })
 })

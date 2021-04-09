@@ -4,6 +4,7 @@ import {
   pageView as pageViewMethod,
   mapID as mapIDMethod,
   getUserId as getUIDMethod,
+  enable as enableMethod,
 } from '@blotoutio/sdk-core'
 
 /* #if _FEATURES !== 'full'
@@ -37,6 +38,10 @@ class API {
 
   getUserId() {
     return getUIDMethod()
+  }
+
+  enable(enable) {
+    enableMethod(enable)
   }
 }
 

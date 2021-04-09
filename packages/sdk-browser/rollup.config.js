@@ -77,12 +77,7 @@ const getDev = () => {
       format: 'umd',
       sourcemap: true,
     },
-    plugins: [
-      cleaner({
-        targets: ['./dist/'],
-      }),
-      ...defaultPlugins('full', 'development'),
-    ],
+    plugins: [...defaultPlugins('full', 'development')],
   }
 }
 
