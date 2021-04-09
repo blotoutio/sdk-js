@@ -2,11 +2,7 @@ import { encryptRSA } from './security'
 
 describe('encryptRSA', () => {
   it('empty key', () => {
-    expect(encryptRSA('', '')).toStrictEqual({
-      data: '',
-      key: '',
-      iv: '',
-    })
+    expect(encryptRSA('', '')).toBeNull()
   })
 
   it('success', () => {
