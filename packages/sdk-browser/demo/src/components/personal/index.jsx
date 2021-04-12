@@ -4,7 +4,7 @@ const Personal = () => {
   const [name, setName] = useState('personal-event')
   const [method, setMethod] = useState('normal')
   const [type, setType] = useState('pii')
-  const [data, setData] = useState(JSON.stringify({ data: 'foo' }))
+  const [data, setData] = useState(JSON.stringify({ lang: 'sl' }))
 
   const send = () => {
     let options = null

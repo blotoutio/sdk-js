@@ -44,12 +44,12 @@ export const mapID = (
   mapIDMethod(id, provider, data, options)
 }
 
-export const pageView = (previousUrl: string): void => {
+export const pageView = (previousUrl: string, data?: EventData): void => {
   if (!isEnabled()) {
     return
   }
 
-  pageViewMethod(previousUrl)
+  pageViewMethod(previousUrl, data)
 }
 
 export const enable = (enable: boolean): void => {

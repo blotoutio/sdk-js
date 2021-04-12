@@ -98,7 +98,7 @@ export declare const mapID: (
   data?: EventData,
   options?: EventOptions
 ) => void
-export declare const pageView: (previousUrl: string) => void
+export declare const pageView: (previousUrl: string, data?: EventData) => void
 export declare const enable: (enable: boolean) => void
 export declare const internalUtils: {
   sendEvent: (events: SendEvent[], options?: EventOptions) => void

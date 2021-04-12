@@ -28,8 +28,8 @@ class API {
   }
   // #endif
 
-  pageView(previousUrl) {
-    pageViewMethod(previousUrl)
+  pageView(previousUrl, data) {
+    pageViewMethod(previousUrl, data)
   }
 
   mapID(id, provider, data, options) {

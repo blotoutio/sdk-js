@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 const MapID = () => {
   const [id, setId] = useState('234234234')
-  const [service, setService] = useState('service')
-  const [data, setData] = useState(JSON.stringify({ data: 'foo' }))
+  const [service, setService] = useState('sass')
+  const [data, setData] = useState(JSON.stringify({ lang: 'de' }))
 
   const send = () => {
     trends('mapID', id, service, JSON.parse(data))

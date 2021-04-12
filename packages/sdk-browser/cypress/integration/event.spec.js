@@ -73,7 +73,7 @@ context('Events', () => {
       expect(interceptions.request.body.events).to.have.lengthOf(1)
       const event = interceptions.request.body.events[0]
 
-      expect(event.mid).to.have.lengthOf(63)
+      expect(event.mid).to.have.lengthOf(71)
       delete event.mid
 
       expect(event.userid).to.have.lengthOf(87)
@@ -83,8 +83,8 @@ context('Events', () => {
       delete event.session_id
 
       assert.deepEqual(event, {
-        evn: 'dev-event',
-        evcs: 24000,
+        evn: 'codified-event',
+        evcs: 23636,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
         type: 'codified',
@@ -94,7 +94,7 @@ context('Events', () => {
           docHeight: 700,
           docWidth: 1000,
         },
-        additionalData: { data: 'foo' },
+        additionalData: { lang: 'en' },
       })
     })
   })
@@ -118,10 +118,12 @@ context('Events', () => {
       expect(event.session_id).to.have.lengthOf(13)
       delete event.session_id
 
-      expect(event.additionalData.data).to.have.lengthOf(44)
+      expect(event.additionalData.data).to.have.lengthOf(24)
       expect(event.additionalData.key).to.have.lengthOf(172)
       expect(event.additionalData.iv).to.have.lengthOf(32)
-      delete event.additionalData
+      delete event.additionalData.data
+      delete event.additionalData.key
+      delete event.additionalData.iv
 
       assert.deepEqual(event, {
         evn: 'personal-event',
@@ -135,6 +137,7 @@ context('Events', () => {
           docHeight: 700,
           docWidth: 1000,
         },
+        additionalData: {},
       })
     })
   })
@@ -159,10 +162,12 @@ context('Events', () => {
       expect(event.session_id).to.have.lengthOf(13)
       delete event.session_id
 
-      expect(event.additionalData.data).to.have.lengthOf(44)
+      expect(event.additionalData.data).to.have.lengthOf(24)
       expect(event.additionalData.key).to.have.lengthOf(172)
       expect(event.additionalData.iv).to.have.lengthOf(32)
-      delete event.additionalData
+      delete event.additionalData.data
+      delete event.additionalData.key
+      delete event.additionalData.iv
 
       assert.deepEqual(event, {
         evn: 'personal-event',
@@ -176,6 +181,7 @@ context('Events', () => {
           docHeight: 700,
           docWidth: 1000,
         },
+        additionalData: {},
       })
     })
   })
@@ -213,6 +219,9 @@ context('Events', () => {
           docHeight: 700,
           docWidth: 1000,
         },
+        additionalData: {
+          lang: 'es',
+        },
       })
 
       // SDK start
@@ -236,6 +245,9 @@ context('Events', () => {
           height: 700,
           docHeight: 700,
           docWidth: 1000,
+        },
+        additionalData: {
+          lang: 'es',
         },
       })
     })
@@ -273,9 +285,9 @@ context('Events', () => {
           docWidth: 1000,
         },
         additionalData: {
-          data: 'foo',
+          lang: 'de',
           map_id: '234234234',
-          map_provider: 'service',
+          map_provider: 'sass',
         },
       })
     })
