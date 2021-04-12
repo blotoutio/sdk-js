@@ -9,6 +9,7 @@ import * as domainUtil from './domainUtil'
 import * as manifest from './manifest'
 import { setSessionDataValue } from '../storage'
 import { constants } from './config'
+import { setEnable } from './enabled'
 
 window.fetch = require('node-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
@@ -16,6 +17,7 @@ beforeAll(() => jest.spyOn(window, 'fetch'))
 beforeEach(() => {
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
+  setEnable(true)
 })
 
 describe('init', () => {
@@ -30,7 +32,21 @@ describe('init', () => {
     })
   })
 
-  it('with preferences', () => {
+  it('SDK is disabled', () => {
+    const spySendSystemEvent = jest.spyOn(event, 'sendSystemEvent')
+    setEnable(false)
+    init({
+      token: '3WBQ5E48ND3VTPC',
+      endpointUrl: 'https://domain.com/sdk',
+      customDomain: 'domain.com',
+      storageRootKey: 'foo',
+    })
+    expect(spySendSystemEvent).toBeCalledTimes(0)
+    spySendSystemEvent.mockRestore()
+  })
+
+  it('new session', () => {
+    window.sessionStorage.clear()
     const spySetUrl = jest.spyOn(endPoint, 'setUrl')
     const spySetClientToken = jest.spyOn(clientToken, 'setClientToken')
     const spySetCustomDomain = jest.spyOn(domainUtil, 'setCustomDomain')

@@ -10,6 +10,7 @@ import { checkRetry } from '../network/retries'
 import { setClientToken } from './clientToken'
 import type { InitPreferences } from '../typings'
 import { constants } from './config'
+import { checkEnabled, setInitialised } from './enabled'
 
 const setConfiguration = (preferences: InitPreferences) => {
   setUrl(preferences.endpointUrl)
@@ -29,6 +30,11 @@ export const init = (preferences?: InitPreferences): void => {
   }
 
   setConfiguration(preferences)
+  setInitialised()
+  if (!checkEnabled()) {
+    return
+  }
+
   const newSession = checkSession()
   let manifestLoaded = false
   if (!newSession) {

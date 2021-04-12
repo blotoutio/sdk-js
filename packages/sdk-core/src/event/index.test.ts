@@ -2,19 +2,29 @@ import * as eventUtils from './utils'
 import * as storage from '../storage'
 import { mapID, pageView, sendDevEvent, sendSystemEvent } from './index'
 import type { EventOptions, SendEvent } from '../typings'
+import { setEnable, setInitialised } from '../common/enabled'
+import { getSessionDataKey } from '../storage/key'
+
 jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
 window.fetch = require('node-fetch')
-beforeAll(() => jest.spyOn(window, 'fetch'))
+beforeAll(() => {
+  jest.spyOn(window, 'fetch')
+  setInitialised()
+})
 
 let spySession: jest.SpyInstance<string, [name: string]>
 beforeEach(() => {
-  spySession = jest
-    .spyOn(storage, 'getSession')
-    .mockImplementation(() => '124123423')
+  spySession = jest.spyOn(storage, 'getSession').mockImplementation((key) => {
+    if (key === getSessionDataKey()) {
+      return '{}'
+    }
+    return '124123423'
+  })
 
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
+  setEnable(true)
 })
 
 afterEach(() => {
@@ -33,6 +43,12 @@ describe('mapID', () => {
 
   afterEach(() => {
     spySet.mockRestore()
+  })
+
+  it('SDK is disabled', () => {
+    setEnable(false)
+    mapID('sdfasfasdfds', 'service')
+    expect(spySet).toBeCalledTimes(0)
   })
 
   it('id is empty', () => {
@@ -103,6 +119,19 @@ describe('sendSystemEvent', () => {
 
   afterAll(() => {
     spySend.mockRestore()
+  })
+
+  it('SDK is disabled', () => {
+    setEnable(false)
+    const target = document.createElement('h1')
+    target.innerText = 'hi'
+
+    const event = new MouseEvent('click')
+    Object.defineProperty(event, 'target', {
+      value: target,
+    })
+    sendSystemEvent('click', event, { method: 'beacon' })
+    expect(spySend).toBeCalledTimes(0)
   })
 
   it('empty name', () => {
@@ -299,7 +328,34 @@ describe('sendDevEvent', () => {
     expect(spySend).toBeCalledTimes(0)
   })
 
+  it('SDK disabled', () => {
+    setEnable(false)
+    sendDevEvent([
+      {
+        name: 'custom-event',
+        data: {
+          foo: true,
+        },
+      },
+      {
+        name: '',
+        data: {
+          foo: true,
+        },
+      },
+      {
+        name: 'new-event',
+        data: null,
+        options: {
+          method: 'beacon',
+        },
+      },
+    ])
+    expect(spySend).toBeCalledTimes(0)
+  })
+
   it('ok', () => {
+    setInitialised()
     sendDevEvent([
       {
         name: 'custom-event',

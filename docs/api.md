@@ -180,6 +180,31 @@ console.log(userId)
 {% endtab %}
 {% endtabs %}
 
+## enable
+The `enable` method allows you to enable or disable SDK. If you disable SDK, no event will be logged or send to the server, system or codified. This setting is persisted in session. So when new session is created this setting needs to be set again.
+
+#### Input
+
+|||||
+|---|---|---|---|
+| `enable` | `Boolean` |  | Define if you want to enable or disable sdk |
+
+#### Example
+{% tabs basic %}
+{% tab basic browser %}
+```js
+trends('enable', false)
+```
+{% endtab %}
+{% tab basic node %}
+```js
+import { enable } from '@blotoutio/sdk-core'
+
+enable(false)
+```
+{% endtab %}
+{% endtabs %}
+
 ## Appendix
 **Options**
 

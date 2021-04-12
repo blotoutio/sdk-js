@@ -30,6 +30,12 @@ context('General', () => {
     cy.get('#send').click()
   })
 
+  it('enable do not trigger error', () => {
+    cy.get('#enable').click()
+    cy.get('#enable-true').click()
+    cy.get('#enable-false').click()
+  })
+
   it('user id is generated', () => {
     cy.get('#user-id').click()
     cy.get('.events-content').then((element) => {

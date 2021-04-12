@@ -13,13 +13,18 @@ import type {
   IncomingEvent,
   SendEvent,
 } from '../typings'
+import { isEnabled } from '../common/enabled'
 
 export const sendSystemEvent = (
   name: string,
   event?: Event,
   options?: EventOptions
 ): void => {
-  if (!name || (isHighFreqEventOff && highFreqEvents.includes(name))) {
+  if (
+    !isEnabled() ||
+    !name ||
+    (isHighFreqEventOff && highFreqEvents.includes(name))
+  ) {
     return
   }
 
@@ -53,7 +58,7 @@ export const sendDevEvent = (
   events: IncomingEvent[],
   options?: EventOptions
 ): void => {
-  if (!events) {
+  if (!isEnabled() || !events) {
     return
   }
 

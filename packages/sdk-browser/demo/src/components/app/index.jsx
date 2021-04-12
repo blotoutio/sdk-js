@@ -4,6 +4,7 @@ import Personal from '../personal'
 import PageView from '../pageView'
 import UserID from '../userID'
 import MapID from '../mapID'
+import Enable from '../enable'
 
 const tabs = [
   {
@@ -30,6 +31,11 @@ const tabs = [
     id: 'user-id',
     name: 'User ID',
     component: <UserID />,
+  },
+  {
+    id: 'enable',
+    name: 'Enable/Disable',
+    component: <Enable />,
   },
 ]
 

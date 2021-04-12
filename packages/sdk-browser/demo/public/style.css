@@ -100,10 +100,23 @@ nav a:hover {
   margin: 0 30px 0 5px;
 }
 
-.form-line input[type='submit'] {
+.form-line input[type='submit'],
+.form-line button.primary,
+.form-line button.secondary {
   border: none;
   background: #f25c2b;
   color: #fff;
+  width: 100px;
+  height: 30px;
+  margin-top: 20px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.form-line button.secondary {
+  border: none;
+  background: #bdbdbd;
+  color: #000;
   width: 100px;
   height: 30px;
   margin-top: 20px;

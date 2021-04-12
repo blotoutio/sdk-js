@@ -36,6 +36,7 @@ interface SessionData {
   search: Record<string, string>
   manifest?: Manifest
   retries?: RequestRetry[]
+  enabled?: string
 }
 
 interface Payload {
