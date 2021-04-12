@@ -119,7 +119,7 @@ export const mapID = (
   )
 }
 
-export const pageView = (previousUrl: string): void => {
+export const pageView = (previousUrl: string, data?: EventData): void => {
   const visibilityHidden: SendEvent = {
     type: 'system',
     data: createBasicEvent({
@@ -127,6 +127,7 @@ export const pageView = (previousUrl: string): void => {
       url: previousUrl,
       code: systemEventCode.visibilityHidden,
     }),
+    extra: data,
   }
 
   const sdkStart: SendEvent = {
@@ -135,6 +136,7 @@ export const pageView = (previousUrl: string): void => {
       name: constants.SDK_START,
       code: systemEventCode.sdk_start,
     }),
+    extra: data,
   }
 
   sendEvent([visibilityHidden, sdkStart])

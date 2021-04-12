@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
 const Event = () => {
-  const [name, setName] = useState('dev-event')
+  const [name, setName] = useState('codified-event')
   const [method, setMethod] = useState('normal')
-  const [data, setData] = useState(JSON.stringify({ data: 'foo' }))
+  const [data, setData] = useState(JSON.stringify({ lang: 'en' }))
 
   const send = () => {
     let options = null

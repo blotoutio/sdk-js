@@ -108,6 +108,7 @@ When you call this API we will send a request to the server that will contain tw
 |||||
 |---|---|---|---|
 | `previousUrl` | `String` |  | Previous page url that will be send as part of `visibility_hidden` event |
+| `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 
 #### Example
 {% tabs basic %}
