@@ -8,8 +8,6 @@ import type { Manifest } from '../typings'
 let manifest: Manifest = null
 
 const manifestDefaults: Manifest = {
-  deviceInfoGrain: 1,
-  eventPath: 'v1/events/publish',
   pushSystemEvents: 0,
 }
 
@@ -32,16 +30,6 @@ const processData = (serverManifest: ServerVariable[]): Manifest => {
     switch (variable.variableDataType) {
       case 1: {
         variableValue = parseInt(variable.value)
-        break
-      }
-      case 2:
-      case 3:
-      case 4: {
-        variableValue = parseFloat(variable.value)
-        break
-      }
-      case 5: {
-        variableValue = !!variable.value
         break
       }
       case 6: {
@@ -72,12 +60,9 @@ const setData = (data: ServerManifest) => {
 }
 
 export const manifestVariables: Record<keyof Manifest, number> = {
-  deviceInfoGrain: 5004,
-  eventPath: 5016,
   phiPublicKey: 5997,
   piiPublicKey: 5998,
   pushSystemEvents: 5023,
-  endPoint: 5009,
 }
 
 export const getVariable = (key: keyof Manifest): string | number | boolean => {
@@ -115,7 +100,6 @@ export const checkManifest = (): Promise<boolean | string> => {
 export const pullManifest = (): Promise<boolean | string> => {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify({
-      lastUpdatedTime: 0,
       bundleId: getDomain(),
     })
     postRequest(getManifestUrl(), payload)

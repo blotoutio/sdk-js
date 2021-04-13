@@ -19,8 +19,8 @@ describe('getVariable', () => {
     [string, string, EventOptions?]
   >
   it('from defaults', () => {
-    const result = getVariable('eventPath')
-    expect(result).toEqual('v1/events/publish')
+    const result = getVariable('pushSystemEvents')
+    expect(result).toEqual(0)
   })
 
   it('from manifest', async () => {
@@ -28,16 +28,16 @@ describe('getVariable', () => {
       Promise.resolve({
         variables: [
           {
-            variableId: 5016,
-            value: '/some-path/sdk',
-            variableDataType: 6,
+            variableId: 5023,
+            value: 0,
+            variableDataType: 1,
           },
         ],
       })
     )
     await expect(pullManifest()).resolves.toEqual(true)
-    const result = getVariable('eventPath')
-    expect(result).toEqual('/some-path/sdk')
+    const result = getVariable('pushSystemEvents')
+    expect(result).toEqual(0)
     spyPost.mockRestore()
   })
 })
@@ -103,110 +103,15 @@ describe('pullManifest', () => {
       Promise.resolve({
         variables: [
           {
-            variableId: 5998,
-            value:
-              'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtnZcbH4dJT7/yYyDIG1pSNHZcutwaFjTj7Bgm0xgSHLOy9ajF9LFUeT/9vr9Y77tuXytnCsOc7d5hZaDpy8XW7iRQ9x6CUrzUiZqgDzrmJD2GC6zKcVISGc5YjH+Iec9YAB9+SMb0/LOHZEhW97L1y6HXRtYi8BjF6e1Bk8RONwIDAQAB',
-            variableDataType: 6,
+            variableId: 5023,
+            value: 0,
+            variableDataType: 1,
           },
           {
             variableId: 5997,
-            value: 5,
-            variableDataType: 1,
-          },
-          {
-            variableId: 5001,
-            value: '1',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5009,
-            value: 'https://demo.blotout.io/sdk',
+            value:
+              'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCtnZcbH4dJT7/yYyDIG1pSNHZcutwaFjTj7Bgm0xgSHLOy9ajF9LFUeT/9vr9Y77tuXytnCsOc7d5hZaDpy8XW7iRQ9x6CUrzUiZqgDzrmJD2GC6zKcVISGc5YjH+Iec9YAB9+SMb0/LOHZEhW97L1y6HXRtYi8BjF6e1Bk8RONwIDAQAB',
             variableDataType: 6,
-          },
-          {
-            variableId: 5003,
-            value: '4',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5011,
-            value: '24',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5002,
-            value: '1',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5013,
-            value: '1',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5014,
-            value: '1',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5010,
-            value: '30',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5026,
-            value: '1',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5004,
-            value: 2,
-            variableDataType: 2,
-          },
-          {
-            variableId: 5024,
-            value: '1',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5007,
-            value: '90',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5027,
-            value: '1',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5999,
-            value: '1613725511959',
-            variableDataType: 6,
-          },
-          {
-            variableId: 5025,
-            value: '1',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5022,
-            value: 'v1/segment/custom/feedback',
-            variableDataType: 6,
-          },
-          {
-            variableId: 5015,
-            value: '0',
-            variableDataType: 1,
-          },
-          {
-            variableId: 5016,
-            value: 'v1/events/publish',
-            variableDataType: 6,
-          },
-          {
-            variableId: 5023,
-            value: 'true',
-            variableDataType: 5,
           },
         ],
       })

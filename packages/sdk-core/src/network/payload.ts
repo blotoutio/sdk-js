@@ -1,5 +1,4 @@
 import { constants } from '../common/config'
-import { getVariable } from '../common/manifest'
 import { getDomain } from '../common/domainUtil'
 import { getSession } from '../storage'
 import { getSessionDataKey } from '../storage/key'
@@ -69,8 +68,6 @@ const getMeta = () => {
     : parsedUA.getBrowser().name || 'unknown'
   const OS = parsedUA.getOS().name || ''
 
-  const deviceGrain = getVariable('deviceInfoGrain')
-
   let manufacture
   switch (OS) {
     case 'Mac OS': {
@@ -106,6 +103,14 @@ const getMeta = () => {
     sdkv: process.env.PACKAGE_VERSION,
     tz_offset: new Date().getTimezoneOffset() * -1,
     user_id_created: getCreateTimestamp(),
+    plf: getPlatform(parsedUA.getDevice().type, parsedUA.getOS().name),
+    appn: getDomain(),
+    osv: parsedUA.getOS().version || '0',
+    appv: parsedUA.getBrowser().version || '0.0.0.0',
+    dmft: manufacture,
+    dm: getDeviceModel(parsedUA.getDevice().type),
+    bnme: browser,
+    osn: OS,
   }
 
   if (sessionData) {
@@ -116,20 +121,6 @@ const getMeta = () => {
     if (sessionData.search) {
       meta.search = sessionData.search
     }
-  }
-
-  if (deviceGrain >= 1) {
-    meta.plf = getPlatform(parsedUA.getDevice().type, parsedUA.getOS().name)
-    meta.appn = getDomain()
-    meta.osv = parsedUA.getOS().version || '0'
-    meta.appv = parsedUA.getBrowser().version || '0.0.0.0'
-    meta.dmft = manufacture
-    meta.dm = getDeviceModel(parsedUA.getDevice().type)
-    meta.bnme = browser
-  }
-
-  if (deviceGrain >= 2) {
-    meta.osn = OS
   }
 
   return meta

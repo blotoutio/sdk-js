@@ -88,6 +88,10 @@ describe('sendEvent', () => {
   })
 
   it('with events', () => {
+    Object.defineProperty(navigator, 'userAgent', {
+      value:
+        '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+    })
     sendEvent(
       [
         {
@@ -126,13 +130,14 @@ describe('sendEvent', () => {
         meta: {
           tz_offset: 0,
           user_id_created: 1580775120000,
-          plf: 70,
+          plf: 27,
           appn: 'localhost',
-          osv: '0',
-          appv: '537.36',
-          dmft: 'unknown',
-          dm: 'AMD Based',
-          bnme: 'WebKit',
+          osv: '11.1.0',
+          appv: '87.0.4280.101',
+          dmft: 'Apple',
+          dm: 'Intel Based',
+          bnme: 'Chrome',
+          osn: 'Mac OS',
         },
         events: [
           {
@@ -172,6 +177,10 @@ describe('sendEvent', () => {
   })
 
   it('default data', () => {
+    Object.defineProperty(navigator, 'userAgent', {
+      value:
+        '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+    })
     getSessionID()
     setDefaultEventData([], { foo: true })
     setDefaultEventData(['codified'], { foo1: true })
@@ -219,13 +228,14 @@ describe('sendEvent', () => {
         meta: {
           tz_offset: 0,
           user_id_created: 1580775120000,
-          plf: 70,
+          plf: 27,
           appn: 'localhost',
-          osv: '0',
-          appv: '537.36',
-          dmft: 'unknown',
-          dm: 'AMD Based',
-          bnme: 'WebKit',
+          osv: '11.1.0',
+          appv: '87.0.4280.101',
+          dmft: 'Apple',
+          dm: 'Intel Based',
+          bnme: 'Chrome',
+          osn: 'Mac OS',
         },
         events: [
           {
