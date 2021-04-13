@@ -9,6 +9,8 @@ import * as network from '../network'
 import * as endPoint from '../network/endPoint'
 import * as manifest from '../common/manifest'
 import type { EventOptions } from '../typings'
+import { setDefaultEventData } from './index'
+import { getSessionID } from '../storage'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
@@ -144,6 +146,7 @@ describe('sendEvent', () => {
             session_id: '1580775120000',
             type: 'system',
             screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
+            additionalData: {},
           },
           {
             mid:
@@ -165,6 +168,110 @@ describe('sendEvent', () => {
       {
         method: 'beacon',
       }
+    )
+  })
+
+  it('default data', () => {
+    getSessionID()
+    setDefaultEventData([], { foo: true })
+    setDefaultEventData(['codified'], { foo1: true })
+    sendEvent([
+      {
+        type: 'system',
+        data: {
+          mid:
+            'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+          name: 'sdk_start',
+          evcs: 11130,
+          urlPath: 'https://blotout.io/',
+          tstmp: 1614584413700,
+        },
+      },
+      {
+        type: 'codified',
+        data: {
+          mid:
+            'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+          name: 'test',
+          evcs: 21302,
+          urlPath: 'https://blotout.io/',
+          tstmp: 1614584313700,
+        },
+        extra: {
+          foo3: true,
+        },
+      },
+      {
+        type: 'codified',
+        data: {
+          mid:
+            'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+          name: 'test',
+          evcs: 21302,
+          urlPath: 'https://blotout.io/',
+          tstmp: 1614584313800,
+        },
+      },
+    ])
+    expect(spy).toBeCalledWith(
+      'https://domain.com/v1/publish',
+      JSON.stringify({
+        meta: {
+          tz_offset: 0,
+          user_id_created: 1580775120000,
+          plf: 70,
+          appn: 'localhost',
+          osv: '0',
+          appv: '537.36',
+          dmft: 'unknown',
+          dm: 'AMD Based',
+          bnme: 'WebKit',
+        },
+        events: [
+          {
+            mid:
+              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            userid: null,
+            evn: 'sdk_start',
+            evcs: 11130,
+            scrn: 'https://blotout.io/',
+            evt: 1614584413700,
+            session_id: '1580775120000',
+            type: 'system',
+            screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
+            additionalData: {
+              foo: true,
+            },
+          },
+          {
+            mid:
+              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            userid: null,
+            evn: 'test',
+            evcs: 21302,
+            scrn: 'https://blotout.io/',
+            evt: 1614584313700,
+            session_id: '1580775120000',
+            type: 'codified',
+            screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
+            additionalData: { foo: true, foo1: true, foo3: true },
+          },
+          {
+            mid:
+              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            userid: null,
+            evn: 'test',
+            evcs: 21302,
+            scrn: 'https://blotout.io/',
+            evt: 1614584313800,
+            session_id: '1580775120000',
+            type: 'codified',
+            screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
+            additionalData: { foo: true, foo1: true },
+          },
+        ],
+      }),
+      undefined
     )
   })
 })

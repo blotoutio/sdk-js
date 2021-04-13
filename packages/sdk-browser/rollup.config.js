@@ -127,7 +127,7 @@ module.exports = (commandLineArgs) => {
   delete pkg.scripts
 
   if (commandLineArgs.watch || commandLineArgs.configDev) {
-    return [getDev(commandLineArgs.watch), getDemo(commandLineArgs.watch)]
+    return [getDev(), getDemo(commandLineArgs.watch)]
   }
 
   const prepare = {

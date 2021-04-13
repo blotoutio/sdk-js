@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import CodeEditor from '../editor'
 
 const Event = () => {
   const [name, setName] = useState('codified-event')
   const [method, setMethod] = useState('normal')
-  const [data, setData] = useState(JSON.stringify({ lang: 'en' }))
+  const [data, setData] = useState(JSON.stringify({ lang: 'en' }, null, 2))
 
   const send = () => {
     let options = null
@@ -26,13 +27,7 @@ const Event = () => {
           onChange={(event) => setName(event.target.value)}
         />
       </div>
-      <div className='form-line'>
-        <span>Data:</span>
-        <textarea
-          onChange={(event) => setData(event.target.value)}
-          value={data}
-        />
-      </div>
+      <CodeEditor data={data} setData={setData} />
       <div className='form-line'>
         <span>Method:</span>
         <input

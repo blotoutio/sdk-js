@@ -7,9 +7,9 @@ The `init` method is used for initializing SDK. This sets all required configura
 
 |||||
 |---|---|---|---|
-| `token` | `String` |  | Application token that you can get in your dashboard |
-| `endpointUrl` | `String` |  | Url where you will be sending data |
-| `customDomain` | `String` | Optional | You can define the custom domain so that if you are developing for example on localhost things will be working correctly. `customDomain` equals Bundle ID from Application tab in your dashboard. |
+| `token` | `String` |  | Application token that you can get in your dashboard. |
+| `endpointUrl` | `String` |  | Url where you will be sending data. |
+| `customDomain` | `String` | Optional | You can define the custom domain so that if you are developing for example on localhost things will be working correctly. `customDomain` equals Bundle ID from the Application tab in your dashboard. |
 | `storageRootKey` | `String` | Optional | Custom storage key that is used as a prefix for all storage keys (session and local storage). Default value is: `_trends`. |
 
 #### Example
@@ -43,9 +43,9 @@ If you are capturing an event when page navigation is triggered, you should add 
 
 |||||
 |---|---|---|---|
-| `eventName` | `String` |  | Name of the event that you are sending |
+| `eventName` | `String` |  | Name of the event that you are sending. |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
-| `options` | `Object` | Optional | Look at options table for more info |
+| `options` | `Object` | Optional | Look at options table for more info. |
 
 #### Example
 {% tabs basic %}
@@ -75,15 +75,15 @@ Same as the method above (`capture`) `capturePersonal` is used to record develop
 
 |||||
 |---|---|---|---|
-| `eventName` | `String` |  | Name of the event that you are sending |
+| `eventName` | `String` |  | Name of the event that you are sending. |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 | `isPHI` | `Boolean` | Optional | Define if data that you are sending is protected health information (PHI). If this is not defined or is set to `false`, data is treated as personally identifiable information (PII).  |
-| `options` | `Object` | Optional | Look at options table for more info |
+| `options` | `Object` | Optional | Look at options table for more info. |
 
 #### Example
 {% tabs basic %}
 {% tab basic browser %}
-Note: you need to include full pacakge to use personal capture.
+Note: you need to include a full package to use personal capture.
 
 ```js
 trends('capturePersonal', 'form-submited', { email: 'user@domain.com' })
@@ -107,7 +107,7 @@ When you call this API we will send a request to the server that will contain tw
 
 |||||
 |---|---|---|---|
-| `previousUrl` | `String` |  | Previous page url that will be send as part of `visibility_hidden` event |
+| `previousUrl` | `String` |  | Previous page URL that will be sent as part of `visibility_hidden` event. |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 
 #### Example
@@ -134,10 +134,10 @@ The `mapID` method allows you to map external services to Blotout ID.
 
 |||||
 |---|---|---|---|
-| `externalID` | `String` |  | External ID that you want to link to Blotout ID |
+| `externalID` | `String` |  | External ID that you want to link to Blotout ID. |
 | `provider` | `String` |  | Provider that generated external ID, for example `hubspot` |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
-| `options` | `Object` | Optional | Look at options table for more info |
+| `options` | `Object` | Optional | Look at options table for more info. |
 
 #### Example
 {% tabs basic %}
@@ -182,13 +182,13 @@ console.log(userId)
 {% endtabs %}
 
 ## enable
-The `enable` method allows you to enable or disable SDK. If you disable SDK, no event will be logged or send to the server, system or codified. This setting is persisted in session. So when new session is created this setting needs to be set again.
+The `enable` method allows you to enable or disable SDK. If you disable SDK, no event will be logged or send to the server, system, or codified. This setting is persisted in session. So a when new session is created this setting needs to be set again.
 
 #### Input
 
 |||||
 |---|---|---|---|
-| `enable` | `Boolean` |  | Define if you want to enable or disable sdk |
+| `enable` | `Boolean` |  | Define if you want to enable or disable SDK. |
 
 #### Example
 {% tabs basic %}
@@ -202,6 +202,34 @@ trends('enable', false)
 import { enable } from '@blotoutio/sdk-core'
 
 enable(false)
+```
+{% endtab %}
+{% endtabs %}
+
+## defaultEventData
+The `defaultEventData` method allows you to set data that will be sent to the server with every request for even type that you passed as the first parameter. You can also combine data for all events and a specific event. For example, if you have data for all events and then some data for a specific event. You can set both of them, and the system will combine all event types data + specific event data and send that to the server.
+
+#### Input
+
+|||||
+|---|---|---|---|
+| `eventType` | `Array` |  | It's an array of events that you want to assign data to. Options are: `system`, `codified`, `pii`, `phi`. If you pass an empty array, data will be assigned to all events. |
+| `data` | `Object` |  | Data that will be added to every event based on the type that you define. There is no limitation as this is just a key-value pair send to the server. |
+
+#### Example
+{% tabs basic %}
+{% tab basic browser %}
+```js
+trends('defaultEventData', ['codified'], { lang: 'fr' })
+trends('defaultEventData', [], { plan: 'free' })
+```
+{% endtab %}
+{% tab basic node %}
+```js
+import { defaultEventData } from '@blotoutio/sdk-core'
+
+defaultEventData(['codified'], { lang: 'fr' })
+defaultEventData([], { plan: 'free' })
 ```
 {% endtab %}
 {% endtabs %}

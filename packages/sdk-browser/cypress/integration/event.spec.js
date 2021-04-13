@@ -315,4 +315,31 @@ context('Events', () => {
     cy.get('#send').click()
     cy.wait('@publish').its('response.statusCode').should('eq', 200)
   })
+
+  it('Default event data', () => {
+    // save for all events
+    cy.get('#default-event-data').click()
+    cy.get('#save').click()
+
+    const selectAllKeys = Cypress.platform === 'darwin' ? '{cmd}a' : '{ctrl}a'
+
+    // save data for codified event
+    cy.get('label[for="codified"]').click()
+    cy.get('textarea').type(selectAllKeys).clear()
+    cy.get('textarea').type('{{} "foo": true {}}')
+    cy.get('#save').click()
+
+    // send event
+    cy.get('#event').click()
+    cy.get('#send').click()
+    cy.wait(1000)
+    cy.get('@publish').then((interceptor) => {
+      const event = interceptor.request.body.events[0]
+      assert.deepEqual(event.additionalData, {
+        lang: 'en', // from event
+        plan: 'free', // from all data
+        foo: true, // from codified data
+      })
+    })
+  })
 })

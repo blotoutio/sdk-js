@@ -10,10 +10,13 @@ import { createBasicEvent, createPosition } from './create'
 import type {
   EventData,
   EventOptions,
+  EventType,
   IncomingEvent,
   SendEvent,
 } from '../typings'
 import { isEnabled } from '../common/enabled'
+import { setSessionDataValue } from '../storage'
+import { getSessionKeyForEventType } from '../storage/utils'
 
 export const sendSystemEvent = (
   name: string,
@@ -140,4 +143,26 @@ export const pageView = (previousUrl: string, data?: EventData): void => {
   }
 
   sendEvent([visibilityHidden, sdkStart])
+}
+
+export const setDefaultEventData = (
+  types: EventType[],
+  data: EventData
+): void => {
+  if (!data) {
+    return
+  }
+
+  if (types.length === 0) {
+    setSessionDataValue('dataAll', data)
+    return
+  }
+
+  for (const type of types) {
+    const key = getSessionKeyForEventType(type)
+    if (!key) {
+      continue
+    }
+    setSessionDataValue(key, data)
+  }
 }

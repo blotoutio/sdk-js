@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import CodeEditor from '../editor'
 
 const Personal = () => {
   const [name, setName] = useState('personal-event')
   const [method, setMethod] = useState('normal')
   const [type, setType] = useState('pii')
-  const [data, setData] = useState(JSON.stringify({ lang: 'sl' }))
+  const [data, setData] = useState(JSON.stringify({ lang: 'sl' }, null, 2))
 
   const send = () => {
     let options = null
@@ -29,13 +30,7 @@ const Personal = () => {
           onChange={(event) => setName(event.target.value)}
         />
       </div>
-      <div className='form-line'>
-        <span>Data:</span>
-        <textarea
-          onChange={(event) => setData(event.target.value)}
-          value={data}
-        />
-      </div>
+      <CodeEditor data={data} setData={setData} />
       <div className='form-line'>
         <span>Method:</span>
         <input

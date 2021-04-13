@@ -5,6 +5,7 @@ import {
   mapID as mapIDMethod,
   getUserId as getUIDMethod,
   enable as enableMethod,
+  defaultEventData as defaultEventDataMethod,
 } from '@blotoutio/sdk-core'
 
 /* #if _FEATURES !== 'full'
@@ -42,6 +43,10 @@ class API {
 
   enable(enable) {
     enableMethod(enable)
+  }
+
+  defaultEventData(types, data) {
+    defaultEventDataMethod(types, data)
   }
 }
 
