@@ -5,6 +5,7 @@ import PageView from '../pageView'
 import UserID from '../userID'
 import MapID from '../mapID'
 import Enable from '../enable'
+import DefaultEventData from '../defaultEventData'
 
 const tabs = [
   {
@@ -36,6 +37,11 @@ const tabs = [
     id: 'enable',
     name: 'Enable/Disable',
     component: <Enable />,
+  },
+  {
+    id: 'default-event-data',
+    name: 'Default event data',
+    component: <DefaultEventData />,
   },
 ]
 

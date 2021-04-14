@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+import CodeEditor from '../editor'
 
 const PageView = () => {
   const [url, setUrl] = useState('https://jsdemo.blotout.io/new_page.html')
-  const [data, setData] = useState(JSON.stringify({ lang: 'es' }))
+  const [data, setData] = useState(JSON.stringify({ lang: 'es' }, null, 2))
 
   const send = () => {
     trends('pageView', url, JSON.parse(data))
@@ -18,13 +19,7 @@ const PageView = () => {
           onChange={(event) => setUrl(event.target.value)}
         />
       </div>
-      <div className='form-line'>
-        <span>Data:</span>
-        <textarea
-          onChange={(event) => setData(event.target.value)}
-          value={data}
-        />
-      </div>
+      <CodeEditor data={data} setData={setData} />
       <div className='form-line'>
         <input type='submit' id='send' value='Send' onClick={send} />
       </div>

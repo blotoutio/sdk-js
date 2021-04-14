@@ -31,12 +31,21 @@ interface RequestRetry {
   payload: string
 }
 
+interface Data {
+  [key: string]: unknown
+}
+
 interface SessionData {
   referrer: string
   search: Record<string, string>
   manifest?: Manifest
   retries?: RequestRetry[]
   enabled?: string
+  dataAll?: Data
+  dataSystem?: Data
+  dataCodified?: Data
+  dataPII?: Data
+  dataPHI?: Data
 }
 
 interface Payload {

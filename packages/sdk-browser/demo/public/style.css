@@ -80,7 +80,7 @@ nav a:hover {
   margin-bottom: 20px;
 }
 
-.form-line span {
+.form-line > span {
   width: 140px;
   display: block;
 }
@@ -122,4 +122,12 @@ nav a:hover {
   margin-top: 20px;
   border-radius: 3px;
   cursor: pointer;
+}
+
+.monaco-editor .margin {
+  display: none;
+}
+
+.monaco-editor .monaco-scrollable-element {
+  left: 0 !important;
 }

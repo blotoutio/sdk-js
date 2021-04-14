@@ -1,6 +1,12 @@
 import * as eventUtils from './utils'
 import * as storage from '../storage'
-import { mapID, pageView, sendDevEvent, sendSystemEvent } from './index'
+import {
+  mapID,
+  pageView,
+  sendDevEvent,
+  sendSystemEvent,
+  setDefaultEventData,
+} from './index'
 import type { EventOptions, SendEvent } from '../typings'
 import { setEnable, setInitialised } from '../common/enabled'
 import { getSessionDataKey } from '../storage/key'
@@ -438,5 +444,38 @@ describe('pageView', () => {
       },
     ])
     spySend.mockRestore()
+  })
+})
+
+describe('setDefaultEventData', () => {
+  const data = { data: true }
+  let spySet: jest.SpyInstance<void, [key: keyof SessionData, value: unknown]>
+  beforeEach(() => {
+    spySet = jest.spyOn(storage, 'setSessionDataValue').mockImplementation()
+  })
+
+  afterEach(() => {
+    spySet.mockRestore()
+  })
+
+  it('null data', () => {
+    setDefaultEventData([], null)
+    expect(spySet).toBeCalledTimes(0)
+  })
+
+  it('null key', () => {
+    setDefaultEventData([null], data)
+    expect(spySet).toBeCalledTimes(0)
+  })
+
+  it('all', () => {
+    setDefaultEventData([], data)
+    expect(spySet).toBeCalledWith('dataAll', data)
+  })
+
+  it('multiple', () => {
+    setDefaultEventData(['codified', 'system'], data)
+    expect(spySet).toBeCalledWith('dataCodified', data)
+    expect(spySet).toBeCalledWith('dataSystem', data)
   })
 })

@@ -1,7 +1,7 @@
 import { constants } from '../common/config'
 import { getVariable } from '../common/manifest'
 import { stringToIntSum } from '../common/securityUtil'
-import { getSessionID } from '../storage'
+import { getSessionDataValue, getSessionID } from '../storage'
 import { getPayload } from '../network/payload'
 import { getPublishUrl } from '../network/endPoint'
 import { postRequest } from '../network'
@@ -14,6 +14,7 @@ import type {
   EventType,
   SendEvent,
 } from '../typings'
+import { getSessionKeyForEventType } from '../storage/utils'
 
 const getEventPayload = (event: BasicEvent, type: EventType): EventPayload => {
   return {
@@ -31,6 +32,20 @@ const getEventPayload = (event: BasicEvent, type: EventType): EventPayload => {
       docHeight: document.documentElement.scrollHeight,
       docWidth: document.documentElement.scrollWidth,
     },
+    additionalData: getEventData(type),
+  }
+}
+
+const getEventData = (type: EventType) => {
+  const allData =
+    (getSessionDataValue('dataAll') as Record<string, unknown>) || {}
+  const typeKey = getSessionKeyForEventType(type)
+  const typeData =
+    (getSessionDataValue(typeKey) as Record<string, unknown>) || {}
+
+  return {
+    ...allData,
+    ...typeData,
   }
 }
 
@@ -61,7 +76,10 @@ export const sendEvent = (
     const payload = getEventPayload(event.data, event.type)
 
     if (event.extra) {
-      payload.additionalData = event.extra
+      payload.additionalData = {
+        ...payload.additionalData,
+        ...event.extra,
+      }
     }
 
     eventsPayload.push(payload)

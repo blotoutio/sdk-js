@@ -19,7 +19,7 @@ const setInterval = () => {
 export const addItem = (payload: RequestRetry): void => {
   let data = []
   try {
-    data = JSON.parse(getSessionDataValue('retries') as string) || []
+    data = JSON.parse((getSessionDataValue('retries') as string) || '[]')
   } catch (e) {
     info(e)
   }

@@ -30,17 +30,22 @@ context('General', () => {
     cy.get('#send').click()
   })
 
-  it('enable do not trigger error', () => {
-    cy.get('#enable').click()
-    cy.get('#enable-true').click()
-    cy.get('#enable-false').click()
-  })
-
   it('user id is generated', () => {
     cy.get('#user-id').click()
     cy.get('.events-content').then((element) => {
       const regex = /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}-[0-9]{13}-[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/gm
       assert.isNotNull(regex.exec(element.text()))
     })
+  })
+
+  it('enable do not trigger error', () => {
+    cy.get('#enable').click()
+    cy.get('#enable-true').click()
+    cy.get('#enable-false').click()
+  })
+
+  it('default event data do not trigger error', () => {
+    cy.get('#default-event-data').click()
+    cy.get('#save').click()
   })
 })

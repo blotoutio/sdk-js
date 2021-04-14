@@ -100,6 +100,10 @@ export declare const mapID: (
 ) => void
 export declare const pageView: (previousUrl: string, data?: EventData) => void
 export declare const enable: (enable: boolean) => void
+export declare const defaultEventData: (
+  types: EventType[],
+  data: EventData
+) => void
 export declare const internalUtils: {
   sendEvent: (events: SendEvent[], options?: EventOptions) => void
   getVariable: (key: keyof Manifest) => string | number | boolean
