@@ -18,7 +18,7 @@ import type {
 } from './typings'
 
 export const capture = (
-  event: string,
+  eventName: string,
   data?: EventData,
   options?: EventOptions
 ): void => {
@@ -26,7 +26,7 @@ export const capture = (
     return
   }
 
-  sendDevEvent([{ name: event, data, options }], options)
+  sendDevEvent([{ name: eventName, data, options }], options)
 }
 
 export const init = (preferences: InitPreferences): void => {

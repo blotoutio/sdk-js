@@ -3,6 +3,7 @@ import {
   IncomingEvent,
   internalUtils,
   SendEvent,
+  EventData,
 } from '@blotoutio/sdk-core'
 import { encryptRSA } from './security'
 
@@ -11,10 +12,6 @@ const createPersonalEvent = (
   isPHI: boolean
 ): SendEvent => {
   const basicEvent = internalUtils.createBasicEvent(event)
-  if (!basicEvent) {
-    return null
-  }
-
   const key = isPHI ? 'phiPublicKey' : 'piiPublicKey'
   const publicKey = (internalUtils.getVariable(key) || '').toString()
   const obj = encryptRSA(publicKey, JSON.stringify([event.data]))
@@ -31,18 +28,23 @@ const createPersonalEvent = (
 }
 
 export const capturePersonal = (
-  event: IncomingEvent,
+  eventName: string,
+  data: EventData,
   isPHI?: boolean,
   options?: EventOptions
 ): void => {
-  if (!event) {
+  if (!eventName) {
     return
   }
 
-  const data = createPersonalEvent(event, isPHI)
-  if (!data) {
+  const eventData = createPersonalEvent(
+    { name: eventName, data, options },
+    isPHI
+  )
+
+  if (!eventData) {
     return
   }
 
-  internalUtils.sendEvent([data], options)
+  internalUtils.sendEvent([eventData], options)
 }

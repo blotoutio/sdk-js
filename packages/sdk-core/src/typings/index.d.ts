@@ -81,12 +81,12 @@ interface IncomingEvent {
   url?: string
 }
 
+export declare const init: (preferences: InitPreferences) => void
 export declare const capture: (
-  event: string,
+  eventName: string,
   data?: EventData,
   options?: EventOptions
 ) => void
-export declare const init: (preferences: InitPreferences) => void
 export declare const getUserId: () => string
 export declare const mapID: (
   id: string,

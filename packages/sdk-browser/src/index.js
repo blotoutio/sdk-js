@@ -18,14 +18,14 @@ class API {
     initMethod(preferences)
   }
 
-  capture(event, data, options) {
-    captureMethod(event, data, options)
+  capture(eventName, data, options) {
+    captureMethod(eventName, data, options)
   }
 
   /* #if _FEATURES !== 'full'
   // #else */
-  capturePersonal(event, data, isPHI, options) {
-    capturePersonalMethod({ name: event, data, options }, isPHI, options)
+  capturePersonal(eventName, data, isPHI, options) {
+    capturePersonalMethod(eventName, data, isPHI, options)
   }
   // #endif
 
