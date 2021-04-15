@@ -22,7 +22,7 @@
     "start": "rollup --config --w"
   },
   "engines": {
-    "node": ">=15.0.0"
+    "node": ">=14.0.0"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
