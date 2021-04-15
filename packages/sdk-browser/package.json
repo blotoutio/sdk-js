@@ -22,7 +22,7 @@
     "cypress": "start-server-and-test start http://localhost:9000 'TZ=America/Los_Angeles cypress open'"
   },
   "engines": {
-    "node": ">=15.0.0"
+    "node": ">=14.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.13.10",

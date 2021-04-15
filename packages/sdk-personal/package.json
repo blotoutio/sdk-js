@@ -22,7 +22,7 @@
     "start": "rollup --config --w"
   },
   "engines": {
-    "node": ">=15.0.0"
+    "node": ">=14.0.0"
   },
   "dependencies": {
     "@blotoutio/jsencrypt-no-random-padding": "^2.3.6",
