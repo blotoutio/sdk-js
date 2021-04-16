@@ -1,6 +1,5 @@
 import { getManifestUrl } from '../network/endPoint'
 import { postRequest } from '../network'
-import { getDomain } from './domainUtil'
 import { getSessionDataValue, setSessionDataValue } from '../storage'
 import { info } from './logUtil'
 import type { Manifest } from '../typings'
@@ -99,10 +98,7 @@ export const checkManifest = (): Promise<boolean | string> => {
 
 export const pullManifest = (): Promise<boolean | string> => {
   return new Promise((resolve, reject) => {
-    const payload = JSON.stringify({
-      bundleId: getDomain(),
-    })
-    postRequest(getManifestUrl(), payload)
+    postRequest(getManifestUrl(), '')
       .then((data) => {
         setData(data as ServerManifest)
         resolve(true)

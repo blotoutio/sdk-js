@@ -1,11 +1,10 @@
 import { constants } from '../common/config'
-import { getDomain } from '../common/domainUtil'
 import { getSession } from '../storage'
 import { getSessionDataKey } from '../storage/key'
 import { info } from '../common/logUtil'
 import { UAParser } from 'ua-parser-js'
 import type { EventPayload } from '../typings'
-import { getCreateTimestamp } from '../common/utils'
+import { getCreateTimestamp, getDomain } from '../common/utils'
 
 const getPlatform = (deviceType: string, OS: string) => {
   if (OS === 'iOS') {

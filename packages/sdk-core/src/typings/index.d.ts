@@ -29,7 +29,6 @@ interface EventOptions {
 interface InitPreferences {
   endpointUrl: string
   token: string
-  customDomain?: string
   storageRootKey?: string
 }
 
