@@ -3,7 +3,6 @@ import { setUrl } from '../network/endPoint'
 import { checkManifest, loadManifest } from './manifest'
 import { sendSystemEvent } from '../event'
 import { setUID } from './uidUtil'
-import { setCustomDomain } from './domainUtil'
 import { setRootKey } from '../storage/key'
 import { checkSession, removeLocal } from '../storage'
 import { checkRetry } from '../network/retries'
@@ -15,7 +14,6 @@ import { checkEnabled, setInitialised } from './enabled'
 const setConfiguration = (preferences: InitPreferences) => {
   setUrl(preferences.endpointUrl)
   setClientToken(preferences.token)
-  setCustomDomain(preferences.customDomain)
   setRootKey(preferences.storageRootKey)
 }
 

@@ -1,4 +1,3 @@
-import { getVariable } from '../common/manifest'
 import { getClientToken } from '../common/clientToken'
 import { constants } from '../common/config'
 
@@ -16,10 +15,6 @@ const generateUrl = (path: string) => {
 }
 
 export const getUrl = (): string => {
-  const url = getVariable('endPoint') as string
-  if (url) {
-    return url
-  }
   return endpointUrl
 }
 
@@ -32,8 +27,7 @@ export const setUrl = (url?: string): void => {
 }
 
 export const getPublishUrl = (): string => {
-  const path = getVariable('eventPath') as string
-  return generateUrl(path)
+  return generateUrl('v1/events/publish')
 }
 
 export const getManifestUrl = (): string => {

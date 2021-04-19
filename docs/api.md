@@ -9,7 +9,6 @@ The `init` method is used for initializing SDK. This sets all required configura
 |---|---|---|---|
 | `token` | `String` |  | Application token that you can get in your dashboard. |
 | `endpointUrl` | `String` |  | Url where you will be sending data. |
-| `customDomain` | `String` | Optional | You can define the custom domain so that if you are developing for example on localhost things will be working correctly. `customDomain` equals Bundle ID from the Application tab in your dashboard. |
 | `storageRootKey` | `String` | Optional | Custom storage key that is used as a prefix for all storage keys (session and local storage). Default value is: `_trends`. |
 
 #### Example

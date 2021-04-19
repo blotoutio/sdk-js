@@ -5,7 +5,6 @@ import * as key from '../storage/key'
 import * as eventSystem from '../event/system'
 import * as event from '../event'
 import * as clientToken from './clientToken'
-import * as domainUtil from './domainUtil'
 import * as manifest from './manifest'
 import { setSessionDataValue } from '../storage'
 import { constants } from './config'
@@ -38,7 +37,6 @@ describe('init', () => {
     init({
       token: '3WBQ5E48ND3VTPC',
       endpointUrl: 'https://domain.com/sdk',
-      customDomain: 'domain.com',
       storageRootKey: 'foo',
     })
     expect(spySendSystemEvent).toBeCalledTimes(0)
@@ -49,7 +47,6 @@ describe('init', () => {
     window.sessionStorage.clear()
     const spySetUrl = jest.spyOn(endPoint, 'setUrl')
     const spySetClientToken = jest.spyOn(clientToken, 'setClientToken')
-    const spySetCustomDomain = jest.spyOn(domainUtil, 'setCustomDomain')
     const spySetRootKey = jest.spyOn(key, 'setRootKey')
     const spySendSystemEvent = jest.spyOn(event, 'sendSystemEvent')
     const spyRequiredEvents = jest.spyOn(eventSystem, 'requiredEvents')
@@ -60,20 +57,17 @@ describe('init', () => {
     init({
       token: '3WBQ5E48ND3VTPC',
       endpointUrl: 'https://domain.com/sdk',
-      customDomain: 'domain.com',
       storageRootKey: 'foo',
     })
 
     expect(spySetUrl).toBeCalledWith('https://domain.com/sdk')
     expect(spySetClientToken).toBeCalledWith('3WBQ5E48ND3VTPC')
-    expect(spySetCustomDomain).toBeCalledWith('domain.com')
     expect(spySetRootKey).toBeCalledWith('foo')
     expect(spySendSystemEvent).toBeCalledWith(constants.SDK_START)
     expect(spyRequiredEvents).toBeCalledTimes(1)
 
     spySetUrl.mockRestore()
     spySetClientToken.mockRestore()
-    spySetCustomDomain.mockRestore()
     spySetRootKey.mockRestore()
     spySendSystemEvent.mockRestore()
     spyRequiredEvents.mockRestore()

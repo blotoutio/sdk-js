@@ -68,6 +68,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'unknown',
         osv: '0',
+        osn: '',
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
@@ -91,6 +92,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'unknown',
         osv: '0',
+        osn: '',
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
@@ -116,6 +118,7 @@ describe('getPayload', () => {
         dm: 'ARM Based',
         dmft: 'unknown',
         osv: '4.0.3',
+        osn: 'Android',
         plf: 11,
         sdkv: undefined,
         tz_offset: -0,
@@ -141,6 +144,7 @@ describe('getPayload', () => {
         dm: 'ARM Based',
         dmft: 'unknown',
         osv: '12.2',
+        osn: 'iOS',
         plf: 15,
         sdkv: undefined,
         tz_offset: -0,
@@ -166,6 +170,7 @@ describe('getPayload', () => {
         dm: 'Intel Based',
         dmft: 'Apple',
         osv: '11.1.0',
+        osn: 'Mac OS',
         plf: 27,
         sdkv: undefined,
         tz_offset: -0,
@@ -191,6 +196,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'Microsoft',
         osv: '10',
+        osn: 'Windows',
         plf: 26,
         sdkv: undefined,
         tz_offset: -0,
@@ -216,6 +222,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'Ubuntu',
         osv: 'i686',
+        osn: 'Linux',
         plf: 28,
         sdkv: undefined,
         tz_offset: -0,
@@ -241,6 +248,7 @@ describe('getPayload', () => {
         dm: 'ARM Based',
         dmft: 'unknown',
         osv: '6.1',
+        osn: 'Windows Mobile',
         plf: 16,
         sdkv: undefined,
         tz_offset: -0,
@@ -266,6 +274,7 @@ describe('getPayload', () => {
         dm: 'ARM Based',
         dmft: 'unknown',
         osv: '3.2',
+        osn: 'Android',
         plf: 12,
         sdkv: undefined,
         tz_offset: -0,
@@ -291,6 +300,7 @@ describe('getPayload', () => {
         dm: 'ARM Based',
         dmft: 'unknown',
         osv: '2.1',
+        osn: 'iOS',
         plf: 14,
         sdkv: undefined,
         tz_offset: -0,
@@ -316,6 +326,7 @@ describe('getPayload', () => {
         dm: 'ARM Based',
         dmft: 'unknown',
         osv: '2.1',
+        osn: 'iOS',
         plf: 14,
         sdkv: undefined,
         tz_offset: -0,
@@ -340,6 +351,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'unknown',
         osv: '0',
+        osn: '',
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
@@ -364,6 +376,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'unknown',
         osv: '0',
+        osn: '',
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
@@ -389,6 +402,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'unknown',
         osv: '6.0.1',
+        osn: 'Android',
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
@@ -427,16 +441,6 @@ describe('getPayload', () => {
     spy.mockRestore()
   })
 
-  it('do not set', () => {
-    const spy = jest.spyOn(manifest, 'getVariable').mockImplementation(() => 0)
-    const result = getPayload([])
-    expect(result).toStrictEqual({
-      events: [],
-      meta: { sdkv: undefined, tz_offset: -0, user_id_created: 1580775120000 },
-    })
-    spy.mockRestore()
-  })
-
   it('session data is corrupted', () => {
     const spy = jest
       .spyOn(storage, 'getSession')
@@ -451,6 +455,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'unknown',
         osv: '0',
+        osn: '',
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
@@ -481,6 +486,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'unknown',
         osv: '0',
+        osn: '',
         plf: 70,
         referrer: 'https://domain.com',
         sdkv: undefined,
@@ -510,6 +516,7 @@ describe('getPayload', () => {
         dm: 'AMD Based',
         dmft: 'unknown',
         osv: '0',
+        osn: '',
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,

@@ -29,7 +29,6 @@ interface EventOptions {
 interface InitPreferences {
   endpointUrl: string
   token: string
-  customDomain?: string
   storageRootKey?: string
 }
 
@@ -69,12 +68,9 @@ interface SendEvent {
 }
 
 interface Manifest {
-  deviceInfoGrain: number
-  eventPath: string
   pushSystemEvents: number
   phiPublicKey?: string
   piiPublicKey?: string
-  endPoint?: string
 }
 
 interface IncomingEvent {
