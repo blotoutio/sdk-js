@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { getLocal, setLocal } from '../storage'
 import { getUIDKey } from '../storage/key'
-import { getClientToken } from './clientToken'
 import { setCreateTimestamp } from './utils'
 
 export const generateUUID = (): string => {
@@ -19,17 +18,13 @@ export const generateUUID = (): string => {
 }
 
 const checkUID = () => {
-  const userUUID = getLocal(getUIDKey())
+  let userUUID = getLocal(getUIDKey())
   if (userUUID) {
     return userUUID
   }
 
-  const clientToken = getClientToken()
-  if (!clientToken) {
-    return null
-  }
-
-  setLocal(getUIDKey(), generateUUID())
+  userUUID = generateUUID()
+  setLocal(getUIDKey(), userUUID)
   setCreateTimestamp()
   return userUUID
 }
