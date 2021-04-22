@@ -63,16 +63,12 @@ describe('capturePersonal', () => {
   })
 
   it('null', () => {
-    capturePersonal(null)
+    capturePersonal(null, {})
     expect(spySend).toBeCalledTimes(0)
   })
 
   it('name empty', () => {
-    const event = {
-      name: '',
-      data: {},
-    }
-    capturePersonal(event)
+    capturePersonal('', {})
     expect(spySend).toBeCalledTimes(0)
   })
 
@@ -91,11 +87,7 @@ describe('capturePersonal', () => {
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     })
-    const event = {
-      name: 'custom event',
-      data: {},
-    }
-    capturePersonal(event)
+    capturePersonal('custom event', {})
     expect(spySend).toBeCalledWithSendEvent([
       {
         type: 'pii',
@@ -114,7 +106,7 @@ describe('capturePersonal', () => {
     spyVariable.mockRestore()
   })
 
-  it('keys are null', () => {
+  it('encryption keys are null', () => {
     spyCreate = jest.spyOn(internalUtils, 'createBasicEvent').mockReturnValue({
       evcs: 23814,
       mid:
@@ -123,13 +115,9 @@ describe('capturePersonal', () => {
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     })
-    const event = {
-      name: 'custom event',
-      data: {
-        foo: true,
-      },
-    }
-    capturePersonal(event, false)
+    capturePersonal('custom event', {
+      foo: true,
+    })
     expect(spySend).toBeCalledTimes(0)
     spyCreate.mockRestore()
   })
@@ -149,13 +137,13 @@ describe('capturePersonal', () => {
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     })
-    const event = {
-      name: 'custom event',
-      data: {
+    capturePersonal(
+      'custom event',
+      {
         foo: true,
       },
-    }
-    capturePersonal(event, false)
+      false
+    )
     expect(spySend).toBeCalledWithSendEvent(
       [
         {
@@ -191,14 +179,14 @@ describe('capturePersonal', () => {
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     })
-    const event = {
-      name: 'custom event',
-      data: {
+
+    capturePersonal(
+      'custom event',
+      {
         foo: true,
       },
-    }
-
-    capturePersonal(event, true)
+      true
+    )
     expect(spySend).toBeCalledWithSendEvent(
       [
         {

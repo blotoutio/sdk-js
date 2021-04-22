@@ -1,7 +1,8 @@
-import { EventOptions, IncomingEvent } from '@blotoutio/sdk-core'
+import { EventOptions, EventData } from '@blotoutio/sdk-core'
 
 export declare const capturePersonal: (
-  event: IncomingEvent,
+  eventName: string,
+  data: EventData,
   isPHI?: boolean,
   options?: EventOptions
 ) => void

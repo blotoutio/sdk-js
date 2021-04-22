@@ -75,7 +75,7 @@ Same as the method above (`capture`) `capturePersonal` is used to record develop
 |||||
 |---|---|---|---|
 | `eventName` | `String` |  | Name of the event that you are sending. |
-| `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
+| `additionalData` | `Object` | | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 | `isPHI` | `Boolean` | Optional | Define if data that you are sending is protected health information (PHI). If this is not defined or is set to `false`, data is treated as personally identifiable information (PII).  |
 | `options` | `Object` | Optional | Look at options table for more info. |
 
