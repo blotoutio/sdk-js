@@ -4,7 +4,7 @@ import { getSessionDataKey } from '../storage/key'
 import { info } from '../common/logUtil'
 import { UAParser } from 'ua-parser-js'
 import type { EventPayload } from '../typings'
-import { getCreateTimestamp, getDomain } from '../common/utils'
+import { getCreateTimestamp } from '../common/utils'
 
 const getPlatform = (deviceType: string, OS: string) => {
   if (OS === 'iOS') {
@@ -103,7 +103,6 @@ const getMeta = () => {
     tz_offset: new Date().getTimezoneOffset() * -1,
     user_id_created: getCreateTimestamp(),
     plf: getPlatform(parsedUA.getDevice().type, parsedUA.getOS().name),
-    appn: getDomain(),
     osv: parsedUA.getOS().version || '0',
     appv: parsedUA.getBrowser().version || '0.0.0.0',
     dmft: manufacture,

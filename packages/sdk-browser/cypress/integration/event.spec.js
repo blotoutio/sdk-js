@@ -29,7 +29,6 @@ const compareMeta = (meta) => {
   const expected = {
     tz_offset: -480,
     user_id_created: 1614677171392,
-    appn: 'localhost',
   }
   assert.deepEqual(meta, expected)
 }

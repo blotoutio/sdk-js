@@ -73,7 +73,3 @@ export const getCreateTimestamp = (): number => {
 
   return setCreateTimestamp()
 }
-
-export const getDomain = (): string => {
-  return window.location.hostname
-}
