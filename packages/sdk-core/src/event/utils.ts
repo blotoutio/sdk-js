@@ -1,5 +1,4 @@
 import { constants } from '../common/config'
-import { getVariable } from '../common/manifest'
 import { stringToIntSum } from '../common/securityUtil'
 import { getSessionDataValue, getSessionID } from '../storage'
 import { getPayload } from '../network/payload'
@@ -47,10 +46,6 @@ const getEventData = (type: EventType) => {
     ...allData,
     ...typeData,
   }
-}
-
-export const shouldCollectSystemEvents = (): boolean => {
-  return getVariable('pushSystemEvents') === 1
 }
 
 const generateSubCode = (eventSum: number): number => {

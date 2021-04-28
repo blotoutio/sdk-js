@@ -1,10 +1,9 @@
-import { debounce } from '../../common/utils'
-import { constants } from '../../common/config'
 import { sendSystemEvent } from '../index'
+import { constants } from '../../common/config'
 
 let visible = true
 
-export const pagehide = (window: Window): void => {
+export const pagehide = (): void => {
   const eventName = 'onpagehide' in window ? 'pagehide' : 'unload'
   window.addEventListener(eventName, function (e) {
     // This is fallback for browsers that don't trigger visibilitychange event
@@ -18,17 +17,7 @@ export const pagehide = (window: Window): void => {
   })
 }
 
-export const scroll = (window: Window): void => {
-  const eventName = 'scroll'
-  window.addEventListener(
-    eventName,
-    debounce((event: Event) => {
-      sendSystemEvent(eventName, event)
-    }, constants.SCROLL_INTERVAL)
-  )
-}
-
-export const visibilityChange = (window: Window): void => {
+export const visibilityChange = (): void => {
   const eventName = 'visibilitychange'
   window.addEventListener(eventName, function (e) {
     if (document.visibilityState === 'visible') {

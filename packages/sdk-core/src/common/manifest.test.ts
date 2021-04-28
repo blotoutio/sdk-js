@@ -14,31 +14,27 @@ beforeEach(() => {
 })
 
 describe('getVariable', () => {
-  let spyPost: jest.SpyInstance<
-    Promise<unknown>,
-    [string, string, EventOptions?]
-  >
-  it('from defaults', () => {
-    const result = getVariable('pushSystemEvents')
-    expect(result).toEqual(0)
+  it('no manifest', () => {
+    const result = getVariable('systemEvents')
+    expect(result).toBeNull()
   })
 
   it('from manifest', async () => {
-    spyPost = jest.spyOn(network, 'postRequest').mockImplementation(() =>
+    const spyPost = jest.spyOn(network, 'postRequest').mockImplementation(() =>
       Promise.resolve({
         variables: [
           {
-            variableId: 5023,
-            value: 0,
-            variableDataType: 1,
+            variableId: 5001,
+            value: '11119,11118',
+            variableDataType: 7,
           },
         ],
       })
     )
     await expect(pullManifest()).resolves.toEqual(true)
-    const result = getVariable('pushSystemEvents')
-    expect(result).toEqual(0)
-    spyPost.mockRestore()
+    const result = getVariable('systemEvents')
+    expect(result).toStrictEqual(['11119', '11118'])
+    spyPost.mockReset()
   })
 })
 
@@ -84,12 +80,27 @@ describe('pullManifest', () => {
       Promise.resolve({
         variables: [
           {
-            variableId: 5997,
-            variableDataType: 1,
-          },
-          {
             variableId: 5998,
             value: '323fd',
+            variableDataType: 8,
+          },
+          {
+            variableId: 5001,
+            value: '',
+            variableDataType: 7,
+          },
+        ],
+      })
+    )
+    expect(pullManifest()).resolves.toEqual(true)
+  })
+
+  it('response has variables, variable is wrong', () => {
+    spyPost = jest.spyOn(network, 'postRequest').mockImplementation(() =>
+      Promise.resolve({
+        variables: [
+          {
+            variableId: 5001,
             variableDataType: 7,
           },
         ],
@@ -102,11 +113,6 @@ describe('pullManifest', () => {
     spyPost = jest.spyOn(network, 'postRequest').mockImplementation(() =>
       Promise.resolve({
         variables: [
-          {
-            variableId: 5023,
-            value: 0,
-            variableDataType: 1,
-          },
           {
             variableId: 5997,
             value:

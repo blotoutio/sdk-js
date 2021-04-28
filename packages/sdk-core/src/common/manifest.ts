@@ -6,12 +6,8 @@ import type { Manifest } from '../typings'
 
 let manifest: Manifest = null
 
-const manifestDefaults: Manifest = {
-  pushSystemEvents: 0,
-}
-
 const processData = (serverManifest: ServerVariable[]): Manifest => {
-  const localManifest: Manifest = manifestDefaults
+  const localManifest: Manifest = {}
   Object.entries(manifestVariables).forEach(([key, value]) => {
     const manifestIndex = serverManifest.findIndex(
       (obj) => obj.variableId === value
@@ -27,12 +23,12 @@ const processData = (serverManifest: ServerVariable[]): Manifest => {
 
     let variableValue
     switch (variable.variableDataType) {
-      case 1: {
-        variableValue = parseInt(variable.value)
-        break
-      }
       case 6: {
         variableValue = variable.value
+        break
+      }
+      case 7: {
+        variableValue = (variable.value || '').split(',')
         break
       }
     }
@@ -61,16 +57,17 @@ const setData = (data: ServerManifest) => {
 export const manifestVariables: Record<keyof Manifest, number> = {
   phiPublicKey: 5997,
   piiPublicKey: 5998,
-  pushSystemEvents: 5023,
+  systemEvents: 5001,
 }
 
-export const getVariable = (key: keyof Manifest): string | number | boolean => {
-  let variable
+export const getVariable = (
+  key: keyof Manifest
+): string | string[] | boolean => {
   if (manifest) {
-    variable = manifest[key]
+    return manifest[key]
   }
 
-  return variable !== undefined ? variable : manifestDefaults[key]
+  return null
 }
 
 export const loadManifest = (): boolean => {

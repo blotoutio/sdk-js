@@ -1,70 +1,28 @@
-import * as event from '../index'
-import { offline, online } from './network'
-import * as utils from '../utils'
-import type { EventOptions } from '../../typings'
+import { getIsOnline, offline, online } from './network'
+import * as retries from '../../network/retries'
 
-let spySet: jest.SpyInstance<void, [string, Event?, EventOptions?]>
+describe('getIsOnline', () => {
+  it('default', () => {
+    expect(getIsOnline()).toBeTruthy()
+  })
 
-beforeEach(() => {
-  spySet = jest.spyOn(event, 'sendSystemEvent').mockImplementation()
-})
-
-afterEach(() => {
-  spySet.mockReset()
-})
-
-afterAll(() => {
-  spySet.mockRestore()
-})
-
-describe('offline', () => {
-  it('system disabled', () => {
-    const spySystem = jest
-      .spyOn(utils, 'shouldCollectSystemEvents')
-      .mockImplementation(() => false)
-
-    offline(window)
+  it('offline', () => {
+    offline()
     const event = new Event('offline')
     window.dispatchEvent(event)
-    expect(spySet).toBeCalledTimes(0)
-    spySystem.mockRestore()
+    expect(getIsOnline()).toBeFalsy()
   })
 
-  it('system enabled', () => {
-    const spySystem = jest
-      .spyOn(utils, 'shouldCollectSystemEvents')
-      .mockImplementation(() => true)
-
-    offline(window)
-    const event = new Event('offline')
-    window.dispatchEvent(event)
-    expect(spySet).toBeCalledWith('offline', event)
-    spySystem.mockRestore()
-  })
-})
-
-describe('online', () => {
-  it('system disabled', () => {
-    const spySystem = jest
-      .spyOn(utils, 'shouldCollectSystemEvents')
-      .mockImplementation(() => false)
-
-    online(window)
-    const event = new Event('online')
-    window.dispatchEvent(event)
-    expect(spySet).toBeCalledTimes(0)
-    spySystem.mockRestore()
-  })
-
-  it('system enabled', () => {
-    const spySystem = jest
-      .spyOn(utils, 'shouldCollectSystemEvents')
-      .mockImplementation(() => true)
-
-    online(window)
-    const event = new Event('online')
-    window.dispatchEvent(event)
-    expect(spySet).toBeCalledWith('online', event)
-    spySystem.mockRestore()
+  it('offline and then online', () => {
+    const spy = jest.spyOn(retries, 'checkRetry').mockImplementation()
+    offline()
+    online()
+    const eventOffline = new Event('offline')
+    window.dispatchEvent(eventOffline)
+    const eventOnline = new Event('online')
+    window.dispatchEvent(eventOnline)
+    expect(getIsOnline()).toBeTruthy()
+    expect(spy).toBeCalledTimes(1)
+    spy.mockRestore()
   })
 })
