@@ -17,7 +17,6 @@ interface Meta {
   referrer?: string
   search?: Record<string, string>
   plf?: number
-  appn?: string
   osv?: string
   appv?: string
   dmft?: string

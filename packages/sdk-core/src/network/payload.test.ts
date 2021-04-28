@@ -62,7 +62,6 @@ describe('getPayload', () => {
         },
       ],
       meta: {
-        appn: 'localhost',
         appv: '0.0.0.0',
         bnme: 'unknown',
         dm: 'AMD Based',
@@ -86,7 +85,6 @@ describe('getPayload', () => {
     const result = getPayload()
     expect(result).toStrictEqual({
       meta: {
-        appn: 'localhost',
         appv: '0.0.0.0',
         bnme: 'unknown',
         dm: 'AMD Based',
@@ -112,7 +110,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '4.0',
         bnme: 'Android Browser',
         dm: 'ARM Based',
@@ -138,7 +135,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '12.1',
         bnme: 'Mobile Safari',
         dm: 'ARM Based',
@@ -164,7 +160,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '87.0.4280.101',
         bnme: 'Chrome',
         dm: 'Intel Based',
@@ -190,7 +185,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '87.0.664.47',
         bnme: 'Edge',
         dm: 'AMD Based',
@@ -216,7 +210,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '10.0.648.127',
         bnme: 'Chrome',
         dm: 'AMD Based',
@@ -242,7 +235,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '4.01',
         bnme: 'IE',
         dm: 'ARM Based',
@@ -268,7 +260,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '4.0',
         bnme: 'Android Browser',
         dm: 'ARM Based',
@@ -294,7 +285,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '3.1.1',
         bnme: 'Mobile Safari',
         dm: 'ARM Based',
@@ -320,7 +310,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '3.1.1',
         bnme: 'Mobile Safari',
         dm: 'ARM Based',
@@ -345,7 +334,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '0.0.0.0',
         bnme: 'unknown',
         dm: 'AMD Based',
@@ -370,7 +358,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '0.0.0.0',
         bnme: 'Brave',
         dm: 'AMD Based',
@@ -396,7 +383,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '0.0.0.0',
         bnme: 'unknown',
         dm: 'AMD Based',
@@ -424,7 +410,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '16.0.912.77',
         bnme: 'Chrome',
         dm: 'AMD Based',
@@ -449,7 +434,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '0.0.0.0',
         bnme: 'unknown',
         dm: 'AMD Based',
@@ -480,7 +464,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '0.0.0.0',
         bnme: 'unknown',
         dm: 'AMD Based',
@@ -510,7 +493,6 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [],
       meta: {
-        appn: 'localhost',
         appv: '0.0.0.0',
         bnme: 'unknown',
         dm: 'AMD Based',
