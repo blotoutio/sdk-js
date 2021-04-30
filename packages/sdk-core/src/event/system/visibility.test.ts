@@ -1,5 +1,5 @@
 import * as event from '../index'
-import { pagehide, scroll, visibilityChange } from './window'
+import { pagehide, visibilityChange } from './visibility'
 import type { EventOptions } from '../../typings'
 
 let spy: jest.SpyInstance<void, [string, Event?, EventOptions?]>
@@ -18,7 +18,7 @@ afterAll(() => {
 
 describe('pagehide', () => {
   it('visibility is visible, sent it', () => {
-    pagehide(window)
+    pagehide()
     const event = new Event('pagehide')
     window.dispatchEvent(event)
     expect(spy).toBeCalledWith('visibility_hidden', event, {
@@ -27,7 +27,7 @@ describe('pagehide', () => {
   })
 
   it('visibility is hidden, do not sent', () => {
-    visibilityChange(window)
+    visibilityChange()
 
     // set visibility visible first
     Object.defineProperty(document, 'visibilityState', {
@@ -46,43 +46,25 @@ describe('pagehide', () => {
     window.dispatchEvent(new Event('visibilitychange'))
     expect(spy).toBeCalledTimes(1)
     spy.mockReset()
-    pagehide(window)
+    pagehide()
     window.dispatchEvent(new Event('pagehide'))
     expect(spy).toBeCalledTimes(0)
   })
 
   it('unload fallback', () => {
-    visibilityChange(window)
+    visibilityChange()
     Object.defineProperty(document, 'visibilityState', {
       value: 'visible',
       configurable: true,
     })
     window.dispatchEvent(new Event('visibilitychange'))
     delete window.onpagehide
-    pagehide(window)
+    pagehide()
     const event = new Event('unload')
     window.dispatchEvent(event)
     expect(spy).toBeCalledWith('visibility_hidden', event, {
       method: 'beacon',
     })
-  })
-})
-
-describe('scroll', () => {
-  it('no delay', () => {
-    scroll(window)
-    const event = new Event('scroll')
-    window.dispatchEvent(event)
-    expect(spy).toBeCalledTimes(0)
-  })
-
-  it('with delay', () => {
-    jest.useFakeTimers()
-    scroll(window)
-    const event = new Event('scroll')
-    window.dispatchEvent(event)
-    jest.runAllTimers()
-    expect(spy).toBeCalledWith('scroll', event)
   })
 })
 
@@ -92,8 +74,7 @@ describe('visibilitychange', () => {
       value: 'visible',
       configurable: true,
     })
-    console.log(document.visibilityState)
-    visibilityChange(window)
+    visibilityChange()
     const event = new Event('visibilitychange')
     window.dispatchEvent(event)
     expect(spy).toBeCalledWith('visibility_visible', event)
@@ -104,8 +85,7 @@ describe('visibilitychange', () => {
       value: 'hidden',
       configurable: true,
     })
-    console.log(document.visibilityState)
-    visibilityChange(window)
+    visibilityChange()
     const event = new Event('visibilitychange')
     window.dispatchEvent(event)
     expect(spy).toBeCalledWith('visibility_hidden', event, { method: 'beacon' })
@@ -116,8 +96,7 @@ describe('visibilitychange', () => {
       value: 'prerender',
       configurable: true,
     })
-    console.log(document.visibilityState)
-    visibilityChange(window)
+    visibilityChange()
     const event = new Event('visibilitychange')
     window.dispatchEvent(event)
     expect(spy).toBeCalledTimes(0)

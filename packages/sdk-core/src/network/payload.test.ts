@@ -1,5 +1,4 @@
 import { getPayload } from './payload'
-import * as manifest from '../common/manifest'
 import * as storage from '../storage'
 
 beforeEach(() => {
@@ -398,8 +397,6 @@ describe('getPayload', () => {
   })
 
   it('Unix ', () => {
-    const spy = jest.spyOn(manifest, 'getVariable').mockImplementation(() => 2)
-
     Object.defineProperty(navigator, 'userAgent', {
       value:
         'Mozilla/5.0 (Unix) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7',
@@ -422,8 +419,6 @@ describe('getPayload', () => {
         user_id_created: 1580775120000,
       },
     })
-
-    spy.mockRestore()
   })
 
   it('session data is corrupted', () => {

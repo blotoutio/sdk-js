@@ -1,57 +1,35 @@
-import { dragStart, dragEnd } from './dragdrop'
-import { copy, cut, paste } from './clipboard'
-import { blur, focus } from './focus'
-import { reset, submit } from './form'
-import { keyPressed, keyDown } from './keyboard'
-import { click, doubleClick, contextMenu, hover } from './mouse'
+import { pagehide, visibilityChange } from './visibility'
 import { online, offline } from './network'
-import { print } from './print'
-import { touchEnd } from './touch'
-import { hashChange } from './hash'
-import { pagehide, scroll, visibilityChange } from './window'
-import { error } from './resource'
-import { shouldCollectSystemEvents } from '../utils'
+import { sendSystemEvent } from '../index'
+import { getVariable } from '../../common/manifest'
+import { systemEvents } from './events'
 
-export const optionalEvents = (window: Window): void => {
-  if (!shouldCollectSystemEvents()) {
+export const optionalEvents = (): void => {
+  const manifestEvents = getVariable('systemEvents') as string[]
+  if (!manifestEvents) {
     return
   }
 
-  dragStart(window)
-  dragEnd(window)
+  manifestEvents.forEach((eventCode) => {
+    const systemEvent = systemEvents[eventCode]
+    if (!systemEvent) {
+      return
+    }
 
-  copy(window)
-  cut(window)
-  paste(window)
+    if (systemEvent.operation) {
+      systemEvent.operation()
+      return
+    }
 
-  blur(window)
-  focus(window)
-
-  reset(window)
-  submit(window)
-
-  keyPressed(window)
-  keyDown(window)
-
-  click(window)
-  doubleClick(window)
-  contextMenu(window)
-  hover(window)
-
-  print(window)
-
-  touchEnd(window)
-
-  hashChange(window)
-
-  scroll(window)
-
-  error(window)
+    window.addEventListener(systemEvent.name, (event) => {
+      sendSystemEvent(systemEvent.name, event)
+    })
+  })
 }
 
-export const requiredEvents = (window: Window): void => {
-  pagehide(window)
-  visibilityChange(window)
-  online(window)
-  offline(window)
+export const requiredEvents = (): void => {
+  pagehide()
+  visibilityChange()
+  online()
+  offline()
 }

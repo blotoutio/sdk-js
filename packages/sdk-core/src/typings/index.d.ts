@@ -68,7 +68,7 @@ interface SendEvent {
 }
 
 interface Manifest {
-  pushSystemEvents: number
+  systemEvents?: string[]
   phiPublicKey?: string
   piiPublicKey?: string
 }

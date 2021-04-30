@@ -40,14 +40,14 @@ export const init = (preferences?: InitPreferences): void => {
   }
   setUID()
   sendSystemEvent(constants.SDK_START)
-  requiredEvents(window)
+  requiredEvents()
   if (!manifestLoaded) {
     checkManifest().then(() => {
-      optionalEvents(window)
+      optionalEvents()
       checkRetry()
     })
   } else {
-    optionalEvents(window)
+    optionalEvents()
     checkRetry()
   }
 

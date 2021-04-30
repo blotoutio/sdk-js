@@ -52,6 +52,8 @@ interface Payload {
   events?: EventPayload[]
 }
 
+type SystemEvents = Record<string, { name: string; operation?: () => void }>
+
 interface Navigator {
   brave: unknown
 }

@@ -3,11 +3,9 @@ import {
   getObjectTitle,
   getSelector,
   sendEvent,
-  shouldCollectSystemEvents,
 } from './utils'
 import * as network from '../network'
 import * as endPoint from '../network/endPoint'
-import * as manifest from '../common/manifest'
 import type { EventOptions } from '../typings'
 import { setDefaultEventData } from './index'
 import { getSessionID, setLocal } from '../storage'
@@ -20,18 +18,6 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.useRealTimers()
-})
-
-describe('shouldCollectSystemEvents', () => {
-  it('null', () => {
-    expect(shouldCollectSystemEvents()).toBe(false)
-  })
-
-  it('variable', () => {
-    const spy = jest.spyOn(manifest, 'getVariable').mockImplementation(() => 1)
-    expect(shouldCollectSystemEvents()).toBe(true)
-    spy.mockRestore()
-  })
 })
 
 describe('codeForDevEvent', () => {

@@ -1,4 +1,4 @@
 trends('init', {
-  token: 'YJ9NSY556HG9YSK',
+  token: 'VDHHK82VA3GZ6QY',
   endpointUrl: 'https://stage.blotout.io/sdk',
 })

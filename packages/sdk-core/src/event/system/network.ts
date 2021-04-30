@@ -1,27 +1,19 @@
-import { sendSystemEvent } from '../index'
 import { checkRetry } from '../../network/retries'
-import { shouldCollectSystemEvents } from '../utils'
 
 let isOnline = true
 
-export const offline = (window: Window): void => {
+export const offline = (): void => {
   const eventName = 'offline'
-  window.addEventListener(eventName, function (event) {
+  window.addEventListener(eventName, () => {
     isOnline = false
-    if (shouldCollectSystemEvents()) {
-      sendSystemEvent(eventName, event)
-    }
   })
 }
 
-export const online = (window: Window): void => {
+export const online = (): void => {
   const eventName = 'online'
-  window.addEventListener(eventName, function (event) {
+  window.addEventListener(eventName, () => {
     isOnline = true
     checkRetry()
-    if (shouldCollectSystemEvents()) {
-      sendSystemEvent(eventName, event)
-    }
   })
 }
 
