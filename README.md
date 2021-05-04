@@ -1,5 +1,4 @@
 [![codecov](https://codecov.io/gh/blotoutio/sdk-js/branch/main/graph/badge.svg?token=G7IOCHKWEP)](https://codecov.io/gh/blotoutio/sdk-js)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=blotoutio_sdk-js&metric=alert_status)](https://sonarcloud.io/dashboard?id=blotoutio_sdk-js)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=blotoutio_sdk-js&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=blotoutio_sdk-js)
 
 # Blotout JS SDK
