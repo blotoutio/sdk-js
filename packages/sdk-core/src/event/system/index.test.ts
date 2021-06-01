@@ -20,10 +20,10 @@ describe('optionalEvents', () => {
   it('call', () => {
     const spyVariable = jest
       .spyOn(manifest, 'getVariable')
-      .mockReturnValue(['11119'])
+      .mockReturnValue(['11101'])
     const spySendSystemEvent = jest.spyOn(events, 'sendSystemEvent')
     optionalEvents()
-    const event = new Event('click')
+    const event = new Event('cut')
     window.dispatchEvent(event)
     expect(spySendSystemEvent).toBeCalledTimes(1)
     spyVariable.mockRestore()
