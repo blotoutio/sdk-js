@@ -125,6 +125,7 @@ describe('sendEvent', () => {
           dm: 'Intel Based',
           bnme: 'Chrome',
           osn: 'Mac OS',
+          page_title: '',
         },
         events: [
           {
@@ -223,6 +224,7 @@ describe('sendEvent', () => {
           dm: 'Intel Based',
           bnme: 'Chrome',
           osn: 'Mac OS',
+          page_title: '',
         },
         events: [
           {
