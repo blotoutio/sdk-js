@@ -66,4 +66,11 @@ describe('systemEvents', () => {
     jest.runAllTimers()
     expect(spy).toBeCalledWith('hover', event)
   })
+
+  it('click', () => {
+    systemEvents['11119'].operation()
+    const event = new KeyboardEvent('click')
+    window.dispatchEvent(event)
+    expect(spy).toBeCalledTimes(1)
+  })
 })

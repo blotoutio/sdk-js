@@ -66,6 +66,11 @@ export const systemEvents: SystemEvents = {
   },
   '11119': {
     name: 'click',
+    operation: () => {
+      window.addEventListener('click', (event) => {
+        sendSystemEvent('click', event, { method: 'beacon' })
+      })
+    },
   },
   '11120': {
     name: 'hashchange',
