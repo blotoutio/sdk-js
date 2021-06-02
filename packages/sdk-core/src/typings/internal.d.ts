@@ -23,6 +23,8 @@ interface Meta {
   dm?: string
   bnme?: string
   osn?: string
+  // eslint-disable-next-line camelcase
+  page_title?: string
 }
 
 interface RequestRetry {

@@ -29,6 +29,7 @@ const compareMeta = (meta) => {
   const expected = {
     tz_offset: -480,
     user_id_created: 1614677171392,
+    page_title: 'Blotout - JS SDK',
   }
   assert.deepEqual(meta, expected)
 }

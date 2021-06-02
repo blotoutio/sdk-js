@@ -109,6 +109,7 @@ const getMeta = () => {
     dm: getDeviceModel(parsedUA.getDevice().type),
     bnme: browser,
     osn: OS,
+    page_title: document.title,
   }
 
   if (sessionData) {
