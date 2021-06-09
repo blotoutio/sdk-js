@@ -262,6 +262,7 @@ describe('sendSystemEvent', () => {
               y: -1,
             },
             objectName: 'DIV',
+            objectTitle: 'no',
             position: { height: -1, width: -1, x: -1, y: -1 },
           },
         },
@@ -294,7 +295,6 @@ describe('sendSystemEvent', () => {
           },
           extra: {
             mouse: { x: -1, y: -1 },
-            objectName: 'Unknown',
             position: { height: -1, width: -1, x: -1, y: -1 },
           },
         },

@@ -93,27 +93,39 @@ export const sendEvent = (
 
 export const getSelector = (element?: HTMLElement): string => {
   if (!element) {
-    return 'Unknown'
-  }
-
-  return (
-    element.nodeName +
-    (element.id ? '#' + element.id : '') +
-    (element.className ? '.' + element.className : '')
-  )
-}
-
-export const getObjectTitle = (element: HTMLElement): null | string => {
-  if (!element || !element.localName) {
     return null
   }
 
-  const elmArr = ['a', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+  let className = ''
+  if (element.className) {
+    className = `.${element.className.split(' ').join('.')}`
+  }
 
-  const name = element.localName.toLocaleLowerCase()
-  const elmIndex = elmArr.findIndex((el) => el === name)
-  if (elmIndex !== -1) {
-    return element.innerText
+  let id = ''
+  if (element.id) {
+    id = `#${element.id}`
+  }
+
+  return `${element.nodeName}${id}${className}`
+}
+
+export const getObjectTitle = (
+  element: HTMLElement | HTMLImageElement
+): null | string => {
+  if (!element) {
+    return null
+  }
+
+  if ('alt' in element && element.alt) {
+    return element.alt
+  }
+
+  if (element.title) {
+    return element.title
+  }
+
+  if (element.innerText) {
+    return element.innerText.substring(0, 100)
   }
 
   return null

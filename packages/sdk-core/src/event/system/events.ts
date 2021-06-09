@@ -96,7 +96,7 @@ export const systemEvents: SystemEvents = {
       window.addEventListener('mouseover', (event) => {
         timeout = setTimeout(() => {
           sendSystemEvent('hover', event)
-        }, 1000)
+        }, 2000)
       })
 
       window.addEventListener('mouseout', () => {

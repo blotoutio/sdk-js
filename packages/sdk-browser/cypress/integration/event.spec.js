@@ -36,7 +36,7 @@ const compareMeta = (meta) => {
 const compareBasic = (statusCode, url) => {
   assert.equal(
     url,
-    'https://stage.blotout.io/sdk/v1/events/publish?token=VDHHK82VA3GZ6QY'
+    'https://stage.blotout.io/sdk/v1/events/publish?token=JX2GN9XYDTSWG6U'
   )
   assert.equal(statusCode, 200)
 }

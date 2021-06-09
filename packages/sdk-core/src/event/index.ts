@@ -42,7 +42,10 @@ export const sendSystemEvent = (
       eventObject.extra.objectTitle = title
     }
 
-    eventObject.extra.objectName = getSelector(event.target as HTMLElement)
+    const selector = getSelector(event.target as HTMLElement)
+    if (selector) {
+      eventObject.extra.objectName = selector
+    }
   }
 
   sendEvent([eventObject], options)
