@@ -6,6 +6,7 @@ import UserID from '../userID'
 import MapID from '../mapID'
 import Enable from '../enable'
 import DefaultEventData from '../defaultEventData'
+import SystemEvents from '../systemEvents'
 
 const tabs = [
   {
@@ -42,6 +43,11 @@ const tabs = [
     id: 'default-event-data',
     name: 'Default event data',
     component: <DefaultEventData />,
+  },
+  {
+    id: 'system-event',
+    name: 'System events',
+    component: <SystemEvents />,
   },
 ]
 

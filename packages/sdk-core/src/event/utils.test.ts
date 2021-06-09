@@ -277,7 +277,7 @@ describe('sendEvent', () => {
 
 describe('getSelector', () => {
   it('null', () => {
-    expect(getSelector()).toBe('Unknown')
+    expect(getSelector()).toBeNull()
   })
 
   it('no identifiers', () => {
@@ -296,6 +296,12 @@ describe('getSelector', () => {
     event.setAttribute('class', 'test')
     expect(getSelector(event)).toBe('P.test')
   })
+
+  it('multiple classname', () => {
+    const event = document.createElement('p')
+    event.setAttribute('class', 'test ok')
+    expect(getSelector(event)).toBe('P.test.ok')
+  })
 })
 
 describe('getObjectTitle', () => {
@@ -303,30 +309,39 @@ describe('getObjectTitle', () => {
     expect(getObjectTitle(null)).toBeNull()
   })
 
-  it('null', () => {
-    expect(getObjectTitle(null)).toBeNull()
-  })
-
-  it('local name is missing', () => {
-    const element = document.createElement('div')
-    element.innerText = 'no'
-
-    Object.defineProperty(element, 'localName', {
-      value: null,
-    })
-
+  it('no tags', () => {
+    const element = document.createElement('img')
     expect(getObjectTitle(element)).toBeNull()
   })
 
-  it('h1', () => {
+  it('image with alt', () => {
+    const element = document.createElement('img')
+    element.alt = 'alt text'
+
+    expect(getObjectTitle(element)).toBe('alt text')
+  })
+
+  it('h1 with title', () => {
     const element = document.createElement('h1')
+    element.title = 'hi'
+    expect(getObjectTitle(element)).toBe('hi')
+  })
+
+  it('h1 no title', () => {
+    const element = document.createElement('div')
     element.innerText = 'hi'
     expect(getObjectTitle(element)).toBe('hi')
   })
 
-  it('h1', () => {
+  it('div with a lot of text', () => {
     const element = document.createElement('div')
-    element.innerText = 'hi'
-    expect(getObjectTitle(element)).toBeNull()
+    element.innerText = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the 
+    industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and 
+    scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic 
+    typesetting, remaining essentially unchanged.`
+
+    expect(getObjectTitle(element)).toBe(
+      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the '
+    )
   })
 })
