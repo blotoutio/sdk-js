@@ -1,10 +1,5 @@
 import { getObjectTitle, getSelector, sendEvent } from './utils'
-import {
-  constants,
-  highFreqEvents,
-  isHighFreqEventOff,
-  systemEventCode,
-} from '../common/config'
+import { constants, systemEventCode } from '../common/config'
 import { error } from '../common/logUtil'
 import { createBasicEvent, createPosition } from './create'
 import type {
@@ -23,11 +18,7 @@ export const sendSystemEvent = (
   event?: Event,
   options?: EventOptions
 ): void => {
-  if (
-    !isEnabled() ||
-    !name ||
-    (isHighFreqEventOff && highFreqEvents.includes(name))
-  ) {
+  if (!isEnabled() || !name) {
     return
   }
 

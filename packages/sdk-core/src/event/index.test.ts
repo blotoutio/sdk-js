@@ -145,11 +145,6 @@ describe('sendSystemEvent', () => {
     expect(spySend).toBeCalledTimes(0)
   })
 
-  it('high frequency event', () => {
-    sendSystemEvent('focus')
-    expect(spySend).toBeCalledTimes(0)
-  })
-
   it('no event', () => {
     sendSystemEvent('click')
     expect(spySend).toBeCalledWith(

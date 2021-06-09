@@ -41,12 +41,3 @@ export const systemEventCode: Record<string, number> = {
   visibilityHidden: 11132,
 }
 export const isDevMode = process.env.NODE_ENV === 'development'
-export const isHighFreqEventOff = true
-export const highFreqEvents = [
-  'scroll',
-  'hover',
-  'focus',
-  'blur',
-  'keypress',
-  'touchend',
-]
