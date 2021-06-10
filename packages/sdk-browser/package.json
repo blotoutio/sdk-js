@@ -1,6 +1,6 @@
 {
   "name": "@blotoutio/sdk-browser",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Blotout JS SDK Browser",
   "author": "Blotout",
   "license": "MIT",
@@ -27,8 +27,8 @@
   "devDependencies": {
     "@babel/preset-env": "^7.13.10",
     "@babel/preset-react": "^7.12.13",
-    "@blotoutio/sdk-core": "^0.7.0",
-    "@blotoutio/sdk-personal": "^0.7.0",
+    "@blotoutio/sdk-core": "^0.8.0",
+    "@blotoutio/sdk-personal": "^0.8.0",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
