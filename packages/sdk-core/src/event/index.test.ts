@@ -302,6 +302,66 @@ describe('sendSystemEvent', () => {
       undefined
     )
   })
+
+  it('sdk_start', () => {
+    sendSystemEvent('sdk_start')
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          type: 'system',
+          data: {
+            evcs: 11130,
+            mid:
+              'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'sdk_start',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+      ],
+      undefined
+    )
+  })
+
+  it('visibility_hidden', () => {
+    sendSystemEvent('visibility_hidden')
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          type: 'system',
+          data: {
+            evcs: 11132,
+            mid:
+              'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'visibility_hidden',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+      ],
+      undefined
+    )
+  })
+
+  it('visibility_visible', () => {
+    sendSystemEvent('visibility_visible')
+    expect(spySend).toBeCalledWith(
+      [
+        {
+          type: 'system',
+          data: {
+            evcs: 11131,
+            mid:
+              'dmlzaWJpbGl0eV92aXNpYmxl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'visibility_visible',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+        },
+      ],
+      undefined
+    )
+  })
 })
 
 describe('sendDevEvent', () => {

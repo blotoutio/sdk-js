@@ -122,7 +122,7 @@ export const pageView = (previousUrl: string, data?: EventData): void => {
     data: createBasicEvent({
       name: constants.VISIBILITY_HIDDEN,
       url: previousUrl,
-      code: systemEventCode.visibilityHidden,
+      code: systemEventCode.visibility_hidden,
     }),
     extra: data,
   }
