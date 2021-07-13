@@ -24,10 +24,14 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
+            node_modules
             packages/sdk-browser/node_modules
             packages/sdk-core/node_modules
             packages/sdk-personal/node_modules
-          key: ${{ hashFiles('packages/sdk-browser/package-lock.json') }}-${{ hashFiles('packages/sdk-core/package-lock.json') }}-${{ hashFiles('packages/sdk-personal/package-lock.json') }}
+          key: ${{ hashFiles('package-lock.json') }}-${{ hashFiles('packages/sdk-browser/package-lock.json') }}-${{ hashFiles('packages/sdk-core/package-lock.json') }}-${{ hashFiles('packages/sdk-personal/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Bootstrap lerna
         run: npm run bootstrap
