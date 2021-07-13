@@ -1,7 +1,6 @@
 import * as eventUtils from './utils'
 import * as storage from '../storage'
 import {
-  mapID,
   pageView,
   sendDevEvent,
   sendSystemEvent,
@@ -14,6 +13,7 @@ import { getSessionDataKey } from '../storage/key'
 jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
 window.fetch = require('node-fetch')
+
 beforeAll(() => {
   jest.spyOn(window, 'fetch')
   setInitialised()
@@ -36,80 +36,6 @@ beforeEach(() => {
 afterEach(() => {
   spySession.mockRestore()
   jest.useRealTimers()
-})
-
-describe('mapID', () => {
-  let spySet: jest.SpyInstance<
-    void,
-    [events: SendEvent[], options?: EventOptions]
-  >
-  beforeEach(() => {
-    spySet = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
-  })
-
-  afterEach(() => {
-    spySet.mockRestore()
-  })
-
-  it('SDK is disabled', () => {
-    setEnable(false)
-    mapID('sdfasfasdfds', 'service')
-    expect(spySet).toBeCalledTimes(0)
-  })
-
-  it('id is empty', () => {
-    mapID('', '')
-    expect(spySet).toBeCalledTimes(0)
-  })
-
-  it('provider is empty', () => {
-    mapID('sdfasfasdfds', '')
-    expect(spySet).toBeCalledTimes(0)
-  })
-
-  it('data is not set', () => {
-    mapID('sdfasfasdfds', 'service')
-    expect(spySet).toBeCalledWith(
-      [
-        {
-          type: 'codified',
-          data: {
-            evcs: 21001,
-            mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-            name: 'map_id',
-            tstmp: 1580775120000,
-            urlPath: 'http://localhost/',
-          },
-          extra: { map_id: 'sdfasfasdfds', map_provider: 'service' },
-        },
-      ],
-      undefined
-    )
-  })
-
-  it('with data', () => {
-    mapID('sdfasfasdfds', 'service', { custom: true })
-    expect(spySet).toBeCalledWith(
-      [
-        {
-          type: 'codified',
-          data: {
-            evcs: 21001,
-            mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-            name: 'map_id',
-            tstmp: 1580775120000,
-            urlPath: 'http://localhost/',
-          },
-          extra: {
-            custom: true,
-            map_id: 'sdfasfasdfds',
-            map_provider: 'service',
-          },
-        },
-      ],
-      undefined
-    )
-  })
 })
 
 describe('sendSystemEvent', () => {

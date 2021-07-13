@@ -1,4 +1,4 @@
-# API
+# Basic API's
 
 ## init
 The `init` method is used for initializing SDK. This sets all required configurations and also sends system event `sdk_start` which allows it to record user.
@@ -7,8 +7,8 @@ The `init` method is used for initializing SDK. This sets all required configura
 
 |||||
 |---|---|---|---|
-| `token` | `String` |  | Application token that you can get in your dashboard. |
-| `endpointUrl` | `String` |  | Url where you will be sending data. |
+| `token` | `String` | Required | Application token that you can get in your dashboard. |
+| `endpointUrl` | `String` | Required | Url where you will be sending data. |
 | `storageRootKey` | `String` | Optional | Custom storage key that is used as a prefix for all storage keys (session and local storage). Default value is: `_trends`. |
 
 #### Example
@@ -42,7 +42,7 @@ If you are capturing an event when page navigation is triggered, you should add 
 
 |||||
 |---|---|---|---|
-| `eventName` | `String` |  | Name of the event that you are sending. |
+| `eventName` | `String` | Required | Name of the event that you are sending. |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 | `options` | `Object` | Optional | Look at options table for more info. |
 
@@ -74,8 +74,8 @@ Same as the method above (`capture`) `capturePersonal` is used to record develop
 
 |||||
 |---|---|---|---|
-| `eventName` | `String` |  | Name of the event that you are sending. |
-| `additionalData` | `Object` | | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
+| `eventName` | `String` | Required | Name of the event that you are sending. |
+| `additionalData` | `Object` | Required | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 | `isPHI` | `Boolean` | Optional | Define if data that you are sending is protected health information (PHI). If this is not defined or is set to `false`, data is treated as personally identifiable information (PII).  |
 | `options` | `Object` | Optional | Look at options table for more info. |
 
@@ -106,7 +106,7 @@ When you call this API we will send a request to the server that will contain tw
 
 |||||
 |---|---|---|---|
-| `previousUrl` | `String` |  | Previous page URL that will be sent as part of `visibility_hidden` event. |
+| `previousUrl` | `String` | Required | Previous page URL that will be sent as part of `visibility_hidden` event. |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 
 #### Example
@@ -121,37 +121,6 @@ trends('pageView', 'https://blotout.io')
 import { pageView } from '@blotoutio/sdk-core'
 
 pageView('https://blotout.io')
-```
-{% endtab %}
-{% endtabs %}
-
-
-## mapID
-The `mapID` method allows you to map external services to Blotout ID.
-
-#### Input
-
-|||||
-|---|---|---|---|
-| `externalID` | `String` |  | External ID that you want to link to Blotout ID. |
-| `provider` | `String` |  | Provider that generated external ID, for example `hubspot` |
-| `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
-| `options` | `Object` | Optional | Look at options table for more info. |
-
-#### Example
-{% tabs basic %}
-{% tab basic browser %}
-```js
-trends('mapID', '92j2jr230r-232j9j2342j3-jiji', 'hubspot')
-trends('mapID', '92j2jr230r-232j9j2342j3-jiji', 'hubspot', { language: 'es' })
-```
-{% endtab %}
-{% tab basic node %}
-```js
-import { mapID } from '@blotoutio/sdk-core'
-
-mapID('92j2jr230r-232j9j2342j3-jiji', 'hubspot')
-mapID('92j2jr230r-232j9j2342j3-jiji', 'hubspot', { language: 'es' })
 ```
 {% endtab %}
 {% endtabs %}
@@ -187,7 +156,7 @@ The `enable` method allows you to enable or disable SDK. If you disable SDK, no 
 
 |||||
 |---|---|---|---|
-| `enable` | `Boolean` |  | Define if you want to enable or disable SDK. |
+| `enable` | `Boolean` | Required | Define if you want to enable or disable SDK. |
 
 #### Example
 {% tabs basic %}
@@ -212,8 +181,8 @@ The `defaultEventData` method allows you to set data that will be sent to the se
 
 |||||
 |---|---|---|---|
-| `eventType` | `Array` |  | It's an array of events that you want to assign data to. Options are: `system`, `codified`, `pii`, `phi`. If you pass an empty array, data will be assigned to all events. |
-| `data` | `Object` |  | Data that will be added to every event based on the type that you define. There is no limitation as this is just a key-value pair send to the server. |
+| `eventType` | `Array` | Required | It's an array of events that you want to assign data to. Options are: `system`, `codified`, `pii`, `phi`. If you pass an empty array, data will be assigned to all events. |
+| `data` | `Object` | Required | Data that will be added to every event based on the type that you define. There is no limitation as this is just a key-value pair send to the server. |
 
 #### Example
 {% tabs basic %}
@@ -229,6 +198,31 @@ import { defaultEventData } from '@blotoutio/sdk-core'
 
 defaultEventData(['codified'], { lang: 'fr' })
 defaultEventData([], { plan: 'free' })
+```
+{% endtab %}
+{% endtabs %}
+
+
+## isEnabled
+The `isEnabled` method allows you to check if Blotout SDK is enabled or not.
+
+#### Output
+Returns `boolean`.
+
+#### Example
+{% tabs basic %}
+{% tab basic browser %}
+```js
+const enabled = trends('isEnabled')
+console.log(enabled)
+```
+{% endtab %}
+{% tab basic node %}
+```js
+import { isEnabled } from '@blotoutio/sdk-core'
+
+const enabled = getUserId()
+console.log(enabled)
 ```
 {% endtab %}
 {% endtabs %}

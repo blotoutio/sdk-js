@@ -55,3 +55,10 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: packages/sdk-personal/coverage/coverage-final.json
           flags: sdk-personal
+
+      - name: Coverage sdk-events
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: packages/sdk-events/coverage/coverage-final.json
+          flags: sdk-events

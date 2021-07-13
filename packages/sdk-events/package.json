@@ -1,0 +1,33 @@
+{
+  "name": "@blotoutio/sdk-events",
+  "version": "0.8.1",
+  "description": "Blotout JS SDK Defined Events",
+  "author": "Blotout",
+  "license": "MIT",
+  "homepage": "https://github.com/blotoutio/sdk-js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/blotoutio/sdk-js.git"
+  },
+  "types": "index.d.ts",
+  "main": "index.cjs.js",
+  "module": "index.esm.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "rollup --config",
+    "lint": "npm-run-all lint:*",
+    "lint:eslint": "eslint --max-warnings 0 .",
+    "lint:prettier": "prettier --check .",
+    "test": "jest --runInBand --logHeapUsage",
+    "start": "rollup --config --w"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "@blotoutio/sdk-core": "^0.8.1"
+  },
+  "publishConfig": {
+    "directory": "dist"
+  }
+}

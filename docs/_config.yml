@@ -2,7 +2,8 @@ theme: minima
 
 header_pages:
   - integration.md
-  - api.md
+  - basic_apis.md
+  - defined_events.md
   - system_events.md
   - migration.md
 
