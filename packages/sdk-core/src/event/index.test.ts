@@ -311,8 +311,7 @@ describe('sendSystemEvent', () => {
           type: 'system',
           data: {
             evcs: 11130,
-            mid:
-              'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'sdk_start',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -331,8 +330,7 @@ describe('sendSystemEvent', () => {
           type: 'system',
           data: {
             evcs: 11132,
-            mid:
-              'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'visibility_hidden',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -351,8 +349,7 @@ describe('sendSystemEvent', () => {
           type: 'system',
           data: {
             evcs: 11131,
-            mid:
-              'dmlzaWJpbGl0eV92aXNpYmxl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'dmlzaWJpbGl0eV92aXNpYmxl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'visibility_visible',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -443,8 +440,7 @@ describe('sendDevEvent', () => {
         {
           data: {
             evcs: 23872,
-            mid:
-              'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'custom-event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -455,8 +451,7 @@ describe('sendDevEvent', () => {
         {
           data: {
             evcs: 24004,
-            mid:
-              'bmV3LWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'bmV3LWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'new-event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -479,8 +474,7 @@ describe('pageView', () => {
         type: 'system',
         data: {
           evcs: 11132,
-          mid:
-            'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+          mid: 'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
           name: 'visibility_hidden',
           tstmp: 1580775120000,
           urlPath: 'https://blotout.io/',
@@ -490,8 +484,7 @@ describe('pageView', () => {
         type: 'system',
         data: {
           evcs: 11130,
-          mid:
-            'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+          mid: 'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
           name: 'sdk_start',
           tstmp: 1580775120000,
           urlPath: 'http://localhost/',

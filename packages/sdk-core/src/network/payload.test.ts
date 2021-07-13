@@ -21,8 +21,7 @@ describe('getPayload', () => {
   it('basic', () => {
     const result = getPayload([
       {
-        mid:
-          'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+        mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
         userid:
           '64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84',
         evn: 'sdk_start',
@@ -42,8 +41,7 @@ describe('getPayload', () => {
     expect(result).toStrictEqual({
       events: [
         {
-          mid:
-            'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+          mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           userid:
             '64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84',
           evn: 'sdk_start',
