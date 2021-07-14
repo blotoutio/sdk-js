@@ -6,8 +6,8 @@ box compliant with GDPR, CCPA & COPPA. Blotout’s SDK uses on-device, distribut
 computing for Analytics, Messaging and Remarketing, all without using User Personal Data, Device
 IDs or IP Addresses.
 
-
 ## About Blotout
+
 Blotout increases conversions by letting companies capture every user with a customer data platform deployed in their own cloud.
 
-If you have any questions let us know via [developers@blotout.io](mailto:developers@blotout.io) or [sales@blotout.io](mailto:sales@blotout.io). 
+If you have any questions let us know via [developers@blotout.io](mailto:developers@blotout.io) or [sales@blotout.io](mailto:sales@blotout.io).
