@@ -13,6 +13,8 @@ Read more about how to use our SDK on [documentation pages](https://docs-js.blot
 
 sdk-core: https://www.npmjs.com/package/@blotoutio/sdk-core
 
-sdk-personal: https://www.npmjs.com/package/@blotoutio/sdk-personal
-
 sdk-browser: https://www.npmjs.com/package/@blotoutio/sdk-browser
+
+sdk-events: https://www.npmjs.com/package/@blotoutio/sdk-events
+
+sdk-personal: https://www.npmjs.com/package/@blotoutio/sdk-personal

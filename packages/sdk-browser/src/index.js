@@ -8,7 +8,10 @@ import {
   isEnabled as isEnabledMethod,
 } from '@blotoutio/sdk-core'
 
-import { mapID as mapIDMethod } from '@blotoutio/sdk-events'
+import {
+  mapID as mapIDMethod,
+  transaction as transactionMethod,
+} from '@blotoutio/sdk-events'
 
 /* #if _FEATURES !== 'full'
 // #else */
@@ -35,10 +38,6 @@ class API {
     pageViewMethod(previousUrl, additionalData)
   }
 
-  mapID(mapIDData, additionalData, options) {
-    mapIDMethod(mapIDData, additionalData, options)
-  }
-
   getUserId() {
     return getUIDMethod()
   }
@@ -53,6 +52,17 @@ class API {
 
   isEnabled() {
     return isEnabledMethod()
+  }
+
+  /*
+    Defined events
+   */
+  mapID(mapIDData, additionalData, options) {
+    mapIDMethod(mapIDData, additionalData, options)
+  }
+
+  transaction(transactionData, additionalData, options) {
+    transactionMethod(transactionData, additionalData, options)
   }
 }
 

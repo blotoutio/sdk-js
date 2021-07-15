@@ -1,4 +1,4 @@
-import { mapID } from './index'
+import { mapID, transaction } from './index'
 import * as core from '@blotoutio/sdk-core'
 
 let spySet: jest.SpyInstance<
@@ -13,10 +13,10 @@ beforeEach(() => {
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())
   spyCreate = jest
     .spyOn(core.internalUtils, 'createBasicEvent')
-    .mockImplementation(() => ({
-      evcs: 21001,
+    .mockImplementation((event) => ({
+      evcs: event.code,
       mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-      name: 'map_id',
+      name: event.name,
       tstmp: 1580775120000,
       urlPath: 'http://localhost/',
     }))
@@ -54,6 +54,45 @@ describe('mapID', () => {
             urlPath: 'http://localhost/',
           },
           extra: { map_id: 'sdfasfasdfds', map_provider: 'service' },
+        },
+      ],
+      undefined
+    )
+    spyEnabled.mockReset()
+  })
+})
+
+describe('transaction', () => {
+  it('SDK is disabled', () => {
+    const spyEnabled = jest
+      .spyOn(core, 'isEnabled')
+      .mockImplementation(() => false)
+    transaction({ ID: '123423423' })
+    expect(spySet).toBeCalledTimes(0)
+    spyEnabled.mockReset()
+  })
+
+  it('ok', () => {
+    const spyEnabled = jest
+      .spyOn(core, 'isEnabled')
+      .mockImplementation(() => true)
+    transaction({ ID: '123423423', currency: 'EUR', total: 10.5 })
+    expect(spySet).toBeCalledWith(
+      [
+        {
+          type: 'codified',
+          data: {
+            evcs: 21002,
+            mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'transaction',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: {
+            transaction_id: '123423423',
+            transaction_currency: 'EUR',
+            transaction_total: 10.5,
+          },
         },
       ],
       undefined

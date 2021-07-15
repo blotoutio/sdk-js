@@ -85,15 +85,19 @@ nav a:hover {
   display: block;
 }
 
-.form-line input[type='text'] {
+.form-line input[type='text'],
+.form-line select {
   height: 30px;
   padding: 0 10px;
   width: 300px;
+  box-sizing: border-box;
 }
 
 .form-line textarea {
   width: 300px;
   height: 300px;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .form-line label {

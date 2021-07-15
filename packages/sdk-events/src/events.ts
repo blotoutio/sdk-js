@@ -25,6 +25,42 @@ const getType = (type: EventType): unknown => {
         },
       }
     }
+    case 'transaction': {
+      return {
+        name: constants.TRANSACTION_NAME,
+        code: constants.TRANSACTION_CODE,
+        fields: {
+          ID: {
+            required: true,
+            key: 'transaction_id',
+          },
+          currency: {
+            required: false,
+            key: 'transaction_currency',
+          },
+          payment: {
+            required: false,
+            key: 'transaction_payment',
+          },
+          total: {
+            required: false,
+            key: 'transaction_total',
+          },
+          discount: {
+            required: false,
+            key: 'transaction_discount',
+          },
+          shipping: {
+            required: false,
+            key: 'transaction_shipping',
+          },
+          tax: {
+            required: false,
+            key: 'transaction_tax',
+          },
+        },
+      }
+    }
   }
 }
 

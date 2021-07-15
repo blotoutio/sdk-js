@@ -25,8 +25,8 @@ context('General', () => {
     cy.get('#send').click()
   })
 
-  it('map id event do not trigger error', () => {
-    cy.get('#map-id').click()
+  it('defined event do not trigger error', () => {
+    cy.get('#defined-events').click()
     cy.get('#send').click()
   })
 

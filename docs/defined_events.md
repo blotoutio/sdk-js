@@ -8,7 +8,7 @@ The `mapID` method allows you to map external services to Blotout ID.
 
 |                  |          |          |                                                                                                                                 |
 | ---------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `mapIDData`      | `Object` | Required | See data table.                                                                                                                 |
+| `data`      | `Object` | Required | See data table.                                                                                                                 |
 | `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 | `options`        | `Object` | Optional | Look at options table for more info.                                                                                            |
 
@@ -51,6 +51,60 @@ mapID(
     externalID: '92j2jr230r-232j9j2342j3-jiji',
     provider: 'hubspot',
   },
+  { language: 'es' }
+)
+```
+
+{% endtab %}
+{% endtabs %}
+
+## transaction
+
+The `transaction` method allows you to record tranasctions in your system, like purchase in ecommerce.
+
+#### Input
+
+|                  |          |          |                                                                                                                                 |
+| ---------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `data`      | `Object` | Required | See data table.                                                                                                                 |
+| `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
+| `options`        | `Object` | Optional | Look at options table for more info.                                                                                            |
+
+#### Data
+
+|              |          |          |                                                            |
+| ------------ | -------- | -------- | ---------------------------------------------------------- |
+| `ID` | `String` | Required | Transaction ID.           |
+| `currency`   | `String` | Optional | Currency used for the transaction. Example: `EUR` |
+| `payment`   | `String` | Optional | Payment type used in the transaction. Example: `credit-card` |
+| `total`   | `Double` | Optional | Total amount for the transaction. Example `10.50` |
+| `discount`   | `Double` | Optional | Discount that was applied in the transaction. Example: `2.1` |
+| `shipping`   | `Double` | Optional | Shipping that was charged in the transaction. Example: `5.0` |
+| `tax`   | `Double` | Optional | How much tax was applied in the transaction. Example: `1.21` |
+
+#### Example
+
+{% tabs basic %}
+{% tab basic browser %}
+
+```js
+trends('transaction', { ID: '123423423', currency: 'EUR', total: 10.5 })
+trends(
+  'transaction',
+  { ID: '123423423', currency: 'EUR', total: 10.5 },
+  { language: 'es' }
+)
+```
+
+{% endtab %}
+{% tab basic node %}
+
+```js
+import { transaction } from '@blotoutio/sdk-events'
+
+transaction({ ID: '123423423', currency: 'EUR', total: 10.5 })
+transaction(
+  { ID: '123423423', currency: 'EUR', total: 10.5 },
   { language: 'es' }
 )
 ```
