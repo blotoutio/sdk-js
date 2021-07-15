@@ -1,5 +1,5 @@
-import { mapID as mapIDMethod } from './events'
-import { EventOptions, EventData, isEnabled } from '@blotoutio/sdk-core'
+import { createEvent } from './events'
+import { EventData, EventOptions, isEnabled } from '@blotoutio/sdk-core'
 import { MapIDData } from './typings'
 
 export const mapID = (
@@ -11,5 +11,5 @@ export const mapID = (
     return
   }
 
-  mapIDMethod(mapIDData, data, options)
+  createEvent<MapIDData>('mapID', mapIDData, data, options)
 }

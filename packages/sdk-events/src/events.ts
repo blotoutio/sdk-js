@@ -5,9 +5,30 @@ import {
   SendEvent,
 } from '@blotoutio/sdk-core'
 import { constants } from './constants'
-import { MapIDData } from './typings'
+import { Event, EventType, Field } from './typings'
 
-const createEvent = (
+const getType = (type: EventType): unknown => {
+  switch (type) {
+    case 'mapID': {
+      return {
+        name: constants.MAP_ID_NAME,
+        code: constants.MAP_ID_CODE,
+        fields: {
+          externalID: {
+            required: true,
+            key: 'map_id',
+          },
+          provider: {
+            required: true,
+            key: 'map_provider',
+          },
+        },
+      }
+    }
+  }
+}
+
+const generateEvent = (
   name: string,
   code: number,
   eventData: EventData,
@@ -28,32 +49,56 @@ const createEvent = (
   }
 }
 
-export const mapID = (
-  mapIDData: MapIDData,
+const validateInput = <T>(
+  input: T,
+  event: Event<T>
+): null | Record<string, unknown> => {
+  if (!input) {
+    internalUtils.error(`Data not provided for ${event.name}`)
+    return
+  }
+
+  const data: Record<string, unknown> = {}
+  let error = false
+  Object.entries(event.fields).forEach(([keyString, fieldObject]) => {
+    const key = keyString as keyof T
+    const field = fieldObject as Field
+    if (!input[key]) {
+      if (field.required) {
+        error = true
+        internalUtils.error(`Missing required field ${key} for ${event.name}`)
+      }
+      return
+    }
+
+    data[field.key] = input[key]
+  })
+
+  if (error) {
+    return null
+  }
+
+  return data
+}
+
+export const createEvent = <T>(
+  type: EventType,
+  inputData: T,
   additionalData?: EventData,
   options?: EventOptions
 ): void => {
-  if (!mapIDData || !mapIDData.externalID) {
-    internalUtils.error('ID mapping is missing id')
+  const event = getType(type) as Event<T>
+  const eventData = validateInput<T>(inputData, event)
+  if (!eventData) {
     return
   }
 
-  if (!mapIDData.provider) {
-    internalUtils.error('ID mapping is missing provider')
-    return
-  }
-
-  const eventData = {
-    map_id: mapIDData.externalID,
-    map_provider: mapIDData.provider,
-  }
-
-  const event = createEvent(
-    constants.MAP_ID_EVENT,
-    constants.MAP_ID_EVENT_CODE,
+  const finalEvent = generateEvent(
+    event.name,
+    event.code,
     eventData,
     additionalData
   )
 
-  internalUtils.sendEvent([event], options)
+  internalUtils.sendEvent([finalEvent], options)
 }
