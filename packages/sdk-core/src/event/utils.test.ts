@@ -281,26 +281,34 @@ describe('getSelector', () => {
   })
 
   it('no identifiers', () => {
-    const event = document.createElement('div')
-    expect(getSelector(event)).toBe('DIV')
+    const element = document.createElement('div')
+    expect(getSelector(element)).toBe('DIV')
   })
 
   it('with id', () => {
-    const event = document.createElement('p')
-    event.setAttribute('id', 'test')
-    expect(getSelector(event)).toBe('P#test')
+    const element = document.createElement('p')
+    element.setAttribute('id', 'test')
+    expect(getSelector(element)).toBe('P#test')
   })
 
   it('with classname', () => {
-    const event = document.createElement('p')
-    event.setAttribute('class', 'test')
-    expect(getSelector(event)).toBe('P.test')
+    const element = document.createElement('p')
+    element.setAttribute('class', 'test')
+    expect(getSelector(element)).toBe('P.test')
   })
 
   it('multiple classname', () => {
-    const event = document.createElement('p')
-    event.setAttribute('class', 'test ok')
-    expect(getSelector(event)).toBe('P.test.ok')
+    const element = document.createElement('p')
+    element.setAttribute('class', 'test ok')
+    expect(getSelector(element)).toBe('P.test.ok')
+  })
+
+  it('classname is object', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    const link = document.createElementNS('http://www.w3.org/2000/svg', 'a')
+    link.setAttributeNS(null, 'className', 'geeks')
+    svg.appendChild(link)
+    expect(getSelector(svg)).toBe('svg')
   })
 })
 

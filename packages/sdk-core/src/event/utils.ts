@@ -91,13 +91,13 @@ export const sendEvent = (
   ).catch(info)
 }
 
-export const getSelector = (element?: HTMLElement): string => {
+export const getSelector = (element?: Element): string => {
   if (!element) {
     return null
   }
 
   let className = ''
-  if (element.className) {
+  if (element.className && typeof element.className === 'string') {
     className = `.${element.className.split(' ').join('.')}`
   }
 

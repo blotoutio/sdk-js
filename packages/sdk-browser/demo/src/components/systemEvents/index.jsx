@@ -20,6 +20,11 @@ const SystemEvents = () => {
       <br />
       <br />
       <img src='/favicon.png' alt='favicon ' />
+      <br />
+      <br />
+      <svg width='150' height='150' xmlns='http://www.w3.org/2000/svg'>
+        <circle cx='50' cy='50' r='40' className='circle' />
+      </svg>
     </>
   )
 }
