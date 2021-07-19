@@ -11,6 +11,7 @@ import {
 import {
   mapID as mapIDMethod,
   transaction as transactionMethod,
+  item as itemMethod,
 } from '@blotoutio/sdk-events'
 
 /* #if _FEATURES !== 'full'
@@ -63,6 +64,10 @@ class API {
 
   transaction(transactionData, additionalData, options) {
     transactionMethod(transactionData, additionalData, options)
+  }
+
+  item(itemData, additionalData, options) {
+    itemMethod(itemData, additionalData, options)
   }
 }
 

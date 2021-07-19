@@ -75,4 +75,33 @@ context('Defined Events', () => {
       },
     })
   })
+
+  it('Item', () => {
+    cy.get('#defined-events').click()
+    cy.get('#event-selection').select('item')
+    cy.get('#send').click()
+
+    validateRequest(59, {
+      evn: 'item',
+      evcs: 21003,
+      scrn: 'http://localhost:9000/',
+      evt: 1614677171392,
+      type: 'codified',
+      screen: {
+        width: 1000,
+        height: 1500,
+        docHeight: 1500,
+        docWidth: 1000,
+      },
+      additionalData: {
+        lang: 'de',
+        item_category: ['cars', 'electric'],
+        item_currency: 'EUR',
+        item_id: '123123',
+        item_name: 'EV',
+        item_price: 20.4,
+        item_quantity: 2,
+      },
+    })
+  })
 })

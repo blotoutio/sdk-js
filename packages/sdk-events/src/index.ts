@@ -1,6 +1,6 @@
 import { createEvent } from './events'
 import { EventData, EventOptions, isEnabled } from '@blotoutio/sdk-core'
-import { MapIDData, TransactionData } from './typings'
+import { ItemData, MapIDData, TransactionData } from './typings'
 
 export const mapID = (
   mapIDData: MapIDData,
@@ -24,4 +24,16 @@ export const transaction = (
   }
 
   createEvent<TransactionData>('transaction', transactionData, data, options)
+}
+
+export const item = (
+  itemData: ItemData,
+  data?: EventData,
+  options?: EventOptions
+): void => {
+  if (!isEnabled()) {
+    return
+  }
+
+  createEvent<ItemData>('item', itemData, data, options)
 }

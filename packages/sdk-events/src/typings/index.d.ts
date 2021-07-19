@@ -1,6 +1,6 @@
 import { EventOptions, EventData } from '@blotoutio/sdk-core'
 
-type EventType = 'mapID' | 'transaction'
+type EventType = 'mapID' | 'transaction' | 'item'
 
 interface Field {
   required: boolean
@@ -28,6 +28,16 @@ interface TransactionData {
   tax?: number
 }
 
+interface ItemData {
+  ID: string
+  name?: string
+  SKU?: string
+  category?: string[]
+  price?: number
+  currency?: string
+  quantity?: number
+}
+
 export declare const mapID: (
   mapIDData: MapIDData,
   additionalData?: EventData,
@@ -36,6 +46,12 @@ export declare const mapID: (
 
 export declare const transaction: (
   transactionData: TransactionData,
+  additionalData?: EventData,
+  options?: EventOptions
+) => void
+
+export declare const item: (
+  itemData: ItemData,
   additionalData?: EventData,
   options?: EventOptions
 ) => void

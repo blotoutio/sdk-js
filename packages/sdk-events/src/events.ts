@@ -61,6 +61,42 @@ const getType = (type: EventType): unknown => {
         },
       }
     }
+    case 'item': {
+      return {
+        name: constants.ITEM_NAME,
+        code: constants.ITEM_CODE,
+        fields: {
+          ID: {
+            required: true,
+            key: 'item_id',
+          },
+          name: {
+            required: false,
+            key: 'item_name',
+          },
+          SKU: {
+            required: false,
+            key: 'item_sku',
+          },
+          category: {
+            required: false,
+            key: 'item_category',
+          },
+          price: {
+            required: false,
+            key: 'item_price',
+          },
+          currency: {
+            required: false,
+            key: 'item_currency',
+          },
+          quantity: {
+            required: false,
+            key: 'item_quantity',
+          },
+        },
+      }
+    }
   }
 }
 

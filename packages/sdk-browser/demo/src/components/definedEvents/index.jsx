@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import MapID from './mapID'
 import Transaction from './transaction'
+import Item from './item'
 
 const DefinedEvents = () => {
   const [event, setEvent] = useState('mapID')
@@ -17,6 +18,9 @@ const DefinedEvents = () => {
       case 'transaction': {
         return <Transaction onSend={handleSend} />
       }
+      case 'item': {
+        return <Item onSend={handleSend} />
+      }
     }
   }
 
@@ -31,6 +35,7 @@ const DefinedEvents = () => {
         <select id='event-selection' onChange={handleSelect}>
           <option value='mapID'>mapID</option>
           <option value='transaction'>transaction</option>
+          <option value='item'>item</option>
         </select>
       </div>
       {getEvent()}

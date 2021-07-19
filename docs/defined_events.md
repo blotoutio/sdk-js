@@ -111,3 +111,57 @@ transaction(
 
 {% endtab %}
 {% endtabs %}
+
+## item
+
+The `item` method allows you to record item in your system, like add to cart in ecommerce.
+
+#### Input
+
+|                  |          |          |                                                                                                                                 |
+| ---------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `data`      | `Object` | Required | See data table.                                                                                                                 |
+| `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
+| `options`        | `Object` | Optional | Look at options table for more info.                                                                                            |
+
+#### Data
+
+|              |          |          |                                                            |
+| ------------ | -------- | -------- | ---------------------------------------------------------- |
+| `ID` | `String` | Required | Item ID.           |
+| `name`   | `String` | Optional | Example: `Phone 4` |
+| `SKU`   | `String` | Optional | Example: `SHOP-01` |
+| `category`   | `Array` | Optional | Example `['mobile', 'free-time]` |
+| `currency`   | `String` | Optional | Currency of item price. Example: `EUR` |
+| `price`   | `Double` | Optional | Example: `2.1` |
+| `quantity`   | `Double` | Optional | Example: `3` |
+
+#### Example
+
+{% tabs basic %}
+{% tab basic browser %}
+
+```js
+trends('item', { ID: '123423423', currency: 'EUR', price: 10.5, quantity: 2 })
+trends(
+  'item',
+  { ID: '123423423', currency: 'EUR', price: 10.5, quantity: 2 },
+  { language: 'es' }
+)
+```
+
+{% endtab %}
+{% tab basic node %}
+
+```js
+import { item } from '@blotoutio/sdk-events'
+
+item({ ID: '123423423', currency: 'EUR', price: 10.5, quantity: 2 })
+item(
+  { ID: '123423423', currency: 'EUR', price: 10.5, quantity: 2 },
+  { language: 'es' }
+)
+```
+
+{% endtab %}
+{% endtabs %}
