@@ -165,3 +165,65 @@ item(
 
 {% endtab %}
 {% endtabs %}
+
+## persona
+
+The `persona` method allows you to record persona in your system, like when user signs up or saves user profile.
+
+#### Input
+
+|                  |          |          |                                                                                                                                 |
+| ---------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `data`      | `Object` | Required | See data table.                                                                                                                 |
+| `additionalData` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
+| `options`        | `Object` | Optional | Look at options table for more info.                                                                                            |
+
+#### Data
+
+|              |          |          |                                                            |
+| ------------ | -------- | -------- | ---------------------------------------------------------- |
+| `ID` | `String` | Required | Persona ID.           |
+| `firstname`   | `String` | Optional | Example: `John` |
+| `lastname`   | `String` | Optional | Example: `Smith` |
+| `middlename`   | `String` | Optional | Example `Jack` |
+| `username`   | `String` | Optional | Example: `jsmith` |
+| `dob`   | `String` | Optional | Date of birth. Example: `04/30/2000` |
+| `email`   | `String` | Optional | Example: `john@domain.com` |
+| `number`   | `String` | Optional | Example: `+386 31 777 444` |
+| `address`   | `String` | Optional | Example: `Street 1` |
+| `city`   | `String` | Optional | Example: `San Francisco` |
+| `state`   | `String` | Optional | Example: `CA` |
+| `zip`   | `Double` | Optional | Example: `10000` |
+| `country`   | `String` | Optional | Example: `US` |
+| `gender`   | `String` | Optional | Example: `Female` |
+| `age`   | `Double` | Optional | Example: `22` |
+
+#### Example
+
+{% tabs basic %}
+{% tab basic browser %}
+
+```js
+trends('persona', { ID: '3434343', gender: 'female', age: 22 })
+trends(
+  'persona',
+  { ID: '3434343', gender: 'female', age: 22 },
+  { language: 'es' }
+)
+```
+
+{% endtab %}
+{% tab basic node %}
+
+```js
+import { persona } from '@blotoutio/sdk-events'
+
+persona({ ID: '3434343', gender: 'female', age: 22 })
+persona(
+  { ID: '3434343', gender: 'female', age: 22 },
+  { language: 'es' }
+)
+```
+
+{% endtab %}
+{% endtabs %}

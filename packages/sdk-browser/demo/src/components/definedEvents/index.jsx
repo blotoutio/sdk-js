@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import MapID from './mapID'
 import Transaction from './transaction'
 import Item from './item'
+import Persona from './persona'
 
 const DefinedEvents = () => {
   const [event, setEvent] = useState('mapID')
@@ -21,6 +22,9 @@ const DefinedEvents = () => {
       case 'item': {
         return <Item onSend={handleSend} />
       }
+      case 'persona': {
+        return <Persona onSend={handleSend} />
+      }
     }
   }
 
@@ -36,6 +40,7 @@ const DefinedEvents = () => {
           <option value='mapID'>mapID</option>
           <option value='transaction'>transaction</option>
           <option value='item'>item</option>
+          <option value='persona'>persona</option>
         </select>
       </div>
       {getEvent()}

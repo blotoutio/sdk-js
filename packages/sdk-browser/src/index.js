@@ -12,6 +12,7 @@ import {
   mapID as mapIDMethod,
   transaction as transactionMethod,
   item as itemMethod,
+  persona as personaMethod,
 } from '@blotoutio/sdk-events'
 
 /* #if _FEATURES !== 'full'
@@ -68,6 +69,10 @@ class API {
 
   item(itemData, additionalData, options) {
     itemMethod(itemData, additionalData, options)
+  }
+
+  persona(personaData, additionalData, options) {
+    personaMethod(personaData, additionalData, options)
   }
 }
 

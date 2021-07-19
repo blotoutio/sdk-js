@@ -5,4 +5,6 @@ export const constants = {
   TRANSACTION_CODE: 21002,
   ITEM_NAME: 'item',
   ITEM_CODE: 21003,
+  PERSONA_NAME: 'persona',
+  PERSONA_CODE: 21004,
 }

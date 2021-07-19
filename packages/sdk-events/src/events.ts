@@ -97,6 +97,74 @@ const getType = (type: EventType): unknown => {
         },
       }
     }
+    case 'persona': {
+      return {
+        name: constants.PERSONA_NAME,
+        code: constants.PERSONA_CODE,
+        fields: {
+          ID: {
+            required: true,
+            key: 'persona_id',
+          },
+          firstname: {
+            required: false,
+            key: 'persona_firstname',
+          },
+          lastname: {
+            required: false,
+            key: 'persona_lastname',
+          },
+          middlename: {
+            required: false,
+            key: 'persona_middlename',
+          },
+          username: {
+            required: false,
+            key: 'persona_username',
+          },
+          dob: {
+            required: false,
+            key: 'persona_dob',
+          },
+          email: {
+            required: false,
+            key: 'persona_email',
+          },
+          number: {
+            required: false,
+            key: 'persona_number',
+          },
+          address: {
+            required: false,
+            key: 'persona_address',
+          },
+          city: {
+            required: false,
+            key: 'persona_city',
+          },
+          state: {
+            required: false,
+            key: 'persona_state',
+          },
+          zip: {
+            required: false,
+            key: 'persona_zip',
+          },
+          country: {
+            required: false,
+            key: 'persona_country',
+          },
+          gender: {
+            required: false,
+            key: 'persona_gender',
+          },
+          age: {
+            required: false,
+            key: 'persona_age',
+          },
+        },
+      }
+    }
   }
 }
 

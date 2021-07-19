@@ -104,4 +104,42 @@ context('Defined Events', () => {
       },
     })
   })
+
+  it('Persona', () => {
+    cy.get('#defined-events').click()
+    cy.get('#event-selection').select('persona')
+    cy.get('#send').click()
+
+    validateRequest(63, {
+      evn: 'persona',
+      evcs: 21004,
+      scrn: 'http://localhost:9000/',
+      evt: 1614677171392,
+      type: 'codified',
+      screen: {
+        width: 1000,
+        height: 1500,
+        docHeight: 1500,
+        docWidth: 1000,
+      },
+      additionalData: {
+        lang: 'de',
+        persona_address: 'Street 1',
+        persona_age: 22,
+        persona_city: 'Some City',
+        persona_country: 'US',
+        persona_dob: '4/30/2000',
+        persona_email: 'j@domain.com',
+        persona_firstname: 'John',
+        persona_lastname: 'Smith',
+        persona_middlename: 'Jack',
+        persona_number: '+386 31 777 444',
+        persona_state: 'CA',
+        persona_username: 'jsmith',
+        persona_zip: 10000,
+        persona_id: '312312',
+        persona_gender: 'female',
+      },
+    })
+  })
 })

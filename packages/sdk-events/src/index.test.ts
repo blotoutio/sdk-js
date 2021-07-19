@@ -1,4 +1,4 @@
-import { item, mapID, transaction } from './index'
+import { item, mapID, persona, transaction } from './index'
 import * as core from '@blotoutio/sdk-core'
 
 let spySet: jest.SpyInstance<
@@ -132,6 +132,45 @@ describe('item', () => {
             item_currency: 'EUR',
             item_price: 10.5,
             item_quantity: 2,
+          },
+        },
+      ],
+      undefined
+    )
+    spyEnabled.mockReset()
+  })
+})
+
+describe('persona', () => {
+  it('SDK is disabled', () => {
+    const spyEnabled = jest
+      .spyOn(core, 'isEnabled')
+      .mockImplementation(() => false)
+    persona({ ID: '3434343', gender: 'female', age: 22 })
+    expect(spySet).toBeCalledTimes(0)
+    spyEnabled.mockReset()
+  })
+
+  it('ok', () => {
+    const spyEnabled = jest
+      .spyOn(core, 'isEnabled')
+      .mockImplementation(() => true)
+    persona({ ID: '3434343', gender: 'female', age: 22 })
+    expect(spySet).toBeCalledWith(
+      [
+        {
+          type: 'codified',
+          data: {
+            evcs: 21004,
+            mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            name: 'persona',
+            tstmp: 1580775120000,
+            urlPath: 'http://localhost/',
+          },
+          extra: {
+            persona_id: '3434343',
+            persona_gender: 'female',
+            persona_age: 22,
           },
         },
       ],
