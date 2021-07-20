@@ -1,7 +1,7 @@
 {
-  "name": "@blotoutio/sdk-core",
+  "name": "@blotoutio/sdk-events",
   "version": "0.8.1",
-  "description": "Blotout JS SDK Core",
+  "description": "Blotout JS SDK Defined Events",
   "author": "Blotout",
   "license": "MIT",
   "homepage": "https://github.com/blotoutio/sdk-js",
@@ -25,9 +25,7 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "crypto-js": "^3.1.9-1",
-    "ua-parser-js": "^0.7.23",
-    "uuid": "^8.3.0"
+    "@blotoutio/sdk-core": "^0.8.1"
   },
   "publishConfig": {
     "directory": "dist"

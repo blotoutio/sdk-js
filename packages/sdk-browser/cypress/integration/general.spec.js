@@ -25,15 +25,16 @@ context('General', () => {
     cy.get('#send').click()
   })
 
-  it('map id event do not trigger error', () => {
-    cy.get('#map-id').click()
+  it('defined event do not trigger error', () => {
+    cy.get('#defined-events').click()
     cy.get('#send').click()
   })
 
   it('user id is generated', () => {
     cy.get('#user-id').click()
     cy.get('.events-content').then((element) => {
-      const regex = /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}-[0-9]{13}-[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/gm
+      const regex =
+        /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}-[0-9]{13}-[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/gm
       assert.isNotNull(regex.exec(element.text()))
     })
   })

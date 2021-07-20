@@ -1,6 +1,5 @@
 import { getObjectTitle, getSelector, sendEvent } from './utils'
 import { constants, systemEventCode } from '../common/config'
-import { error } from '../common/logUtil'
 import { createBasicEvent, createPosition } from './create'
 import type {
   EventData,
@@ -78,42 +77,6 @@ export const sendDevEvent = (
   }
 
   sendEvent(devEvents, options)
-}
-
-export const mapID = (
-  id: string,
-  provider: string,
-  data?: EventData,
-  options?: EventOptions
-): void => {
-  if (!id) {
-    error('ID mapping is missing id')
-    return
-  }
-
-  if (!provider) {
-    error('ID mapping is missing provider')
-    return
-  }
-
-  if (!data) {
-    data = {}
-  }
-
-  sendDevEvent(
-    [
-      {
-        name: constants.MAP_ID_EVENT,
-        code: constants.MAP_ID_EVENT_CODE,
-        data: {
-          ...data,
-          map_id: id,
-          map_provider: provider,
-        },
-      },
-    ],
-    options
-  )
 }
 
 export const pageView = (previousUrl: string, data?: EventData): void => {

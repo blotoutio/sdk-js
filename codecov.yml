@@ -13,6 +13,9 @@ status:
     sdk-personal:
       target: 100%
       flags: sdk-personal
+    sdk-events:
+      target: 100%
+      flags: sdk-events
 
 flags:
   sdk-core:
@@ -21,6 +24,9 @@ flags:
   sdk-personal:
     paths:
       - packages/sdk-personal
+  sdk-events:
+    paths:
+      - packages/sdk-events
 
 parsers:
   javascript:

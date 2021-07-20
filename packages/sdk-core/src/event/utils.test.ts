@@ -85,8 +85,7 @@ describe('sendEvent', () => {
         {
           type: 'system',
           data: {
-            mid:
-              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             name: 'sdk_start',
             evcs: 11130,
             urlPath: 'https://blotout.io/',
@@ -96,8 +95,7 @@ describe('sendEvent', () => {
         {
           type: 'codified',
           data: {
-            mid:
-              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             name: 'visibility_hidden',
             evcs: 11132,
             urlPath: 'https://blotout.io/',
@@ -129,8 +127,7 @@ describe('sendEvent', () => {
         },
         events: [
           {
-            mid:
-              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             userid: 'key',
             evn: 'sdk_start',
             evcs: 11130,
@@ -142,8 +139,7 @@ describe('sendEvent', () => {
             additionalData: {},
           },
           {
-            mid:
-              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             userid: 'key',
             evn: 'visibility_hidden',
             evcs: 11132,
@@ -177,8 +173,7 @@ describe('sendEvent', () => {
       {
         type: 'system',
         data: {
-          mid:
-            'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+          mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'sdk_start',
           evcs: 11130,
           urlPath: 'https://blotout.io/',
@@ -188,8 +183,7 @@ describe('sendEvent', () => {
       {
         type: 'codified',
         data: {
-          mid:
-            'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+          mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'test',
           evcs: 21302,
           urlPath: 'https://blotout.io/',
@@ -202,8 +196,7 @@ describe('sendEvent', () => {
       {
         type: 'codified',
         data: {
-          mid:
-            'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+          mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'test',
           evcs: 21302,
           urlPath: 'https://blotout.io/',
@@ -228,8 +221,7 @@ describe('sendEvent', () => {
         },
         events: [
           {
-            mid:
-              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             userid: 'key',
             evn: 'sdk_start',
             evcs: 11130,
@@ -243,8 +235,7 @@ describe('sendEvent', () => {
             },
           },
           {
-            mid:
-              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             userid: 'key',
             evn: 'test',
             evcs: 21302,
@@ -256,8 +247,7 @@ describe('sendEvent', () => {
             additionalData: { foo: true, foo1: true, foo3: true },
           },
           {
-            mid:
-              'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
+            mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             userid: 'key',
             evn: 'test',
             evcs: 21302,

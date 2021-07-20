@@ -2,11 +2,18 @@ import {
   init as initMethod,
   capture as captureMethod,
   pageView as pageViewMethod,
-  mapID as mapIDMethod,
   getUserId as getUIDMethod,
   enable as enableMethod,
   defaultEventData as defaultEventDataMethod,
+  isEnabled as isEnabledMethod,
 } from '@blotoutio/sdk-core'
+
+import {
+  mapID as mapIDMethod,
+  transaction as transactionMethod,
+  item as itemMethod,
+  persona as personaMethod,
+} from '@blotoutio/sdk-events'
 
 /* #if _FEATURES !== 'full'
 // #else */
@@ -18,23 +25,19 @@ class API {
     initMethod(preferences)
   }
 
-  capture(eventName, data, options) {
-    captureMethod(eventName, data, options)
+  capture(eventName, additionalData, options) {
+    captureMethod(eventName, additionalData, options)
   }
 
   /* #if _FEATURES !== 'full'
   // #else */
-  capturePersonal(eventName, data, isPHI, options) {
-    capturePersonalMethod(eventName, data, isPHI, options)
+  capturePersonal(eventName, additionalData, isPHI, options) {
+    capturePersonalMethod(eventName, additionalData, isPHI, options)
   }
   // #endif
 
-  pageView(previousUrl, data) {
-    pageViewMethod(previousUrl, data)
-  }
-
-  mapID(id, provider, data, options) {
-    mapIDMethod(id, provider, data, options)
+  pageView(previousUrl, additionalData) {
+    pageViewMethod(previousUrl, additionalData)
   }
 
   getUserId() {
@@ -45,8 +48,31 @@ class API {
     enableMethod(enable)
   }
 
-  defaultEventData(types, data) {
-    defaultEventDataMethod(types, data)
+  defaultEventData(types, additionalData) {
+    defaultEventDataMethod(types, additionalData)
+  }
+
+  isEnabled() {
+    return isEnabledMethod()
+  }
+
+  /*
+    Defined events
+   */
+  mapID(mapIDData, additionalData, options) {
+    mapIDMethod(mapIDData, additionalData, options)
+  }
+
+  transaction(transactionData, additionalData, options) {
+    transactionMethod(transactionData, additionalData, options)
+  }
+
+  item(itemData, additionalData, options) {
+    itemMethod(itemData, additionalData, options)
+  }
+
+  persona(personaData, additionalData, options) {
+    personaMethod(personaData, additionalData, options)
   }
 }
 

@@ -9,7 +9,7 @@
     "sourceMap": true,
     "declaration": false,
     "skipLibCheck": true,
-    "types": ["node", "jest"],
+    "types": ["node", "jest"]
   },
   "exclude": ["node_modules", "**/*.test.ts"]
 }

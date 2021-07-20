@@ -1,13 +1,19 @@
 import React, { useState } from 'react'
 import CodeEditor from '../editor'
 
-const MapID = () => {
+const MapID = ({ onSend }) => {
   const [id, setId] = useState('234234234')
   const [service, setService] = useState('sass')
   const [data, setData] = useState(JSON.stringify({ lang: 'de' }, null, 2))
 
   const send = () => {
-    trends('mapID', id, service, JSON.parse(data))
+    onSend(
+      {
+        externalID: id,
+        provider: service,
+      },
+      data
+    )
   }
 
   return (

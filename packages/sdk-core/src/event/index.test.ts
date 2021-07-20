@@ -1,7 +1,6 @@
 import * as eventUtils from './utils'
 import * as storage from '../storage'
 import {
-  mapID,
   pageView,
   sendDevEvent,
   sendSystemEvent,
@@ -14,6 +13,7 @@ import { getSessionDataKey } from '../storage/key'
 jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
 window.fetch = require('node-fetch')
+
 beforeAll(() => {
   jest.spyOn(window, 'fetch')
   setInitialised()
@@ -36,80 +36,6 @@ beforeEach(() => {
 afterEach(() => {
   spySession.mockRestore()
   jest.useRealTimers()
-})
-
-describe('mapID', () => {
-  let spySet: jest.SpyInstance<
-    void,
-    [events: SendEvent[], options?: EventOptions]
-  >
-  beforeEach(() => {
-    spySet = jest.spyOn(eventUtils, 'sendEvent').mockImplementation()
-  })
-
-  afterEach(() => {
-    spySet.mockRestore()
-  })
-
-  it('SDK is disabled', () => {
-    setEnable(false)
-    mapID('sdfasfasdfds', 'service')
-    expect(spySet).toBeCalledTimes(0)
-  })
-
-  it('id is empty', () => {
-    mapID('', '')
-    expect(spySet).toBeCalledTimes(0)
-  })
-
-  it('provider is empty', () => {
-    mapID('sdfasfasdfds', '')
-    expect(spySet).toBeCalledTimes(0)
-  })
-
-  it('data is not set', () => {
-    mapID('sdfasfasdfds', 'service')
-    expect(spySet).toBeCalledWith(
-      [
-        {
-          type: 'codified',
-          data: {
-            evcs: 21001,
-            mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-            name: 'map_id',
-            tstmp: 1580775120000,
-            urlPath: 'http://localhost/',
-          },
-          extra: { map_id: 'sdfasfasdfds', map_provider: 'service' },
-        },
-      ],
-      undefined
-    )
-  })
-
-  it('with data', () => {
-    mapID('sdfasfasdfds', 'service', { custom: true })
-    expect(spySet).toBeCalledWith(
-      [
-        {
-          type: 'codified',
-          data: {
-            evcs: 21001,
-            mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
-            name: 'map_id',
-            tstmp: 1580775120000,
-            urlPath: 'http://localhost/',
-          },
-          extra: {
-            custom: true,
-            map_id: 'sdfasfasdfds',
-            map_provider: 'service',
-          },
-        },
-      ],
-      undefined
-    )
-  })
 })
 
 describe('sendSystemEvent', () => {
@@ -311,8 +237,7 @@ describe('sendSystemEvent', () => {
           type: 'system',
           data: {
             evcs: 11130,
-            mid:
-              'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'sdk_start',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -331,8 +256,7 @@ describe('sendSystemEvent', () => {
           type: 'system',
           data: {
             evcs: 11132,
-            mid:
-              'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'visibility_hidden',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -351,8 +275,7 @@ describe('sendSystemEvent', () => {
           type: 'system',
           data: {
             evcs: 11131,
-            mid:
-              'dmlzaWJpbGl0eV92aXNpYmxl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'dmlzaWJpbGl0eV92aXNpYmxl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'visibility_visible',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -443,8 +366,7 @@ describe('sendDevEvent', () => {
         {
           data: {
             evcs: 23872,
-            mid:
-              'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'custom-event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -455,8 +377,7 @@ describe('sendDevEvent', () => {
         {
           data: {
             evcs: 24004,
-            mid:
-              'bmV3LWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+            mid: 'bmV3LWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'new-event',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
@@ -479,8 +400,7 @@ describe('pageView', () => {
         type: 'system',
         data: {
           evcs: 11132,
-          mid:
-            'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+          mid: 'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
           name: 'visibility_hidden',
           tstmp: 1580775120000,
           urlPath: 'https://blotout.io/',
@@ -490,8 +410,7 @@ describe('pageView', () => {
         type: 'system',
         data: {
           evcs: 11130,
-          mid:
-            'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
+          mid: 'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
           name: 'sdk_start',
           tstmp: 1580775120000,
           urlPath: 'http://localhost/',

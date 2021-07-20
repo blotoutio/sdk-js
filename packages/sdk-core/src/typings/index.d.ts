@@ -88,20 +88,16 @@ export declare const capture: (
   options?: EventOptions
 ) => void
 export declare const getUserId: () => string
-export declare const mapID: (
-  id: string,
-  provider: string,
-  data?: EventData,
-  options?: EventOptions
-) => void
 export declare const pageView: (previousUrl: string, data?: EventData) => void
 export declare const enable: (enable: boolean) => void
 export declare const defaultEventData: (
   types: EventType[],
   data: EventData
 ) => void
+export const isEnabled: () => boolean
 export declare const internalUtils: {
   sendEvent: (events: SendEvent[], options?: EventOptions) => void
   getVariable: (key: keyof Manifest) => string | number | boolean
   createBasicEvent: (event: IncomingEvent) => BasicEvent
+  error: (data: string) => void
 }

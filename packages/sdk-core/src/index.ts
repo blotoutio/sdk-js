@@ -1,12 +1,11 @@
 import {
-  mapID as mapIDMethod,
   pageView as pageViewMethod,
   sendDevEvent,
   setDefaultEventData,
 } from './event'
 import { init as initMethod } from './common/init'
 import { getUID } from './common/uidUtil'
-import { isEnabled, setEnable } from './common/enabled'
+import { isEnabled as isEnabledMethod, setEnable } from './common/enabled'
 import { sendEvent } from './event/utils'
 import { getVariable } from './common/manifest'
 import { createBasicEvent } from './event/create'
@@ -16,6 +15,7 @@ import type {
   EventType,
   InitPreferences,
 } from './typings'
+import { error } from './common/logUtil'
 
 export const capture = (
   eventName: string,
@@ -37,19 +37,6 @@ export const getUserId = (): string => {
   return getUID()
 }
 
-export const mapID = (
-  id: string,
-  provider: string,
-  data?: EventData,
-  options?: EventOptions
-): void => {
-  if (!isEnabled()) {
-    return
-  }
-
-  mapIDMethod(id, provider, data, options)
-}
-
 export const pageView = (previousUrl: string, data?: EventData): void => {
   if (!isEnabled()) {
     return
@@ -66,8 +53,13 @@ export const defaultEventData = (types: EventType[], data: EventData): void => {
   setDefaultEventData(types, data)
 }
 
+export const isEnabled = (): boolean => {
+  return isEnabledMethod()
+}
+
 export const internalUtils = {
   sendEvent,
   getVariable,
   createBasicEvent,
+  error,
 }

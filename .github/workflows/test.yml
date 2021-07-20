@@ -26,11 +26,15 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
+            node_modules
             ~/.cache/Cypress
             packages/sdk-browser/node_modules
             packages/sdk-core/node_modules
             packages/sdk-personal/node_modules
-          key: ${{ hashFiles('packages/sdk-browser/package-lock.json') }}-${{ hashFiles('packages/sdk-core/package-lock.json') }}-${{ hashFiles('packages/sdk-personal/package-lock.json') }}
+          key: ${{ hashFiles('package-lock.json') }}-${{ hashFiles('packages/sdk-browser/package-lock.json') }}-${{ hashFiles('packages/sdk-core/package-lock.json') }}-${{ hashFiles('packages/sdk-personal/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Bootstrap lerna
         run: npm run bootstrap
@@ -51,3 +55,10 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: packages/sdk-personal/coverage/coverage-final.json
           flags: sdk-personal
+
+      - name: Coverage sdk-events
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: packages/sdk-events/coverage/coverage-final.json
+          flags: sdk-events

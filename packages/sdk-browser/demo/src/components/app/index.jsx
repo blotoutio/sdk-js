@@ -3,7 +3,7 @@ import Event from '../event'
 import Personal from '../personal'
 import PageView from '../pageView'
 import UserID from '../userID'
-import MapID from '../mapID'
+import DefinedEvents from '../definedEvents'
 import Enable from '../enable'
 import DefaultEventData from '../defaultEventData'
 import SystemEvents from '../systemEvents'
@@ -25,9 +25,9 @@ const tabs = [
     component: <PageView />,
   },
   {
-    id: 'map-id',
-    name: 'Map ID',
-    component: <MapID />,
+    id: 'defined-events',
+    name: 'Defined Events',
+    component: <DefinedEvents />,
   },
   {
     id: 'user-id',

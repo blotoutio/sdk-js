@@ -4,8 +4,6 @@ export const constants = {
   DEFAULT_STORAGE_KEY: 'trends',
   DOM_SUB_TREE_MODIFIED_INTERVAL: 1800000,
   DEVELOPER_EVENT_CUSTOM: 21100,
-  MAP_ID_EVENT: 'map_id',
-  MAP_ID_EVENT_CODE: 21001,
   SCROLL_INTERVAL: 2000,
   MANIFEST_PATH: 'v1/manifest/pull',
   SDK_START: 'sdk_start',
