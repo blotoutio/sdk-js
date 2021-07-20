@@ -1,6 +1,6 @@
 {
   "name": "@blotoutio/sdk-personal",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "Blotout JS SDK Personal",
   "author": "Blotout",
   "license": "MIT",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@blotoutio/jsencrypt-no-random-padding": "^2.3.6",
-    "@blotoutio/sdk-core": "^0.8.1",
+    "@blotoutio/sdk-core": "^0.9.0",
     "crypto-js": "^3.1.9-1",
     "uuid": "^8.3.2"
   },
