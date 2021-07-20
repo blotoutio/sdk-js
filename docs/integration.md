@@ -79,9 +79,11 @@ Non-minified version
 
 {% endtab %}
 {% tab basic node %}
-**Basic** (system events + codified api + ID mapping): `npm i @blotoutio/sdk-core`
+**Basic** (system events + codified api): `npm i @blotoutio/sdk-core`
 
-**Full** (basic + PII and PHI support): `npm i @blotoutio/sdk-core @blotoutio/sdk-personal`
+**Defined events**: `npm i @blotoutio/sdk-events`
+
+**Full** (PII and PHI support): `npm i @blotoutio/sdk-personal`
 {% endtab %}
 {% endtabs %}
 
