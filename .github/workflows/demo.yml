@@ -33,6 +33,7 @@ jobs:
           key: ${{ hashFiles('package-lock.json') }}-${{ hashFiles('packages/sdk-browser/package-lock.json') }}-${{ hashFiles('packages/sdk-core/package-lock.json') }}-${{ hashFiles('packages/sdk-personal/package-lock.json') }}
 
       - name: Install dependencies
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Bootstrap lerna
