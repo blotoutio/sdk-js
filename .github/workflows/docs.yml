@@ -28,14 +28,14 @@ jobs:
         run: bundle config set --local path 'vendor/bundle'
 
       - name: Cache vendor
-        id: cache
+        id: cache-modules
         uses: actions/cache@v2
         with:
           path: docs/vendor
           key: docs-ruby2.6-${{ hashFiles('docs/Gemfile.lock') }}
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: bundle install
 
       - name: Build
