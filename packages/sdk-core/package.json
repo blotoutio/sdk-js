@@ -13,7 +13,7 @@
   "main": "index.cjs.js",
   "module": "index.esm.js",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "build": "rollup --config",
     "lint": "npm-run-all lint:*",
     "lint:eslint": "eslint --max-warnings 0 .",
@@ -25,6 +25,7 @@
     "node": ">=12.0.0"
   },
   "publishConfig": {
+    "access": "public",
     "directory": "dist"
   }
 }

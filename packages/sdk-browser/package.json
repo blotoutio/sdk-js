@@ -13,7 +13,7 @@
   "browser": "index.min.js",
   "unpkg": "index.min.js",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "build": "rollup --config",
     "build:web": "rollup --config --configDev",
     "start": "rollup --config -w",
@@ -28,5 +28,9 @@
     "@blotoutio/sdk-core": "^0.9.1",
     "@blotoutio/sdk-personal": "^0.9.1",
     "@blotoutio/sdk-events": "^0.9.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
   }
 }
