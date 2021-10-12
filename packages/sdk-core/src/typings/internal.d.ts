@@ -15,7 +15,7 @@ interface Meta {
   // eslint-disable-next-line camelcase
   user_id_created?: number
   referrer?: string
-  search?: Record<string, string>
+  search?: string
   plf?: number
   osv?: string
   appv?: string
@@ -38,7 +38,7 @@ interface Data {
 
 interface SessionData {
   referrer: string
-  search: Record<string, string>
+  search: string
   manifest?: Manifest
   retries?: RequestRetry[]
   enabled?: string

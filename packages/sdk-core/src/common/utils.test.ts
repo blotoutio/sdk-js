@@ -117,6 +117,25 @@ describe('getSearchParams', () => {
     expect(getSearchParams()).toBeNull()
   })
 
+  it('with # seperator', () => {
+    const windowSpy = jest.spyOn(global, 'window', 'get')
+    const originalWindow = { ...window }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    windowSpy.mockImplementation(() => ({
+      ...originalWindow,
+      location: {
+        ...originalWindow.location,
+        search: '?key1=value1#key2=value2#key3=value3',
+      },
+    }))
+
+    expect(getSearchParams()).toStrictEqual(
+      '?key1=value1#key2=value2#key3=value3'
+    )
+    windowSpy.mockRestore()
+  })
+
   it('ok', () => {
     const windowSpy = jest.spyOn(global, 'window', 'get')
     const originalWindow = { ...window }
@@ -126,15 +145,13 @@ describe('getSearchParams', () => {
       ...originalWindow,
       location: {
         ...originalWindow.location,
-        search: '?key1=value1&key2=value2&key3=1',
+        search: '?key1=value1&key2=value2&key3=value3',
       },
     }))
 
-    expect(getSearchParams()).toStrictEqual({
-      key1: 'value1',
-      key2: 'value2',
-      key3: '1',
-    })
+    expect(getSearchParams()).toStrictEqual(
+      '?key1=value1&key2=value2&key3=value3'
+    )
     windowSpy.mockRestore()
   })
 })
