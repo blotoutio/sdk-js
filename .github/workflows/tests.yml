@@ -32,10 +32,9 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            packages/sdk-browser/node_modules
             packages/sdk-core/node_modules
             packages/sdk-personal/node_modules
-          key: ${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('packages/sdk-browser/package-lock.json') }}-${{ hashFiles('packages/sdk-core/package-lock.json') }}-${{ hashFiles('packages/sdk-personal/package-lock.json') }}
+          key: ${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('packages/sdk-core/package-lock.json') }}-${{ hashFiles('packages/sdk-personal/package-lock.json') }}
 
       - name: Install dependencies
         run: npm ci

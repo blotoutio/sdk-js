@@ -44,19 +44,13 @@ export const getReferrer = (): null | string => {
   return referer
 }
 
-export const getSearchParams = (): Record<string, string> => {
+export const getSearchParams = (): string => {
   const search = window.location.search
   if (!search) {
     return null
   }
 
-  const result: Record<string, string> = {}
-  const params = new URLSearchParams(window.location.search)
-  params.forEach((value: string, key: string) => {
-    result[key] = value
-  })
-
-  return result
+  return search
 }
 
 export const setCreateTimestamp = (): number => {

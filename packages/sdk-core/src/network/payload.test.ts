@@ -464,9 +464,7 @@ describe('getPayload', () => {
       .mockImplementation(() =>
         JSON.stringify({
           referrer: 'https://domain.com',
-          search: {
-            key: true,
-          },
+          search: '?key=value',
         })
       )
     const result = getPayload([])
@@ -483,7 +481,7 @@ describe('getPayload', () => {
         plf: 70,
         referrer: 'https://domain.com',
         sdkv: undefined,
-        search: { key: true },
+        search: '?key=value',
         tz_offset: -0,
         user_id_created: 1580775120000,
       },
