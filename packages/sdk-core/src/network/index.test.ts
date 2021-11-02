@@ -1,6 +1,6 @@
 import { postRequest } from './index'
 
-window.fetch = require('node-fetch')
+window.fetch = require('cross-fetch')
 beforeAll(() => jest.spyOn(window, 'fetch'))
 
 describe('postRequest', () => {
