@@ -10,9 +10,6 @@ import { setSessionDataValue } from '../storage'
 import { constants } from './config'
 import { setEnable } from './enabled'
 
-window.fetch = require('node-fetch')
-beforeAll(() => jest.spyOn(window, 'fetch'))
-
 beforeEach(() => {
   jest.useFakeTimers('modern')
   jest.setSystemTime(new Date('04 Feb 2020 00:12:00 GMT').getTime())

@@ -10,4 +10,5 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   collectCoverage: true,
+  testEnvironment: 'jsdom',
 }

@@ -12,10 +12,7 @@ import { getSessionDataKey } from '../storage/key'
 
 jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
 
-window.fetch = require('node-fetch')
-
 beforeAll(() => {
-  jest.spyOn(window, 'fetch')
   setInitialised()
 })
 
