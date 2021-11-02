@@ -5,7 +5,7 @@ import { getPayload } from '../network/payload'
 import { getPublishUrl } from '../network/endPoint'
 import { postRequest } from '../network'
 import { info } from '../common/logUtil'
-import { getUID } from '../common/uidUtil'
+import { getUIDFromLocal } from '../common/uidUtil'
 import type {
   BasicEvent,
   EventOptions,
@@ -16,9 +16,8 @@ import type {
 import { getSessionKeyForEventType } from '../storage/utils'
 
 const getEventPayload = (event: BasicEvent, type: EventType): EventPayload => {
-  return {
+  const payload: EventPayload = {
     mid: event.mid,
-    userid: getUID(),
     evn: event.name,
     evcs: event.evcs,
     scrn: event.urlPath,
@@ -33,6 +32,13 @@ const getEventPayload = (event: BasicEvent, type: EventType): EventPayload => {
     },
     additionalData: getEventData(type),
   }
+
+  const localID = getUIDFromLocal()
+  if (localID) {
+    payload.userid = localID
+  }
+
+  return payload
 }
 
 const getEventData = (type: EventType) => {

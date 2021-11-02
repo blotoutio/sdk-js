@@ -1,38 +1,33 @@
-import { v4 as uuidv4 } from 'uuid'
-import { getLocal, setLocal } from '../storage'
+import { getLocal } from '../storage'
 import { getUIDKey } from '../storage/key'
-import { setCreateTimestamp } from './utils'
 
-export const generateUUID = (): string => {
-  let time = Date.now()
-  if (
-    typeof performance !== 'undefined' &&
-    typeof performance.now === 'function'
-  ) {
-    time += performance.now()
+export const getUIDFromCookie = (): string => {
+  const cookie = document.cookie
+  if (!cookie) {
+    return ''
   }
 
-  time = parseInt(time.toString(), 10)
+  const cookies = cookie.split('; ')
 
-  return `${uuidv4()}-${time}-${uuidv4()}`
+  for (const item of cookies) {
+    if (!item) {
+      continue
+    }
+
+    const [key, value] = item.split('=', 2)
+    if (key === '_trends_user_id') {
+      return value
+    }
+  }
+
+  return ''
 }
 
-const checkUID = () => {
-  let userUUID = getLocal(getUIDKey())
-  if (userUUID) {
-    return userUUID
+export const getUIDFromLocal = (): string => {
+  const userUUID = getLocal(getUIDKey())
+  if (!userUUID) {
+    return ''
   }
 
-  userUUID = generateUUID()
-  setLocal(getUIDKey(), userUUID)
-  setCreateTimestamp()
   return userUUID
-}
-
-export const setUID = (): void => {
-  checkUID()
-}
-
-export const getUID = (): string => {
-  return checkUID()
 }

@@ -28,7 +28,6 @@ export const compareMeta = (meta) => {
 
   const expected = {
     tz_offset: -480,
-    user_id_created: 1614677171392,
     page_title: 'Blotout - JS SDK',
   }
   assert.deepEqual(meta, expected)
@@ -52,9 +51,6 @@ export const validateRequest = (midLength, expectedPayload) => {
 
     expect(event.mid).to.have.lengthOf(midLength)
     delete event.mid
-
-    expect(event.userid).to.have.lengthOf(87)
-    delete event.userid
 
     expect(event.session_id).to.have.lengthOf(13)
     delete event.session_id

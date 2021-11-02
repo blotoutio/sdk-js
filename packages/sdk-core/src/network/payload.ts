@@ -101,7 +101,6 @@ const getMeta = () => {
   const meta: Meta = {
     sdkv: process.env.PACKAGE_VERSION,
     tz_offset: new Date().getTimezoneOffset() * -1,
-    user_id_created: getCreateTimestamp(),
     plf: getPlatform(parsedUA.getDevice().type, parsedUA.getOS().name),
     osv: parsedUA.getOS().version || '0',
     appv: parsedUA.getBrowser().version || '0.0.0.0',
@@ -110,6 +109,11 @@ const getMeta = () => {
     bnme: browser,
     osn: OS,
     page_title: document.title,
+  }
+
+  const createdUser = getCreateTimestamp()
+  if (createdUser) {
+    meta.user_id_created = createdUser
   }
 
   if (sessionData) {

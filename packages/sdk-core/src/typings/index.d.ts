@@ -44,7 +44,7 @@ type EventType = 'system' | 'codified' | 'pii' | 'phi'
 
 interface EventPayload {
   mid: string
-  userid: string
+  userid?: string
   evn: string
   evcs: number
   scrn: string
