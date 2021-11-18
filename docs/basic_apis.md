@@ -274,6 +274,37 @@ console.log(enabled)
 {% endtab %}
 {% endtabs %}
 
+## logging
+
+The `logging` method allows you to enable logs, so that if there are any problems you can debug them.
+
+#### Input
+
+|          |           |          |                                              |
+| -------- | --------- | -------- | -------------------------------------------- |
+| `enable` | `Boolean` | Required | Define if you want to enable or disable logging. |   
+
+#### Example
+
+{% tabs basic %}
+{% tab basic browser %}
+
+```js
+trends('logging', true)
+```
+
+{% endtab %}
+{% tab basic node %}
+
+```js
+import { logging } from '@blotoutio/sdk-core'
+
+logging(true)
+```
+
+{% endtab %}
+{% endtabs %}
+
 ## Appendix
 
 **Options**

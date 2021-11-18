@@ -4,7 +4,7 @@ import Personal from '../personal'
 import PageView from '../pageView'
 import UserID from '../userID'
 import DefinedEvents from '../definedEvents'
-import Enable from '../enable'
+import Settings from '../settings'
 import DefaultEventData from '../defaultEventData'
 import SystemEvents from '../systemEvents'
 
@@ -35,9 +35,9 @@ const tabs = [
     component: <UserID />,
   },
   {
-    id: 'enable',
-    name: 'Enable/Disable',
-    component: <Enable />,
+    id: 'settings',
+    name: 'Settings',
+    component: <Settings />,
   },
   {
     id: 'default-event-data',

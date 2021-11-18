@@ -6,6 +6,7 @@ import {
   enable as enableMethod,
   defaultEventData as defaultEventDataMethod,
   isEnabled as isEnabledMethod,
+  logging as loggingMethod,
 } from '@blotoutio/sdk-core'
 
 import {
@@ -54,6 +55,10 @@ class API {
 
   isEnabled() {
     return isEnabledMethod()
+  }
+
+  logging(enable) {
+    loggingMethod(enable)
   }
 
   /*

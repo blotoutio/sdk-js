@@ -38,4 +38,3 @@ export const systemEventCode: Record<string, number> = {
   visibility_visible: 11131,
   visibility_hidden: 11132,
 }
-export const isDevMode = process.env.NODE_ENV === 'development'

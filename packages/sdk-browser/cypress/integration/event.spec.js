@@ -195,7 +195,7 @@ context('Events', () => {
       currentPublish = interceptor.id
     })
     // Disabled
-    cy.get('#enable').click()
+    cy.get('#settings').click()
     cy.get('#enable-false').click()
     cy.get('#event').click()
     cy.get('#send').click()
@@ -205,7 +205,7 @@ context('Events', () => {
     })
 
     // Enabled
-    cy.get('#enable').click()
+    cy.get('#settings').click()
     cy.get('#enable-true').click()
     cy.get('#event').click()
     cy.get('#send').click()
