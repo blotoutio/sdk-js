@@ -45,9 +45,10 @@ describe('sendEvent', () => {
   })
 
   it('with events', () => {
+    const ua =
+      '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36'
     Object.defineProperty(navigator, 'userAgent', {
-      value:
-        '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+      value: ua,
     })
     sendEvent(
       [
@@ -82,13 +83,7 @@ describe('sendEvent', () => {
       JSON.stringify({
         meta: {
           tz_offset: 0,
-          plf: 27,
-          osv: '11.1.0',
-          appv: '87.0.4280.101',
-          dmft: 'Apple',
-          dm: 'Intel Based',
-          bnme: 'Chrome',
-          osn: 'Mac OS',
+          user_agent: ua,
           page_title: '',
         },
         events: [
@@ -122,12 +117,12 @@ describe('sendEvent', () => {
     )
   })
 
-  it('default data, with local data', () => {
+  it('default data', () => {
+    const ua =
+      '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36'
     Object.defineProperty(navigator, 'userAgent', {
-      value:
-        '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+      value: ua,
     })
-    setLocal(getCreatedKey(), '1580775120000')
     setLocal(getUIDKey(), 'key')
     getSessionID()
     setDefaultEventData([], { foo: true })
@@ -169,15 +164,8 @@ describe('sendEvent', () => {
       JSON.stringify({
         meta: {
           tz_offset: 0,
-          plf: 27,
-          osv: '11.1.0',
-          appv: '87.0.4280.101',
-          dmft: 'Apple',
-          dm: 'Intel Based',
-          bnme: 'Chrome',
-          osn: 'Mac OS',
+          user_agent: ua,
           page_title: '',
-          user_id_created: 1580775120000,
         },
         events: [
           {

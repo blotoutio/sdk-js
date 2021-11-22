@@ -1,5 +1,5 @@
 import { getObjectTitle, getSelector, sendEvent } from './utils'
-import { constants, systemEventCode } from '../common/config'
+import { constants } from '../common/config'
 import { createBasicEvent, createPosition } from './create'
 import type {
   EventData,

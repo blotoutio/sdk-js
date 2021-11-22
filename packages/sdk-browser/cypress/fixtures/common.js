@@ -5,30 +5,11 @@ export const compareMeta = (meta) => {
   expect(meta.sdkv).to.have.lengthOf(5)
   delete meta.sdkv
 
-  expect(meta).to.have.ownProperty('appv')
-  delete meta.appv
-
-  expect(meta).to.have.ownProperty('osv')
-  delete meta.osv
-
-  expect(meta).to.have.ownProperty('dmft')
-  delete meta.dmft
-
-  expect(meta).to.have.ownProperty('dm')
-  delete meta.dm
-
-  expect(meta).to.have.ownProperty('osn')
-  delete meta.osn
-
-  expect(meta).to.have.ownProperty('bnme')
-  delete meta.bnme
-
-  expect(meta).to.have.ownProperty('plf')
-  delete meta.plf
-
   const expected = {
     tz_offset: -480,
     page_title: 'Blotout - JS SDK',
+    user_agent:
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36',
   }
   assert.deepEqual(meta, expected)
 }

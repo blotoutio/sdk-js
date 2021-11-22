@@ -13,18 +13,13 @@ interface Meta {
   // eslint-disable-next-line camelcase
   tz_offset: number
   // eslint-disable-next-line camelcase
+  page_title: string
+  // eslint-disable-next-line camelcase
+  user_agent: string
+  // eslint-disable-next-line camelcase
   user_id_created?: number
   referrer?: string
   search?: string
-  plf?: number
-  osv?: string
-  appv?: string
-  dmft?: string
-  dm?: string
-  bnme?: string
-  osn?: string
-  // eslint-disable-next-line camelcase
-  page_title?: string
 }
 
 interface RequestRetry {
