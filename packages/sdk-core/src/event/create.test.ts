@@ -78,8 +78,7 @@ describe('createBasicEvent', () => {
   })
 
   it('basic', () => {
-    expect(createBasicEvent({ name: 'click', code: 11119 })).toStrictEqual({
-      evcs: 11119,
+    expect(createBasicEvent({ name: 'click' })).toStrictEqual({
       mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: 'click',
       tstmp: 1580775120000,
@@ -92,10 +91,8 @@ describe('createBasicEvent', () => {
       createBasicEvent({
         name: 'click',
         url: 'https://blotout.io/',
-        code: 11119,
       })
     ).toStrictEqual({
-      evcs: 11119,
       mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: 'click',
       tstmp: 1580775120000,

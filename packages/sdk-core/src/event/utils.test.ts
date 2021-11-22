@@ -1,9 +1,4 @@
-import {
-  codeForDevEvent,
-  getObjectTitle,
-  getSelector,
-  sendEvent,
-} from './utils'
+import { getObjectTitle, getSelector, sendEvent } from './utils'
 import * as network from '../network'
 import * as endPoint from '../network/endPoint'
 import type { EventOptions } from '../typings'
@@ -18,31 +13,6 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.useRealTimers()
-})
-
-describe('codeForDevEvent', () => {
-  it('empty', () => {
-    expect(codeForDevEvent('')).toBe(0)
-  })
-  it('name has spaces', () => {
-    expect(codeForDevEvent('some awesome event')).toBe(24016)
-  })
-
-  it('name with underscore', () => {
-    expect(codeForDevEvent('awesome_event')).toBe(24008)
-  })
-
-  it('non ascii name', () => {
-    expect(codeForDevEvent('目_awesome_event')).toBe(24049)
-  })
-
-  it('long name', () => {
-    expect(
-      codeForDevEvent(
-        'event event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_event'
-      )
-    ).toBe(23962)
-  })
 })
 
 describe('sendEvent', () => {
@@ -86,7 +56,6 @@ describe('sendEvent', () => {
           data: {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             name: 'sdk_start',
-            evcs: 11130,
             urlPath: 'https://blotout.io/',
             tstmp: 1614584413700,
           },
@@ -96,7 +65,6 @@ describe('sendEvent', () => {
           data: {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             name: 'visibility_hidden',
-            evcs: 11132,
             urlPath: 'https://blotout.io/',
             tstmp: 1614584313700,
           },
@@ -127,7 +95,6 @@ describe('sendEvent', () => {
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'sdk_start',
-            evcs: 11130,
             scrn: 'https://blotout.io/',
             evt: 1614584413700,
             session_id: '1580775120000',
@@ -138,7 +105,6 @@ describe('sendEvent', () => {
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'visibility_hidden',
-            evcs: 11132,
             scrn: 'https://blotout.io/',
             evt: 1614584313700,
             session_id: '1580775120000',
@@ -172,7 +138,6 @@ describe('sendEvent', () => {
         data: {
           mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'sdk_start',
-          evcs: 11130,
           urlPath: 'https://blotout.io/',
           tstmp: 1614584413700,
         },
@@ -182,7 +147,6 @@ describe('sendEvent', () => {
         data: {
           mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'test',
-          evcs: 21302,
           urlPath: 'https://blotout.io/',
           tstmp: 1614584313700,
         },
@@ -195,7 +159,6 @@ describe('sendEvent', () => {
         data: {
           mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'test',
-          evcs: 21302,
           urlPath: 'https://blotout.io/',
           tstmp: 1614584313800,
         },
@@ -220,7 +183,6 @@ describe('sendEvent', () => {
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'sdk_start',
-            evcs: 11130,
             scrn: 'https://blotout.io/',
             evt: 1614584413700,
             session_id: '1580775120000',
@@ -234,7 +196,6 @@ describe('sendEvent', () => {
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'test',
-            evcs: 21302,
             scrn: 'https://blotout.io/',
             evt: 1614584313700,
             session_id: '1580775120000',
@@ -246,7 +207,6 @@ describe('sendEvent', () => {
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'test',
-            evcs: 21302,
             scrn: 'https://blotout.io/',
             evt: 1614584313800,
             session_id: '1580775120000',

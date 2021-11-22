@@ -15,7 +15,7 @@ module.exports = () => {
       { file: `dist/${pkg.main}`, format: 'cjs', sourcemap: true },
       { file: `dist/${pkg.module}`, format: 'es', sourcemap: true },
     ],
-    external: ['crypto-js/sha1', 'ua-parser-js', 'uuid'],
+    external: ['ua-parser-js', 'uuid'],
     plugins: [
       // code
       typescript({

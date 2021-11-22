@@ -1,5 +1,3 @@
-import { constants } from '../common/config'
-import { stringToIntSum } from '../common/securityUtil'
 import { getSessionDataValue, getSessionID } from '../storage'
 import { getPayload } from '../network/payload'
 import { getPublishUrl } from '../network/endPoint'
@@ -19,7 +17,6 @@ const getEventPayload = (event: BasicEvent, type: EventType): EventPayload => {
   const payload: EventPayload = {
     mid: event.mid,
     evn: event.name,
-    evcs: event.evcs,
     scrn: event.urlPath,
     evt: event.tstmp,
     session_id: getSessionID(),
@@ -52,20 +49,6 @@ const getEventData = (type: EventType) => {
     ...allData,
     ...typeData,
   }
-}
-
-const generateSubCode = (eventSum: number): number => {
-  return constants.DEVELOPER_EVENT_CUSTOM + (eventSum % 8899)
-}
-
-// TODO this will be a problem as we will not know if event with the
-//  same code was already sent
-export const codeForDevEvent = (eventName: string): number => {
-  if (!eventName) {
-    return 0
-  }
-
-  return generateSubCode(stringToIntSum(eventName))
 }
 
 export const sendEvent = (

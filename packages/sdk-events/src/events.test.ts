@@ -21,7 +21,6 @@ describe('createEvent', () => {
     spyCreate = jest
       .spyOn(internalUtils, 'createBasicEvent')
       .mockImplementation(() => ({
-        evcs: 21001,
         mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
         name: 'map_id',
         tstmp: 1580775120000,
@@ -54,7 +53,6 @@ describe('createEvent', () => {
         {
           type: 'codified',
           data: {
-            evcs: 21001,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'map_id',
             tstmp: 1580775120000,
@@ -78,7 +76,6 @@ describe('createEvent', () => {
         {
           type: 'codified',
           data: {
-            evcs: 21001,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'map_id',
             tstmp: 1580775120000,
@@ -102,7 +99,6 @@ describe('createEvent', () => {
         {
           type: 'codified',
           data: {
-            evcs: 21001,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'map_id',
             tstmp: 1580775120000,

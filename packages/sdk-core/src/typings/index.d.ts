@@ -19,7 +19,6 @@ interface BasicEvent {
   urlPath: string
   tstmp: number
   mid: string
-  evcs: number
 }
 
 interface EventOptions {
@@ -46,7 +45,6 @@ interface EventPayload {
   mid: string
   userid?: string
   evn: string
-  evcs: number
   scrn: string
   evt: number
   // eslint-disable-next-line camelcase
@@ -76,7 +74,6 @@ interface Manifest {
 interface IncomingEvent {
   name: string
   data?: EventData
-  code?: number
   options?: EventOptions
   url?: string
 }

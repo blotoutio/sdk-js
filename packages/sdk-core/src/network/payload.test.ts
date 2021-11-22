@@ -25,7 +25,6 @@ describe('getPayload', () => {
         userid:
           '64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84',
         evn: 'sdk_start',
-        evcs: 11130,
         scrn: 'https://blotout.io/',
         evt: 1614584413700,
         session_id: '1614584413698',
@@ -45,7 +44,6 @@ describe('getPayload', () => {
           userid:
             '64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84',
           evn: 'sdk_start',
-          evcs: 11130,
           scrn: 'https://blotout.io/',
           evt: 1614584413700,
           session_id: '1614584413698',

@@ -14,7 +14,6 @@ beforeEach(() => {
   spyCreate = jest
     .spyOn(core.internalUtils, 'createBasicEvent')
     .mockImplementation((event) => ({
-      evcs: event.code,
       mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
       name: event.name,
       tstmp: 1580775120000,
@@ -47,7 +46,6 @@ describe('mapID', () => {
         {
           type: 'codified',
           data: {
-            evcs: 21001,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'map_id',
             tstmp: 1580775120000,
@@ -82,7 +80,6 @@ describe('transaction', () => {
         {
           type: 'codified',
           data: {
-            evcs: 21002,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'transaction',
             tstmp: 1580775120000,
@@ -121,7 +118,6 @@ describe('item', () => {
         {
           type: 'codified',
           data: {
-            evcs: 21003,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'item',
             tstmp: 1580775120000,
@@ -161,7 +157,6 @@ describe('persona', () => {
         {
           type: 'codified',
           data: {
-            evcs: 21004,
             mid: 'bWFwX2lk-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'persona',
             tstmp: 1580775120000,
