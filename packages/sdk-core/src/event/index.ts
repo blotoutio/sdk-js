@@ -24,16 +24,17 @@ export const sendSystemEvent = (
   const eventObject: SendEvent = {
     type: 'system',
     data: createBasicEvent({ name, code: systemEventCode[name] }),
+    extra: {
+      path: window.location.pathname,
+    },
   }
 
   if (event) {
     const mouseEvent = event as MouseEvent
-    eventObject.extra = {
-      position: createPosition(mouseEvent),
-      mouse: {
-        x: mouseEvent.clientX || -1,
-        y: mouseEvent.clientY || -1,
-      },
+    eventObject.extra.position = createPosition(mouseEvent)
+    eventObject.extra.mouse = {
+      x: mouseEvent.clientX || -1,
+      y: mouseEvent.clientY || -1,
     }
 
     const title = getObjectTitle(event.target as HTMLElement)

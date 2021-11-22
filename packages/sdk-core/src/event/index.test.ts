@@ -81,6 +81,9 @@ describe('sendSystemEvent', () => {
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
+          extra: {
+            path: '/',
+          },
         },
       ],
       undefined
@@ -108,6 +111,7 @@ describe('sendSystemEvent', () => {
             urlPath: 'http://localhost/',
           },
           extra: {
+            path: '/',
             mouse: { x: -1, y: -1 },
             objectName: 'H1',
             objectTitle: 'hi',
@@ -144,6 +148,7 @@ describe('sendSystemEvent', () => {
             urlPath: 'http://localhost/',
           },
           extra: {
+            path: '/',
             mouse: {
               x: -1,
               y: -1,
@@ -180,6 +185,7 @@ describe('sendSystemEvent', () => {
             urlPath: 'http://localhost/',
           },
           extra: {
+            path: '/',
             mouse: {
               x: -1,
               y: -1,
@@ -217,6 +223,7 @@ describe('sendSystemEvent', () => {
             urlPath: 'http://localhost/',
           },
           extra: {
+            path: '/',
             mouse: { x: -1, y: -1 },
             position: { height: -1, width: -1, x: -1, y: -1 },
           },
@@ -239,6 +246,9 @@ describe('sendSystemEvent', () => {
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
+          extra: {
+            path: '/',
+          },
         },
       ],
       undefined
@@ -258,6 +268,9 @@ describe('sendSystemEvent', () => {
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
           },
+          extra: {
+            path: '/',
+          },
         },
       ],
       undefined
@@ -276,6 +289,9 @@ describe('sendSystemEvent', () => {
             name: 'visibility_visible',
             tstmp: 1580775120000,
             urlPath: 'http://localhost/',
+          },
+          extra: {
+            path: '/',
           },
         },
       ],
