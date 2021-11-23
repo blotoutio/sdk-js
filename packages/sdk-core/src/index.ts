@@ -4,7 +4,7 @@ import {
   setDefaultEventData,
 } from './event'
 import { init as initMethod } from './common/init'
-import { getUID } from './common/uidUtil'
+import { getUIDFromCookie } from './common/uidUtil'
 import { isEnabled as isEnabledMethod, setEnable } from './common/enabled'
 import { sendEvent } from './event/utils'
 import { getVariable } from './common/manifest'
@@ -34,7 +34,7 @@ export const init = (preferences: InitPreferences): void => {
 }
 
 export const getUserId = (): string => {
-  return getUID()
+  return getUIDFromCookie()
 }
 
 export const pageView = (previousUrl: string, data?: EventData): void => {

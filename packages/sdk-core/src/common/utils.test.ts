@@ -4,9 +4,7 @@ import {
   getMid,
   getReferrer,
   getSearchParams,
-  setCreateTimestamp,
 } from './utils'
-import * as uidUtil from './uidUtil'
 import { getLocal, removeLocal, setLocal } from '../storage'
 import { getCreatedKey } from '../storage/key'
 jest.mock('uuid', () => ({ v4: () => '43cf2386-1285-445c-8633-d7555d6e2f35' }))
@@ -17,16 +15,6 @@ beforeEach(() => {
 })
 
 describe('getMid', () => {
-  let spyUID: jest.SpyInstance<string>
-
-  beforeEach(() => {
-    spyUID = jest.spyOn(uidUtil, 'getUID').mockReturnValue('er2r23r2r23r')
-  })
-
-  afterEach(() => {
-    spyUID.mockRestore()
-  })
-
   it('ok', () => {
     Object.defineProperty(performance, 'now', {
       value: () => 1231231.023424234,
@@ -156,18 +144,6 @@ describe('getSearchParams', () => {
   })
 })
 
-describe('setCreateTimestamp', () => {
-  beforeEach(() => {
-    removeLocal(getCreatedKey())
-  })
-
-  it('ok', () => {
-    const result = setCreateTimestamp()
-    expect(result).toBe(1580775120000)
-    expect(getLocal(getCreatedKey())).toEqual('1580775120000')
-  })
-})
-
 describe('getCreateTimestamp', () => {
   beforeEach(() => {
     removeLocal(getCreatedKey())
@@ -176,8 +152,8 @@ describe('getCreateTimestamp', () => {
   it('not set', () => {
     expect(getLocal(getCreatedKey())).toBe(null)
     const result = getCreateTimestamp()
-    expect(result).toBe(1580775120000)
-    expect(getLocal(getCreatedKey())).toEqual('1580775120000')
+    expect(result).toBeNull()
+    expect(getLocal(getCreatedKey())).toBeNull()
   })
 
   it('set', () => {

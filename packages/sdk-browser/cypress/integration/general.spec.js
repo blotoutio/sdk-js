@@ -31,11 +31,12 @@ context('General', () => {
   })
 
   it('user id is generated', () => {
+    const id = 'k4j12i4j12i4p123j4ij23'
+    cy.setCookie('_trends_user_id', id)
+    cy.setCookie('username', 'John Doe')
     cy.get('#user-id').click()
     cy.get('.events-content').then((element) => {
-      const regex =
-        /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}-[0-9]{13}-[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/gm
-      assert.isNotNull(regex.exec(element.text()))
+      assert.equal(id, element.text())
     })
   })
 

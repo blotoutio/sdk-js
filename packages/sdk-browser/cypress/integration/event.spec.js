@@ -59,9 +59,6 @@ context('Events', () => {
       expect(event.mid).to.have.lengthOf(71)
       delete event.mid
 
-      expect(event.userid).to.have.lengthOf(87)
-      delete event.userid
-
       expect(event.session_id).to.have.lengthOf(13)
       delete event.session_id
 
@@ -102,9 +99,6 @@ context('Events', () => {
 
       expect(event.mid).to.have.lengthOf(71)
       delete event.mid
-
-      expect(event.userid).to.have.lengthOf(87)
-      delete event.userid
 
       expect(event.session_id).to.have.lengthOf(13)
       delete event.session_id
@@ -148,9 +142,6 @@ context('Events', () => {
       expect(event.mid).to.have.lengthOf(75)
       delete event.mid
 
-      expect(event.userid).to.have.lengthOf(87)
-      delete event.userid
-
       expect(event.session_id).to.have.lengthOf(13)
       delete event.session_id
 
@@ -176,8 +167,6 @@ context('Events', () => {
 
       expect(event.mid).to.have.lengthOf(63)
       delete event.mid
-      expect(event.userid).to.have.lengthOf(87)
-      delete event.userid
       expect(event.session_id).to.have.lengthOf(13)
       delete event.session_id
 

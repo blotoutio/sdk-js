@@ -9,7 +9,7 @@ import * as endPoint from '../network/endPoint'
 import type { EventOptions } from '../typings'
 import { setDefaultEventData } from './index'
 import { getSessionID, setLocal } from '../storage'
-import { getUIDKey } from '../storage/key'
+import { getCreatedKey, getUIDKey } from '../storage/key'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
@@ -79,7 +79,6 @@ describe('sendEvent', () => {
       value:
         '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
     })
-    setLocal(getUIDKey(), 'key')
     sendEvent(
       [
         {
@@ -115,7 +114,6 @@ describe('sendEvent', () => {
       JSON.stringify({
         meta: {
           tz_offset: 0,
-          user_id_created: 1580775120000,
           plf: 27,
           osv: '11.1.0',
           appv: '87.0.4280.101',
@@ -128,7 +126,6 @@ describe('sendEvent', () => {
         events: [
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
-            userid: 'key',
             evn: 'sdk_start',
             evcs: 11130,
             scrn: 'https://blotout.io/',
@@ -140,7 +137,6 @@ describe('sendEvent', () => {
           },
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
-            userid: 'key',
             evn: 'visibility_hidden',
             evcs: 11132,
             scrn: 'https://blotout.io/',
@@ -160,11 +156,12 @@ describe('sendEvent', () => {
     )
   })
 
-  it('default data', () => {
+  it('default data, with local data', () => {
     Object.defineProperty(navigator, 'userAgent', {
       value:
         '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
     })
+    setLocal(getCreatedKey(), '1580775120000')
     setLocal(getUIDKey(), 'key')
     getSessionID()
     setDefaultEventData([], { foo: true })
@@ -209,7 +206,6 @@ describe('sendEvent', () => {
       JSON.stringify({
         meta: {
           tz_offset: 0,
-          user_id_created: 1580775120000,
           plf: 27,
           osv: '11.1.0',
           appv: '87.0.4280.101',
@@ -218,11 +214,11 @@ describe('sendEvent', () => {
           bnme: 'Chrome',
           osn: 'Mac OS',
           page_title: '',
+          user_id_created: 1580775120000,
         },
         events: [
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
-            userid: 'key',
             evn: 'sdk_start',
             evcs: 11130,
             scrn: 'https://blotout.io/',
@@ -233,10 +229,10 @@ describe('sendEvent', () => {
             additionalData: {
               foo: true,
             },
+            userid: 'key',
           },
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
-            userid: 'key',
             evn: 'test',
             evcs: 21302,
             scrn: 'https://blotout.io/',
@@ -245,10 +241,10 @@ describe('sendEvent', () => {
             type: 'codified',
             screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
             additionalData: { foo: true, foo1: true, foo3: true },
+            userid: 'key',
           },
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
-            userid: 'key',
             evn: 'test',
             evcs: 21302,
             scrn: 'https://blotout.io/',
@@ -257,6 +253,7 @@ describe('sendEvent', () => {
             type: 'codified',
             screen: { width: 0, height: 0, docHeight: 0, docWidth: 0 },
             additionalData: { foo: true, foo1: true },
+            userid: 'key',
           },
         ],
       }),

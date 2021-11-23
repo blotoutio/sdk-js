@@ -69,7 +69,6 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -93,7 +92,6 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -119,7 +117,6 @@ describe('getPayload', () => {
         plf: 11,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -145,7 +142,6 @@ describe('getPayload', () => {
         plf: 15,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -171,7 +167,6 @@ describe('getPayload', () => {
         plf: 27,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -197,7 +192,6 @@ describe('getPayload', () => {
         plf: 26,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -223,7 +217,6 @@ describe('getPayload', () => {
         plf: 28,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -249,7 +242,6 @@ describe('getPayload', () => {
         plf: 16,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -275,7 +267,6 @@ describe('getPayload', () => {
         plf: 12,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -301,7 +292,6 @@ describe('getPayload', () => {
         plf: 14,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -327,7 +317,6 @@ describe('getPayload', () => {
         plf: 14,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -352,7 +341,6 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -377,7 +365,6 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -403,7 +390,6 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -429,7 +415,6 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
   })
@@ -452,7 +437,6 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
     spy.mockRestore()
@@ -483,7 +467,6 @@ describe('getPayload', () => {
         sdkv: undefined,
         search: '?key=value',
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
     spySession.mockRestore()
@@ -511,7 +494,6 @@ describe('getPayload', () => {
         plf: 70,
         sdkv: undefined,
         tz_offset: -0,
-        user_id_created: 1580775120000,
       },
     })
     spySession.mockRestore()

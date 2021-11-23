@@ -14,6 +14,7 @@ const ajax = async (url: string, payload: string) => {
       Accept: 'application/json; charset=utf-8',
     },
     body: payload,
+    credentials: 'include',
   })
     .then((response) =>
       response.json().then((data) => ({ status: response.status, body: data }))

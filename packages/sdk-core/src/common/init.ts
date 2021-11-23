@@ -2,7 +2,6 @@ import { optionalEvents, requiredEvents } from '../event/system'
 import { setUrl } from '../network/endPoint'
 import { checkManifest, loadManifest } from './manifest'
 import { sendSystemEvent } from '../event'
-import { setUID } from './uidUtil'
 import { setRootKey } from '../storage/key'
 import { checkSession, removeLocal } from '../storage'
 import { checkRetry } from '../network/retries'
@@ -38,7 +37,6 @@ export const init = (preferences?: InitPreferences): void => {
   if (!newSession) {
     manifestLoaded = loadManifest()
   }
-  setUID()
   sendSystemEvent(constants.SDK_START)
   requiredEvents()
   if (!manifestLoaded) {
