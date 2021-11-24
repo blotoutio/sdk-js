@@ -1,5 +1,4 @@
-const mockTrue = { isDevMode: true }
-const mockFalse = { isDevMode: false }
+import { info, log, error, setLogging } from './logUtil'
 
 describe('info', () => {
   const spy = jest.spyOn(global.console, 'info')
@@ -14,18 +13,16 @@ describe('info', () => {
     spy.mockRestore()
   })
 
-  it('development', async () => {
-    jest.mock('./config', () => mockTrue)
-    const { info } = await import('./logUtil')
-    info('data')
-    expect(spy).toHaveBeenCalledTimes(1)
-  })
-
-  it('production', async () => {
-    jest.mock('./config', () => mockFalse)
-    const { info } = await import('./logUtil')
+  it('logging off', async () => {
+    setLogging(false)
     info('data')
     expect(spy).toHaveBeenCalledTimes(0)
+  })
+
+  it('logging on', async () => {
+    setLogging(true)
+    info('data')
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 })
 
@@ -42,18 +39,16 @@ describe('log', () => {
     spy.mockRestore()
   })
 
-  it('development', async () => {
-    jest.mock('./config', () => mockTrue)
-    const { log } = await import('./logUtil')
-    log('data')
-    expect(spy).toHaveBeenCalledTimes(1)
-  })
-
-  it('production', async () => {
-    jest.mock('./config', () => mockFalse)
-    const { log } = await import('./logUtil')
+  it('logging off', async () => {
+    setLogging(false)
     log('data')
     expect(spy).toHaveBeenCalledTimes(0)
+  })
+
+  it('logging on', async () => {
+    setLogging(true)
+    log('data')
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 })
 
@@ -70,17 +65,15 @@ describe('error', () => {
     spy.mockRestore()
   })
 
-  it('development', async () => {
-    jest.mock('./config', () => mockTrue)
-    const { error } = await import('./logUtil')
+  it('logging off', async () => {
+    setLogging(false)
     error('data')
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  it('production', async () => {
-    jest.mock('./config', () => mockFalse)
-    const { error } = await import('./logUtil')
+  it('logging on', async () => {
+    setLogging(true)
     error('data')
-    expect(spy).toHaveBeenCalledTimes(0)
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 })

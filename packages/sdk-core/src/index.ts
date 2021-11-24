@@ -15,7 +15,7 @@ import type {
   EventType,
   InitPreferences,
 } from './typings'
-import { error } from './common/logUtil'
+import { error, setLogging } from './common/logUtil'
 
 export const capture = (
   eventName: string,
@@ -55,6 +55,10 @@ export const defaultEventData = (types: EventType[], data: EventData): void => {
 
 export const isEnabled = (): boolean => {
   return isEnabledMethod()
+}
+
+export const logging = (enable: boolean): void => {
+  setLogging(enable)
 }
 
 export const internalUtils = {

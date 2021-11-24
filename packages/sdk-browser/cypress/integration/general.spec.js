@@ -41,9 +41,15 @@ context('General', () => {
   })
 
   it('enable do not trigger error', () => {
-    cy.get('#enable').click()
+    cy.get('#settings').click()
     cy.get('#enable-true').click()
     cy.get('#enable-false').click()
+  })
+
+  it('logging do not trigger error', () => {
+    cy.get('#settings').click()
+    cy.get('#logging-true').click()
+    cy.get('#logging-false').click()
   })
 
   it('default event data do not trigger error', () => {
