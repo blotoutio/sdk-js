@@ -1,4 +1,3 @@
-import { codeForDevEvent } from './utils'
 import { getMid } from '../common/utils'
 import type { BasicEvent, IncomingEvent, Position } from '../typings'
 
@@ -43,6 +42,5 @@ export const createBasicEvent = (event: IncomingEvent): BasicEvent => {
     urlPath: event.url || window.location.href,
     mid: getMid(event.name),
     tstmp: Date.now(),
-    evcs: event.code || codeForDevEvent(event.name),
   }
 }

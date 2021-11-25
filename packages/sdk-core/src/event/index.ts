@@ -1,5 +1,5 @@
 import { getObjectTitle, getSelector, sendEvent } from './utils'
-import { constants, systemEventCode } from '../common/config'
+import { constants } from '../common/config'
 import { createBasicEvent, createPosition } from './create'
 import type {
   EventData,
@@ -23,7 +23,7 @@ export const sendSystemEvent = (
 
   const eventObject: SendEvent = {
     type: 'system',
-    data: createBasicEvent({ name, code: systemEventCode[name] }),
+    data: createBasicEvent({ name }),
     extra: {
       path: window.location.pathname,
     },
@@ -86,7 +86,6 @@ export const pageView = (previousUrl: string, data?: EventData): void => {
     data: createBasicEvent({
       name: constants.VISIBILITY_HIDDEN,
       url: previousUrl,
-      code: systemEventCode.visibility_hidden,
     }),
     extra: data,
   }
@@ -95,7 +94,6 @@ export const pageView = (previousUrl: string, data?: EventData): void => {
     type: 'system',
     data: createBasicEvent({
       name: constants.SDK_START,
-      code: systemEventCode.sdk_start,
     }),
     extra: data,
   }

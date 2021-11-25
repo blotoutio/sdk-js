@@ -28,7 +28,6 @@ context('Defined Events', () => {
 
     validateRequest(59, {
       evn: 'map_id',
-      evcs: 21001,
       scrn: 'http://localhost:9000/',
       evt: 1614677171392,
       type: 'codified',
@@ -53,7 +52,6 @@ context('Defined Events', () => {
 
     validateRequest(67, {
       evn: 'transaction',
-      evcs: 21002,
       scrn: 'http://localhost:9000/',
       evt: 1614677171392,
       type: 'codified',
@@ -83,7 +81,6 @@ context('Defined Events', () => {
 
     validateRequest(59, {
       evn: 'item',
-      evcs: 21003,
       scrn: 'http://localhost:9000/',
       evt: 1614677171392,
       type: 'codified',
@@ -112,7 +109,6 @@ context('Defined Events', () => {
 
     validateRequest(63, {
       evn: 'persona',
-      evcs: 21004,
       scrn: 'http://localhost:9000/',
       evt: 1614677171392,
       type: 'codified',

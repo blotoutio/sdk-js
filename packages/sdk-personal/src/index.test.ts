@@ -80,7 +80,6 @@ describe('capturePersonal', () => {
           '7SIy4uwiAX7VXYF8Tx2XaLnwWGsU8g1kkNZVw6r+9WGg9Pt1udAKDbfyW+DlGrc1okfP+zi1TzAZIpBd8KphplBgJkmqWRchQwToZVQIDAQAB'
       )
     spyCreate = jest.spyOn(internalUtils, 'createBasicEvent').mockReturnValue({
-      evcs: 23814,
       mid: 'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
       name: 'custom event',
       tstmp: 1580775120000,
@@ -91,7 +90,6 @@ describe('capturePersonal', () => {
       {
         type: 'pii',
         data: {
-          evcs: 23814,
           mid: 'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
           name: 'custom event',
           tstmp: 1580775120000,
@@ -106,7 +104,6 @@ describe('capturePersonal', () => {
 
   it('encryption keys are null', () => {
     spyCreate = jest.spyOn(internalUtils, 'createBasicEvent').mockReturnValue({
-      evcs: 23814,
       mid: 'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
       name: 'custom event',
       tstmp: 1580775120000,
@@ -127,7 +124,6 @@ describe('capturePersonal', () => {
           '7SIy4uwiAX7VXYF8Tx2XaLnwWGsU8g1kkNZVw6r+9WGg9Pt1udAKDbfyW+DlGrc1okfP+zi1TzAZIpBd8KphplBgJkmqWRchQwToZVQIDAQAB'
       )
     spyCreate = jest.spyOn(internalUtils, 'createBasicEvent').mockReturnValue({
-      evcs: 23814,
       mid: 'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
       name: 'custom event',
       tstmp: 1580775120000,
@@ -145,7 +141,6 @@ describe('capturePersonal', () => {
         {
           type: 'pii',
           data: {
-            evcs: 23814,
             mid: 'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
             name: 'custom event',
             tstmp: 1580775120000,
@@ -167,7 +162,6 @@ describe('capturePersonal', () => {
           '7SIy4uwiAX7VXYF8Tx2XaLnwWGsU8g1kkNZVw6r+9WGg9Pt1udAKDbfyW+DlGrc1okfP+zi1TzAZIpBd8KphplBgJkmqWRchQwToZVQIDAQAB'
       )
     spyCreate = jest.spyOn(internalUtils, 'createBasicEvent').mockReturnValue({
-      evcs: 23814,
       mid: 'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
       name: 'custom event',
       tstmp: 1580775120000,
@@ -186,7 +180,6 @@ describe('capturePersonal', () => {
         {
           type: 'phi',
           data: {
-            evcs: 23814,
             mid: 'Y3VzdG9tIGV2ZW50-fa6bcd09-2cdf-4bc5-b935-c4ac2da08223-1580775120000',
             name: 'custom event',
             tstmp: 1580775120000,

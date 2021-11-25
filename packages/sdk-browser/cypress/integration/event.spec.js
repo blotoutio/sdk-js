@@ -32,7 +32,6 @@ context('Events', () => {
     cy.get('#send').click()
     validateRequest(71, {
       evn: 'codified-event',
-      evcs: 23636,
       scrn: 'http://localhost:9000/',
       evt: 1614677171392,
       type: 'codified',
@@ -71,7 +70,6 @@ context('Events', () => {
 
       assert.deepEqual(event, {
         evn: 'personal-event',
-        evcs: 24050,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
         type: 'pii',
@@ -112,7 +110,6 @@ context('Events', () => {
 
       assert.deepEqual(event, {
         evn: 'personal-event',
-        evcs: 24050,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
         type: 'phi',
@@ -147,7 +144,6 @@ context('Events', () => {
 
       assert.deepEqual(event, {
         evn: 'visibility_hidden',
-        evcs: 11132,
         scrn: 'https://jsdemo.blotout.io/new_page.html',
         evt: 1614677171392,
         type: 'system',
@@ -172,7 +168,6 @@ context('Events', () => {
 
       assert.deepEqual(event, {
         evn: 'sdk_start',
-        evcs: 11130,
         scrn: 'http://localhost:9000/',
         evt: 1614677171392,
         type: 'system',

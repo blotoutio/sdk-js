@@ -75,7 +75,6 @@ describe('sendSystemEvent', () => {
         {
           type: 'system',
           data: {
-            evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'click',
             tstmp: 1580775120000,
@@ -104,7 +103,6 @@ describe('sendSystemEvent', () => {
         {
           type: 'system',
           data: {
-            evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'click',
             tstmp: 1580775120000,
@@ -141,7 +139,6 @@ describe('sendSystemEvent', () => {
         {
           type: 'system',
           data: {
-            evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'click',
             tstmp: 1580775120000,
@@ -178,7 +175,6 @@ describe('sendSystemEvent', () => {
         {
           type: 'system',
           data: {
-            evcs: 11119,
             mid: 'Y2xpY2s=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'click',
             tstmp: 1580775120000,
@@ -216,7 +212,6 @@ describe('sendSystemEvent', () => {
         {
           type: 'system',
           data: {
-            evcs: 11102,
             mid: 'Y29weQ==-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'copy',
             tstmp: 1580775120000,
@@ -240,7 +235,6 @@ describe('sendSystemEvent', () => {
         {
           type: 'system',
           data: {
-            evcs: 11130,
             mid: 'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'sdk_start',
             tstmp: 1580775120000,
@@ -262,7 +256,6 @@ describe('sendSystemEvent', () => {
         {
           type: 'system',
           data: {
-            evcs: 11132,
             mid: 'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'visibility_hidden',
             tstmp: 1580775120000,
@@ -284,7 +277,6 @@ describe('sendSystemEvent', () => {
         {
           type: 'system',
           data: {
-            evcs: 11131,
             mid: 'dmlzaWJpbGl0eV92aXNpYmxl-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'visibility_visible',
             tstmp: 1580775120000,
@@ -378,7 +370,6 @@ describe('sendDevEvent', () => {
       [
         {
           data: {
-            evcs: 23872,
             mid: 'Y3VzdG9tLWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'custom-event',
             tstmp: 1580775120000,
@@ -389,7 +380,6 @@ describe('sendDevEvent', () => {
         },
         {
           data: {
-            evcs: 24004,
             mid: 'bmV3LWV2ZW50-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
             name: 'new-event',
             tstmp: 1580775120000,
@@ -412,7 +402,6 @@ describe('pageView', () => {
       {
         type: 'system',
         data: {
-          evcs: 11132,
           mid: 'dmlzaWJpbGl0eV9oaWRkZW4=-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
           name: 'visibility_hidden',
           tstmp: 1580775120000,
@@ -422,7 +411,6 @@ describe('pageView', () => {
       {
         type: 'system',
         data: {
-          evcs: 11130,
           mid: 'c2RrX3N0YXJ0-43cf2386-1285-445c-8633-d7555d6e2f35-1580775120000',
           name: 'sdk_start',
           tstmp: 1580775120000,

@@ -1,15 +1,10 @@
-import {
-  codeForDevEvent,
-  getObjectTitle,
-  getSelector,
-  sendEvent,
-} from './utils'
+import { getObjectTitle, getSelector, sendEvent } from './utils'
 import * as network from '../network'
 import * as endPoint from '../network/endPoint'
 import type { EventOptions } from '../typings'
 import { setDefaultEventData } from './index'
 import { getSessionID, setLocal } from '../storage'
-import { getCreatedKey, getUIDKey } from '../storage/key'
+import { getUIDKey } from '../storage/key'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
@@ -18,31 +13,6 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.useRealTimers()
-})
-
-describe('codeForDevEvent', () => {
-  it('empty', () => {
-    expect(codeForDevEvent('')).toBe(0)
-  })
-  it('name has spaces', () => {
-    expect(codeForDevEvent('some awesome event')).toBe(24016)
-  })
-
-  it('name with underscore', () => {
-    expect(codeForDevEvent('awesome_event')).toBe(24008)
-  })
-
-  it('non ascii name', () => {
-    expect(codeForDevEvent('目_awesome_event')).toBe(24049)
-  })
-
-  it('long name', () => {
-    expect(
-      codeForDevEvent(
-        'event event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_eventevent event event event event event event event event event event_event_event_event_event'
-      )
-    ).toBe(23962)
-  })
 })
 
 describe('sendEvent', () => {
@@ -75,9 +45,10 @@ describe('sendEvent', () => {
   })
 
   it('with events', () => {
+    const ua =
+      '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36'
     Object.defineProperty(navigator, 'userAgent', {
-      value:
-        '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+      value: ua,
     })
     sendEvent(
       [
@@ -86,7 +57,6 @@ describe('sendEvent', () => {
           data: {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             name: 'sdk_start',
-            evcs: 11130,
             urlPath: 'https://blotout.io/',
             tstmp: 1614584413700,
           },
@@ -96,7 +66,6 @@ describe('sendEvent', () => {
           data: {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             name: 'visibility_hidden',
-            evcs: 11132,
             urlPath: 'https://blotout.io/',
             tstmp: 1614584313700,
           },
@@ -114,20 +83,13 @@ describe('sendEvent', () => {
       JSON.stringify({
         meta: {
           tz_offset: 0,
-          plf: 27,
-          osv: '11.1.0',
-          appv: '87.0.4280.101',
-          dmft: 'Apple',
-          dm: 'Intel Based',
-          bnme: 'Chrome',
-          osn: 'Mac OS',
+          user_agent: ua,
           page_title: '',
         },
         events: [
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'sdk_start',
-            evcs: 11130,
             scrn: 'https://blotout.io/',
             evt: 1614584413700,
             session_id: '1580775120000',
@@ -138,7 +100,6 @@ describe('sendEvent', () => {
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'visibility_hidden',
-            evcs: 11132,
             scrn: 'https://blotout.io/',
             evt: 1614584313700,
             session_id: '1580775120000',
@@ -156,12 +117,12 @@ describe('sendEvent', () => {
     )
   })
 
-  it('default data, with local data', () => {
+  it('default data', () => {
+    const ua =
+      '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36'
     Object.defineProperty(navigator, 'userAgent', {
-      value:
-        '5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.101 Safari/537.36',
+      value: ua,
     })
-    setLocal(getCreatedKey(), '1580775120000')
     setLocal(getUIDKey(), 'key')
     getSessionID()
     setDefaultEventData([], { foo: true })
@@ -172,7 +133,6 @@ describe('sendEvent', () => {
         data: {
           mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'sdk_start',
-          evcs: 11130,
           urlPath: 'https://blotout.io/',
           tstmp: 1614584413700,
         },
@@ -182,7 +142,6 @@ describe('sendEvent', () => {
         data: {
           mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'test',
-          evcs: 21302,
           urlPath: 'https://blotout.io/',
           tstmp: 1614584313700,
         },
@@ -195,7 +154,6 @@ describe('sendEvent', () => {
         data: {
           mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
           name: 'test',
-          evcs: 21302,
           urlPath: 'https://blotout.io/',
           tstmp: 1614584313800,
         },
@@ -206,21 +164,13 @@ describe('sendEvent', () => {
       JSON.stringify({
         meta: {
           tz_offset: 0,
-          plf: 27,
-          osv: '11.1.0',
-          appv: '87.0.4280.101',
-          dmft: 'Apple',
-          dm: 'Intel Based',
-          bnme: 'Chrome',
-          osn: 'Mac OS',
+          user_agent: ua,
           page_title: '',
-          user_id_created: 1580775120000,
         },
         events: [
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'sdk_start',
-            evcs: 11130,
             scrn: 'https://blotout.io/',
             evt: 1614584413700,
             session_id: '1580775120000',
@@ -234,7 +184,6 @@ describe('sendEvent', () => {
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'test',
-            evcs: 21302,
             scrn: 'https://blotout.io/',
             evt: 1614584313700,
             session_id: '1580775120000',
@@ -246,7 +195,6 @@ describe('sendEvent', () => {
           {
             mid: 'blotout.io-64e9b82014c0a5b9-3e2b2214-72f2c155-df1b28e1-0b62529fbad4ad02cf7e5c84-1614584413700',
             evn: 'test',
-            evcs: 21302,
             scrn: 'https://blotout.io/',
             evt: 1614584313800,
             session_id: '1580775120000',
