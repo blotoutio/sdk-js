@@ -4,7 +4,7 @@ import * as endPoint from '../network/endPoint'
 import type { EventOptions } from '../typings'
 import { setDefaultEventData } from './index'
 import { getSessionID, setLocal } from '../storage'
-import { getCreatedKey, getUIDKey } from '../storage/key'
+import { getUIDKey } from '../storage/key'
 
 beforeEach(() => {
   jest.useFakeTimers('modern')
