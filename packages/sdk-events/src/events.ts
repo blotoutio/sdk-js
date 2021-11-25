@@ -12,7 +12,6 @@ const getType = (type: EventType): unknown => {
     case 'mapID': {
       return {
         name: constants.MAP_ID_NAME,
-        code: constants.MAP_ID_CODE,
         fields: {
           externalID: {
             required: true,
@@ -28,7 +27,6 @@ const getType = (type: EventType): unknown => {
     case 'transaction': {
       return {
         name: constants.TRANSACTION_NAME,
-        code: constants.TRANSACTION_CODE,
         fields: {
           ID: {
             required: true,
@@ -64,7 +62,6 @@ const getType = (type: EventType): unknown => {
     case 'item': {
       return {
         name: constants.ITEM_NAME,
-        code: constants.ITEM_CODE,
         fields: {
           ID: {
             required: true,
@@ -100,7 +97,6 @@ const getType = (type: EventType): unknown => {
     case 'persona': {
       return {
         name: constants.PERSONA_NAME,
-        code: constants.PERSONA_CODE,
         fields: {
           ID: {
             required: true,
@@ -170,13 +166,11 @@ const getType = (type: EventType): unknown => {
 
 const generateEvent = (
   name: string,
-  code: number,
   eventData: EventData,
   additionalData: EventData = {}
 ): SendEvent => {
   const data = internalUtils.createBasicEvent({
     name,
-    code,
   })
 
   return {
@@ -233,12 +227,7 @@ export const createEvent = <T>(
     return
   }
 
-  const finalEvent = generateEvent(
-    event.name,
-    event.code,
-    eventData,
-    additionalData
-  )
+  const finalEvent = generateEvent(event.name, eventData, additionalData)
 
   internalUtils.sendEvent([finalEvent], options)
 }

@@ -9,7 +9,6 @@ interface Field {
 
 interface Event<T> {
   name: string
-  code: number
   fields: Record<keyof T, Field>
 }
 
