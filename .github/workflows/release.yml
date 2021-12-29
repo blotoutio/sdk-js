@@ -66,6 +66,9 @@ jobs:
       - name: Bootstrap project
         run: npm run bootstrap
 
+      - name: Get latest tags
+        run: git fetch --tags
+
       - name: Publish
         run: npx lerna publish from-git
         env:
