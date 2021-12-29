@@ -61,7 +61,7 @@ jobs:
           node-version: 14
 
       - name: Install dependencies
-        run: npm bootstrap
+        run: npm run bootstrap
 
       - name: Publish
         run: npx lerna publish
