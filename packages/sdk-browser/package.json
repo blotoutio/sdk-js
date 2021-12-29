@@ -27,7 +27,11 @@
   "devDependencies": {
     "@blotoutio/sdk-core": "^0.10.0",
     "@blotoutio/sdk-events": "^0.10.0",
-    "@blotoutio/sdk-personal": "^0.10.0"
+    "@blotoutio/sdk-personal": "^0.10.0",
+    "cypress": "8.5.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "start-server-and-test": "^1.14.0"
   },
   "publishConfig": {
     "access": "public",
