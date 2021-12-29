@@ -2,7 +2,7 @@ export const serveUrl = 'http://localhost:9000'
 
 export const compareMeta = (meta) => {
   expect(meta).to.have.ownProperty('sdkv')
-  expect(meta.sdkv).to.have.lengthOf(5)
+  expect(meta.sdkv).to.have.lengthOf(6)
   delete meta.sdkv
 
   const expected = {
