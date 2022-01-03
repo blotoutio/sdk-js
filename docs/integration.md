@@ -7,9 +7,9 @@ We provide two options of implementing our SDK:
 
 {% tabs basic %}
 {% tab basic browser %}
-**Basic** (system events + defined events + codified api + ID mapping): (~32kb / ~13kb gzip) - [Download](https://unpkg.com/@blotoutio/sdk-browser/index.min.js)
+**Basic** (system events + defined events + codified api + ID mapping): (~12kb / ~4.6kb gzip) - [Download](https://unpkg.com/@blotoutio/sdk-browser/index.min.js)
 
-**Full** (basic + PII and PHI support): (~95kb / ~32kb gzip) - [Download](https://unpkg.com/@blotoutio/sdk-browser/index.full.min.js)
+**Full** (basic + PII and PHI support): (~81kb / ~26kb gzip) - [Download](https://unpkg.com/@blotoutio/sdk-browser/index.full.min.js)
 
 ## Snippet
 
