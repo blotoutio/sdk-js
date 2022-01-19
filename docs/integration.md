@@ -115,4 +115,4 @@ init({
 {% endtab %}
 {% endtabs %}
 
-You can read more about `init` API in [API docs](api.md#init)
+You can read more about `init` API in [API docs](basic_apis.md#init)
