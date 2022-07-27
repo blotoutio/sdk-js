@@ -53,15 +53,7 @@ export const checkSession = (): boolean => {
   const sessionId = getSession(getSessionIDKey())
 
   if (sessionId) {
-    const newReferrer = getReferrer()
-    if (newReferrer) {
-      const oldReferrer = getSessionDataValue('referrer')
-      if (oldReferrer === newReferrer) {
-        return false
-      }
-    } else {
-      return false
-    }
+    return false
   }
 
   creteSession()
