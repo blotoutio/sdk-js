@@ -10,7 +10,6 @@ import {
   setSessionDataValue,
 } from './index'
 import { getSessionDataKey, getSessionIDKey } from './key'
-import * as utils from '../common/utils'
 
 beforeEach(() => {
   window.sessionStorage.removeItem(getSessionIDKey())
@@ -64,54 +63,15 @@ describe('removeLocal', () => {
 })
 
 describe('checkSession', () => {
-  let spyReferrer: jest.SpyInstance<string, []>
-
-  afterAll(() => {
-    spyReferrer.mockRestore()
-  })
-
-  it('session exists and referrer is not set', () => {
+  it('session exists', () => {
     setSession('_trendsId', 'asdf0234kr23rk23rk2')
     const result = checkSession()
     expect(result).toBeFalsy()
-  })
-
-  it('session exists and referrer is set and is the same', () => {
-    spyReferrer = jest
-      .spyOn(utils, 'getReferrer')
-      .mockImplementation(() => 'page.com')
-    setSession('_trendsId', 'asdf0234kr23rk23rk2')
-    setSessionDataValue('referrer', 'page.com')
-    const result = checkSession()
-    expect(result).toBeFalsy()
-    spyReferrer.mockReset()
-  })
-
-  it('session exists and referrer is set and is different', () => {
-    spyReferrer = jest
-      .spyOn(utils, 'getReferrer')
-      .mockImplementation(() => 'diff-page.com')
-    setSession('_trendsId', 'asdf0234kr23rk23rk2')
-    setSessionDataValue('referrer', 'page.com')
-    const result = checkSession()
-    expect(result).toBeTruthy()
-    spyReferrer.mockReset()
   })
 
   it('new session', () => {
-    spyReferrer = jest
-      .spyOn(utils, 'getReferrer')
-      .mockImplementation(() => 'page.com')
     const result = checkSession()
     expect(result).toBeTruthy()
-    expect(getSession(getSessionIDKey())).toMatch('1580775120000')
-    expect(getSession(getSessionDataKey())).toStrictEqual(
-      JSON.stringify({
-        referrer: 'page.com',
-        search: null,
-      })
-    )
-    spyReferrer.mockReset()
   })
 })
 
