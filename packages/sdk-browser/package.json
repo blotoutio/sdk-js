@@ -1,6 +1,6 @@
 {
   "name": "@blotoutio/sdk-browser",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Blotout JS SDK Browser",
   "author": "Blotout",
   "license": "MIT",
@@ -25,9 +25,9 @@
     "node": ">=12.0.0"
   },
   "devDependencies": {
-    "@blotoutio/sdk-core": "^0.10.1",
-    "@blotoutio/sdk-events": "^0.10.1",
-    "@blotoutio/sdk-personal": "^0.10.1",
+    "@blotoutio/sdk-core": "^0.10.2",
+    "@blotoutio/sdk-events": "^0.10.2",
+    "@blotoutio/sdk-personal": "^0.10.2",
     "cypress": "8.5.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
